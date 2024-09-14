@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class UtilisateurService {
+
     private final EtudiantRepository etudiantRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -36,11 +37,28 @@ public class UtilisateurService {
         }
     }
 
+//    public void addUtilisateur(UtilisateurDTO utilisateurDTO, String userType) {
+//        switch (userType) {
+//            case "Etudiant":
+//                Etudiant etudiant = EtudiantDTO.toEntity((EtudiantDTO) utilisateurDTO);
+//                etudiant.setPassword(passwordEncoder.encode(etudiant.getPassword()));
+//                etudiantRepository.save(etudiant);
+//                break;
+//            default:
+//                throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
+//        }
+//    }
     public void addUtilisateur(UtilisateurDTO utilisateurDTO, String userType) {
         switch (userType) {
             case "Etudiant":
-                Etudiant etudiant = EtudiantDTO.toEntity((EtudiantDTO) utilisateurDTO);
-                etudiant.setPassword(passwordEncoder.encode(etudiant.getPassword()));
+                Etudiant etudiant = new Etudiant();
+                etudiant.setFullName(utilisateurDTO.getFullName());
+                etudiant.setEmail(utilisateurDTO.getEmail());
+                etudiant.setPassword(passwordEncoder.encode(utilisateurDTO.getPassword()));
+                etudiant.setPhoneNumber(utilisateurDTO.getPhoneNumber());
+                etudiant.setAdress(utilisateurDTO.getAdress());
+                etudiant.setMatricule(utilisateurDTO.getMatricule());
+                etudiant.setRole(utilisateurDTO.getRole());
                 etudiantRepository.save(etudiant);
                 break;
             default:

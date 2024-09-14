@@ -19,7 +19,6 @@ import lombok.Setter;
 })
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_role")
-
 public class Utilisateur {
 
     @Id
@@ -54,6 +53,7 @@ public class Utilisateur {
     @NotNull
     @NotEmpty
     @Size(min = 3, max = 100, message = "L'adresse doit contenir entre 3 et 100 caractères")
+    @Pattern(regexp = "^[A-Za-z0-9\\s]+$", message = "L'adresse doit contenir uniquement des lettres et des chiffres")
     private String adress;
 
     @Pattern(regexp = "^\\d{8}$", message = "Le Matricule doit contenir 8 chiffres")

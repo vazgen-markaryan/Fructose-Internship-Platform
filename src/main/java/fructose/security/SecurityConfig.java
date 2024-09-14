@@ -18,7 +18,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/create-user").permitAll() // Permettre l'accès à /register sans authentification
+                        .requestMatchers("/creer-utilisateur").permitAll() // Permettre l'accès à /creer-utilisateur sans authentification
                         .anyRequest().authenticated()
                 );
         return http.build();
