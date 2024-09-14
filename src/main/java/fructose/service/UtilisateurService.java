@@ -37,17 +37,6 @@ public class UtilisateurService {
         }
     }
 
-//    public void addUtilisateur(UtilisateurDTO utilisateurDTO, String userType) {
-//        switch (userType) {
-//            case "Etudiant":
-//                Etudiant etudiant = EtudiantDTO.toEntity((EtudiantDTO) utilisateurDTO);
-//                etudiant.setPassword(passwordEncoder.encode(etudiant.getPassword()));
-//                etudiantRepository.save(etudiant);
-//                break;
-//            default:
-//                throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
-//        }
-//    }
     public void addUtilisateur(UtilisateurDTO utilisateurDTO, String userType) {
         switch (userType) {
             case "Etudiant":
@@ -89,13 +78,14 @@ public class UtilisateurService {
 
         switch (userType) {
             case "Etudiant":
-                etudiantRepository.findById(id).ifPresent(etudiantRepository::delete);
+                etudiantRepository.deleteById(id);
                 break;
             default:
                 throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
         }
-        System.out.println( userType + " avec id " + id + " a été supprimé avec succès.");
+        System.out.println(userType + " avec id " + id + " a été supprimé avec succès.");
     }
+
 
     public List<UtilisateurDTO> getUtilisateurs(String userType) {
         return switch (userType) {

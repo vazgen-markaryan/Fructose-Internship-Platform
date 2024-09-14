@@ -8,6 +8,7 @@ class FructoseApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
