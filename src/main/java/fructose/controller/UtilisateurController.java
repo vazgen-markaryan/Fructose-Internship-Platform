@@ -43,10 +43,14 @@ public class UtilisateurController {
             // Réponse en cas de succès
             return ResponseEntity.status(HttpStatus.CREATED).body("Utilisateur créé avec succès !");
         } catch (DataAccessException e) {
-            // Gestion des erreurs liées à la base de données (ex: contrainte unique)
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la création de l'utilisateur.");
+            String errorMessage = "Erreur lors de la création de l'utilisateur.";
+            if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolationException) {
+                String detailMessage = constraintViolationException.getSQLException().getMessage();
+                String uniqueValue = detailMessage.substring(detailMessage.indexOf('(') + 1, detailMessage.indexOf(')'));
+                errorMessage = "Violation de contrainte unique : La valeur \"" + uniqueValue + "\" existe déjà.";
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         } catch (Exception e) {
-            // Gestion des erreurs génériques
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
         }
     }

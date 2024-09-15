@@ -91,6 +91,7 @@ const CreerUtilisateur = () => {
                 navigate('/');
             })
             .catch(error => {
+                setError(`Erreur: ${error.message}`); //Pour afficher erreur sur Écran
                 console.error('Erreur:', error);
             });
     };
