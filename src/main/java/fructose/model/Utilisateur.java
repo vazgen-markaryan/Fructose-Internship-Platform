@@ -56,7 +56,7 @@ public class Utilisateur {
     @Pattern(regexp = "^[A-Za-z0-9\\s]+$", message = "L'adresse doit contenir uniquement des lettres et des chiffres")
     private String adress;
 
-    @Pattern(regexp = "^\\d{8}$", message = "Le Matricule doit contenir 8 chiffres")
+    @Pattern(regexp = "^\\d{7}$", message = "Le Matricule doit contenir 7 chiffres")
     @Column(name = "matricule", unique = true)
     private String matricule;
 

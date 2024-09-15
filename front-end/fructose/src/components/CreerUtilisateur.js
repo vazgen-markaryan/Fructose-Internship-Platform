@@ -40,7 +40,10 @@ const CreerUtilisateur = () => {
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             return "L'adresse courriel doit être valide";
         }
-        if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(password)) {
+        if (email.length < 10 || email.length > 100) {
+            return "L'adresse courriel doit contenir entre 10 et 100 caractères";
+        }
+        if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$/.test(password)) {
             return "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial";
         }
         if (password !== confirmPassword) {
@@ -55,8 +58,8 @@ const CreerUtilisateur = () => {
         if (!/^[A-Za-z0-9\s]+$/.test(adress)) {
             return "L'adresse doit contenir uniquement des lettres et des chiffres";
         }
-        if (!/^\d{8}$/.test(matricule)) {
-            return "Le Matricule doit contenir 8 chiffres";
+        if (!/^\d{7}$/.test(matricule)) {
+            return "Le Matricule doit contenir 7 chiffres";
         }
         if (!/^[A-Za-z\s]+$/.test(role)) {
             return "Le rôle doit contenir uniquement des lettres et des espaces";
