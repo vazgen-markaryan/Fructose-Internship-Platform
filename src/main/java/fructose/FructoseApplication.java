@@ -39,7 +39,7 @@ public class FructoseApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) {
-		Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "(123) 456-7890", "1234 rue Pomme", "11111111", "Etudiant");
+		Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "(123) 456-7890", "1234 rue Pomme", "1111111", "Etudiant");
 		EtudiantDTO etudiantVazgen = vazgen.toEtudiantDTO();
 
 		try {

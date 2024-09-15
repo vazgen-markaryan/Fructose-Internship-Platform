@@ -24,9 +24,7 @@ public class UtilisateurController {
 
     @PostMapping("/creer-utilisateur")
     public ResponseEntity<?> creerUtilisateur(@RequestBody @Valid UtilisateurDTO utilisateurDTO, BindingResult result) {
-        // Validation des données soumises
         if (result.hasErrors()) {
-            // Extraction des messages d'erreur
             String errorMessages = result.getFieldErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.joining(", "));
@@ -34,18 +32,15 @@ public class UtilisateurController {
         }
 
         try {
-            // Vérification du rôle, pour éviter toute injection ou modification indésirable
             if (!utilisateurService.isValidRole(utilisateurDTO.getRole())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rôle invalide.");
             }
-            // Ajout sécurisé de l'utilisateur via le service
             utilisateurService.addUtilisateur(utilisateurDTO, utilisateurDTO.getRole());
-            // Réponse en cas de succès
             return ResponseEntity.status(HttpStatus.CREATED).body("Utilisateur créé avec succès !");
         } catch (DataAccessException e) {
             String errorMessage = "Erreur lors de la création de l'utilisateur.";
-            if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolationException) {
-                String detailMessage = constraintViolationException.getSQLException().getMessage();
+            if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException violation) {
+                String detailMessage = violation.getSQLException().getMessage();
                 String uniqueValue = detailMessage.substring(detailMessage.indexOf('(') + 1, detailMessage.indexOf(')'));
                 errorMessage = "Violation de contrainte unique : La valeur \"" + uniqueValue + "\" existe déjà.";
             }
