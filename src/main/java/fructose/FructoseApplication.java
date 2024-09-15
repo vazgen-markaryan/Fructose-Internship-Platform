@@ -52,6 +52,11 @@ public class FructoseApplication implements CommandLineRunner {
 			} else {
 				utilisateurService.addUtilisateur(etudiantVazgen, "Etudiant");
 			}
+
+			// Test login
+			UtilisateurDTO loggedInUser = utilisateurService.login("1111111", "Vazgen123!");
+			System.out.println("Login successful for user: " + loggedInUser.getFullName());
+
 		} catch (Exception e) {
 			System.out.println("Une erreur s'est produite : " + e.getMessage());
 		}

@@ -3,6 +3,7 @@ package fructose.service;
 import fructose.model.Etudiant;
 import fructose.model.Utilisateur;
 import fructose.repository.EtudiantRepository;
+import fructose.repository.UtilisateurRepository;
 import fructose.service.dto.EtudiantDTO;
 import fructose.service.dto.UtilisateurDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -126,14 +128,22 @@ class UtilisateurServiceTest {
     }
 
     @Test
-    void testLogin_Success() {
+    public void test_successful_login_with_correct_matricule_and_password() {
         String matricule = "1234567";
-        String password = "PourquoiMoi?123";
+        String password = "CorrectPassword1!";
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setMatricule(matricule);
-        utilisateur.setPassword(password);
+        utilisateur.setPassword(new BCryptPasswordEncoder().encode(password));
+
+        UtilisateurRepository utilisateurRepository = mock(UtilisateurRepository.class);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        when(utilisateurRepository.findByMatricule(matricule)).thenReturn(utilisateur);
+
+        UtilisateurService utilisateurService = new UtilisateurService(null, passwordEncoder, utilisateurRepository);
+
         UtilisateurDTO result = utilisateurService.login(matricule, password);
 
         assertNotNull(result);
+        assertEquals(matricule, result.getMatricule());
     }
 }
