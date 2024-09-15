@@ -1,6 +1,7 @@
 package fructose.service;
 
 import fructose.model.Etudiant;
+import fructose.model.Utilisateur;
 import fructose.repository.EtudiantRepository;
 import fructose.service.dto.EtudiantDTO;
 import fructose.service.dto.UtilisateurDTO;
@@ -122,5 +123,17 @@ class UtilisateurServiceTest {
     void testIsValidRole() {
         assertTrue(utilisateurService.isValidRole("Etudiant"));
         assertFalse(utilisateurService.isValidRole("InvalidRole"));
+    }
+
+    @Test
+    void testLogin_Success() {
+        String matricule = "1234567";
+        String password = "PourquoiMoi?123";
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setMatricule(matricule);
+        utilisateur.setPassword(password);
+        UtilisateurDTO result = utilisateurService.login(matricule, password);
+
+        assertNotNull(result);
     }
 }

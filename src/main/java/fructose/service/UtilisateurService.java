@@ -1,9 +1,12 @@
 package fructose.service;
 
 import fructose.model.Etudiant;
+import fructose.model.Utilisateur;
 import fructose.repository.EtudiantRepository;
+import fructose.repository.UtilisateurRepository;
 import fructose.service.dto.EtudiantDTO;
 import fructose.service.dto.UtilisateurDTO;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +19,12 @@ public class UtilisateurService {
 
     private final EtudiantRepository etudiantRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UtilisateurRepository utilisateurRepository;
 
-    public UtilisateurService(EtudiantRepository etudiantRepository, PasswordEncoder passwordEncoder) {
+    public UtilisateurService(EtudiantRepository etudiantRepository, PasswordEncoder passwordEncoder, @Qualifier("utilisateurRepository") UtilisateurRepository utilisateurRepository) {
         this.etudiantRepository = etudiantRepository;
         this.passwordEncoder = passwordEncoder;
+        this.utilisateurRepository = utilisateurRepository;
     }
 
     private static final List<String> VALID_ROLES = Arrays.asList("Etudiant", "Professeur", "Employeur", "Gestionnaire de Stage");
@@ -99,5 +104,19 @@ public class UtilisateurService {
 
     public boolean isValidRole(String role) {
         return VALID_ROLES.contains(role);
+    }
+
+    public UtilisateurDTO login(String matricule, String password) {
+        System.out.println("Matricule: " + matricule);
+        Utilisateur utilisateur = utilisateurRepository.findByMatricule(matricule);
+        System.out.println("Utilisateur: " + utilisateur);
+        if (utilisateur == null) {
+            throw new IllegalArgumentException("L'étudiant avec matricule " + matricule + " n'existe pas");
+        }
+        if (passwordEncoder.matches(password, utilisateur.getPassword())) {
+            return UtilisateurDTO.toDTO(utilisateur);
+        } else {
+            throw new IllegalArgumentException("Mot de passe incorrect");
+        }
     }
 }
