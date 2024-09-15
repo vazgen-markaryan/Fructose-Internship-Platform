@@ -13,10 +13,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email"),
-        @UniqueConstraint(columnNames = "matricule")
-})
+@Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_role")
 public class Utilisateur {
@@ -47,6 +44,7 @@ public class Utilisateur {
 
     @NotNull
     @NotEmpty
+    @Column(unique = true)
     @Pattern(regexp = "^\\(\\d{3}\\) \\d{3}-\\d{4}$", message = "Le numéro de téléphone doit être au format (123) 456-7890")
     private String phoneNumber;
 
@@ -57,7 +55,7 @@ public class Utilisateur {
     private String adress;
 
     @Pattern(regexp = "^\\d{7}$", message = "Le Matricule doit contenir 7 chiffres")
-    @Column(name = "matricule", unique = true)
+    @Column(unique = true)
     private String matricule;
 
     @NotNull

@@ -40,10 +40,7 @@ const CreerUtilisateur = () => {
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             return "L'adresse courriel doit être valide";
         }
-        if (email.length < 10 || email.length > 100) {
-            return "L'adresse courriel doit contenir entre 10 et 100 caractères";
-        }
-        if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$/.test(password)) {
+        if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(password)) {
             return "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial";
         }
         if (password !== confirmPassword) {
