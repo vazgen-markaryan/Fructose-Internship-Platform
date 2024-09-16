@@ -146,4 +146,46 @@ class UtilisateurServiceTest {
         assertNotNull(result);
         assertEquals(matricule, result.getMatricule());
     }
+
+    @Test
+    public void test_login_with_incorrect_matricule() {
+        String matricule = "1234567";
+        String password = "CorrectPassword1!";
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setMatricule(matricule);
+        utilisateur.setPassword(new BCryptPasswordEncoder().encode(password));
+
+        UtilisateurRepository utilisateurRepository = mock(UtilisateurRepository.class);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        when(utilisateurRepository.findByMatricule(matricule)).thenReturn(null);
+
+        UtilisateurService utilisateurService = new UtilisateurService(null, passwordEncoder, utilisateurRepository);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.login(matricule, password);
+        });
+
+        assertEquals("L'étudiant avec matricule 1234567 n'existe pas", exception.getMessage());
+    }
+
+    @Test
+    public void test_login_with_incorrect_password() {
+        String matricule = "1234567";
+        String password = "CorrectPassword1!";
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setMatricule(matricule);
+        utilisateur.setPassword(new BCryptPasswordEncoder().encode(password));
+
+        UtilisateurRepository utilisateurRepository = mock(UtilisateurRepository.class);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        when(utilisateurRepository.findByMatricule(matricule)).thenReturn(utilisateur);
+
+        UtilisateurService utilisateurService = new UtilisateurService(null, passwordEncoder, utilisateurRepository);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.login(matricule, "IncorrectPassword1!");
+        });
+
+        assertEquals("Mot de passe incorrect", exception.getMessage());
+    }
 }

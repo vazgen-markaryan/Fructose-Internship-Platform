@@ -107,9 +107,7 @@ public class UtilisateurService {
     }
 
     public UtilisateurDTO login(String matricule, String password) {
-        System.out.println("Matricule: " + matricule);
         Utilisateur utilisateur = utilisateurRepository.findByMatricule(matricule);
-        System.out.println("Utilisateur: " + utilisateur);
         if (utilisateur == null) {
             throw new IllegalArgumentException("L'étudiant avec matricule " + matricule + " n'existe pas");
         }
