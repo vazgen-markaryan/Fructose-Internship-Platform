@@ -6,6 +6,7 @@ import MotDePasse from "./auth/signup/MotDePasse";
 import SelectionRole from "./auth/signup/SelectionRole";
 import InformationsEtudiant from "./auth/signup/InformationsEtudiant";
 import InformationsEmployeur from "./auth/signup/InformationsEmployeur";
+import InformationsGestionnaire from "./auth/signup/InformationsGestionnaire";
 
 const CreerUtilisateur = () => {
     const [utilisateur, setUtilisateur] = useState({
@@ -98,6 +99,8 @@ const CreerUtilisateur = () => {
                 return <InformationsEtudiant utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsEtudiant>
             }else if (utilisateur.role === "Employeur"){
                 return <InformationsEmployeur utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsEmployeur>
+            }else if (utilisateur.role === "Gestionnaire de Stage"){
+                return <InformationsGestionnaire utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsGestionnaire>
             }
 
         } else if (currentStep === 4){
