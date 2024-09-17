@@ -5,6 +5,7 @@ import CoordonneesUtilisateur from "./auth/signup/CoordonneesUtilisateur";
 import MotDePasse from "./auth/signup/MotDePasse";
 import SelectionRole from "./auth/signup/SelectionRole";
 import InformationsEtudiant from "./auth/signup/InformationsEtudiant";
+import InformationsEmployeur from "./auth/signup/InformationsEmployeur";
 
 const CreerUtilisateur = () => {
     const [utilisateur, setUtilisateur] = useState({
@@ -15,6 +16,7 @@ const CreerUtilisateur = () => {
         phoneNumber: '',
         address: '',
         matricule: '',
+        companyName:'',
         role: '',
         program: ''
     });
@@ -94,7 +96,10 @@ const CreerUtilisateur = () => {
         } else if (currentStep === 3){
             if(utilisateur.role === "Etudiant"){
                 return <InformationsEtudiant utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsEtudiant>
+            }else if (utilisateur.role === "Employeur"){
+                return <InformationsEmployeur utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsEmployeur>
             }
+
         } else if (currentStep === 4){
             return <MotDePasse utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></MotDePasse>
         }
