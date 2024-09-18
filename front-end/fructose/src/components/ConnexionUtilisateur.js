@@ -86,12 +86,12 @@ const ConnexionUtilisateur = () => {
                     <div className="login-content">
                         <div className="input-container">
                             <label>Email:</label>
-                            <input type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
+                            <input className={`${errors.email ? "field-invalid" : ""}`} type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
                             {errors.email && <p style={{color: 'red'}}>{errors.email}</p>}
                         </div>
                         <div className="input-container">
                             <label>Mot de passe:</label>
-                            <input type="password" name="password" onChange={handleChange} value={utilisateur.password} required/>
+                            <input className={`${errors.password ? "field-invalid" : ""}`} type="password" name="password" onChange={handleChange} value={utilisateur.password} required/>
                             {errors.password && <p style={{color: 'red'}}>{errors.password}</p>}
                         </div>
                         <div style={{display: 'flex', alignItems: 'center', marginTop: '20px'}}>
