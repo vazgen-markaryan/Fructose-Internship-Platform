@@ -1,5 +1,8 @@
 package fructose.service.dto;
 
+import fructose.model.Employeur;
+import fructose.model.Etudiant;
+import fructose.model.Professeur;
 import fructose.model.Utilisateur;
 import lombok.*;
 
@@ -7,39 +10,63 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class UtilisateurDTO {
     private Long id;
     private String fullName;
     private String email;
     private String password;
-    private String phoneNumber;
-    private String adress;
     private String matricule;
     private String role;
-
+    private String departament;
+    
     public static Utilisateur toEntity(UtilisateurDTO utilisateur_dto) {
-        Utilisateur utilisateur = new Utilisateur();
+        Utilisateur utilisateur;
+        switch (utilisateur_dto.getRole()) {
+            case "Etudiant":
+                utilisateur = new Etudiant();
+                break;
+            case "Professeur":
+                utilisateur = new Professeur();
+                break;
+            case "Employeur":
+                utilisateur = new Employeur();
+                break;
+            default:
+                throw new IllegalArgumentException("Role d'utilisateur : " + utilisateur_dto.getRole() + " n'est pas valide");
+        }
         utilisateur.setId(utilisateur_dto.getId());
         utilisateur.setFullName(utilisateur_dto.getFullName());
         utilisateur.setEmail(utilisateur_dto.getEmail());
         utilisateur.setPassword(utilisateur_dto.getPassword());
-        utilisateur.setPhoneNumber(utilisateur_dto.getPhoneNumber());
-        utilisateur.setAdress(utilisateur_dto.getAdress());
         utilisateur.setMatricule(utilisateur_dto.getMatricule());
         utilisateur.setRole(utilisateur_dto.getRole());
+        utilisateur.setDepartament(utilisateur_dto.getDepartament());
         return utilisateur;
     }
 
     public static UtilisateurDTO toDTO(Utilisateur utilisateur) {
-        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-        utilisateurDTO.setId(utilisateur.getId());
-        utilisateurDTO.setFullName(utilisateur.getFullName());
-        utilisateurDTO.setEmail(utilisateur.getEmail());
-        utilisateurDTO.setPassword(utilisateur.getPassword());
-        utilisateurDTO.setPhoneNumber(utilisateur.getPhoneNumber());
-        utilisateurDTO.setAdress(utilisateur.getAdress());
-        utilisateurDTO.setMatricule(utilisateur.getMatricule());
-        utilisateurDTO.setRole(utilisateur.getRole());
-        return utilisateurDTO;
+        UtilisateurDTO utilisateur_dto;
+        switch (utilisateur.getRole()) {
+            case "Etudiant":
+                utilisateur_dto = new EtudiantDTO();
+                break;
+            case "Professeur":
+                utilisateur_dto = new ProfesseurDTO();
+                break;
+            case "Employeur":
+                utilisateur_dto = new EmployeurDTO();
+                break;
+            default:
+                throw new IllegalArgumentException("Role d'utilisateur : " + utilisateur.getRole() + " n'est pas valide");
+        }
+        utilisateur_dto.setId(utilisateur.getId());
+        utilisateur_dto.setFullName(utilisateur.getFullName());
+        utilisateur_dto.setEmail(utilisateur.getEmail());
+        utilisateur_dto.setPassword(utilisateur.getPassword());
+        utilisateur_dto.setMatricule(utilisateur.getMatricule());
+        utilisateur_dto.setRole(utilisateur.getRole());
+        utilisateur_dto.setDepartament(utilisateur.getDepartament());
+        return utilisateur_dto;
     }
 }
