@@ -42,21 +42,21 @@ class UtilisateurServiceTest {
     }
 
     @Test
-    public void test_successful_login_with_correct_matricule_and_password() {
+    public void test_successful_login_with_correct_email_and_password() {
         Utilisateur utilisateurVazgan = Utilisateur.createUtilisateur("Etudiant",
                 "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!",
                 "1111111", "Etudiant", "informatique", null);
         utilisateurVazgan.setPassword(new BCryptPasswordEncoder().encode(utilisateurVazgan.getPassword()));
         String password = "Vazgen123!";
 
-        when(utilisateurRepository.findByMatricule("1111111")).thenReturn(utilisateurVazgan);
+        when(utilisateurRepository.findByEmail("vazgen@gmail.com")).thenReturn(utilisateurVazgan);
         doReturn(true).when(passwordEncoder).matches(password, utilisateurVazgan.getPassword());
 
-        UtilisateurDTO result = utilisateurService.login(utilisateurVazgan.getMatricule(), password);
+        UtilisateurDTO result = utilisateurService.login(utilisateurVazgan.getEmail(), password);
 
         assertNotNull(result);
         assertEquals(utilisateurVazgan.getMatricule(), result.getMatricule());
-        verify(utilisateurRepository).findByMatricule(utilisateurVazgan.getMatricule());
+        verify(utilisateurRepository).findByEmail(utilisateurVazgan.getEmail());
     }
 
     @Test
@@ -136,30 +136,29 @@ class UtilisateurServiceTest {
     }
 
     @Test
-    public void test_login_with_incorrect_matricule() {
-        String matricule = "1234567";
-        String password = "CorrectPassword1!";
+    public void test_login_with_incorrect_email() {
+        String email = "vazgen2@gmail.com";
+        String password = "Vazgen";
         Utilisateur utilisateur = new Utilisateur();
-        utilisateur.setMatricule(matricule);
-        utilisateur.setPassword(new BCryptPasswordEncoder().encode(password));
+        utilisateur.setEmail("vazgen@gmail.com");
 
-        when(utilisateurRepository.findByMatricule(matricule)).thenReturn(null);
+        when(utilisateurRepository.findByEmail(email)).thenReturn(null);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.login(matricule, password);
+            utilisateurService.login(email, password);
         });
 
-        assertEquals("L'utilisateur avec matricule 1234567 n'existe pas", exception.getMessage());
+        assertEquals("L'utilisateur avec mail vazgen2@gmail.com n'existe pas", exception.getMessage());
     }
 
     @Test
     public void test_login_with_incorrect_password() {
         Utilisateur utilisateurVazgan = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", "Etudiant", "informatique", null);
         utilisateurVazgan.setPassword(new BCryptPasswordEncoder().encode(utilisateurVazgan.getPassword()));
-        when(utilisateurRepository.findByMatricule(utilisateurVazgan.getMatricule())).thenReturn(utilisateurVazgan);
+        when(utilisateurRepository.findByEmail(utilisateurVazgan.getEmail())).thenReturn(utilisateurVazgan);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.login(utilisateurVazgan.getMatricule(), "IncorrectPassword1!");
+            utilisateurService.login(utilisateurVazgan.getEmail(), "IncorrectPassword1!");
         });
 
         assertEquals("Mot de passe incorrect", exception.getMessage());
