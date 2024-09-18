@@ -52,7 +52,6 @@ public class UtilisateurController {
 
     @PostMapping("/connexion")
     public ResponseEntity<?> connexion(@RequestBody @Valid UtilisateurDTO utilisateurDTO, BindingResult result) {
-        System.out.println(utilisateurDTO);
         if (result.hasErrors()) {
             String errorMessages = result.getFieldErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -61,7 +60,7 @@ public class UtilisateurController {
         }
 
         try {
-            UtilisateurDTO loggedInUser = utilisateurService.login(utilisateurDTO.getMatricule(), utilisateurDTO.getPassword());
+            UtilisateurDTO loggedInUser = utilisateurService.login(utilisateurDTO.getEmail(), utilisateurDTO.getPassword());
             return ResponseEntity.status(HttpStatus.OK).body(loggedInUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur s'est produite : " + e.getMessage());
