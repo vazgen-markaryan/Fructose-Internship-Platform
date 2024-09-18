@@ -11,6 +11,7 @@ const HomePage = () => {
                 <nav>
                     <ul>
                         <li><Link to="/creer-utilisateur">Créer Utilisateur</Link></li>
+                        <li><Link to="/connexion">Connexion</Link></li>
                     </ul>
                 </nav>
             </div>
