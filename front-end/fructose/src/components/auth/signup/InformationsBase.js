@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
+import Icon from "@mdi/react";
 const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
 
     const [errors, setErrors] = useState({});
@@ -30,24 +32,29 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <label>Nom:</label>
-                <input type="text" name="lastName" required value={utilisateur.lastName} onChange={handleChange}/>
-                <p style={{color: 'red'}}>{errors.lastName}</p>
-
-                <label>Prénom:</label>
-                <input type="text" name="firstName" required value={utilisateur.firstName} onChange={handleChange}/>
+                <p>Nom:</p>
+                <input className={`${errors.firstName ? "field-invalid" : ""}`} type="text" name="lastName" required value={utilisateur.lastName} onChange={handleChange}/>
                 <p style={{color: 'red'}}>{errors.firstName}</p>
 
-                <label>Email:</label>
-                <input type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
+                <p>Prénom:</p>
+                <input className={`${errors.lastName ? "field-invalid" : ""}`} type="text" name="firstName" required value={utilisateur.firstName} onChange={handleChange}/>
+                <p style={{color: 'red'}}>{errors.lastName}</p>
+
+                <p>Email:</p>
+                <input className={`${errors.email ? "field-invalid" : ""}`} type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
                 <p style={{color: 'red'}}>{errors.email}</p>
 
                 <br/>
-                <button onClick={() => {
-                    switchStep(false)
-                }}>Reculer
-                </button>
-                <button type={"submit"}>Continuer</button>
+
+                <div className="form-dock">
+                    <button onClick={() => {switchStep(false)}}>
+                        <Icon path={mdiChevronLeft} size={1}/>
+                    </button>
+                    <div className={"toolbar-spacer"}>
+
+                    </div>
+                    <button type="submit" className={"btn-filled"}>Continuer<Icon path={mdiChevronRight} size={1}/></button>
+                </div>
             </form>
         </div>
     );

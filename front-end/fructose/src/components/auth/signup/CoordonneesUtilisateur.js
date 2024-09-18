@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
+import Icon from "@mdi/react";
 
 const CoordonneesUtilisateur = ({utilisateur, handleChange, switchStep}) => {
 
@@ -41,11 +43,16 @@ const CoordonneesUtilisateur = ({utilisateur, handleChange, switchStep}) => {
                 <p style={{color: 'red'}}>{errors.phoneNumber}</p>
 
                 <br/>
-                <button onClick={() => {
-                    switchStep(false)
-                }}>Reculer
-                </button>
-                <button type={"submit"}>Continuer</button>
+
+                <div className="form-dock">
+                    <button onClick={() => {switchStep(false)}}>
+                        <Icon path={mdiChevronLeft} size={1}/>
+                    </button>
+                    <div className={"toolbar-spacer"}>
+
+                    </div>
+                    <button type="submit" className={"btn-filled"}>Continuer<Icon path={mdiChevronRight} size={1}/></button>
+                </div>
             </form>
         </div>
     );

@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import Icon from "@mdi/react";
+import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 
 const MotDePasse = ({utilisateur, handleChange, switchStep}) => {
 
@@ -30,14 +32,22 @@ const MotDePasse = ({utilisateur, handleChange, switchStep}) => {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <label>Mot de passe:</label>
+                <p>Mot de passe:</p>
                 <input type="password" name="password" onChange={handleChange} value={utilisateur.password} required />
 
-                <label>Confirmer le mot de passe:</label>
+                <p>Confirmer le mot de passe:</p>
                 <input type="password" name="confirmPassword" onChange={handleConfirmPasswordChange} required />
 
                 <br/>
-                <button type={"submit"}>Continuer</button>
+                <div className="form-dock">
+                    <button onClick={() => {switchStep(false)}}>
+                        <Icon path={mdiChevronLeft} size={1}/>
+                    </button>
+                    <div className={"toolbar-spacer"}>
+
+                    </div>
+                    <button type="submit" className={"btn-filled"}>Soumettre<Icon path={mdiChevronRight} size={1}/></button>
+                </div>
             </form>
         </div>
     );

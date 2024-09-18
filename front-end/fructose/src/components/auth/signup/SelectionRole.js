@@ -1,4 +1,6 @@
 import React from "react";
+import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
+import Icon from "@mdi/react";
 
 const SelectionRole = ({utilisateur, handleChange, switchStep}) => {
 
@@ -28,7 +30,14 @@ const SelectionRole = ({utilisateur, handleChange, switchStep}) => {
                 <label htmlFor="gestionnaire">Gestionnaire de Stage</label>
                 <input id="gestionnaire" type="radio" name="role" value="Gestionnaire de Stage" onChange={handleChange} checked={utilisateur.role === "Gestionnaire de Stage"}/>
                 <br/>
-                <button type="submit">Continuer</button>
+                <div className="form-dock">
+                    <div className={"toolbar-spacer"}>
+
+                    </div>
+                    <button type="submit" className={"btn-filled"}>Continuer<Icon path={mdiChevronRight} size={1}/></button>
+                </div>
+
+
             </form>
         </div>
     );
