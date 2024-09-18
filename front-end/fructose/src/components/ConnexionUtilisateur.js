@@ -5,21 +5,43 @@ import {mdiArrowLeft} from "@mdi/js";
 
 
 const ConnexionUtilisateur = () => {
-
     const [utilisateur, setUtilisateur] = useState({
         email: '',
         password: ''
     });
 
-
-
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState({
+        email: '',
+        password: ''
+    });
 
     const navigate = useNavigate();
 
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setUtilisateur({ ...utilisateur, [name]: value });
+
+        // Effacer le message d'erreur lorsque l'utilisateur commence à taper
+        setErrors({ ...errors, [name]: '' });
+    };
 
     const handleSubmit = () => {
-        fetch('/creer-utilisateur', {
+        let validationErrors = {};
+
+        if (!utilisateur.email) {
+            validationErrors.email = 'Email est requis';
+        }
+
+        if (!utilisateur.password) {
+            validationErrors.password = 'Mot de passe est requis';
+        }
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        fetch('/connexion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,7 +59,6 @@ const ConnexionUtilisateur = () => {
                 navigate('/');
             })
             .catch(error => {
-                setError(`Erreur: ${error.message}`); //Pour afficher erreur sur Écran
                 console.error('Erreur:', error);
             });
     };
@@ -49,6 +70,7 @@ const ConnexionUtilisateur = () => {
                 <div className="bg-auth-point"></div>
                 <div className="bg-auth-point"></div>
             </div>
+
             <div className="auth-body">
                 <div className="login-frame">
                     <div className="login-head">
@@ -63,16 +85,18 @@ const ConnexionUtilisateur = () => {
                     </div>
                     <div className="login-content">
                         <div className="input-container">
-                            <p>Courriel</p>
-                            <input type="text"/>
+                            <label>Email:</label>
+                            <input type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
+                            {errors.email && <p style={{color: 'red'}}>{errors.email}</p>}
                         </div>
                         <div className="input-container">
-                            <p>Mot de passe</p>
-                            <input type="text"/>
+                            <label>Mot de passe:</label>
+                            <input type="password" name="password" onChange={handleChange} value={utilisateur.password} required/>
+                            {errors.password && <p style={{color: 'red'}}>{errors.password}</p>}
                         </div>
                         <div style={{display: 'flex', alignItems: 'center', marginTop: '20px'}}>
                             <div style={{flexGrow: 1}}></div>
-                            <button className="btn-filled">
+                            <button className="btn-filled" onClick={handleSubmit}>
                                 Continuer <span className="mdi mdi-chevron-right"></span>
                             </button>
                         </div>
@@ -81,6 +105,6 @@ const ConnexionUtilisateur = () => {
             </div>
         </div>
     );
-
 }
+
 export default ConnexionUtilisateur;
