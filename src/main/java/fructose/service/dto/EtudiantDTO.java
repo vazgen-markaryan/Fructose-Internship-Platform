@@ -1,12 +1,11 @@
 package fructose.service.dto;
 
 import fructose.model.Etudiant;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-
+@ToString
 public class EtudiantDTO extends UtilisateurDTO {
 
     public static EtudiantDTO toDTO(Etudiant etudiant) {
@@ -15,10 +14,9 @@ public class EtudiantDTO extends UtilisateurDTO {
         etudiant_dto.setFullName(etudiant.getFullName());
         etudiant_dto.setEmail(etudiant.getEmail());
         etudiant_dto.setPassword(etudiant.getPassword());
-        etudiant_dto.setPhoneNumber(etudiant.getPhoneNumber());
-        etudiant_dto.setAdress(etudiant.getAdress());
         etudiant_dto.setMatricule(etudiant.getMatricule());
         etudiant_dto.setRole("Etudiant");
+        etudiant_dto.setDepartement(etudiant.getDepartement());
         return etudiant_dto;
     }
 
@@ -28,10 +26,9 @@ public class EtudiantDTO extends UtilisateurDTO {
         etudiant.setFullName(etudiant_dto.getFullName());
         etudiant.setEmail(etudiant_dto.getEmail());
         etudiant.setPassword(etudiant_dto.getPassword());
-        etudiant.setPhoneNumber(etudiant_dto.getPhoneNumber());
-        etudiant.setAdress(etudiant_dto.getAdress());
         etudiant.setMatricule(etudiant_dto.getMatricule());
         etudiant.setRole("Etudiant");
+        etudiant.setDepartement(etudiant_dto.getDepartement());
         return etudiant;
     }
 }

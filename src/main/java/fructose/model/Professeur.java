@@ -10,13 +10,13 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-@DiscriminatorValue("RECORD_ETUDIANT")
-public class Etudiant extends Utilisateur {
-	public Etudiant() {
+@DiscriminatorValue("RECORD_PROFESSEUR")
+public class Professeur extends Utilisateur {
+	public Professeur() {
 		super();
 	}
 	
-	public Etudiant(String fullName, String email, String password, String matricule, String role, String departement, String companyName) {
+	public Professeur(String fullName, String email, String password, String matricule, String role, String departement, String companyName) {
 		super(fullName, email, password, matricule, role, departement, companyName);
 	}
 }

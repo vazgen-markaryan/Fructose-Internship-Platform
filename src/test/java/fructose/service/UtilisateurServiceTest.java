@@ -2,11 +2,10 @@ package fructose.service;
 
 import fructose.model.Etudiant;
 import fructose.model.Utilisateur;
-import fructose.repository.EtudiantRepository;
+import fructose.repository.vides.EtudiantRepository;
 import fructose.repository.UtilisateurRepository;
 import fructose.service.dto.EtudiantDTO;
 import fructose.service.dto.UtilisateurDTO;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

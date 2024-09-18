@@ -1,6 +1,5 @@
 package fructose.model;
 
-import fructose.service.dto.EtudiantDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -13,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_role")
+@DiscriminatorColumn(name = "RECORD_TYPE", discriminatorType = DiscriminatorType.STRING)
 public class Utilisateur {
 
     @Id
@@ -23,78 +22,57 @@ public class Utilisateur {
 
     @NotNull
     @NotEmpty
-    @Size(min = 6, max = 50)
-    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Le nom complet doit contenir uniquement des lettres et des espaces")
+    @Size(min = 6, max = 50, message = "Le nom complet doit contenir entre 6 et 50 caractères")
+    @Pattern(regexp = "^[\\p{L}\\s]+$", message = "Le nom complet doit contenir uniquement des lettres et des espaces")
     private String fullName;
-
-    @Email(message = "L'adresse courriel doit être valide")
+    
     @NotNull
     @NotEmpty
-    @Size(min = 10, max = 100)
+    @Size(min = 10, max = 100, message = "L'adresse courriel doit contenir entre 10 et 100 caractères")
     @Column(unique = true)
+    @Email(message = "L'adresse courriel doit être valide")
     private String email;
-
+    
     @NotNull
     @NotEmpty
-    @Size(min = 8)
+    @Size(min = 8, message = "Le mot de passe doit contenir au moins 8 caractères")
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$", message = "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial")
     private String password;
-
-    @NotNull
-    @NotEmpty
+    
     @Column(unique = true)
-    @Pattern(regexp = "^\\(\\d{3}\\) \\d{3}-\\d{4}$", message = "Le numéro de téléphone doit être au format (123) 456-7890")
-    private String phoneNumber;
-
-    @NotNull
-    @NotEmpty
-    @Size(min = 3, max = 100, message = "L'adresse doit contenir entre 3 et 100 caractères")
-    @Pattern(regexp = "^[A-Za-z0-9\\s]+$", message = "L'adresse doit contenir uniquement des lettres et des chiffres")
-    private String adress;
-
     @Pattern(regexp = "^\\d{7}$", message = "Le Matricule doit contenir 7 chiffres")
-    @Column(unique = true)
     private String matricule;
 
     @NotNull
     @NotEmpty
-    @Size(min = 3, max = 50)
-    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Le nom doit contenir uniquement des lettres et des espaces")
+    @Size(min = 3, max = 50, message = "Le rôle doit contenir entre 3 et 50 caractères")
+    @Pattern(regexp = "^[\\p{L}\\s]+$", message = "Le nom doit contenir uniquement des lettres et des espaces")
     private String role;
-
-    public static Utilisateur createUtilisateur(String type,
-                                                String fullName,
-                                                String email,
-                                                String password,
-                                                String phoneNumber,
-                                                String address,
-                                                String matricule,
-                                                String role
-    ) {
-        if (type.equalsIgnoreCase("Etudiant")) {
-            Etudiant etudiant = new Etudiant();
-            etudiant.setFullName(fullName);
-            etudiant.setEmail(email);
-            etudiant.setPassword(password);
-            etudiant.setPhoneNumber(phoneNumber);
-            etudiant.setAdress(address);
-            etudiant.setMatricule(matricule);
-            etudiant.setRole(role);
-            return etudiant;
-        } else {
-            throw new IllegalArgumentException("Invalid user type: " + type);
-        }
+    
+    @Size(max = 100, message = "Le nom du département doit contenir au maximum 100 caractères")
+    @Pattern(regexp = "^[\\p{L}\\s]+$", message = "Le nom du département doit contenir uniquement des lettres et des espaces")
+    private String departement;
+    
+    @Size(max = 100, message = "Le nom de l'entreprise doit contenir au maximum 100 caractères")
+    @Pattern(regexp = "^[\\p{L}\\s]+$", message = "Le nom de l'entreprise doit contenir uniquement des lettres et des espaces")
+    private String companyName;
+    
+    public Utilisateur(String fullName, String email, String password, String matricule, String role, String departement, String companyName) {
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.matricule = matricule;
+        this.role = role;
+        this.departement = departement;
+        this.companyName = companyName;
     }
-
-    public EtudiantDTO toEtudiantDTO() {
-        EtudiantDTO etudiantDTO = new EtudiantDTO();
-        etudiantDTO.setFullName(this.fullName);
-        etudiantDTO.setEmail(this.email);
-        etudiantDTO.setPassword(this.password);
-        etudiantDTO.setPhoneNumber(this.phoneNumber);
-        etudiantDTO.setAdress(this.adress);
-        etudiantDTO.setMatricule(this.matricule);
-        etudiantDTO.setRole(this.role);
-        return etudiantDTO;
+    
+    public static Utilisateur createUtilisateur(String type, String fullName, String email, String password, String matricule, String role, String departement, String companyName) {
+	    return switch (type.toLowerCase()) {
+		    case "etudiant" -> new Etudiant(fullName, email, password, matricule, role, departement, companyName);
+		    case "employeur" -> new Employeur(fullName, email, password, matricule, role, departement, companyName);
+		    case "professeur" -> new Professeur(fullName, email, password, matricule, role, departement, companyName);
+		        default -> throw new IllegalArgumentException("Type d'utilisateur: " + type + " n'est pas supporté");
+	    };
     }
 }
