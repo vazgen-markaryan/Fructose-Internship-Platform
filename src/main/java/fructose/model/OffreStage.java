@@ -80,11 +80,6 @@ public class OffreStage {
     @NotNull
     @NotEmpty
     @Size(min = 1, max = 50)
-    private String dureeStage;
-
-    @NotNull
-    @NotEmpty
-    @Size(min = 1, max = 50)
     private String nombreHeuresSemaine;
 
     @NotNull
@@ -131,7 +126,6 @@ public class OffreStage {
         offreStage.setModaliteTravail(modaliteTravail);
         offreStage.setDateDebut(dateDebut);
         offreStage.setDateFin(dateFin);
-        offreStage.setDureeStage(dureeStage);
         offreStage.setNombreHeuresSemaine(nombreHeuresSemaine);
         offreStage.setNombrePostes(nombrePostes);
         offreStage.setDateLimiteCandidature(dateLimiteCandidature);

@@ -24,7 +24,6 @@ public class OffreStageDTO {
     private String modaliteTravail;
     private LocalDate dateDebut;
     private LocalDate dateFin;
-    private String dureeStage;
     private String nombreHeuresSemaine;
     private int nombrePostes;
     private LocalDate dateLimiteCandidature;
@@ -42,7 +41,6 @@ public class OffreStageDTO {
         offreStageDTO.setModaliteTravail(offreStage.getModaliteTravail());
         offreStageDTO.setDateDebut(offreStage.getDateDebut());
         offreStageDTO.setDateFin(offreStage.getDateFin());
-        offreStageDTO.setDureeStage(offreStage.getDureeStage());
         offreStageDTO.setNombreHeuresSemaine(offreStage.getNombreHeuresSemaine());
         offreStageDTO.setNombrePostes(offreStage.getNombrePostes());
         offreStageDTO.setDateLimiteCandidature(offreStage.getDateLimiteCandidature());
@@ -62,7 +60,6 @@ public class OffreStageDTO {
         offreStage.setModaliteTravail(offreStageDTO.getModaliteTravail());
         offreStage.setDateDebut(offreStageDTO.getDateDebut());
         offreStage.setDateFin(offreStageDTO.getDateFin());
-        offreStage.setDureeStage(offreStageDTO.getDureeStage());
         offreStage.setNombreHeuresSemaine(offreStageDTO.getNombreHeuresSemaine());
         offreStage.setNombrePostes(offreStageDTO.getNombrePostes());
         offreStage.setDateLimiteCandidature(offreStageDTO.getDateLimiteCandidature());
