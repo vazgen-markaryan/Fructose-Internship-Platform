@@ -34,15 +34,15 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
             <form onSubmit={handleSubmit}>
                 <p>Nom:</p>
                 <input className={`${errors.firstName ? "field-invalid" : ""}`} type="text" name="lastName" required value={utilisateur.lastName} onChange={handleChange}/>
-                <p style={{color: 'red'}}>{errors.firstName}</p>
+                <p className={"field-invalid-text"}>{errors.firstName}</p>
 
                 <p>Prénom:</p>
                 <input className={`${errors.lastName ? "field-invalid" : ""}`} type="text" name="firstName" required value={utilisateur.firstName} onChange={handleChange}/>
-                <p style={{color: 'red'}}>{errors.lastName}</p>
+                <p className={"field-invalid-text"}>{errors.lastName}</p>
 
                 <p>Email:</p>
                 <input className={`${errors.email ? "field-invalid" : ""}`} type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
-                <p style={{color: 'red'}}>{errors.email}</p>
+                <p className={"field-invalid-text"}>{errors.email}</p>
 
                 <br/>
 

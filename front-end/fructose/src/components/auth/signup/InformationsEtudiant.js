@@ -5,33 +5,39 @@ import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 
 const InformationsEtudiant = ({utilisateur, handleChange, switchStep}) => {
 
+    const [errors, setErrors] = useState({});
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const errorMessage = validateFields();
-        if (errorMessage) {
-            console.log(errorMessage)
+        if (Object.keys(errorMessage).length > 0) {
+            setErrors(errorMessage);
         } else {
             switchStep(true)
         }
     };
 
     const validateFields = () => {
+        let errors = {};
         if (!/^\d{7}$/.test(utilisateur.matricule)) {
-            return "Le Matricule doit contenir 7 chiffres";
+            errors.matricule = "Le Matricule doit contenir 7 chiffres";
         }
+        return errors
     }
 
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <label>Matricule:</label>
-                <input type="text" name="matricule" required value={utilisateur.matricule} onChange={handleChange} />
+                <p>Matricule:</p>
+                <input type="text" name="matricule" className={`${errors.matricule ? "field-invalid" : ""}`} required value={utilisateur.matricule} onChange={handleChange} />
+                <p className={"field-invalid-text"}>{errors.matricule}</p>
 
-                <label>Programme:</label>
-                <select name="program" onChange={handleChange} value={utilisateur.program} required>
+                <p>Programme:</p>
+                <select name="program" className={`${errors.program ? "field-invalid" : ""}`} onChange={handleChange} value={utilisateur.program} required>
                     <option value="420.B0">Techniques de l'informatique</option>
                     <option value="123.A1">Techniques de l'architecture</option>
                 </select>
+                <p className={"field-invalid-text"}>{errors.program}</p>
 
                 <br/>
 

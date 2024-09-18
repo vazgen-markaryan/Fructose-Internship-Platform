@@ -6,11 +6,13 @@ const MotDePasse = ({utilisateur, handleChange, switchStep}) => {
 
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const [errors, setErrors] = useState({});
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const errorMessage = validateFields();
-        if (errorMessage) {
-            console.log(errorMessage)
+        if (Object.keys(errorMessage).length > 0) {
+            setErrors(errorMessage)
         } else {
             switchStep(true)
         }
@@ -21,22 +23,26 @@ const MotDePasse = ({utilisateur, handleChange, switchStep}) => {
     };
 
     const validateFields = () => {
+        let errors = {};
         if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(utilisateur.password)) {
-            return "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial";
+            errors.password = "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial";
         }
         if (utilisateur.password !== confirmPassword) {
-            return "Les mots de passe ne correspondent pas";
+            errors.passwordConf = "Les mots de passe ne correspondent pas";
         }
+        return errors
     }
 
     return (
         <div>
             <form onSubmit={handleSubmit}>
                 <p>Mot de passe:</p>
-                <input type="password" name="password" onChange={handleChange} value={utilisateur.password} required />
+                <input type="password" name="password" className={`${errors.password ? "field-invalid" : ""}`} onChange={handleChange} value={utilisateur.password} required />
+                <p className={"field-invalid-text"}>{errors.password}</p>
 
                 <p>Confirmer le mot de passe:</p>
-                <input type="password" name="confirmPassword" onChange={handleConfirmPasswordChange} required />
+                <input type="password" name="confirmPassword" className={`${errors.passwordConf ? "field-invalid" : ""}`} onChange={handleConfirmPasswordChange} required />
+                <p className={"field-invalid-text"}>{errors.passwordConf}</p>
 
                 <br/>
                 <div className="form-dock">
