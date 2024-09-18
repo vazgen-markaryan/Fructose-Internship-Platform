@@ -111,20 +111,30 @@ const CreerUtilisateur = () => {
     const [currentStep, setCurrentStep] = useState(0)
 
     return (
+
+
         <div>
-            <h1>Créer Utilisateur</h1>
-            <p>Etape {currentStep + 1}</p>
+            <div className="bg-auth">
+                <div className="bg-auth-point"></div>
+                <div className="bg-auth-point"></div>
+                <div className="bg-auth-point"></div>
+            </div>
 
-            {getPage()}
-
-
-
-
-                <nav>
-                    <ul>
-                        <li><Link to="/">Retour à l'accueil</Link></li>
-                    </ul>
-                </nav>
+            <div className="auth-body">
+                <div className="signup-frame">
+                    <div className="signup-head">
+                        <div className="toolbar-items">
+                            <Link to="/">Retour à l'accueil<span className="mdi mdi-arrow-left"></span></Link>
+                            <p className="m-0">Fructose</p>
+                        </div>
+                        <br/>
+                        <h1>Bienvenue</h1>
+                    </div>
+                    <div className="signup-content">
+                        {getPage()}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
