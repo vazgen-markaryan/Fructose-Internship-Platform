@@ -18,7 +18,8 @@ public class UtilisateurDTO {
     private String password;
     private String matricule;
     private String role;
-    private String departament;
+    private String departement;
+    private String companyName;
     
     public static Utilisateur toEntity(UtilisateurDTO utilisateur_dto) {
         Utilisateur utilisateur;
@@ -41,7 +42,8 @@ public class UtilisateurDTO {
         utilisateur.setPassword(utilisateur_dto.getPassword());
         utilisateur.setMatricule(utilisateur_dto.getMatricule());
         utilisateur.setRole(utilisateur_dto.getRole());
-        utilisateur.setDepartament(utilisateur_dto.getDepartament());
+        utilisateur.setDepartement(utilisateur_dto.getDepartement());
+        utilisateur.setCompanyName(utilisateur_dto.getCompanyName());
         return utilisateur;
     }
 
@@ -66,7 +68,8 @@ public class UtilisateurDTO {
         utilisateur_dto.setPassword(utilisateur.getPassword());
         utilisateur_dto.setMatricule(utilisateur.getMatricule());
         utilisateur_dto.setRole(utilisateur.getRole());
-        utilisateur_dto.setDepartament(utilisateur.getDepartament());
+        utilisateur_dto.setDepartement(utilisateur.getDepartement());
+        utilisateur_dto.setCompanyName(utilisateur.getCompanyName());
         return utilisateur_dto;
     }
 }

@@ -16,7 +16,8 @@ public class ProfesseurDTO extends UtilisateurDTO {
 		professeur_dto.setPassword(professeur.getPassword());
 		professeur_dto.setMatricule(professeur.getMatricule());
 		professeur_dto.setRole("Professeur");
-		professeur_dto.setDepartament(professeur.getDepartament());
+		professeur_dto.setDepartement(professeur.getDepartement());
+		professeur_dto.setCompanyName(professeur.getCompanyName());
 		return professeur_dto;
 	}
 	
@@ -28,7 +29,8 @@ public class ProfesseurDTO extends UtilisateurDTO {
 		professeur.setPassword(professeur_dto.getPassword());
 		professeur.setMatricule(professeur_dto.getMatricule());
 		professeur.setRole("Professeur");
-		professeur.setDepartament(professeur_dto.getDepartament());
+		professeur.setDepartement(professeur_dto.getDepartement());
+		professeur.setCompanyName(professeur_dto.getCompanyName());
 		return professeur;
 	}
 }

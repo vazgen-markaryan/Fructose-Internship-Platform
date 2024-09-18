@@ -44,13 +44,13 @@ public class FructoseApplication implements CommandLineRunner {
 	
 	@Override
 	public void run(String... args) {
-		Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", "Etudiant", "Informatique");
+		Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", "Etudiant", "Informatique", null);
 		EtudiantDTO etudiantVazgen = EtudiantDTO.toDTO((Etudiant) vazgen);
 		
-		Utilisateur francois = Utilisateur.createUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "2222222", "Professeur", "Informatique");
+		Utilisateur francois = Utilisateur.createUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "2222222", "Professeur", "Informatique", null);
 		ProfesseurDTO professeurFrancois = ProfesseurDTO.toDTO((Professeur) francois);
 		
-		Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Ubisoft Incorporé", "ubisoft@gmail.com", "Ubisoft123!", null, "Employeur", "Informatique");
+		Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, "Employeur", "Informatique", "Ubisoft Incorporé");
 		EmployeurDTO employeurUbisoft = EmployeurDTO.toDTO((Employeur) ubisoft);
 		
 		try {

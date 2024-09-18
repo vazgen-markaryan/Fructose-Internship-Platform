@@ -16,7 +16,8 @@ public class EmployeurDTO extends UtilisateurDTO {
 		employeur_dto.setPassword(employeur.getPassword());
 		employeur_dto.setMatricule(employeur.getMatricule());
 		employeur_dto.setRole("Employeur");
-		employeur_dto.setDepartament(employeur.getDepartament());
+		employeur_dto.setDepartement(employeur.getDepartement());
+		employeur_dto.setCompanyName(employeur.getCompanyName());
 		return employeur_dto;
 	}
 	
@@ -28,7 +29,8 @@ public class EmployeurDTO extends UtilisateurDTO {
 		employeur.setPassword(employeur_dto.getPassword());
 		employeur.setMatricule(employeur_dto.getMatricule());
 		employeur.setRole("Employeur");
-		employeur.setDepartament(employeur_dto.getDepartament());
+		employeur.setDepartement(employeur_dto.getDepartement());
+		employeur.setCompanyName(employeur_dto.getCompanyName());
 		return employeur;
 	}
 }

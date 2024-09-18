@@ -16,7 +16,7 @@ public class EtudiantDTO extends UtilisateurDTO {
         etudiant_dto.setPassword(etudiant.getPassword());
         etudiant_dto.setMatricule(etudiant.getMatricule());
         etudiant_dto.setRole("Etudiant");
-        etudiant_dto.setDepartament(etudiant.getDepartament());
+        etudiant_dto.setDepartement(etudiant.getDepartement());
         return etudiant_dto;
     }
 
@@ -28,7 +28,7 @@ public class EtudiantDTO extends UtilisateurDTO {
         etudiant.setPassword(etudiant_dto.getPassword());
         etudiant.setMatricule(etudiant_dto.getMatricule());
         etudiant.setRole("Etudiant");
-        etudiant.setDepartament(etudiant_dto.getDepartament());
+        etudiant.setDepartement(etudiant_dto.getDepartement());
         return etudiant;
     }
 }
