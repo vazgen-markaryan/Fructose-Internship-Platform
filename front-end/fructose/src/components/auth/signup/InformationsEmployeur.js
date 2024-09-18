@@ -1,5 +1,7 @@
 import {Link, useNavigate} from "react-router-dom";
 import React, {useState} from "react";
+import Icon from "@mdi/react";
+import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 
 const InformationsEmployeur = ({utilisateur, handleChange, switchStep}) => {
 
@@ -26,8 +28,15 @@ const InformationsEmployeur = ({utilisateur, handleChange, switchStep}) => {
                 <input type="text" name="companyName" required value={utilisateur.companyName} onChange={handleChange} />
                 <br/>
 
-                <button onClick={() => {switchStep(false)}}>Reculer</button>
-                <button type={"submit"}>Continuer</button>
+                <div className="form-dock">
+                    <button onClick={() => {switchStep(false)}}>
+                        <Icon path={mdiChevronLeft} size={1}/>
+                    </button>
+                    <div className={"toolbar-spacer"}>
+
+                    </div>
+                    <button type="submit" className={"btn-filled"}>Continuer<Icon path={mdiChevronRight} size={1}/></button>
+                </div>
             </form>
         </div>
     );

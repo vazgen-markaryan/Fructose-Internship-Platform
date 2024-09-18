@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
+import Icon from "@mdi/react";
 
 const CoordonneesUtilisateur = ({utilisateur, handleChange, switchStep}) => {
 
@@ -32,20 +34,25 @@ const CoordonneesUtilisateur = ({utilisateur, handleChange, switchStep}) => {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <label>Adresse:</label>
-                <input type="text" name="address" required value={utilisateur.address} onChange={handleChange}/>
-                <p style={{color: 'red'}}>{errors.address}</p>
+                <p>Adresse:</p>
+                <input type="text" name="address" className={`${errors.address ? "field-invalid" : ""}`} required value={utilisateur.address} onChange={handleChange}/>
+                <p className={"field-invalid-text"}>{errors.address}</p>
 
-                <label>Numéro de téléphone:</label>
-                <input type="text" name="phoneNumber" required value={utilisateur.phoneNumber} onChange={handleChange}/>
-                <p style={{color: 'red'}}>{errors.phoneNumber}</p>
+                <p>Numéro de téléphone:</p>
+                <input type="text" name="phoneNumber" className={`${errors.phoneNumber ? "field-invalid" : ""}`} required value={utilisateur.phoneNumber} onChange={handleChange}/>
+                <p className={"field-invalid-text"}>{errors.phoneNumber}</p>
 
                 <br/>
-                <button onClick={() => {
-                    switchStep(false)
-                }}>Reculer
-                </button>
-                <button type={"submit"}>Continuer</button>
+
+                <div className="form-dock">
+                    <button onClick={() => {switchStep(false)}}>
+                        <Icon path={mdiChevronLeft} size={1}/>
+                    </button>
+                    <div className={"toolbar-spacer"}>
+
+                    </div>
+                    <button type="submit" className={"btn-filled"}>Continuer<Icon path={mdiChevronRight} size={1}/></button>
+                </div>
             </form>
         </div>
     );

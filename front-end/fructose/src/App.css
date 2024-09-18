@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Lexend:wght@100..900&display=swap');
+
+
+
 body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
@@ -25,7 +29,7 @@ h6 {}
 h1,
 h2,
 h3 {
-    font-family: var(--font-title);
+    font-family: "Lexend", sans-serif;
     margin: 0 0 18px 0;
 }
 
@@ -39,12 +43,12 @@ h4,
 h5,
 h6,
 p {
-    font-family: var(--font-primary);
+    font-family: "Roboto Condensed", sans-serif;
 }
 
 h1 {
-    font-weight: 700;
-    font-size: 42px;
+    font-weight: 400;
+    font-size: 48px;
 }
 
 h2 {
@@ -117,7 +121,7 @@ button>*{
   Design du input
  */
 
-input[type="text"], textarea, select{
+input[type="text"], input[type="password"], textarea, select{
     background-color: transparent;
     height: 36px;
     max-width: 400px;
@@ -131,11 +135,27 @@ input[type="text"], textarea, select{
     margin: 5px 0 6px 0;
 }
 
-input[type="text"]:focus, textarea:focus, select:focus{
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus, select:focus{
     border: 1px solid rgba(122, 122, 122, 0.7);
     border-bottom: 3px solid #ff006c;
     outline: none;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+}
+
+input.field-invalid{
+    border-color: red;
+    padding-right: calc(1.5em + .75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(.375em + .1875rem) center;
+    background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+}
+
+p.field-invalid-text{
+    color: red;
+    font-size: 12px;
+    line-height: 12px;
+    padding: 0 4px;
 }
 
 .m-0 {
@@ -151,6 +171,22 @@ input[type="text"]:focus, textarea:focus, select:focus{
 .toolbar-spacer {
     flex-grow: 1;
 }
+
+
+/*
+    Formulaires
+ */
+
+.form-dock{
+    position: absolute; bottom: 0; right: 0; left: 0; display: flex; align-items: center; border-top: 1px solid rgba(131, 131, 131, 0.445); padding: 10px 10px;
+}
+
+
+
+
+/*
+ TODO: Demenager ce contenu dans un fichier plus specifique
+ */
 
 .auth-body {
     width: 100%;
@@ -251,3 +287,7 @@ input[type="text"]:focus, textarea:focus, select:focus{
     top: 90%;
     transform: translateX(-50%) translateY(-50%);
 }
+
+/*
+ END TODO
+ */

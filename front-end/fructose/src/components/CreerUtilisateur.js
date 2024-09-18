@@ -7,6 +7,8 @@ import SelectionRole from "./auth/signup/SelectionRole";
 import InformationsEtudiant from "./auth/signup/InformationsEtudiant";
 import InformationsEmployeur from "./auth/signup/InformationsEmployeur";
 import InformationsGestionnaire from "./auth/signup/InformationsGestionnaire";
+import {mdiArrowLeft} from "@mdi/js";
+import Icon from "@mdi/react";
 
 const CreerUtilisateur = () => {
     const [utilisateur, setUtilisateur] = useState({
@@ -124,7 +126,7 @@ const CreerUtilisateur = () => {
                 <div className="signup-frame">
                     <div className="signup-head">
                         <div className="toolbar-items">
-                            <Link to="/">Retour à l'accueil<span className="mdi mdi-arrow-left"></span></Link>
+                            <Link to="/"><Icon path={mdiArrowLeft} title="User Profile" size={1}/><span className="mdi mdi-arrow-left"></span></Link>
                             <p className="m-0">Fructose</p>
                         </div>
                         <br/>
