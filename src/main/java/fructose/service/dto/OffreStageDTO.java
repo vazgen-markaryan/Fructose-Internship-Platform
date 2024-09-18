@@ -48,4 +48,24 @@ public class OffreStageDTO {
         offreStageDTO.setDateLimiteCandidature(offreStage.getDateLimiteCandidature());
         return offreStageDTO;
     }
+
+    public static OffreStage toEntity(OffreStageDTO offreStageDTO) {
+        OffreStage offreStage = new OffreStage();
+        offreStage.setNom(offreStageDTO.getNom());
+        offreStage.setPoste(offreStageDTO.getPoste());
+        offreStage.setDescription(offreStageDTO.getDescription());
+        offreStage.setCompagnie(offreStageDTO.getCompagnie());
+        offreStage.setProgrammeEtude(offreStageDTO.getProgrammeEtude());
+        offreStage.setTauxHoraire(offreStageDTO.getTauxHoraire());
+        offreStage.setTypeEmploi(offreStageDTO.getTypeEmploi());
+        offreStage.setAdresse(offreStageDTO.getAdresse());
+        offreStage.setModaliteTravail(offreStageDTO.getModaliteTravail());
+        offreStage.setDateDebut(offreStageDTO.getDateDebut());
+        offreStage.setDateFin(offreStageDTO.getDateFin());
+        offreStage.setDureeStage(offreStageDTO.getDureeStage());
+        offreStage.setNombreHeuresSemaine(offreStageDTO.getNombreHeuresSemaine());
+        offreStage.setNombrePostes(offreStageDTO.getNombrePostes());
+        offreStage.setDateLimiteCandidature(offreStageDTO.getDateLimiteCandidature());
+        return offreStage;
+    }
 }
