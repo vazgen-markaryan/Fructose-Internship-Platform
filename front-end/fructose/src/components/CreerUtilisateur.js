@@ -16,9 +16,7 @@ const CreerUtilisateur = () => {
         lastName: '',
         email: '',
         password: '',
-        matricule: '',
         role: '',
-        departement: ''
     });
 
     const [confirmPassword, setConfirmPassword] = useState('');
