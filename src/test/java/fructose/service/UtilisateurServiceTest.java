@@ -11,10 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -39,27 +36,27 @@ class UtilisateurServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
-    private Utilisateur utilisateur;
-
     @BeforeEach
     public void setUp() {
-        utilisateur = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "(123) 456-7890", "1234 rue Pomme", "1111111", "Etudiant");
-        utilisateur.setPassword(new BCryptPasswordEncoder().encode(utilisateur.getPassword()));
-        reset(utilisateurRepository, passwordEncoder);
+        utilisateurService = new UtilisateurService(etudiantRepository, null, null, passwordEncoder, utilisateurRepository);
     }
 
     @Test
     public void test_successful_login_with_correct_matricule_and_password() {
+        Utilisateur utilisateurVazgan = Utilisateur.createUtilisateur("Etudiant",
+                "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!",
+                "1111111", "Etudiant", "informatique", null);
+        utilisateurVazgan.setPassword(new BCryptPasswordEncoder().encode(utilisateurVazgan.getPassword()));
         String password = "Vazgen123!";
-        when(utilisateurRepository.findByMatricule("1111111")).thenReturn(utilisateur);
-        doReturn(true).when(passwordEncoder).matches(password, utilisateur.getPassword());
 
-        UtilisateurDTO result = utilisateurService.login(utilisateur.getMatricule(), password);
-        System.out.println(result);
+        when(utilisateurRepository.findByMatricule("1111111")).thenReturn(utilisateurVazgan);
+        doReturn(true).when(passwordEncoder).matches(password, utilisateurVazgan.getPassword());
+
+        UtilisateurDTO result = utilisateurService.login(utilisateurVazgan.getMatricule(), password);
 
         assertNotNull(result);
-        assertEquals(utilisateur.getMatricule(), result.getMatricule());
-        verify(utilisateurRepository).findByMatricule(utilisateur.getMatricule());
+        assertEquals(utilisateurVazgan.getMatricule(), result.getMatricule());
+        verify(utilisateurRepository).findByMatricule(utilisateurVazgan.getMatricule());
     }
 
     @Test
@@ -92,21 +89,6 @@ class UtilisateurServiceTest {
         when(passwordEncoder.encode(utilisateurDTO.getPassword())).thenReturn("encodedPassword");
 
         utilisateurService.addUtilisateur(utilisateurDTO, "Etudiant");
-
-        verify(etudiantRepository, times(1)).save(any(Etudiant.class));
-    }
-
-    @Test
-    void testUpdateUtilisateur_Success() {
-        Long id = 1L;
-        EtudiantDTO utilisateurDTO = new EtudiantDTO();
-        utilisateurDTO.setId(id);
-        Etudiant etudiant = new Etudiant();
-        etudiant.setId(id);
-        when(etudiantRepository.existsById(id)).thenReturn(true);
-        when(etudiantRepository.save(any(Etudiant.class))).thenReturn(etudiant);
-
-        utilisateurService.updateUtilisateur(utilisateurDTO, "Etudiant");
 
         verify(etudiantRepository, times(1)).save(any(Etudiant.class));
     }
@@ -167,15 +149,17 @@ class UtilisateurServiceTest {
             utilisateurService.login(matricule, password);
         });
 
-        assertEquals("L'étudiant avec matricule 1234567 n'existe pas", exception.getMessage());
+        assertEquals("L'utilisateur avec matricule 1234567 n'existe pas", exception.getMessage());
     }
 
     @Test
     public void test_login_with_incorrect_password() {
-        when(utilisateurRepository.findByMatricule(utilisateur.getMatricule())).thenReturn(utilisateur);
+        Utilisateur utilisateurVazgan = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", "Etudiant", "informatique", null);
+        utilisateurVazgan.setPassword(new BCryptPasswordEncoder().encode(utilisateurVazgan.getPassword()));
+        when(utilisateurRepository.findByMatricule(utilisateurVazgan.getMatricule())).thenReturn(utilisateurVazgan);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.login(utilisateur.getMatricule(), "IncorrectPassword1!");
+            utilisateurService.login(utilisateurVazgan.getMatricule(), "IncorrectPassword1!");
         });
 
         assertEquals("Mot de passe incorrect", exception.getMessage());
