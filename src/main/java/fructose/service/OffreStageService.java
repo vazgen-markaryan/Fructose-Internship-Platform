@@ -14,10 +14,9 @@ public class OffreStageService {
         this.offreStageRepository = offreStageRepository;
     }
 
-    public OffreStageDTO addOffreStage(OffreStageDTO offreStageDTO) {
+    public void addOffreStage(OffreStageDTO offreStageDTO) {
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
-        OffreStage savedOffreStage = offreStageRepository.save(offreStage);
-        return OffreStageDTO.toDTO(savedOffreStage);
+        offreStageRepository.save(offreStage);
     }
 
     public void deleteOffreStage(Long id) {
@@ -26,6 +25,7 @@ public class OffreStageService {
 
     public OffreStageDTO getOffreStage(Long id) {
         OffreStage offreStage = offreStageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("OffreStage not found"));
+        System.out.println(offreStage);
         return OffreStageDTO.toDTO(offreStage);
     }
 }
