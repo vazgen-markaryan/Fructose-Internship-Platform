@@ -69,16 +69,17 @@ public class FructoseApplication implements CommandLineRunner {
 	}
 	
 	private void checkAndAddUtilisateur(UtilisateurDTO utilisateurDTO, String userType) {
+		System.out.println(); //Ajouté juste pour la lisibilité
 		List<UtilisateurDTO> utilisateurList = utilisateurService.getUtilisateurs(userType);
 		boolean exists = utilisateurList
 				.stream()
-				.anyMatch(utilisateur -> utilisateur.getFullName().equals(utilisateurDTO.getFullName()));
+				.anyMatch(utilisateur -> utilisateur.getEmail().equals(utilisateurDTO.getEmail()));
 		
 		if (exists) {
-			System.out.println(userType + " " + utilisateurDTO.getFullName() + " existe déjà dans la base de données");
+			System.out.println(userType + " avec email " + utilisateurDTO.getEmail() + " existe déjà dans la base de données");
 		} else {
 			utilisateurService.addUtilisateur(utilisateurDTO, userType);
-			System.out.println(userType + " " + utilisateurDTO.getFullName() + " a été ajouté avec succès");
+			System.out.println(userType + " avec email " + utilisateurDTO.getEmail() + " a été ajouté avec succès");
 		}
 	}
 }

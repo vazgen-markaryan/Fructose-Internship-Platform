@@ -25,22 +25,22 @@ public class Utilisateur {
     @Size(min = 6, max = 50)
     @Pattern(regexp = "^[\\p{L}\\s]+$", message = "Le nom complet doit contenir uniquement des lettres et des espaces")
     private String fullName;
-
-    @Email(message = "L'adresse courriel doit être valide")
+    
     @NotNull
     @NotEmpty
     @Size(min = 10, max = 100)
     @Column(unique = true)
+    @Email(message = "L'adresse courriel doit être valide")
     private String email;
-
+    
     @NotNull
     @NotEmpty
     @Size(min = 8)
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$", message = "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial")
     private String password;
-
-    @Pattern(regexp = "^\\d{7}$", message = "Le Matricule doit contenir 7 chiffres")
+    
     @Column(unique = true)
+    @Pattern(regexp = "^\\d{7}$", message = "Le Matricule doit contenir 7 chiffres")
     private String matricule;
 
     @NotNull
