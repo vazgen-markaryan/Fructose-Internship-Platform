@@ -96,7 +96,7 @@ const CreerUtilisateur = () => {
                 return <InformationsEtudiant utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsEtudiant>
             }else if (utilisateur.role === "Employeur"){
                 return <InformationsEmployeur utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsEmployeur>
-            }else if (utilisateur.role === "Gestionnaire de Stage"){
+            }else if (utilisateur.role === "Professeur"){
                 return <InformationsGestionnaire utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsGestionnaire>
             }
 

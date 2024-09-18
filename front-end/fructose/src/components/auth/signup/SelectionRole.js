@@ -27,8 +27,8 @@ const SelectionRole = ({utilisateur, handleChange, switchStep}) => {
                 <input id="etudiant" type="radio" name="role" value="Etudiant" onChange={handleChange} checked={utilisateur.role === "Etudiant"}/>
                 <label htmlFor="employeur">Employeur</label>
                 <input id="employeur" type="radio" name="role" value="Employeur" onChange={handleChange} checked={utilisateur.role === "Employeur"}/>
-                <label htmlFor="gestionnaire">Gestionnaire de Stage</label>
-                <input id="gestionnaire" type="radio" name="role" value="Gestionnaire de Stage" onChange={handleChange} checked={utilisateur.role === "Gestionnaire de Stage"}/>
+                <label htmlFor="professeur">Professeur</label>
+                <input id="professeur" type="radio" name="role" value="Professeur" onChange={handleChange} checked={utilisateur.role === "Professeur"}/>
                 <br/>
                 <div className="form-dock">
                     <div className={"toolbar-spacer"}>
