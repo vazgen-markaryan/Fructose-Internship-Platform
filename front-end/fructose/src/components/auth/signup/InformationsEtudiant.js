@@ -33,11 +33,11 @@ const InformationsEtudiant = ({utilisateur, handleChange, switchStep}) => {
                 <p className={"field-invalid-text"}>{errors.matricule}</p>
 
                 <p>Programme:</p>
-                <select name="program" className={`${errors.program ? "field-invalid" : ""}`} onChange={handleChange} value={utilisateur.program} required>
+                <select name="departement" className={`${errors.departement ? "field-invalid" : ""}`} onChange={handleChange} value={utilisateur.departement} required>
                     <option value="420.B0">Techniques de l'informatique</option>
                     <option value="123.A1">Techniques de l'architecture</option>
                 </select>
-                <p className={"field-invalid-text"}>{errors.program}</p>
+                <p className={"field-invalid-text"}>{errors.departement}</p>
 
                 <br/>
 

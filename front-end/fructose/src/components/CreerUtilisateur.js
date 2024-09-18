@@ -16,12 +16,9 @@ const CreerUtilisateur = () => {
         lastName: '',
         email: '',
         password: '',
-        phoneNumber: '',
-        address: '',
         matricule: '',
-        companyName:'',
         role: '',
-        program: ''
+        departement: ''
     });
 
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -31,6 +28,7 @@ const CreerUtilisateur = () => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
         setUtilisateur({ ...utilisateur, [name]: value });
 
         //TODO Seulement poour le futur Debug
@@ -43,7 +41,9 @@ const CreerUtilisateur = () => {
 
 
     const handleSubmit = () => {
-
+        utilisateur.fullName = utilisateur.firstName + " " + utilisateur.lastName
+        delete utilisateur.firstName
+        delete utilisateur.lastName
         fetch('/creer-utilisateur', {
             method: 'POST',
             headers: {
@@ -76,9 +76,9 @@ const CreerUtilisateur = () => {
     };
 
     const next = () => {
-        if(currentStep + 1 <= 4){
+        if(currentStep + 1 <= 3){
             setCurrentStep(currentStep + 1)
-        } else if (currentStep + 1 === 5){
+        } else if (currentStep + 1 === 4){
             handleSubmit()
         }
     };
@@ -95,8 +95,6 @@ const CreerUtilisateur = () => {
         } else if(currentStep === 1){
             return <InformationsBase utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsBase>;
         } else if (currentStep === 2){
-            return <CoordonneesUtilisateur utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></CoordonneesUtilisateur>
-        } else if (currentStep === 3){
             if(utilisateur.role === "Etudiant"){
                 return <InformationsEtudiant utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsEtudiant>
             }else if (utilisateur.role === "Employeur"){
@@ -105,7 +103,7 @@ const CreerUtilisateur = () => {
                 return <InformationsGestionnaire utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsGestionnaire>
             }
 
-        } else if (currentStep === 4){
+        } else if (currentStep === 3){
             return <MotDePasse utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></MotDePasse>
         }
     };
