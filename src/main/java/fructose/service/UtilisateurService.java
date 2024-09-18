@@ -150,10 +150,10 @@ public class UtilisateurService {
         return VALID_ROLES.contains(role);
     }
     
-    public UtilisateurDTO login(String matricule, String password) {
-        Utilisateur utilisateur = utilisateurRepository.findByMatricule(matricule);
+    public UtilisateurDTO login(String email, String password) {
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
         if (utilisateur == null) {
-            throw new IllegalArgumentException("L'utilisateur avec matricule " + matricule + " n'existe pas");
+            throw new IllegalArgumentException("L'utilisateur avec mail " + email + " n'existe pas");
         }
         if (passwordEncoder.matches(password, utilisateur.getPassword())) {
             return UtilisateurDTO.toDTO(utilisateur);

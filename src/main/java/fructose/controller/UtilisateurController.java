@@ -49,4 +49,22 @@ public class UtilisateurController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
         }
     }
+
+    @PostMapping("/connexion")
+    public ResponseEntity<?> connexion(@RequestBody @Valid UtilisateurDTO utilisateurDTO, BindingResult result) {
+        System.out.println(utilisateurDTO);
+        if (result.hasErrors()) {
+            String errorMessages = result.getFieldErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.joining(", "));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
+        }
+
+        try {
+            UtilisateurDTO loggedInUser = utilisateurService.login(utilisateurDTO.getMatricule(), utilisateurDTO.getPassword());
+            return ResponseEntity.status(HttpStatus.OK).body(loggedInUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur s'est produite : " + e.getMessage());
+        }
+    }
 }
