@@ -22,6 +22,9 @@ const InformationsEtudiant = ({utilisateur, handleChange, switchStep}) => {
         if (!/^\d{7}$/.test(utilisateur.matricule)) {
             errors.matricule = "Le Matricule doit contenir 7 chiffres";
         }
+        if(utilisateur.departement.length === 0){
+            errors.departement = "Aucun département sélectionné";
+        }
         return errors
     }
 
@@ -34,8 +37,9 @@ const InformationsEtudiant = ({utilisateur, handleChange, switchStep}) => {
 
                 <p>Programme:</p>
                 <select name="departement" className={`${errors.departement ? "field-invalid" : ""}`} onChange={handleChange} value={utilisateur.departement} required>
-                    <option value="420.B0">Techniques de l'informatique</option>
-                    <option value="123.A1">Techniques de l'architecture</option>
+                    <option value="">Sélectionner un programme</option>
+                    <option value="Informatique">Techniques de l'informatique</option>
+                    <option value="Architecture">Techniques de l'architecture</option>
                 </select>
                 <p className={"field-invalid-text"}>{errors.departement}</p>
 

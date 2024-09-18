@@ -28,7 +28,7 @@ public class Utilisateur {
     
     @NotNull
     @NotEmpty
-    @Size(min = 10, max = 100, message = "L'adresse courriel doit contenir entre 10 et 100 caractères")
+    @Size(min = 5, max = 100, message = "L'adresse courriel doit contenir entre 5 et 100 caractères")
     @Column(unique = true)
     @Email(message = "L'adresse courriel doit être valide")
     private String email;

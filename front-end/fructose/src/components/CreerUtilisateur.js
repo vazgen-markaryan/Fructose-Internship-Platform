@@ -42,8 +42,7 @@ const CreerUtilisateur = () => {
 
     const handleSubmit = () => {
         utilisateur.fullName = utilisateur.firstName + " " + utilisateur.lastName
-        delete utilisateur.firstName
-        delete utilisateur.lastName
+        console.log(utilisateur.fullName)
         fetch('/creer-utilisateur', {
             method: 'POST',
             headers: {
