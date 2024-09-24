@@ -3,98 +3,214 @@ package fructose.service;
 import fructose.model.OffreStage;
 import fructose.repository.OffreStageRepository;
 import fructose.service.dto.OffreStageDTO;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class OffreStageServiceTest {
 
-    @Mock
+    @InjectMocks
     private OffreStageService offreStageService;
 
     @Mock
     private OffreStageRepository offreStageRepository;
 
     @Mock
-    private OffreStage offreStage;
+    private OffreStageDTO offreStageDTO;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        offreStage = new OffreStage();
-        offreStage.setId(1L);
-        offreStage.setNom("Développeur Java chez Google");
-        offreStage.setPoste("Développeur Java");
-        offreStage.setDescription("Faire du développement Java chez Google");
-        offreStage.setCompagnie("Google");
-        offreStage.setProgrammeEtude("Techniques de l'informatique");
-        offreStage.setTauxHoraire("25$");
-        offreStage.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, États-Unis");
-        offreStage.setModaliteTravail("Télétravail");
-        offreStage.setDateDebut(LocalDate.of(2022, 5, 1));
-        offreStage.setDateFin(LocalDate.of(2022, 8, 31));
-        offreStage.setNombreHeuresSemaine("40 heures");
-        offreStage.setNombrePostes(5);
-        offreStage.setDateLimiteCandidature(LocalDate.of(2022, 4, 1));
-    }
-
-    @Test
-    void testAddOffreStage() {
-        OffreStageDTO offreStageDTO = new OffreStageDTO();
-        offreStageDTO.setNom("Développeur Java chez Google");
-        offreStageDTO.setPoste("Développeur Java");
+        offreStageDTO = new OffreStageDTO();
+        offreStageDTO.setId(1L);
+        offreStageDTO.setNom("Google");
+        offreStageDTO.setPoste("Developpeur Java");
         offreStageDTO.setDescription("Faire du développement Java chez Google");
         offreStageDTO.setCompagnie("Google");
-        offreStageDTO.setProgrammeEtude("Techniques de l'informatique");
-        offreStageDTO.setTauxHoraire("25$");
+        offreStageDTO.setProgrammeEtude("Technique de l'informatique");
+        offreStageDTO.setTauxHoraire("25");
         offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, États-Unis");
-        offreStageDTO.setModaliteTravail("Télétravail");
+        offreStageDTO.setTypeEmploi("Presentiel");
+        offreStageDTO.setModaliteTravail("Temps plein");
         offreStageDTO.setDateDebut(LocalDate.of(2022, 5, 1));
         offreStageDTO.setDateFin(LocalDate.of(2022, 8, 31));
         offreStageDTO.setNombreHeuresSemaine("40 heures");
         offreStageDTO.setNombrePostes(5);
         offreStageDTO.setDateLimiteCandidature(LocalDate.of(2022, 4, 1));
+    }
 
-        when(offreStageRepository.save(any(OffreStage.class))).thenReturn(offreStage);
-
+    @Test
+    void testAddOffreStageSuccess() {
         offreStageService.addOffreStage(offreStageDTO);
 
         verify(offreStageRepository, times(1)).save(any(OffreStage.class));
-
     }
 
     @Test
-    void testDeleteOffreStage() {
-        when(offreStageRepository.findById(offreStage.getId())).thenReturn(java.util.Optional.of(offreStage));
+    void testAddOffreStageIdNull() {
+        offreStageDTO.setId(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("id: L'identifiant ne peut pas être null", exception.getMessage());
     }
 
     @Test
-    void testGetOffreStage() {
-        OffreStageDTO expectedOffreStageDTO = OffreStageDTO.toDTO(offreStage);
+    void testAddOffreStageNomNull() {
+        offreStageDTO.setNom(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("nom: Le nom ne peut pas être vide", exception.getMessage());
+    }
 
-        when(offreStageRepository.findById(offreStage.getId())).thenReturn(java.util.Optional.of(offreStage));
+    @Test
+    void testAddOffreStagePosteNull() {
+        offreStageDTO.setPoste(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("poste: Le poste ne peut pas être vide", exception.getMessage());
+    }
 
-        OffreStageDTO result = offreStageService.getOffreStage(offreStage.getId());
+    @Test
+    void testAddOffreStageDescriptionNull() {
+        offreStageDTO.setDescription(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("description: La description ne peut pas être vide", exception.getMessage());
+    }
 
+    @Test
+    void testAddOffreStageCompagnieNull() {
+        offreStageDTO.setCompagnie(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("compagnie: La compagnie ne peut pas être vide", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageProgrammeEtudeNull() {
+        offreStageDTO.setProgrammeEtude(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("programmeEtude: Le programme d'étude ne peut pas être vide", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageTauxHoraireNull() {
+        offreStageDTO.setTauxHoraire(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("tauxHoraire: Le taux horaire ne peut pas être vide", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageTypeEmploiNull() {
+        offreStageDTO.setTypeEmploi(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("typeEmploi: Le type d'emploi ne peut pas être null", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageTypeEmploiInvalid() {
+        offreStageDTO.setTypeEmploi("Pina Colada");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("typeEmploi: Le type d'emploi doit être l'un des suivants : Presentiel, Virtuel, Hybride", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageAdresseNull() {
+        offreStageDTO.setAdresse(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("adresse: L'adresse ne peut pas être vide", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageModaliteTravailNull() {
+        offreStageDTO.setModaliteTravail(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("modaliteTravail: La modalité de travail ne peut pas être vide", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageDateDebutNull() {
+        offreStageDTO.setDateDebut(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("dateDebut: La date de début ne peut pas être null", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageDateFinNull() {
+        offreStageDTO.setDateFin(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("dateFin: La date de fin ne peut pas être null", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageNombreHeuresSemaineNull() {
+        offreStageDTO.setNombreHeuresSemaine(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("nombreHeuresSemaine: Le nombre d'heures par semaine ne peut pas être vide", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageNombrePostesInvalid() {
+        offreStageDTO.setNombrePostes(0);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("nombrePostes: Le nombre de postes ne peut pas être inferieur a 1", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageNull() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.addOffreStage(null);
+        });
+
+        assertEquals("OffreStageDTO ne peut pas être nul", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteOffreStageSuccess() {
+        offreStageService.deleteOffreStage(offreStageDTO.getId());
+
+        verify(offreStageRepository, times(1)).deleteById(offreStageDTO.getId());
+    }
+    @Test
+    void testGetOffreStageSuccess() {
+        OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(offreStage));
+
+        OffreStageDTO result = offreStageService.getOffreStage(offreStageDTO.getId());
         assertNotNull(result);
-        assertEquals(expectedOffreStageDTO.getNom(), result.getNom());
-        assertEquals(expectedOffreStageDTO.getPoste(), result.getPoste());
-        assertEquals(expectedOffreStageDTO.getDescription(), result.getDescription());
-        assertEquals(expectedOffreStageDTO.getCompagnie(), result.getCompagnie());
-        assertEquals(expectedOffreStageDTO.getProgrammeEtude(), result.getProgrammeEtude());
-        assertEquals(expectedOffreStageDTO.getTauxHoraire(), result.getTauxHoraire());
-        assertEquals(expectedOffreStageDTO.getAdresse(), result.getAdresse());
-        assertEquals(expectedOffreStageDTO.getModaliteTravail(), result.getModaliteTravail());
-        assertEquals(expectedOffreStageDTO.getDateDebut(), result.getDateDebut());
-        assertEquals(expectedOffreStageDTO.getDateFin(), result.getDateFin());
-        assertEquals(expectedOffreStageDTO.getNombreHeuresSemaine(), result.getNombreHeuresSemaine());
-        assertEquals(expectedOffreStageDTO.getNombrePostes(), result.getNombrePostes());
-        assertEquals(expectedOffreStageDTO.getDateLimiteCandidature(), result.getDateLimiteCandidature());
     }
 }
