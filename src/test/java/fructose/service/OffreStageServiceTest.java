@@ -96,6 +96,15 @@ public class OffreStageServiceTest {
     }
 
     @Test
+    void testAddOffreStageNomTropLong() {
+        offreStageDTO.setNom("Lorem ipsum dolor sit amet consectetur adipiscing elit Sed non risus Suspendisse lectus tortor dignissim sit amet adipiscing nec ultricies sed dolor Cras elementum ultrices diam Maecenas ligula massa varius a semper congue euismod non mi");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("nom: Le nom doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+    }
+
+    @Test
     void testAddOffreStageNomInvalide() {
         offreStageDTO.setNom("Google123");
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
