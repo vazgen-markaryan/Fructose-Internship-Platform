@@ -74,6 +74,37 @@ public class OffreStageServiceTest {
     }
 
     @Test
+    void testAddOffreStageNomVide() {
+        offreStageDTO.setNom("");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        for (String errorMessage : exception.getMessage().split(", ")) {
+            assertTrue(errorMessage.equals("nom: Le nom ne peut pas être vide") ||
+                    errorMessage.equals("nom: Le nom doit contenir au moins 3 caractères") ||
+                    errorMessage.equals("nom: Le nom doit contenir uniquement des lettres et des espaces"));
+        }
+    }
+
+    @Test
+    void testAddOffreStageNomTropCourt() {
+        offreStageDTO.setNom("AB");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("nom: Le nom doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageNomInvalide() {
+        offreStageDTO.setNom("Google123");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("nom: Le nom doit contenir uniquement des lettres et des espaces", exception.getMessage());
+    }
+
+    @Test
     void testAddOffreStagePosteNull() {
         offreStageDTO.setPoste(null);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {

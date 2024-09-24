@@ -20,7 +20,7 @@ public class OffreStageDTO {
     private Long id;
 
     @NotEmpty(message = "Le nom ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "Le nom doit contenir entre 3 et 100 caractères")
+    @Size(min = 3, max = 100, message = "Le nom doit contenir au moins 3 caractères et au plus 100 caractères")
     @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Le nom doit contenir uniquement des lettres et des espaces")
     private String nom;
 
