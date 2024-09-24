@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,7 +35,7 @@ public class OffreStageServiceTest {
         offreStageDTO.setId(1L);
         offreStageDTO.setNom("Google");
         offreStageDTO.setPoste("Developpeur Java");
-        offreStageDTO.setDescription("Faire du développement Java chez Google");
+        offreStageDTO.setDescription("Faire du developpement Java chez Google");
         offreStageDTO.setCompagnie("Google");
         offreStageDTO.setProgrammeEtude("Technique de l'informatique");
         offreStageDTO.setTauxHoraire("25");
@@ -146,7 +147,11 @@ public class OffreStageServiceTest {
 
     @Test
     void testAddOffreStagePosteTropLong() {
-        offreStageDTO.setPoste("Lorem ipsum dolor sit amet consectetur adipiscing elit Sed non risus Suspendisse lectus tortor dignissim sit amet adipiscing nec ultricies sed dolor Cras elementum ultrices diam Maecenas ligula massa varius a semper congue euismod non mi");
+        String randomString = new Random().ints(101, 0, 52)
+                .mapToObj(i -> "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".charAt(i))
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString();
+        offreStageDTO.setPoste(randomString);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
@@ -169,6 +174,50 @@ public class OffreStageServiceTest {
             offreStageService.addOffreStage(offreStageDTO);
         });
         assertEquals("description: La description ne peut pas être vide", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageDescriptionVide() {
+        offreStageDTO.setDescription("");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        for (String errorMessage : exception.getMessage().split(", ")) {
+            assertTrue(errorMessage.equals("description: La description ne peut pas être vide") ||
+                    errorMessage.equals("description: La description doit contenir au moins 10 caractères et au plus 500 caractères") ||
+                    errorMessage.equals("description: La description ne peut contenir que des caractères ASCII valides"));
+        }
+    }
+
+    @Test
+    void testAddOffreStageDescriptionTropCourt() {
+        offreStageDTO.setDescription("AB");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("description: La description doit contenir au moins 10 caractères et au plus 500 caractères", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageDescriptionTropLong() {
+        String randomString = new Random().ints(501, 0, 62)
+                .mapToObj(i -> "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".charAt(i))
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString();
+        offreStageDTO.setDescription(randomString);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("description: La description doit contenir au moins 10 caractères et au plus 500 caractères", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageDescriptionInvalide() {
+        offreStageDTO.setDescription("Gustave & Cieàâäéèêëîïôöùûüÿç");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("description: La description ne peut contenir que des caractères ASCII valides", exception.getMessage());
     }
 
     @Test

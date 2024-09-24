@@ -30,7 +30,8 @@ public class OffreStageDTO {
     private String poste;
 
     @NotEmpty(message = "La description ne peut pas être vide")
-    @Size(min = 10, max = 500)
+    @Size(min = 10, max = 500, message = "La description doit contenir au moins 10 caractères et au plus 500 caractères")
+    @Pattern(regexp = "^[\\x20-\\x7E]*$", message = "La description ne peut contenir que des caractères ASCII valides")
     private String description;
 
     @NotEmpty(message = "La compagnie ne peut pas être vide")
