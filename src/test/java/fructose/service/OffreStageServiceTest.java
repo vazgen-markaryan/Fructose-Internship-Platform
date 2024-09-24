@@ -283,6 +283,15 @@ public class OffreStageServiceTest {
     }
 
     @Test
+    void testAddOffreStageProgrammeEtudeInvalide() {
+        offreStageDTO.setProgrammeEtude("Pina Colada");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("programmeEtude: Le programme d'étude doit être l'un des suivants : Technique de l'informatique, Génie physique, Soin infirmiers", exception.getMessage());
+    }
+
+    @Test
     void testAddOffreStageTauxHoraireNull() {
         offreStageDTO.setTauxHoraire(null);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
