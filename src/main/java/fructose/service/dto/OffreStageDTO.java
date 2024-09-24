@@ -43,10 +43,10 @@ public class OffreStageDTO {
     @Pattern(regexp = "^(Technique de l'informatique|Genie physique|Soin infirmiers)$", message = "Le programme d'étude doit être l'un des suivants : Technique de l'informatique, Génie physique, Soin infirmiers")
     private String programmeEtude;
 
-    @NotEmpty(message = "Le taux horaire ne peut pas être vide")
-    @Size(min = 1, max = 10)
-    @Pattern(regexp = "^\\d+(\\.\\d{1,2})?$", message = "Le taux horaire doit être un nombre valide")
-    private String tauxHoraire;
+    @NotNull(message = "Le taux horaire ne peut pas être null")
+    @DecimalMin(value = "0.0", message = "Le taux horaire ne peut pas être négatif")
+
+    private Double tauxHoraire;
 
     @NotNull(message = "Le type d'emploi ne peut pas être null")
     @Pattern(regexp = "^(Presentiel|Virtuel|Hybride)$", message = "Le type d'emploi doit être l'un des suivants : Presentiel, Virtuel, Hybride")

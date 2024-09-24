@@ -53,7 +53,7 @@ public class OffreStage {
     @NotEmpty
     @Size(min = 1, max = 10)
     @Pattern(regexp = "^\\d+(\\.\\d{1,2})?$", message = "Le taux horaire doit être un nombre valide")
-    private String tauxHoraire;
+    private Double tauxHoraire;
 
     @NotNull
     @NotEmpty
@@ -102,13 +102,12 @@ public class OffreStage {
                                               String description,
                                               String compagnie,
                                               String programmeEtude,
-                                              String tauxHoraire,
+                                              Double tauxHoraire,
                                               String typeEmploi,
                                               String adresse,
                                               String modaliteTravail,
                                               LocalDate dateDebut,
                                               LocalDate dateFin,
-                                              String dureeStage,
                                               String nombreHeuresSemaine,
                                               int nombrePostes,
                                               LocalDate dateLimiteCandidature

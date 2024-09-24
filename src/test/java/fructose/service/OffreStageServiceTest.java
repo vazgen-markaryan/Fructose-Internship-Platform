@@ -38,7 +38,7 @@ public class OffreStageServiceTest {
         offreStageDTO.setDescription("Faire du developpement Java chez Google");
         offreStageDTO.setCompagnie("Google");
         offreStageDTO.setProgrammeEtude("Technique de l'informatique");
-        offreStageDTO.setTauxHoraire("25");
+        offreStageDTO.setTauxHoraire(23.75);
         offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, États-Unis");
         offreStageDTO.setTypeEmploi("Presentiel");
         offreStageDTO.setModaliteTravail("Temps plein");
@@ -297,7 +297,16 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("tauxHoraire: Le taux horaire ne peut pas être vide", exception.getMessage());
+        assertEquals("tauxHoraire: Le taux horaire ne peut pas être null", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageTauxHoraireInvalid() {
+        offreStageDTO.setTauxHoraire(-1.0);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("tauxHoraire: Le taux horaire ne peut pas être négatif", exception.getMessage());
     }
 
     @Test
