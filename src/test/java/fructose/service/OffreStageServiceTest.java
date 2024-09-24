@@ -230,6 +230,50 @@ public class OffreStageServiceTest {
     }
 
     @Test
+    void testAddOffreStageCompagnieVide() {
+        offreStageDTO.setCompagnie("");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        for (String errorMessage : exception.getMessage().split(", ")) {
+            assertTrue(errorMessage.equals("compagnie: La compagnie ne peut pas être vide") ||
+                    errorMessage.equals("compagnie: La compagnie doit contenir au moins 3 caractères et au plus 100 caractères") ||
+                    errorMessage.equals("compagnie: La compagnie ne peut contenir que des caractères ASCII valides"));
+        }
+    }
+
+    @Test
+    void testAddOffreStageCompagnieTropCourt() {
+        offreStageDTO.setCompagnie("AB");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("compagnie: La compagnie doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageCompagnieTropLong() {
+        String randomString = new Random().ints(101, 0, 62)
+                .mapToObj(i -> "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".charAt(i))
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString();
+        offreStageDTO.setCompagnie(randomString);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("compagnie: La compagnie doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageCompagnieInvalide() {
+        offreStageDTO.setCompagnie("Gustave & Cieàâäéèêëîïôöùûüÿç");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("compagnie: La compagnie ne peut contenir que des caractères ASCII valides", exception.getMessage());
+    }
+
+    @Test
     void testAddOffreStageProgrammeEtudeNull() {
         offreStageDTO.setProgrammeEtude(null);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {

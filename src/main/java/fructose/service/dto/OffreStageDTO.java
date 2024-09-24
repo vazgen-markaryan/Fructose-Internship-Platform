@@ -35,8 +35,8 @@ public class OffreStageDTO {
     private String description;
 
     @NotEmpty(message = "La compagnie ne peut pas être vide")
-    @Size(min = 3, max = 100)
-    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "La compagnie doit contenir uniquement des lettres et des espaces")
+    @Size(min = 3, max = 100, message = "La compagnie doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Pattern(regexp = "^[\\x20-\\x7E]*$", message = "La compagnie ne peut contenir que des caractères ASCII valides")
     private String compagnie;
 
     @NotEmpty(message = "Le programme d'étude ne peut pas être vide")
