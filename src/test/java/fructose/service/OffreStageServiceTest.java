@@ -39,7 +39,7 @@ public class OffreStageServiceTest {
         offreStageDTO.setCompagnie("Google");
         offreStageDTO.setProgrammeEtude("Technique de l'informatique");
         offreStageDTO.setTauxHoraire(23.75);
-        offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, États-Unis");
+        offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, Etats-Unis");
         offreStageDTO.setTypeEmploi("Presentiel");
         offreStageDTO.setModaliteTravail("Temps plein");
         offreStageDTO.setDateDebut(LocalDate.of(2022, 5, 1));
@@ -301,7 +301,7 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void testAddOffreStageTauxHoraireInvalid() {
+    void testAddOffreStageTauxHoraireInvalide() {
         offreStageDTO.setTauxHoraire(-1.0);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);

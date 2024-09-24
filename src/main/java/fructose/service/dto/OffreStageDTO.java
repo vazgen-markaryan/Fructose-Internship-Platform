@@ -45,7 +45,6 @@ public class OffreStageDTO {
 
     @NotNull(message = "Le taux horaire ne peut pas être null")
     @DecimalMin(value = "0.0", message = "Le taux horaire ne peut pas être négatif")
-
     private Double tauxHoraire;
 
     @NotNull(message = "Le type d'emploi ne peut pas être null")
@@ -53,7 +52,8 @@ public class OffreStageDTO {
     private String typeEmploi;
 
     @NotEmpty(message = "L'adresse ne peut pas être vide")
-    @Size(min = 3, max = 100)
+    @Size(min = 3, max = 100, message = "L'adresse doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Pattern(regexp = "^[\\x20-\\x7E]*$", message = "L'adresse ne peut contenir que des caractères ASCII valides")
     private String adresse;
 
     @NotEmpty(message = "La modalité de travail ne peut pas être vide")
