@@ -81,7 +81,7 @@ public class OffreStageServiceTest {
         });
         for (String errorMessage : exception.getMessage().split(", ")) {
             assertTrue(errorMessage.equals("nom: Le nom ne peut pas être vide") ||
-                    errorMessage.equals("nom: Le nom doit contenir au moins 3 caractères") ||
+                    errorMessage.equals("nom: Le nom doit contenir au moins 3 caractères et au plus 100 caractères") ||
                     errorMessage.equals("nom: Le nom doit contenir uniquement des lettres et des espaces"));
         }
     }
@@ -120,6 +120,46 @@ public class OffreStageServiceTest {
             offreStageService.addOffreStage(offreStageDTO);
         });
         assertEquals("poste: Le poste ne peut pas être vide", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStagePosteVide() {
+        offreStageDTO.setPoste("");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        for (String errorMessage : exception.getMessage().split(", ")) {
+            assertTrue(errorMessage.equals("poste: Le poste ne peut pas être vide") ||
+                    errorMessage.equals("poste: Le poste doit contenir au moins 3 caractères et au plus 100 caractères") ||
+                    errorMessage.equals("poste: Le poste doit contenir uniquement des lettres et des espaces"));
+        }
+    }
+
+    @Test
+    void testAddOffreStagePosteTropCourt() {
+        offreStageDTO.setPoste("AB");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("poste: Le poste doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStagePosteTropLong() {
+        offreStageDTO.setPoste("Lorem ipsum dolor sit amet consectetur adipiscing elit Sed non risus Suspendisse lectus tortor dignissim sit amet adipiscing nec ultricies sed dolor Cras elementum ultrices diam Maecenas ligula massa varius a semper congue euismod non mi");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("poste: Le poste doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStagePosteInvalide() {
+        offreStageDTO.setPoste("Developpeur Java123");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("poste: Le poste doit contenir uniquement des lettres et des espaces", exception.getMessage());
     }
 
     @Test

@@ -25,7 +25,7 @@ public class OffreStageDTO {
     private String nom;
 
     @NotEmpty(message = "Le poste ne peut pas être vide")
-    @Size(min = 3, max = 100)
+    @Size(min = 3, max = 100, message = "Le poste doit contenir au moins 3 caractères et au plus 100 caractères")
     @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Le poste doit contenir uniquement des lettres et des espaces")
     private String poste;
 
