@@ -67,9 +67,9 @@ public class OffreStageDTO {
     @NotNull(message = "La date de fin ne peut pas être null")
     private LocalDate dateFin;
 
-    @NotEmpty(message = "Le nombre d'heures par semaine ne peut pas être vide")
-    @Size(min = 1, max = 50)
-    private String nombreHeuresSemaine;
+    @Min(value = 1, message = "Le nombre d'heures par semaine ne peut pas être inferieur a 1")
+    @Max(value = 40, message = "Le nombre d'heures par semaine ne peut pas être superieur a 40")
+    private int nombreHeuresSemaine;
 
     @Min(value = 1, message = "Le nombre de postes ne peut pas être inferieur a 1")
     private int nombrePostes;

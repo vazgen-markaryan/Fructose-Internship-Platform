@@ -44,7 +44,7 @@ public class OffreStageServiceTest {
         offreStageDTO.setModaliteTravail("Temps plein");
         offreStageDTO.setDateDebut(LocalDate.now());
         offreStageDTO.setDateFin(LocalDate.now().plusMonths(6));
-        offreStageDTO.setNombreHeuresSemaine("40 heures");
+        offreStageDTO.setNombreHeuresSemaine(40);
         offreStageDTO.setNombrePostes(5);
         offreStageDTO.setDateLimiteCandidature(LocalDate.of(2022, 4, 1));
     }
@@ -436,12 +436,21 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void testAddOffreStageNombreHeuresSemaineNull() {
-        offreStageDTO.setNombreHeuresSemaine(null);
+    void testAddOffreStageNombreHeuresSemaineTropPetit() {
+        offreStageDTO.setNombreHeuresSemaine(0);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("nombreHeuresSemaine: Le nombre d'heures par semaine ne peut pas être vide", exception.getMessage());
+        assertEquals("nombreHeuresSemaine: Le nombre d'heures par semaine ne peut pas être inferieur a 1", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageNombreHeuresSemaineTropGrand() {
+        offreStageDTO.setNombreHeuresSemaine(41);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("nombreHeuresSemaine: Le nombre d'heures par semaine ne peut pas être superieur a 40", exception.getMessage());
     }
 
     @Test

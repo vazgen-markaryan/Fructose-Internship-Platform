@@ -79,7 +79,7 @@ public class OffreStage {
     @NotNull
     @NotEmpty
     @Size(min = 1, max = 50)
-    private String nombreHeuresSemaine;
+    private int nombreHeuresSemaine;
 
     @NotNull
     @NotEmpty
@@ -108,7 +108,7 @@ public class OffreStage {
                                               String modaliteTravail,
                                               LocalDate dateDebut,
                                               LocalDate dateFin,
-                                              String nombreHeuresSemaine,
+                                              int nombreHeuresSemaine,
                                               int nombrePostes,
                                               LocalDate dateLimiteCandidature
     ) {
