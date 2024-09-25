@@ -337,6 +337,50 @@ public class OffreStageServiceTest {
     }
 
     @Test
+    void testAddOffreStageAdresseVide() {
+        offreStageDTO.setAdresse("");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        for (String errorMessage : exception.getMessage().split(", ")) {
+            assertTrue(errorMessage.equals("adresse: L'adresse ne peut pas être vide") ||
+                    errorMessage.equals("adresse: L'adresse doit contenir au moins 3 caractères et au plus 100 caractères") ||
+                    errorMessage.equals("adresse: L'adresse ne peut contenir que des caractères ASCII valides"));
+        }
+    }
+
+    @Test
+    void testAddOffreStageAdresseTropCourt() {
+        offreStageDTO.setAdresse("AB");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("adresse: L'adresse doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageAdresseTropLong() {
+        String randomString = new Random().ints(101, 0, 62)
+                .mapToObj(i -> "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".charAt(i))
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString();
+        offreStageDTO.setAdresse(randomString);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("adresse: L'adresse doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageAdresseInvalide() {
+        offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, États-Unis");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("adresse: L'adresse ne peut contenir que des caractères ASCII valides", exception.getMessage());
+    }
+
+    @Test
     void testAddOffreStageModaliteTravailNull() {
         offreStageDTO.setModaliteTravail(null);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
