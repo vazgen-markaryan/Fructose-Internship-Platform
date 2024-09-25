@@ -16,6 +16,7 @@ const ConnexionUtilisateur = () => {
     });
 
     const navigate = useNavigate();
+    const [backendError, setBackendError] = useState('');
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -59,7 +60,7 @@ const ConnexionUtilisateur = () => {
                 navigate('/');
             })
             .catch(error => {
-                console.error('Erreur:', error);
+                setBackendError(error.message);
             });
     };
 
@@ -83,7 +84,10 @@ const ConnexionUtilisateur = () => {
                         <h1>Connexion</h1>
                     </div>
                     <div className="login-content">
+
+
                         <div className="input-container">
+<<<<<<< HEAD
                             <p>Courriel:</p>
                             <input className={`${errors.email ? "field-invalid" : ""}`} type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
                             {errors.email && <p className={"field-invalid-text"}>{errors.email}</p>}
@@ -92,7 +96,22 @@ const ConnexionUtilisateur = () => {
                             <p>Mot de passe:</p>
                             <input className={`${errors.password ? "field-invalid" : ""}`} type="password" name="password" onChange={handleChange} value={utilisateur.password} required/>
                             {errors.password && <p className={"field-invalid-text"}>{errors.password}</p>}
+=======
+                            <label>Email:</label>
+                            <input className={`${errors.email ? "field-invalid" : ""}`} type="text" name="email"
+                                   required value={utilisateur.email} onChange={handleChange}/>
+                            {errors.email && <p style={{color: 'red'}}>{errors.email}</p>}
                         </div>
+                        <div className="input-container">
+                            <label>Mot de passe:</label>
+                            <input className={`${errors.password ? "field-invalid" : ""}`} type="password"
+                                   name="password" onChange={handleChange} value={utilisateur.password} required/>
+                            {errors.password && <p style={{color: 'red'}}>{errors.password}</p>}
+>>>>>>> ad320ad67aa39ae32e3fc5d1fd85c81aaf0912b0
+                        </div>
+
+                        {backendError && <p style={{color: 'red', textAlign: 'center'}}>{backendError}</p>}
+
                         <div style={{display: 'flex', alignItems: 'center', marginTop: '20px'}}>
                             <div style={{flexGrow: 1}}></div>
                             <button className="btn-filled" onClick={handleSubmit}>
@@ -100,6 +119,7 @@ const ConnexionUtilisateur = () => {
                             </button>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

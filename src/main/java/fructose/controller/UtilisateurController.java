@@ -47,4 +47,21 @@ public class UtilisateurController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         }
     }
+
+    @PostMapping("/connexion")
+    public ResponseEntity<?> connexion(@RequestBody @Valid UtilisateurDTO utilisateurDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            String errorMessages = result.getFieldErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.joining(", "));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
+        }
+
+        try {
+            UtilisateurDTO loggedInUser = utilisateurService.login(utilisateurDTO.getEmail(), utilisateurDTO.getPassword());
+            return ResponseEntity.status(HttpStatus.OK).body(loggedInUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur s'est produite : " + e.getMessage());
+        }
+    }
 }

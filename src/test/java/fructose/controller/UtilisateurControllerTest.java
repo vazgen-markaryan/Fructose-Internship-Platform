@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+
+import java.sql.SQLException;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doThrow;
@@ -99,5 +101,28 @@ class UtilisateurControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertEquals("Une erreur inattendue s'est produite.", response.getBody());
+    }
+
+    @Test
+    void testCreerUtilisateur_ConstraintViolationException() {
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        utilisateurDTO.setRole("Etudiant");
+        when(bindingResult.hasErrors()).thenReturn(false);
+        when(utilisateurService.isValidRole(utilisateurDTO.getRole())).thenReturn(true);
+
+        // Simuler une violation de contrainte unique
+        org.hibernate.exception.ConstraintViolationException violationException =
+                new org.hibernate.exception.ConstraintViolationException(
+                        "Violation de contrainte unique",
+                        new SQLException("ERREUR: duplicate key value violates unique constraint \"unique_email\" (email)"),
+                        "email"
+                );
+
+        doThrow(new DataAccessException("Database error", violationException) {}).when(utilisateurService).addUtilisateur(utilisateurDTO, utilisateurDTO.getRole());
+
+        ResponseEntity<?> response = utilisateurController.creerUtilisateur(utilisateurDTO, bindingResult);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Violation de contrainte unique : La valeur \"email\" existe déjà.", response.getBody());
     }
 }
