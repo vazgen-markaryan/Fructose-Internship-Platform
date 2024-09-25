@@ -61,7 +61,6 @@ public class OffreStageDTO {
     private String modaliteTravail;
 
     @NotNull(message = "La date de début ne peut pas être null")
-    @FutureOrPresent(message = "La date de début doit être dans le futur ou aujourd'hui")
     private LocalDate dateDebut;
 
     @NotNull(message = "La date de fin ne peut pas être null")
@@ -74,7 +73,7 @@ public class OffreStageDTO {
     @Min(value = 1, message = "Le nombre de postes ne peut pas être inferieur a 1")
     private int nombrePostes;
 
-    @NotNull
+    @NotNull(message = "La date limite de candidature ne peut pas être null")
     private LocalDate dateLimiteCandidature;
 
     public static OffreStageDTO toDTO(OffreStage offreStage) {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Validated
@@ -31,6 +32,12 @@ public class OffreStageService {
         Set<ConstraintViolation<OffreStageDTO>> violations = validator.validate(offreStageDTO);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
+        }
+        if (offreStageDTO.getDateLimiteCandidature().isBefore(LocalDate.now().plusDays(7))) {
+            throw new IllegalArgumentException("La date limite de candidature doit être au moins 7 jours après aujourd'hui");
+        }
+        if (offreStageDTO.getDateDebut().isBefore(offreStageDTO.getDateLimiteCandidature().plusDays(1))) {
+            throw new IllegalArgumentException("La date de début doit être au moins 1 jour après la date limite de candidature");
         }
         if (offreStageDTO.getDateFin().isBefore(offreStageDTO.getDateDebut().plusDays(1))) {
             throw new IllegalArgumentException("La date de fin doit être au moins 1 jour après la date de début");

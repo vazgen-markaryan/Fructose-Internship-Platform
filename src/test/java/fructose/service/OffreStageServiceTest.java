@@ -42,11 +42,11 @@ public class OffreStageServiceTest {
         offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, Etats-Unis");
         offreStageDTO.setTypeEmploi("Presentiel");
         offreStageDTO.setModaliteTravail("Temps plein");
-        offreStageDTO.setDateDebut(LocalDate.now());
+        offreStageDTO.setDateDebut(LocalDate.now().plusMonths(1));
         offreStageDTO.setDateFin(LocalDate.now().plusMonths(6));
         offreStageDTO.setNombreHeuresSemaine(40);
         offreStageDTO.setNombrePostes(5);
-        offreStageDTO.setDateLimiteCandidature(LocalDate.of(2022, 4, 1));
+        offreStageDTO.setDateLimiteCandidature(LocalDate.now().plusDays(14));
     }
 
     @Test
@@ -410,10 +410,10 @@ public class OffreStageServiceTest {
     @Test
     void testAddOffreStageDateDebutPassee() {
         offreStageDTO.setDateDebut(LocalDate.of(2020, 5, 1));
-        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("dateDebut: La date de début doit être dans le futur ou aujourd'hui", exception.getMessage());
+        assertEquals("La date de début doit être au moins 1 jour après la date limite de candidature", exception.getMessage());
     }
 
     @Test
@@ -432,7 +432,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("La date de fin doit être au moins 1 jour après la date de début", exception.getMessage());
+        assertEquals("La date de début doit être au moins 1 jour après la date limite de candidature", exception.getMessage());
     }
 
     @Test
@@ -454,12 +454,31 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void testAddOffreStageNombrePostesInvalid() {
+    void testAddOffreStageNombrePostesTropPetit() {
         offreStageDTO.setNombrePostes(0);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
         assertEquals("nombrePostes: Le nombre de postes ne peut pas être inferieur a 1", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageDateLimiteCandidatureNull() {
+        offreStageDTO.setDateLimiteCandidature(null);
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("dateLimiteCandidature: La date limite de candidature ne peut pas être null", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageDateLimiteCandidatureMemeJourDateDebut() {
+        offreStageDTO.setDateDebut(LocalDate.now());
+        offreStageDTO.setDateLimiteCandidature(LocalDate.now());
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("La date limite de candidature doit être au moins 7 jours après aujourd'hui", exception.getMessage());
     }
 
     @Test
