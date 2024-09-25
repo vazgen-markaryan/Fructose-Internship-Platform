@@ -15,6 +15,7 @@ const CreerUtilisateur = () => {
         firstName: '',
         lastName: '',
         email: '',
+        companyName: '',
         password: '',
         role: '',
     });
@@ -118,14 +119,56 @@ const CreerUtilisateur = () => {
             </div>
 
             <div className="auth-body">
-                <div className="signup-frame">
-                    <div className="signup-head">
+                <div className={"signup-frame"}>
+                    <div className={"signup-head " + (currentStep !== 0 ? "signup-head-instep":"")} style={{"background": "linear-gradient(rgba(0,0,0,0.4), rgb(255, 0, 108,0.8)), url('/assets/auth/signup/s1.jpg') center/cover", "backdropFilter":"blur(10px)"}}>
                         <div className="toolbar-items">
-                            <Link to="/"><Icon path={mdiArrowLeft} title="User Profile" size={1}/><span className="mdi mdi-arrow-left"></span></Link>
-                            <p className="m-0">Fructose</p>
+                            <Link to="/">
+                                <img src="/assets/logo/logo.svg" alt="" className={"logo"}/>
+                            </Link>
                         </div>
                         <br/>
-                        <h1>Bienvenue</h1>
+                        <h5>Créer votre compte</h5>
+                        <br/>
+                        {
+                            (currentStep !== 0)?
+                            <div className="vertical-stepper">
+                                <div className="vertical-stepper-item">
+
+                                <div className="vertical-stepper-content">
+                                <h6 className="vertical-stepper-title">Votre profil</h6>
+                                <p className="vertical-stepper-desc">Informations cruciales pour votre profil</p>
+                                </div>
+                                </div>
+                                <div className="vertical-stepper-item">
+
+                                <div className="vertical-stepper-content">
+                                <h6 className="vertical-stepper-title">Informations scolaires</h6>
+                                <p className="vertical-stepper-desc">Information liées à votre cheminement scolaire</p>
+                                </div>
+                                </div>
+                                <div className="vertical-stepper-item">
+
+                                <div className="vertical-stepper-content">
+                                <h6 className="vertical-stepper-title">Sécurité</h6>
+                                <p className="vertical-stepper-desc">Créez votre mot de passe</p>
+                                </div>
+                                </div>
+                                <div className="vertical-stepper-item">
+
+                                <div className="vertical-stepper-content">
+                                <h6 className="vertical-stepper-title">Finalisation</h6>
+                                <p className="vertical-stepper-desc">Accèdez au tableau de bord</p>
+                                </div>
+                                </div>
+                            </div>
+                            :
+                                <div>
+                                    <h1>Votre carrière commence ici.</h1>
+                                </div>
+                        }
+                        <br/>
+                        <br/>
+
                     </div>
                     <div className="signup-content">
                         {getPage()}

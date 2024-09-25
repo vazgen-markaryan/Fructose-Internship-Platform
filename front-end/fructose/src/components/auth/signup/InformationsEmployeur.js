@@ -5,28 +5,37 @@ import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 
 const InformationsEmployeur = ({utilisateur, handleChange, switchStep}) => {
 
+    const [errors, setErrors] = useState({});
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const errorMessage = validateFields();
-        if (errorMessage) {
-            console.log(errorMessage)
+        if (Object.keys(errorMessage).length > 0) {
+            setErrors(errorMessage);
         } else {
             switchStep(true)
         }
     };
 
     const validateFields = () => {
+        let errors = {};
         if (!/^[A-Za-z0-9&'\s-]+$/.test(utilisateur.companyName)) {
-            return "Le nom de compagnie doit contenir uniquement des lettres, chiffres, espaces, et les caractères spéciaux (&, ', -).";
+            errors.companyName = "Le nom de compagnie doit contenir uniquement des lettres, chiffres, espaces, et les caractères spéciaux (&, ', -).";
         }
+        return errors
     };
 
     return (
-        <div>
+        <div className={"form-signup-condensed"}>
+            <h4>Informations sur l'employeur</h4>
+            <p>Entrez les informations requises sur la compagnie qui offre les stages</p>
+            <br/>
             <form onSubmit={handleSubmit}>
-                <label>Nom de la compagnie:</label>
-                <input type="text" name="companyName" required value={utilisateur.companyName} onChange={handleChange} />
-                <br/>
+                <div className={"input-container"}>
+                    <p>Nom de la compagnie:</p>
+                    <input type="text" name="companyName" className={`${errors.companyName ? "field-invalid" : ""}`} required value={utilisateur.companyName} onChange={handleChange} />
+                    <p className={"field-invalid-text"}>{errors.companyName}</p>
+                </div>
 
                 <div className="form-dock">
                     <button onClick={() => {switchStep(false)}}>

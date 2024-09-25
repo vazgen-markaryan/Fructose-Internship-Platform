@@ -34,16 +34,21 @@ const MotDePasse = ({utilisateur, handleChange, switchStep}) => {
     }
 
     return (
-        <div>
+        <div className={"form-signup-condensed"}>
+            <h4>Créez votre mot de passe</h4>
+            <p>Un mot de passe complexe offre moins de chances d'être deviné par quelqu'un d'autre. Votre mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un symbole.</p>
+            <br/>
             <form onSubmit={handleSubmit}>
-                <p>Mot de passe:</p>
-                <input type="password" name="password" className={`${errors.password ? "field-invalid" : ""}`} onChange={handleChange} value={utilisateur.password} required />
-                <p className={"field-invalid-text"}>{errors.password}</p>
-
-                <p>Confirmer le mot de passe:</p>
-                <input type="password" name="confirmPassword" className={`${errors.passwordConf ? "field-invalid" : ""}`} onChange={handleConfirmPasswordChange} required />
-                <p className={"field-invalid-text"}>{errors.passwordConf}</p>
-
+                <div className={"input-container"}>
+                    <p>Mot de passe:</p>
+                    <input type="password" name="password" className={`${errors.password ? "field-invalid" : ""}`} onChange={handleChange} value={utilisateur.password} required />
+                    <p className={"field-invalid-text"}>{errors.password}</p>
+                </div>
+                <div className={"input-container"}>
+                    <p>Confirmer le mot de passe:</p>
+                    <input type="password" name="confirmPassword" className={`${errors.passwordConf ? "field-invalid" : ""}`} onChange={handleConfirmPasswordChange} required />
+                    <p className={"field-invalid-text"}>{errors.passwordConf}</p>
+                </div>
                 <br/>
                 <div className="form-dock">
                     <button onClick={() => {switchStep(false)}}>

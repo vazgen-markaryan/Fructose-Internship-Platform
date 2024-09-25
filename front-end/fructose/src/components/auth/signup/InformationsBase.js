@@ -30,20 +30,26 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
     }
 
     return (
-        <div>
+        <div className={"form-signup-condensed"}>
+            <h4>Informations de base</h4>
+            <p>Entrez votre Prénom, Nom, ainsi que le courriel que vous utiliserez pour dorénavant vous connecter à la plateforme.</p>
+            <br/>
             <form onSubmit={handleSubmit}>
-                <p>Nom:</p>
-                <input className={`${errors.firstName ? "field-invalid" : ""}`} type="text" name="lastName" required value={utilisateur.lastName} onChange={handleChange}/>
-                <p className={"field-invalid-text"}>{errors.firstName}</p>
-
-                <p>Prénom:</p>
-                <input className={`${errors.lastName ? "field-invalid" : ""}`} type="text" name="firstName" required value={utilisateur.firstName} onChange={handleChange}/>
-                <p className={"field-invalid-text"}>{errors.lastName}</p>
-
-                <p>Email:</p>
-                <input className={`${errors.email ? "field-invalid" : ""}`} type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
-                <p className={"field-invalid-text"}>{errors.email}</p>
-
+                <div className={"input-container"}>
+                    <p>Nom:</p>
+                    <input className={`${errors.firstName ? "field-invalid" : ""}`} type="text" name="lastName" required value={utilisateur.lastName} onChange={handleChange}/>
+                    <p className={"field-invalid-text"}>{errors.firstName}</p>
+                </div>
+                <div className={"input-container"}>
+                    <p>Prénom:</p>
+                    <input className={`${errors.lastName ? "field-invalid" : ""}`} type="text" name="firstName" required value={utilisateur.firstName} onChange={handleChange}/>
+                    <p className={"field-invalid-text"}>{errors.lastName}</p>
+                </div>
+                <div className={"input-container"}>
+                    <p>Email:</p>
+                    <input className={`${errors.email ? "field-invalid" : ""}`} type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
+                    <p className={"field-invalid-text"}>{errors.email}</p>
+                </div>
                 <br/>
 
                 <div className="form-dock">

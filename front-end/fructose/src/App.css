@@ -72,7 +72,7 @@ h5 {
 }
 
 h6 {
-    font-weight: 500;
+    font-weight: 400;
     font-size: 16px;
 }
 
@@ -84,7 +84,7 @@ p {
 
 
 .input-container {
-    padding: 3px 0px;
+    padding: 7px 0px;
 }
 
 .input-container>p {
@@ -102,6 +102,8 @@ button {
     font-size: 16px;
     padding: 0 12px;
     border-radius: var(--border-radius);
+    font-family: "Roboto Condensed", sans-serif;
+
 }
 
 button.btn-filled {
@@ -136,8 +138,8 @@ input[type="text"], input[type="password"], textarea, select{
 }
 
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus, select:focus{
-    border: 1px solid rgba(122, 122, 122, 0.7);
-    border-bottom: 3px solid #ff006c;
+    border-color: rgba(122, 122, 122, 0.7);
+    border-bottom: 3px solid var(--color-primay);
     outline: none;
     margin-bottom: 6px;
 }
@@ -178,9 +180,28 @@ p.field-invalid-text{
  */
 
 .form-dock{
-    position: absolute; bottom: 0; right: 0; left: 0; display: flex; align-items: center; border-top: 1px solid rgba(131, 131, 131, 0.445); padding: 10px 10px;
+    position: absolute; bottom: 0; right: 0; left: 0; display: flex; align-items: center; border-top: 1px solid rgba(131, 131, 131, 0.3i); padding: 10px 10px;
 }
 
+.form-signup-condensed{
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    padding: 10px 0;
+}
+
+
+
+
+
+img.logo{
+    height: 36px;
+    vertical-align: middle;
+}
+
+a{
+    color: inherit;
+}
 
 
 
@@ -204,7 +225,7 @@ p.field-invalid-text{
 }
 
 .signup-frame {
-    max-width: 1200px;
+    max-width: 1100px;
     height: 600px;
     width: 100%;
     background-color: white;
@@ -214,7 +235,7 @@ p.field-invalid-text{
 }
 
 .login-head {
-    background-color: #ff006c;
+    background-color: var(--color-primay);
     background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.1));
     width: 100%;
     padding: 22px;
@@ -224,14 +245,18 @@ p.field-invalid-text{
 }
 
 .signup-head {
-    background-color: #ff006c;
+    background-color: var(--color-primay);
     background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.1));
     padding: 22px;
     color: white;
     height: 100%;
-    width: 40%;
+    width: 45%;
     box-sizing: border-box;
     border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.signup-head.signup-head-instep{
+    width: 320px;
 }
 
 .login-content {
@@ -241,7 +266,7 @@ p.field-invalid-text{
 
 
 .signup-content{
-    width: 60%;
+    flex-grow: 1;
     padding: 22px;
     box-sizing: border-box;
     position: relative;
@@ -271,7 +296,7 @@ p.field-invalid-text{
 }
 
 .bg-auth .bg-auth-point:nth-child(1) {
-    background: linear-gradient(132deg, #cf1f71 0.00%, #d3085c 100.00%);
+    background: var(--color-primay);
     width: 40%;
     padding-top: 40%;
     left: 25%;
@@ -291,3 +316,61 @@ p.field-invalid-text{
 /*
  END TODO
  */
+
+.stepper-frame{
+    display: flex; align-items: center; gap: 7px; padding: 5px 0;
+}
+
+.stepper-path{
+    border-radius: 2px; flex-grow: 1; height: 4px; background-color: white;
+}
+
+.stepper-step{
+    width: 14px; height: 14px; border: 2px solid white; border-radius: 50%;
+}
+
+
+
+.vertical-stepper-item {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    padding-bottom: 20px;
+}
+
+.vertical-stepper-title {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.vertical-stepper-desc {
+    color: white;
+    font-weight: 300;
+    font-size: 14px;
+}
+
+.vertical-stepper-content {
+    max-width: 700px;
+}
+
+
+.vertical-stepper-item:before {
+    content: "";
+    flex: 0 0 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: white;
+}
+.vertical-stepper-item:not(:last-child):after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 26px;
+    bottom: 8px;
+    z-index: -1;
+    transform: translateX(7px);
+    width: 4px;
+    border-radius: 4px;
+    background-color: #e0e0e0;
+}

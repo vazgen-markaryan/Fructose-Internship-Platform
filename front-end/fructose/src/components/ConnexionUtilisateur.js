@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Icon from "@mdi/react";
-import {mdiArrowLeft} from "@mdi/js";
+import {mdiArrowLeft, mdiChevronRight} from "@mdi/js";
 
 
 const ConnexionUtilisateur = () => {
@@ -77,27 +77,26 @@ const ConnexionUtilisateur = () => {
                         <div className="toolbar-items">
                             <span className="mdi mdi-arrow-left"></span>
                             <div className="toolbar-items">
-                                <Link to="/"><Icon path={mdiArrowLeft} size={1}/></Link>
-                                <p className="m-0">Fructose</p>
+                                <Link to="/"><img src="/assets/logo/logo.svg" alt="" className={"logo"}/></Link>
                             </div>
                         </div>
                         <h1>Connexion</h1>
                     </div>
                     <div className="login-content">
                         <div className="input-container">
-                            <label>Email:</label>
+                            <p>Courriel:</p>
                             <input className={`${errors.email ? "field-invalid" : ""}`} type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
-                            {errors.email && <p style={{color: 'red'}}>{errors.email}</p>}
+                            {errors.email && <p className={"field-invalid-text"}>{errors.email}</p>}
                         </div>
                         <div className="input-container">
-                            <label>Mot de passe:</label>
+                            <p>Mot de passe:</p>
                             <input className={`${errors.password ? "field-invalid" : ""}`} type="password" name="password" onChange={handleChange} value={utilisateur.password} required/>
-                            {errors.password && <p style={{color: 'red'}}>{errors.password}</p>}
+                            {errors.password && <p className={"field-invalid-text"}>{errors.password}</p>}
                         </div>
                         <div style={{display: 'flex', alignItems: 'center', marginTop: '20px'}}>
                             <div style={{flexGrow: 1}}></div>
                             <button className="btn-filled" onClick={handleSubmit}>
-                                Continuer <span className="mdi mdi-chevron-right"></span>
+                                Continuer <Icon path={mdiChevronRight} size={1}/>
                             </button>
                         </div>
                     </div>

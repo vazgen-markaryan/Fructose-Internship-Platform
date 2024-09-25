@@ -29,20 +29,25 @@ const InformationsEtudiant = ({utilisateur, handleChange, switchStep}) => {
     }
 
     return (
-        <div>
+        <div className={"form-signup-condensed"}>
+            <h4>Informations Scolaires</h4>
+            <p>Entrez votre matricule défini par l'établissement ainsi que le programme d'étude fréquenté</p>
+            <br/>
             <form onSubmit={handleSubmit}>
-                <p>Matricule:</p>
-                <input type="text" name="matricule" className={`${errors.matricule ? "field-invalid" : ""}`} required value={utilisateur.matricule} onChange={handleChange} />
-                <p className={"field-invalid-text"}>{errors.matricule}</p>
-
-                <p>Programme:</p>
-                <select name="departement" className={`${errors.departement ? "field-invalid" : ""}`} onChange={handleChange} value={utilisateur.departement} required>
-                    <option value="">Sélectionner un programme</option>
-                    <option value="Informatique">Techniques de l'informatique</option>
-                    <option value="Architecture">Techniques de l'architecture</option>
-                </select>
-                <p className={"field-invalid-text"}>{errors.departement}</p>
-
+                <div className={"input-container"}>
+                    <p>Matricule:</p>
+                    <input type="text" name="matricule" className={`${errors.matricule ? "field-invalid" : ""}`} required value={utilisateur.matricule} onChange={handleChange} />
+                    <p className={"field-invalid-text"}>{errors.matricule}</p>
+                </div>
+                <div className={"input-container"}>
+                    <p>Programme:</p>
+                    <select name="departement" className={`${errors.departement ? "field-invalid" : ""}`} onChange={handleChange} value={utilisateur.departement} required>
+                        <option value="">Sélectionner un programme</option>
+                        <option value="Informatique">Techniques de l'informatique</option>
+                        <option value="Architecture">Techniques de l'architecture</option>
+                    </select>
+                    <p className={"field-invalid-text"}>{errors.departement}</p>
+                </div>
                 <br/>
 
                 <div className="form-dock">

@@ -4,28 +4,49 @@ import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 
 const InformationsGestionnaire = ({utilisateur, handleChange, switchStep}) => {
 
+    const [errors, setErrors] = useState({});
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const errorMessage = validateFields();
-        if (errorMessage) {
-            console.log(errorMessage)
+        if (Object.keys(errorMessage).length > 0) {
+            setErrors(errorMessage);
         } else {
             switchStep(true)
         }
     };
 
     const validateFields = () => {
+        let errors = {};
         if (!/^\d{7}$/.test(utilisateur.matricule)) {
-            return "Le Matricule doit contenir 7 chiffres";
+            errors.matricule = "Le Matricule doit contenir 7 chiffres";
         }
+        if(utilisateur.departement.length === 0){
+            errors.departement = "Aucun département sélectionné";
+        }
+        return errors
     }
 
     return (
-        <div>
+        <div className={"form-signup-condensed"}>
+            <h4>Informations sur votre emploi</h4>
+            <p>Entrez votre numéro d'employé défini par l'établissement ainsi que le département d'appartenance</p>
+            <br/>
             <form onSubmit={handleSubmit}>
-                <label>Matricule:</label>
-                <input type="text" name="matricule" required value={utilisateur.matricule} onChange={handleChange} />
-
+                <div className={"input-container"}>
+                    <p>Numéro d'employé</p>
+                    <input type="text" name="matricule" required value={utilisateur.matricule} onChange={handleChange} />
+                    <p className={"field-invalid-text"}>{errors.departement}</p>
+                </div>
+                <div className={"input-container"}>
+                    <p>Programme:</p>
+                    <select name="departement" className={`${errors.departement ? "field-invalid" : ""}`} onChange={handleChange} value={utilisateur.departement} required>
+                        <option value="">Sélectionner un programme</option>
+                        <option value="Informatique">Techniques de l'informatique</option>
+                        <option value="Architecture">Techniques de l'architecture</option>
+                    </select>
+                    <p className={"field-invalid-text"}>{errors.departement}</p>
+                </div>
                 <br/>
 
                 <div className="form-dock">
