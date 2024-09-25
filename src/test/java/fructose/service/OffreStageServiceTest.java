@@ -390,6 +390,15 @@ public class OffreStageServiceTest {
     }
 
     @Test
+    void testAddOffreStageModaliteTravailInvalide() {
+        offreStageDTO.setModaliteTravail("Pina Colada");
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("modaliteTravail: La modalité de travail doit être l'une des suivantes : Temps plein, Temps partiel", exception.getMessage());
+    }
+
+    @Test
     void testAddOffreStageDateDebutNull() {
         offreStageDTO.setDateDebut(null);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
