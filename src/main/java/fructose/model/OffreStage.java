@@ -17,76 +17,65 @@ import java.util.Set;
 public class OffreStage {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotNull
-    @NotEmpty
-    @Size(min = 3, max = 100)
+    @NotEmpty(message = "Le nom ne peut pas être vide")
+    @Size(min = 3, max = 100, message = "Le nom doit contenir au moins 3 caractères et au plus 100 caractères")
     @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Le nom doit contenir uniquement des lettres et des espaces")
     private String nom;
 
-    @NotNull
-    @NotEmpty
-    @Size(min = 3, max = 100)
+    @NotEmpty(message = "Le poste ne peut pas être vide")
+    @Size(min = 3, max = 100, message = "Le poste doit contenir au moins 3 caractères et au plus 100 caractères")
     @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Le poste doit contenir uniquement des lettres et des espaces")
     private String poste;
 
-    @NotNull
-    @NotEmpty
-    @Size(min = 10, max = 500)
+    @NotEmpty(message = "La description ne peut pas être vide")
+    @Size(min = 10, max = 500, message = "La description doit contenir au moins 10 caractères et au plus 500 caractères")
+    @Pattern(regexp = "^[\\x20-\\x7E]*$", message = "La description ne peut contenir que des caractères ASCII valides")
     private String description;
 
-    @NotNull
-    @NotEmpty
-    @Size(min = 3, max = 100)
-    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "La compagnie doit contenir uniquement des lettres et des espaces")
+    @NotEmpty(message = "La compagnie ne peut pas être vide")
+    @Size(min = 3, max = 100, message = "La compagnie doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Pattern(regexp = "^[\\x20-\\x7E]*$", message = "La compagnie ne peut contenir que des caractères ASCII valides")
     private String compagnie;
 
-    @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Le programme d'étude ne peut pas être vide")
     @Pattern(regexp = "^(Technique de l'informatique|Genie physique|Soin infirmiers)$", message = "Le programme d'étude doit être l'un des suivants : Technique de l'informatique, Génie physique, Soin infirmiers")
     private String programmeEtude;
 
-    @NotNull
-    @NotEmpty
-    @Size(min = 1, max = 10)
-    @Pattern(regexp = "^\\d+(\\.\\d{1,2})?$", message = "Le taux horaire doit être un nombre valide")
+    @NotNull(message = "Le taux horaire ne peut pas être null")
+    @DecimalMin(value = "0.0", message = "Le taux horaire ne peut pas être négatif")
     private Double tauxHoraire;
 
-    @NotNull
-    @NotEmpty
-    @Pattern(regexp = "^(Presentiel|Virtuel|Hybride)$", message = "Le type d'emploi doit être l'un des suivants : Présentiel, Virtuel, Hybride")
+    @NotNull(message = "Le type d'emploi ne peut pas être null")
+    @Pattern(regexp = "^(Presentiel|Virtuel|Hybride)$", message = "Le type d'emploi doit être l'un des suivants : Presentiel, Virtuel, Hybride")
     private String typeEmploi;
 
-    @NotNull
-    @NotEmpty
-    @Size(min = 3, max = 100)
+    @NotEmpty(message = "L'adresse ne peut pas être vide")
+    @Size(min = 3, max = 100, message = "L'adresse doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Pattern(regexp = "^[\\x20-\\x7E]*$", message = "L'adresse ne peut contenir que des caractères ASCII valides")
     private String adresse;
 
-    @NotNull
-    @NotEmpty
+    @NotEmpty(message = "La modalité de travail ne peut pas être vide")
     @Pattern(regexp = "^(Temps plein|Temps partiel)$", message = "La modalité de travail doit être l'une des suivantes : Temps plein, Temps partiel")
     private String modaliteTravail;
 
-    @NotNull
+    @NotNull(message = "La date de début ne peut pas être null")
     private LocalDate dateDebut;
 
-    @NotNull
+    @NotNull(message = "La date de fin ne peut pas être null")
     private LocalDate dateFin;
 
-    @NotNull
-    @NotEmpty
-    @Size(min = 1, max = 50)
+    @Min(value = 1, message = "Le nombre d'heures par semaine ne peut pas être inferieur a 1")
+    @Max(value = 40, message = "Le nombre d'heures par semaine ne peut pas être superieur a 40")
     private int nombreHeuresSemaine;
 
-    @NotNull
-    @NotEmpty
-    @Size(min = 1, max = 50)
+    @Min(value = 1, message = "Le nombre de postes ne peut pas être inferieur a 1")
     private int nombrePostes;
 
-    @NotNull
+    @NotNull(message = "La date limite de candidature ne peut pas être null")
     private LocalDate dateLimiteCandidature;
 
     @ManyToMany
