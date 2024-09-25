@@ -15,9 +15,8 @@ const CreerUtilisateur = () => {
         firstName: '',
         lastName: '',
         email: '',
-        companyName: '',
         password: '',
-        role: '',
+        role: 'Etudiant',
     });
 
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -40,6 +39,7 @@ const CreerUtilisateur = () => {
 
 
     const handleSubmit = () => {
+        setError("")
         utilisateur.fullName = utilisateur.firstName + " " + utilisateur.lastName
         console.log(utilisateur.fullName)
         fetch('/creer-utilisateur', {
@@ -61,7 +61,7 @@ const CreerUtilisateur = () => {
             })
             .catch(error => {
                 setError(`Erreur: ${error.message}`); //Pour afficher erreur sur Écran
-                console.error('Erreur:', error);
+                console.log(error)
             });
     };
 
@@ -163,7 +163,7 @@ const CreerUtilisateur = () => {
                             </div>
                             :
                                 <div>
-                                    <h1>Votre carrière commence ici.</h1>
+                                    <h1>Partir votre carrière n'a jamais été aussi facile.</h1>
                                 </div>
                         }
                         <br/>
@@ -172,6 +172,8 @@ const CreerUtilisateur = () => {
                     </div>
                     <div className="signup-content">
                         {getPage()}
+
+                        <p className={"field-invalid-text"} style={{"textAlign": "center"}}>{error}</p>
                     </div>
                 </div>
             </div>

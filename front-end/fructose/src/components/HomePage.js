@@ -13,7 +13,7 @@ const HomePage = () => {
                 <Link to="/creer-utilisateur"><button style={{"fontSize":"18px"}} className={"btn-filled"}>S'inscrire</button></Link>
             </div>
             <div style={{"padding": "50px"}}>
-                <h1 style={{"fontSize":"96px", "position": "absolute", "bottom": "20%"}}>Votre carrière <br/> commence <span style={{"backgroundColor": "#ff006c"}}>ici.</span></h1>
+                <h1 style={{"fontSize":"96px", "position": "absolute", "bottom": "20%"}}>Votre carrière <br/> commence <span style={{"backgroundColor": "#ff006c", "padding":"0 12px"}}>ici.</span></h1>
             </div>
         </div>
     );
