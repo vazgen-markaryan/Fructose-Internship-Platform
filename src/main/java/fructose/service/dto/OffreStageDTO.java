@@ -61,6 +61,7 @@ public class OffreStageDTO {
     private String modaliteTravail;
 
     @NotNull(message = "La date de début ne peut pas être null")
+    @FutureOrPresent(message = "La date de début doit être dans le futur ou aujourd'hui")
     private LocalDate dateDebut;
 
     @NotNull(message = "La date de fin ne peut pas être null")

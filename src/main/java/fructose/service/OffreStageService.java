@@ -27,9 +27,13 @@ public class OffreStageService {
         if (offreStageDTO == null) {
             throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
         }
+        // Vérifier que la date de fin est au moins 1 jour après la date de début
         Set<ConstraintViolation<OffreStageDTO>> violations = validator.validate(offreStageDTO);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
+        }
+        if (offreStageDTO.getDateFin().isBefore(offreStageDTO.getDateDebut().plusDays(1))) {
+            throw new IllegalArgumentException("La date de fin doit être au moins 1 jour après la date de début");
         }
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
         offreStageRepository.save(offreStage);

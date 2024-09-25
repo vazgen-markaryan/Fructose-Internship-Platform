@@ -42,8 +42,8 @@ public class OffreStageServiceTest {
         offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, Etats-Unis");
         offreStageDTO.setTypeEmploi("Presentiel");
         offreStageDTO.setModaliteTravail("Temps plein");
-        offreStageDTO.setDateDebut(LocalDate.of(2022, 5, 1));
-        offreStageDTO.setDateFin(LocalDate.of(2022, 8, 31));
+        offreStageDTO.setDateDebut(LocalDate.now());
+        offreStageDTO.setDateFin(LocalDate.now().plusMonths(6));
         offreStageDTO.setNombreHeuresSemaine("40 heures");
         offreStageDTO.setNombrePostes(5);
         offreStageDTO.setDateLimiteCandidature(LocalDate.of(2022, 4, 1));
@@ -408,12 +408,31 @@ public class OffreStageServiceTest {
     }
 
     @Test
+    void testAddOffreStageDateDebutPassee() {
+        offreStageDTO.setDateDebut(LocalDate.of(2020, 5, 1));
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("dateDebut: La date de début doit être dans le futur ou aujourd'hui", exception.getMessage());
+    }
+
+    @Test
     void testAddOffreStageDateFinNull() {
         offreStageDTO.setDateFin(null);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
         assertEquals("dateFin: La date de fin ne peut pas être null", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageDateFinInferieureADateDebutPlusUnJour() {
+        offreStageDTO.setDateDebut(LocalDate.now());
+        offreStageDTO.setDateFin(LocalDate.now());
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("La date de fin doit être au moins 1 jour après la date de début", exception.getMessage());
     }
 
     @Test
