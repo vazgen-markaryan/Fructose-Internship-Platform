@@ -426,13 +426,24 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void testAddOffreStageDateFinInferieureADateDebutPlusUnJour() {
+    void testAddOffreStageDateDebutInferieureADateLimiteCandidaturePlusUnJour() {
         offreStageDTO.setDateDebut(LocalDate.now());
         offreStageDTO.setDateFin(LocalDate.now());
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
         assertEquals("La date de début doit être au moins 1 jour après la date limite de candidature", exception.getMessage());
+    }
+
+    @Test
+    void testAddOffreStageDateFinInferieureADateDebutPlusUnJour() {
+        offreStageDTO.setDateLimiteCandidature(LocalDate.now().plusDays(7));
+        offreStageDTO.setDateDebut(LocalDate.now().plusDays(8));
+        offreStageDTO.setDateFin(LocalDate.now().plusDays(8));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+        assertEquals("La date de fin doit être au moins 1 jour après la date de début", exception.getMessage());
     }
 
     @Test

@@ -28,7 +28,6 @@ public class OffreStageService {
         if (offreStageDTO == null) {
             throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
         }
-        // Vérifier que la date de fin est au moins 1 jour après la date de début
         Set<ConstraintViolation<OffreStageDTO>> violations = validator.validate(offreStageDTO);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
