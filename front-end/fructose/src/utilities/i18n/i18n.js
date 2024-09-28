@@ -1,20 +1,15 @@
 import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
+import {initReactI18next} from "react-i18next";
+import english from "./locals/en.json";
+import francais from "./locals/fr.json";
 
 const resources = {
     en: {
-        translation: {
-            "welcome": "https://react.i18next.com/latest/trans-component",
-            "sinscrire": "Sign up"
-
-        }
+        translation: english,
     },
     fr: {
-        translation: {
-            "welcome": "https://react.i18next.com/latest/trans-component",
-            "sinscrire": "S'inscrire"
-        }
-    }
+        translation: francais,
+    },
 };
 
 i18n
@@ -22,11 +17,10 @@ i18n
     .init({
         resources,
         fallbackLng: "fr", // Utiliser le français si la langue sélectionné est mal défini ou n'est pas disponible
+        //TODO: CHANGER EN FR APRÈS AVOIR FINI DE TRADUIRE
         lng: "en", // Utiliser le français par défaut
 
         interpolation: {
             escapeValue: false
         }
     })
-
-export default i18n;
