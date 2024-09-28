@@ -1,8 +1,9 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Icon from "@mdi/react";
 import {mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
+import i18n from "i18next";
 
 const ConnexionUtilisateur = () => {
     const {t} = useTranslation();
@@ -65,6 +66,15 @@ const ConnexionUtilisateur = () => {
                 setBackendError(error.message);
             });
     };
+
+    useEffect(
+        () => {
+        // Si utilisateur change la langue pendant qu'erreur est affichée, traduire les messages d'erreur
+        setErrors(prevErrors => ({
+            email: prevErrors.email ? t("connexion_page.error.email") : '',
+            password: prevErrors.password ? t("connexion_page.error.password") : ''
+        }));
+    }, [i18n.language, t]);
 
     return (
         <div>
