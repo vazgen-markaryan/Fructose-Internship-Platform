@@ -15,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,22 +39,6 @@ public class OffreStageControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        offreStageDTO = new OffreStageDTO();
-        offreStageDTO.setId(1L);
-        offreStageDTO.setNom("Google");
-        offreStageDTO.setPoste("Developpeur Java");
-        offreStageDTO.setDescription("Faire du developpement Java chez Google");
-        offreStageDTO.setCompagnie("Google");
-        offreStageDTO.setProgrammeEtude("Technique de l'informatique");
-        offreStageDTO.setTauxHoraire(23.75);
-        offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, Etats-Unis");
-        offreStageDTO.setTypeEmploi("Presentiel");
-        offreStageDTO.setModaliteTravail("Temps plein");
-        offreStageDTO.setDateDebut(LocalDate.now().plusMonths(1));
-        offreStageDTO.setDateFin(LocalDate.now().plusMonths(6));
-        offreStageDTO.setNombreHeuresSemaine(40);
-        offreStageDTO.setNombrePostes(5);
-        offreStageDTO.setDateLimiteCandidature(LocalDate.now().plusDays(14));
     }
 
     @Test
