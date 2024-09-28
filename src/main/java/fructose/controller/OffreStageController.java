@@ -30,7 +30,6 @@ public class OffreStageController {
                     .collect(Collectors.joining(", "));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
         }
-
         try {
             offreStageService.addOffreStage(offreStageDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body("Offre de stage créée avec succès !");
