@@ -51,13 +51,16 @@ public class OffreStageService {
             throw new IllegalArgumentException("ID ne peut pas être nul");
         }
         if (!offreStageRepository.existsById(id)) {
-            throw new IllegalArgumentException("OffreStage avec ID: " + id + " n'existe pas");
+            throw new IllegalArgumentException("L'offre stage avec l'ID: " + id + " n'existe pas, alors il ne peut pas être supprimé");
         }
         offreStageRepository.deleteById(id);
     }
 
     public OffreStageDTO getOffreStage(Long id) {
-        OffreStage offreStage = offreStageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("OffreStage not found"));
+        if (id == null) {
+            throw new IllegalArgumentException("ID ne peut pas être nul");
+        }
+        OffreStage offreStage = offreStageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("L'offre stage avec l'ID: " + id + " n'existe pas, alors il ne peut pas être récupéré"));
         return OffreStageDTO.toDTO(offreStage);
     }
 }

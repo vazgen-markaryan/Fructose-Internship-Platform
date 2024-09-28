@@ -492,6 +492,9 @@ public class OffreStageServiceTest {
 
     @Test
     void testDeleteOffreStageSuccess() {
+        OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
+        when(offreStageRepository.existsById(offreStage.getId())).thenReturn(true);
+
         offreStageService.deleteOffreStage(offreStageDTO.getId());
 
         verify(offreStageRepository, times(1)).deleteById(offreStageDTO.getId());
@@ -499,14 +502,13 @@ public class OffreStageServiceTest {
 
     @Test
     void testDeleteOffreStageNotFound() {
-        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.empty());
+        when(offreStageRepository.existsById(offreStageDTO.getId())).thenReturn(false);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             offreStageService.deleteOffreStage(offreStageDTO.getId());
         });
 
-        System.out.println(offreStageDTO.getId());
-        assertEquals("OffreStage avec ID: " + offreStageDTO.getId() + " n'existe pas", exception.getMessage());
+        assertEquals("L'offre stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être supprimé", exception.getMessage());
     }
 
     @Test
@@ -525,5 +527,25 @@ public class OffreStageServiceTest {
 
         OffreStageDTO result = offreStageService.getOffreStage(offreStageDTO.getId());
         assertNotNull(result);
+    }
+
+    @Test
+    void testGetOffreStageNotFound() {
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getOffreStage(offreStageDTO.getId());
+        });
+
+        assertEquals("L'offre stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être récupéré", exception.getMessage());
+    }
+
+    @Test
+    void testGetOffreStageIdNull() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getOffreStage(null);
+        });
+
+        assertEquals("ID ne peut pas être nul", exception.getMessage());
     }
 }
