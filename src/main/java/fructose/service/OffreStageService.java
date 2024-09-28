@@ -47,6 +47,12 @@ public class OffreStageService {
     }
 
     public void deleteOffreStage(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID ne peut pas être nul");
+        }
+        if (!offreStageRepository.existsById(id)) {
+            throw new IllegalArgumentException("OffreStage avec ID: " + id + " n'existe pas");
+        }
         offreStageRepository.deleteById(id);
     }
 

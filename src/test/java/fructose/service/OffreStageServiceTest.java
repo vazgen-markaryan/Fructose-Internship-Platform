@@ -496,6 +496,28 @@ public class OffreStageServiceTest {
 
         verify(offreStageRepository, times(1)).deleteById(offreStageDTO.getId());
     }
+
+    @Test
+    void testDeleteOffreStageNotFound() {
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.deleteOffreStage(offreStageDTO.getId());
+        });
+
+        System.out.println(offreStageDTO.getId());
+        assertEquals("OffreStage avec ID: " + offreStageDTO.getId() + " n'existe pas", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteOffreStageIdNull() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.deleteOffreStage(null);
+        });
+
+        assertEquals("ID ne peut pas être nul", exception.getMessage());
+    }
+
     @Test
     void testGetOffreStageSuccess() {
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
