@@ -16,5 +16,18 @@
             "email": "Email est requis",
             "password": "Mot de passe est requis"
         }
+    },
+
+    "creer_utilisateur_page": {
+        "creer_compte": "Créer un compte",
+        "carriere": "Commencer votre carrière n'a jamais été aussi facile",
+        "profile": "Votre profil",
+        "profile_2": "Informations cruciales pour votre profil",
+        "school": "Informations scolaires",
+        "school_2": "Informations relatives à votre progression académique",
+        "security": "Sécurité",
+        "pasword": "Créez votre mot de passe",
+        "finalization": "Finalisation",
+        "dashboard": "Accéder au tableau de bord"
     }
 }

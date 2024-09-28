@@ -16,5 +16,18 @@
             "email": "Email is required",
             "password": "Password is required"
         }
+    },
+
+    "creer_utilisateur_page": {
+        "creer_compte": "Create an account",
+        "carriere": "Starting your career has never been easier",
+        "profile": "Your profile",
+        "profile_2": "Crucial information for your profile",
+        "school": "School information",
+        "school_2": "Information related to your academic progress",
+        "security": "Security",
+        "pasword": "Create your password",
+        "finalization": "Finalization",
+        "dashboard": "Access the dashboard"
     }
 }
