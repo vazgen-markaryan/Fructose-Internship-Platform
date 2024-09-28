@@ -62,20 +62,56 @@ const HomePage = () => {
 <h1>  {t("notification")} </h1>
 // Avec count
 <h1>  {t("notification", { count: 1 })} </h1>
+// Count comme une variable
+<h1>  {t("notification", { count: maVariable })} </h1>
 ```
 
 # Si vous voulez traduire les trucs avec CSS au milieu de votre texte:
-Importez le Trans component et utilisez-le comme suit:
+Il existe Trans component pour ça. Mais c'est très difficile à utiliser so je vais pas le faire LOL.
 
-```javascript
-import { Trans, useTranslation} from "react-i18next";
+# Et finalement, pour ajouter une nouvelle variable de traduction:
 
-const HomePage = () => {
-    const {t} = useTranslation();
-    return (
-        <Trans i18nKey="welcomeMessage">
-            Votre carrière <br/> commence <span style={{"backgroundColor": "#ff006c", "padding":"0 12px"}}>ici.</span>
-        </Trans>
-    );
+- Allez dans frontend/fructose/src/locales/
+- Ajoutez ```LA MEME ``` variable en format JSON dans ```TOUS LES FICHIERS``` de traduction sous la forme ```"cle": "valeur"```
+- ATTENTION: ```"cle"``` reste la même dans tous les fichiers de traduction peu importe la langue
+- Exemple:
+
+```json
+//fr.json
+{
+    "homepage": {
+        "carriere": "Votre carrière",
+        "commence": "commence ",
+        "ici": "ici",
+        "signup": "S'inscrire"
+    },
+    "connexion": {
+        "email": "Email",
+        "password": "Mot de passe",
+        "login": "Se connecter"
+    }
 }
+```
+```json
+//en.json
+{
+    "homepage": {
+        "carriere": "Your career",
+        "commence": "starts ",
+        "ici": "here",
+        "signup": "Sign up"
+    },
+    "connexion": {
+        "email": "Email",
+        "password": "Password",
+        "login": "Login"
+    }
+}
+```
+
+- SVP: Pour simplifier la vie divisez la traduction en sections. Exemple: homepage, connexion, etc.
+
+- Dans ce cas le syntaxe d'appel change un peu:
+```html
+<h1>  {t("homepage.carriere")} </h1>
 ```
