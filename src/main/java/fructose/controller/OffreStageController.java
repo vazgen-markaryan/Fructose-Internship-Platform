@@ -34,13 +34,13 @@ public class OffreStageController {
             offreStageService.addOffreStage(offreStageDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body("Offre de stage créée avec succès !");
         } catch (DataAccessException e) {
-            String errorMessage = "Erreur lors de la création de l'offre de stage.";
             if (e.getCause() instanceof ConstraintViolationException violation) {
                 String detailMessage = violation.getSQLException().getMessage();
                 String uniqueValue = detailMessage.substring(detailMessage.indexOf('(') + 1, detailMessage.indexOf(')'));
-                errorMessage = "Violation de contrainte unique : La valeur \"" + uniqueValue + "\" existe déjà.";
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Violation de contrainte unique : La valeur \"" + uniqueValue + "\" existe déjà.");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la création de l'offre de stage.");
             }
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
         }
