@@ -1,8 +1,20 @@
 {
-    "homepage": {
+    "home_page": {
         "carriere": "Votre carrière",
         "commence": "commence ",
         "ici": "ici",
         "signup": "S'inscrire"
+    },
+
+    "connexion_page": {
+        "connexion": "Connexion",
+        "email": "Courriel",
+        "password": "Mot de passe",
+        "continue": "Continuer",
+
+        "error": {
+            "email": "Email est requis",
+            "password": "Mot de passe est requis"
+        }
     }
 }
