@@ -12,13 +12,14 @@ const resources = {
     },
 };
 
-i18n
-    .use(initReactI18next)
-    .init({
+i18n.use(initReactI18next).init({
         resources,
-        fallbackLng: "fr", // Utiliser le français si la langue sélectionné est mal défini ou n'est pas disponible
-        //TODO: CHANGER EN FR APRÈS AVOIR FINI DE TRADUIRE
-        lng: "en", // Utiliser le français par défaut
+
+        // Utiliser le français si la langue sélectionné est mal défini ou n'est pas disponible
+        fallbackLng: "fr",
+
+        // Utiliser la langue sauvegardée dans le local storage ou le français par défaut
+        lng: localStorage.getItem('language') || "fr",
 
         interpolation: {
             escapeValue: false
