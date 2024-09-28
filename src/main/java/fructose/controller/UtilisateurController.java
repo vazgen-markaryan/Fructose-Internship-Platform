@@ -45,6 +45,8 @@ public class UtilisateurController {
                 errorMessage = "Violation de contrainte unique : La valeur \"" + uniqueValue + "\" existe déjà.";
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
         }
     }
 
