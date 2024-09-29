@@ -38,7 +38,9 @@ const SelectionRole = ({utilisateur, handleChange, switchStep}) => {
                         }}>
                             <Icon path={mdiSchool} size={2}/>
                             <br/>
-                            <h6><input id="etudiant" type="radio" name="role" value="Etudiant" onChange={handleChange} checked={utilisateur.role === "Etudiant"}/>{t("selection_role_page.student")}</h6>
+                            <h6>
+                                <input id="etudiant" type="radio" name="role" value="Etudiant" onChange={handleChange} checked={utilisateur.role === "Etudiant"}/>{t("selection_role_page.student")}
+                            </h6>
                         </div>
                         <div style={{
                             "width": "30%",
@@ -49,7 +51,9 @@ const SelectionRole = ({utilisateur, handleChange, switchStep}) => {
                         }}>
                             <Icon path={mdiDomain} size={2}/>
                             <br/>
-                            <h6><input id="employeur" type="radio" name="role" value="Employeur" onChange={handleChange} checked={utilisateur.role === "Employeur"}/>{t("selection_role_page.employer")}</h6>
+                            <h6>
+                                <input id="employeur" type="radio" name="role" value="Employeur" onChange={handleChange} checked={utilisateur.role === "Employeur"}/>{t("selection_role_page.employer")}
+                            </h6>
                         </div>
                         <div style={{
                             "width": "30%",
@@ -60,7 +64,9 @@ const SelectionRole = ({utilisateur, handleChange, switchStep}) => {
                         }}>
                             <Icon path={mdiHumanMaleBoard} size={2}/>
                             <br/>
-                            <h6><input id="professeur" type="radio" name="role" value="Professeur" onChange={handleChange} checked={utilisateur.role === "Professeur"}/>{t("selection_role_page.teacher")}</h6>
+                            <h6>
+                                <input id="professeur" type="radio" name="role" value="Professeur" onChange={handleChange} checked={utilisateur.role === "Professeur"}/>{t("selection_role_page.teacher")}
+                            </h6>
                         </div>
 
                     </div>
@@ -69,8 +75,7 @@ const SelectionRole = ({utilisateur, handleChange, switchStep}) => {
                     <div className={"toolbar-spacer"}>
 
                     </div>
-                    <button type="submit" className={"btn-filled"}>{t("selection_role_page.continue")}<Icon path={mdiChevronRight} size={1}/>
-                    </button>
+                    <button type="submit" className={"btn-filled"}>{t("selection_role_page.continue")}<Icon path={mdiChevronRight} size={1}/></button>
                 </div>
             </form>
         </div>

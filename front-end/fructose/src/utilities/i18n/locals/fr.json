@@ -38,5 +38,22 @@
         "teacher": "Enseignant",
         "employer": "Employeur",
         "continue": "Continuer"
+    },
+
+    "information_base_page": {
+        "information": "Informations de base",
+        "description": "Entrez votre prénom, nom de famille et l'adresse courriel que vous utiliserez pour vous connecter à la plateforme à partir de maintenant.",
+        "first_name": "Prénom",
+        "last_name": "Nom de famille",
+        "email": "Courriel",
+        "continue": "Continuer",
+
+        "error": {
+            "first_name_short": "Votre prénom doit contenir au moins 2 caractères",
+            "first_name_letters_only": "Votre prénom doit contenir uniquement des lettres et des espaces.",
+            "last_name_short": "Votre nom de famille doit contenir au moins 2 caractères",
+            "last_name_letters_only": "Votre nom de famille doit contenir uniquement des lettres et des espaces.",
+            "email": "L'adresse courriel doit être valide : exemple@gmail.com"
+        }
     }
 }
