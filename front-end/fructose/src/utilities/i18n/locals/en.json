@@ -29,5 +29,14 @@
         "pasword": "Create your password",
         "finalization": "Finalization",
         "dashboard": "Access the dashboard"
+    },
+
+    "selection_role_page": {
+        "who_are_you": "Who are you?",
+        "description": "Select the user type that suits you",
+        "student": "Student",
+        "teacher": "Teacher",
+        "employer": "Employer",
+        "continue": "Continue"
     }
 }

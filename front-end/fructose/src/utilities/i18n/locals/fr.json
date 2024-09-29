@@ -29,5 +29,14 @@
         "pasword": "Créez votre mot de passe",
         "finalization": "Finalisation",
         "dashboard": "Accéder au tableau de bord"
+    },
+
+    "selection_role_page": {
+        "who_are_you": "Qui êtes-vous?",
+        "description": "Sélectionner le type d'utilisateur qui vous correspond",
+        "student": "Étudiant",
+        "teacher": "Enseignant",
+        "employer": "Employeur",
+        "continue": "Continuer"
     }
 }
