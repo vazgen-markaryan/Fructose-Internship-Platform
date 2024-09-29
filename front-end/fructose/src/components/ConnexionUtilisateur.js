@@ -67,8 +67,7 @@ const ConnexionUtilisateur = () => {
             });
     };
 
-    useEffect(
-        () => {
+    useEffect(() => {
         // Si utilisateur change la langue pendant qu'erreur est affichée, traduire les messages d'erreur
         setErrors(prevErrors => ({
             email: prevErrors.email ? t("connexion_page.error.email") : '',

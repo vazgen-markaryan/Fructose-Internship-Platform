@@ -22,7 +22,7 @@ public class Utilisateur {
 
     @NotNull
     @NotEmpty
-    @Size(min = 6, max = 50, message = "Le nom complet doit contenir entre 6 et 50 caractères")
+    @Size(min = 5, max = 50, message = "Le nom complet doit contenir entre 5 et 50 caractères")
     @Pattern(regexp = "^[\\p{L}\\s]+$", message = "Le nom complet doit contenir uniquement des lettres et des espaces")
     private String fullName;
     

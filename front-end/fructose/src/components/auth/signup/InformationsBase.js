@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import Icon from "@mdi/react";
 import {useTranslation} from "react-i18next";
@@ -23,23 +23,22 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
 
         if (utilisateur.firstName.length < 2) {
             errors.firstName = t("information_base_page.error.first_name_short");
+        } else if (!/^[A-Za-z\s]+$/.test(utilisateur.firstName)) {
+            errors.firstName = t("information_base_page.error.first_name_letters_only");
         }
 
         if (utilisateur.lastName.length < 2) {
             errors.lastName = t("information_base_page.error.last_name_short");
-        }
-
-        if (!/^[A-Za-z\s]+$/.test(utilisateur.firstName)) {
-            errors.firstName = t("information_base_page.error.first_name_letters_only");
-        }
-        if (!/^[A-Za-z\s]+$/.test(utilisateur.lastName)) {
+        } else if (!/^[A-Za-z\s]+$/.test(utilisateur.lastName)) {
             errors.lastName = t("information_base_page.error.last_name_letters_only");
         }
+
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(utilisateur.email)) {
             errors.email = t("information_base_page.error.email");
         }
+
         return errors;
-    }
+    };
 
     const handleInputChange = (event) => {
         const {name} = event.target;
@@ -50,6 +49,32 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
         // Supprime le message d'erreur pour ce champ si une modification est détectée
         setErrors((prevErrors) => ({...prevErrors, [name]: ""}));
     };
+
+    // useEffect pour re-traduire les erreurs si la langue change
+    useEffect(() => {
+        setErrors((prevErrors) => {
+            const updatedErrors = { ...prevErrors };
+
+            // Re-traduit chaque message d'erreur existant selon la nouvelle langue
+            if (prevErrors.firstName) {
+                updatedErrors.firstName = utilisateur.firstName.length < 2
+                    ? t("information_base_page.error.first_name_short")
+                    : t("information_base_page.error.first_name_letters_only");
+            }
+
+            if (prevErrors.lastName) {
+                updatedErrors.lastName = utilisateur.lastName.length < 2
+                    ? t("information_base_page.error.last_name_short")
+                    : t("information_base_page.error.last_name_letters_only");
+            }
+
+            if (prevErrors.email) {
+                updatedErrors.email = t("information_base_page.error.email");
+            }
+
+            return updatedErrors;
+        });
+    }, [utilisateur.firstName, utilisateur.lastName, utilisateur.email, t]);
 
     return (
         <div className={"form-signup-condensed"}>
