@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Icon from "@mdi/react";
 import {mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
-import i18n from "i18next";
 
 const ConnexionUtilisateur = () => {
     const {t} = useTranslation();
@@ -73,7 +72,7 @@ const ConnexionUtilisateur = () => {
             email: prevErrors.email ? t("connexion_page.error.email") : '',
             password: prevErrors.password ? t("connexion_page.error.password") : ''
         }));
-    }, [i18n.language, t]);
+    }, [t]);
 
     return (
         <div>

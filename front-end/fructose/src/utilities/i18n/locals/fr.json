@@ -55,5 +55,45 @@
             "last_name_letters_only": "Votre nom de famille doit contenir uniquement des lettres et des espaces.",
             "email": "L'adresse courriel doit être valide : exemple@gmail.com"
         }
+    },
+
+    "information_etudiant_page": {
+        "information": "Informations scolaires",
+        "description": "Entrez votre numéro de matricule défini par l'établissement ainsi que le programme d'études suivi.",
+        "matricule": "Numéro d'étudiant",
+        "program": "Programme",
+        "continue": "Continuer",
+        "select_program": "Sélectionner un programme",
+
+        "programme": {
+            "cinema": "Cinéma",
+            "gestion_commerce": "Gestion de commerces",
+            "gestion_operations_chaine_logistique": "Gestion des opérations et de la chaîne logistique",
+            "journalisme_multimedia": "Journalisme multimédia",
+            "langues_trilinguisme_cultures": "Langues – profil Trilinguisme et cultures",
+            "photographie_design_graphique": "Photographie et design graphique",
+            "sciences_nature": "Sciences de la nature",
+            "sciences_humaines_administration_economie": "Sciences humaines – profil Administration et économie",
+            "sciences_humaines_individu_relations_humaines": "Sciences humaines – profil Individu et relations humaines",
+            "sciences_humaines_monde_en_action": "Sciences humaines – profil Monde en action",
+            "soins_infirmiers": "Soins infirmiers",
+            "soins_infirmiers_auxiliaires": "Soins infirmiers pour auxiliaires",
+            "techniques_education_enfance": "Techniques d’éducation à l’enfance",
+            "techniques_bureautique": "Techniques de bureautique",
+            "techniques_comptabilite_gestion": "Techniques de comptabilité et de gestion",
+            "techniques_informatique": "Techniques de l’informatique",
+            "techniques_travail_social": "Techniques de travail social",
+            "technologie_architecture": "Technologie de l’architecture",
+            "technologie_estimation_evaluation_batiment": "Technologie de l’estimation et de l’évaluation en bâtiment",
+            "technologie_genie_civil": "Technologie du génie civil",
+            "technologie_genie_electrique": "Technologie du génie électrique : automatisation et contrôle",
+            "technologie_genie_physique": "Technologie du génie physique",
+            "tremplin_dec": "Tremplin DEC"
+        },
+
+        "error": {
+            "matricule": "Le numéro d'étudiant doit comporter 7 chiffres",
+            "department": "Aucun département n'est sélectionné"
+        }
     }
 }

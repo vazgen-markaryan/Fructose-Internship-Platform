@@ -49,11 +49,51 @@
         "continue": "Continue",
 
         "error": {
-            "first_name_short": "Your first name must contain at least 2 characters",
+            "first_name_short": "Your first name must contain at least 2 characters.",
             "first_name_letters_only": "Your first name must contain only letters and spaces.",
-            "last_name_short": "Your last name must contain at least 2 characters",
+            "last_name_short": "Your last name must contain at least 2 characters.",
             "last_name_letters_only": "Your last name must contain only letters and spaces.",
             "email": "Email address must be valid: example@gmail.com"
+        }
+    },
+
+    "information_etudiant_page": {
+        "information": "School Information",
+        "description": "Enter your matriculation number defined by the establishment as well as the study program attended.",
+        "matricule": "Student number",
+        "program": "Program",
+        "continue": "Continue",
+        "select_program": "Select a program",
+
+        "programme": {
+            "cinema": "Cinema",
+            "gestion_commerce": "Business Management",
+            "gestion_operations_chaine_logistique": "Operations and Supply Chain Management",
+            "journalisme_multimedia": "Multimedia Journalism",
+            "langues_trilinguisme_cultures": "Languages – Trilingualism and Cultures",
+            "photographie_design_graphique": "Photography and Graphic Design",
+            "sciences_nature": "Natural Sciences",
+            "sciences_humaines_administration_economie": "Human Sciences – Administration and Economics Profile",
+            "sciences_humaines_individu_relations_humaines": "Human Sciences – Individual and Human Relations Profile",
+            "sciences_humaines_monde_en_action": "Human Sciences – World in Action Profile",
+            "soins_infirmiers": "Nursing",
+            "soins_infirmiers_auxiliaires": "Nursing for Assistants",
+            "techniques_education_enfance": "Early Childhood Education Techniques",
+            "techniques_bureautique": "Office Automation Techniques",
+            "techniques_comptabilite_gestion": "Accounting and Management Techniques",
+            "techniques_informatique": "Computer Techniques",
+            "techniques_travail_social": "Social Work Techniques",
+            "technologie_architecture": "Architecture Technology",
+            "technologie_estimation_evaluation_batiment": "Building Estimation and Evaluation Technology",
+            "technologie_genie_civil": "Civil Engineering Technology",
+            "technologie_genie_electrique": "Electrical Engineering Technology: Automation and Control",
+            "technologie_genie_physique": "Physical Engineering Technology",
+            "tremplin_dec": "DEC Transition Program"
+        },
+
+        "error": {
+            "matricule": "Student number must have 7 digits",
+            "department": "No Department is selected"
         }
     }
 }
