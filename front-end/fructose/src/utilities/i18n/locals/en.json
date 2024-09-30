@@ -95,5 +95,19 @@
             "matricule": "Student number must have 7 digits",
             "department": "No Department is selected"
         }
+    },
+
+    "mot_de_passe_page": {
+        "title": "Create your password",
+        "description": "A complex password is less likely to be guessed by someone else",
+        "description_2": "Your password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number and one symbol",
+        "password": "Password",
+        "confirm_password": "Confirm password",
+        "submit": "Submit",
+
+        "error": {
+            "password_wrong": "Password must contain at least one uppercase letter, one number and one special character",
+            "password_doesnt_match": "Passwords do not match."
+        }
     }
 }
