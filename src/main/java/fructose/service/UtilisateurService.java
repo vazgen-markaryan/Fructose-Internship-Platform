@@ -8,11 +8,13 @@ import fructose.repository.vides.EmployeurRepository;
 import fructose.repository.vides.EtudiantRepository;
 import fructose.repository.vides.ProfesseurRepository;
 import fructose.repository.UtilisateurRepository;
+import fructose.security.JwtTokenProvider;
 import fructose.service.dto.EmployeurDTO;
 import fructose.service.dto.EtudiantDTO;
 import fructose.service.dto.ProfesseurDTO;
 import fructose.service.dto.UtilisateurDTO;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,23 +24,27 @@ import java.util.stream.Collectors;
 
 @Service
 public class UtilisateurService {
-
+    
     private final EtudiantRepository etudiantRepository;
     private final ProfesseurRepository professeurRepository;
     private final EmployeurRepository employeurRepository;
     private final PasswordEncoder passwordEncoder;
     private final UtilisateurRepository utilisateurRepository;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public UtilisateurService(EtudiantRepository etudiantRepository, ProfesseurRepository professeurRepository, EmployeurRepository employeurRepository, PasswordEncoder passwordEncoder, @Qualifier("utilisateurRepository") UtilisateurRepository utilisateurRepository) {
+    public UtilisateurService(EtudiantRepository etudiantRepository, ProfesseurRepository professeurRepository, EmployeurRepository employeurRepository, PasswordEncoder passwordEncoder, @Qualifier("utilisateurRepository") UtilisateurRepository utilisateurRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.etudiantRepository = etudiantRepository;
         this.professeurRepository = professeurRepository;
         this.employeurRepository = employeurRepository;
         this.passwordEncoder = passwordEncoder;
         this.utilisateurRepository = utilisateurRepository;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
-
+    
     private static final List<String> VALID_ROLES = Arrays.asList("Etudiant", "Professeur", "Employeur", "Gestionnaire de Stage");
-
+    
     public UtilisateurDTO getUtilisateurById(Long id, String userType) {
         switch (userType) {
             case "Etudiant":
@@ -63,19 +69,19 @@ public class UtilisateurService {
                 throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
         }
     }
-
+    
     public void addUtilisateur(UtilisateurDTO utilisateurDTO, String userType) {
         Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
         saveUtilisateur(utilisateur, userType);
     }
-
+    
     public void updateUtilisateur(UtilisateurDTO utilisateurDTO, String userType) {
         Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
         saveUtilisateur(utilisateur, userType);
     }
-
+    
     private void saveUtilisateur(Utilisateur utilisateur, String userType) {
         switch (userType) {
             case "Etudiant":
@@ -103,15 +109,15 @@ public class UtilisateurService {
                 throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
         }
     }
-
+    
     public void deleteUtilisateur(Long id, String userType) {
         UtilisateurDTO utilisateur = getUtilisateurById(id, userType);
-
+        
         if (utilisateur == null) {
             System.out.println("L'utilisateur de type " + userType + " n'existe pas.");
             return;
         }
-
+        
         switch (userType) {
             case "Etudiant":
                 etudiantRepository.deleteById(id);
@@ -127,7 +133,7 @@ public class UtilisateurService {
         }
         System.out.println(userType + " avec id " + id + " a été supprimé avec succès.");
     }
-
+    
     public List<UtilisateurDTO> getUtilisateurs(String userType) {
         return switch (userType) {
             case "Etudiant" -> etudiantRepository.findAll()
@@ -145,7 +151,7 @@ public class UtilisateurService {
             default -> throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
         };
     }
-
+    
     public boolean isValidRole(String role) {
         return VALID_ROLES.contains(role);
     }

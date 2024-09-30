@@ -8,6 +8,7 @@ import fructose.repository.vides.EmployeurRepository;
 import fructose.repository.vides.EtudiantRepository;
 import fructose.repository.UtilisateurRepository;
 import fructose.repository.vides.ProfesseurRepository;
+import fructose.security.JwtTokenProvider;
 import fructose.service.dto.EmployeurDTO;
 import fructose.service.dto.EtudiantDTO;
 import fructose.service.dto.ProfesseurDTO;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -48,9 +50,15 @@ class UtilisateurServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private AuthenticationManager authenticationManager;
+
+    @Mock
+    private JwtTokenProvider jwtTokenProvider;
+
     @BeforeEach
     public void setUp() {
-        utilisateurService = new UtilisateurService(etudiantRepository, professeurRepository, employeurRepository, passwordEncoder, utilisateurRepository);
+        utilisateurService = new UtilisateurService(etudiantRepository, professeurRepository, employeurRepository, passwordEncoder, utilisateurRepository, authenticationManager, jwtTokenProvider);
     }
 
     // ------------------- GET UTILISATEUR BY ID ------------------- //

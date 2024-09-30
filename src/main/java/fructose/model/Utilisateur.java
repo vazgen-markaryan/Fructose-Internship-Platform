@@ -1,8 +1,13 @@
 package fructose.model;
 
+import fructose.model.auth.Credentials;
+import fructose.model.auth.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
 
 @Entity
 @Setter
@@ -56,6 +61,25 @@ public class Utilisateur {
     @Size(min = 3, max = 100, message = "Le nom de l'entreprise doit contenir de 3 à 100 caractères")
     @Pattern(regexp = "^[A-Za-zÀ-ÿ\\s]+$", message = "Le nom de l'entreprise doit contenir uniquement des lettres et des espaces")
     private String companyName;
+
+    @Embedded
+    private Credentials credentials;
+
+    public String getEmail(){
+        return credentials.getEmail();
+    }
+
+    public String getPassword(){
+        return credentials.getPassword();
+    }
+
+    public Role getRole(){
+        return credentials.getRole();
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities(){
+        return credentials.getAuthorities();
+    }
     
     public Utilisateur(String fullName, String email, String password, String matricule, String role, String departement, String companyName) {
         this.fullName = fullName;
