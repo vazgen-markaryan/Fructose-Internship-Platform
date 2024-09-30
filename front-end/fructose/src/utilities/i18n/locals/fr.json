@@ -121,5 +121,19 @@
             "company_name_invalid": "Le nom de l'entreprise doit contenir uniquement des lettres et des espaces",
             "company_name_lenght" : "Le nom de l'entreprise doit contenir entre 3 et 100 caractères"
         }
+    },
+
+    "information_professeur_page": {
+        "title": "Informations sur votre emploi",
+        "description": "Entrez votre numéro d'employé défini par l'établissement ainsi que le département d'appartenance",
+        "employee_number": "Numéro d'employé",
+        "department": "Département",
+        "select_department": "Sélectionnez un département",
+        "continue": "Continuer",
+
+        "error": {
+            "employee_number": "Le numéro d'employé doit comporter 7 chiffres",
+            "department": "Aucun département n'est sélectionné"
+        }
     }
 }

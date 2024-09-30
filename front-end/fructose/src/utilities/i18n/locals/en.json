@@ -121,5 +121,19 @@
             "company_name_invalid": "The company name must contain only letters and spaces",
             "company_name_lenght" : "Company name must be between 3 and 100 characters"
         }
+    },
+
+    "information_professeur_page": {
+        "title": "Information about your employment",
+        "description": "Enter your employee number defined by the establishment as well as the department of belonging",
+        "employee_number": "Employee number",
+        "department": "Department",
+        "select_department": "Select a department",
+        "continue": "Continue",
+
+        "error": {
+            "employee_number": "Employee number must have 7 digits",
+            "department": "No Department is selected"
+        }
     }
 }

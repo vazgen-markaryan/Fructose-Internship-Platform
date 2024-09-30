@@ -4,7 +4,9 @@ import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
 import { useTranslation } from "react-i18next";
 
 const InformationsEmployeur = ({ utilisateur, handleChange, switchStep }) => {
+
     const { t } = useTranslation();
+
     const [errors, setErrors] = useState({});
 
     const handleSubmit = (event) => {
@@ -33,7 +35,9 @@ const InformationsEmployeur = ({ utilisateur, handleChange, switchStep }) => {
 
         if (user.companyName?.length < 3 || user.companyName?.length > 100) {
             validationErrors.companyNameLength = t("information_employeur_page.error.company_name_lenght");
-        } else if (!/^[A-Za-zÀ-ÿ&'\s-]+$/.test(user.companyName)) {
+        }
+
+        else if (!/^[A-Za-zÀ-ÿ&'\s-]+$/.test(user.companyName)) {
             validationErrors.companyName = t("information_employeur_page.error.company_name_invalid");
         }
 
@@ -46,9 +50,13 @@ const InformationsEmployeur = ({ utilisateur, handleChange, switchStep }) => {
 
             if (utilisateur?.companyName?.length < 3 || utilisateur?.companyName?.length > 100) {
                 updatedErrors.companyNameLength = t("information_employeur_page.error.company_name_lenght");
-            } else if (!/^[A-Za-zÀ-ÿ&'\s-]+$/.test(utilisateur?.companyName)) {
+            }
+
+            else if (!/^[A-Za-zÀ-ÿ&'\s-]+$/.test(utilisateur?.companyName)) {
                 updatedErrors.companyName = t("information_employeur_page.error.company_name_invalid");
-            } else {
+            }
+
+            else {
                 delete updatedErrors.companyNameLength;
                 delete updatedErrors.companyName;
             }
@@ -56,7 +64,6 @@ const InformationsEmployeur = ({ utilisateur, handleChange, switchStep }) => {
             return updatedErrors;
         });
     }, [utilisateur?.companyName, t]);
-
 
     return (
         <div className={"form-signup-condensed"}>

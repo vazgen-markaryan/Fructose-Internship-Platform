@@ -5,7 +5,7 @@ import MotDePasse from "./auth/signup/MotDePasse";
 import SelectionRole from "./auth/signup/SelectionRole";
 import InformationsEtudiant from "./auth/signup/InformationsEtudiant";
 import InformationsEmployeur from "./auth/signup/InformationsEmployeur";
-import InformationsGestionnaire from "./auth/signup/InformationsGestionnaire";
+import InformationsProfesseur from "./auth/signup/InformationsProfesseur";
 import {useTranslation} from "react-i18next";
 
 const CreerUtilisateur = () => {
@@ -58,7 +58,6 @@ const CreerUtilisateur = () => {
                 navigate('/');
             })
             .catch(error => {
-                setError(`Erreur: ${error.message}`); //Pour afficher erreur sur Écran
                 console.log(error)
             });
     };
@@ -96,7 +95,7 @@ const CreerUtilisateur = () => {
             } else if (utilisateur.role === "Employeur") {
                 return <InformationsEmployeur utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsEmployeur>
             } else if (utilisateur.role === "Professeur") {
-                return <InformationsGestionnaire utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsGestionnaire>
+                return <InformationsProfesseur utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsProfesseur>
             }
 
         } else if (currentStep === 3) {
