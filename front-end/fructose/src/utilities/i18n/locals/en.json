@@ -109,5 +109,17 @@
             "password_wrong": "Password must contain at least one uppercase letter, one number and one special character",
             "password_doesnt_match": "Passwords do not match."
         }
+    },
+
+    "information_employeur_page": {
+        "title": "Employer information",
+        "description": "Enter the required information about the company offering the internships",
+        "company_name": "Company name",
+        "continue": "Continue",
+
+        "error": {
+            "company_name_invalid": "The company name must contain only letters and spaces",
+            "company_name_lenght" : "Company name must be between 3 and 100 characters"
+        }
     }
 }

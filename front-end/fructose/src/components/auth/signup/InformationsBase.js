@@ -42,20 +42,14 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
 
     const handleInputChange = (event) => {
         const {name} = event.target;
-
-        // Appelle la fonction handleChange passée en props pour mettre à jour le parent
         handleChange(event);
-
-        // Supprime le message d'erreur pour ce champ si une modification est détectée
         setErrors((prevErrors) => ({...prevErrors, [name]: ""}));
     };
 
-    // useEffect pour re-traduire les erreurs si la langue change
     useEffect(() => {
         setErrors((prevErrors) => {
             const updatedErrors = { ...prevErrors };
 
-            // Re-traduit chaque message d'erreur existant selon la nouvelle langue
             if (prevErrors.firstName) {
                 updatedErrors.firstName = utilisateur.firstName.length < 2
                     ? t("information_base_page.error.first_name_short")

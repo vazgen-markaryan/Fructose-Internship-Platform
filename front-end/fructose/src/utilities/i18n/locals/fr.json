@@ -109,5 +109,17 @@
             "password_wrong": "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial",
             "password_doesnt_match": "Les mots de passe ne correspondent pas."
         }
+    },
+
+    "information_employeur_page": {
+        "title": "Informations sur l'employeur",
+        "description": "Entrez les informations requises sur l'entreprise offrant les stages",
+        "company_name": "Nom de l'entreprise",
+        "continue": "Continuer",
+
+        "error": {
+            "company_name_invalid": "Le nom de l'entreprise doit contenir uniquement des lettres et des espaces",
+            "company_name_lenght" : "Le nom de l'entreprise doit contenir entre 3 et 100 caractères"
+        }
     }
 }
