@@ -4,6 +4,7 @@ import fructose.model.Employeur;
 import fructose.model.Etudiant;
 import fructose.model.Professeur;
 import fructose.model.Utilisateur;
+import fructose.model.auth.Role;
 import fructose.repository.vides.EmployeurRepository;
 import fructose.repository.vides.EtudiantRepository;
 import fructose.repository.vides.ProfesseurRepository;
@@ -13,6 +14,7 @@ import fructose.service.dto.EmployeurDTO;
 import fructose.service.dto.EtudiantDTO;
 import fructose.service.dto.ProfesseurDTO;
 import fructose.service.dto.UtilisateurDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UtilisateurService {
     
     private final EtudiantRepository etudiantRepository;
@@ -30,9 +33,9 @@ public class UtilisateurService {
     private final EmployeurRepository employeurRepository;
     private final PasswordEncoder passwordEncoder;
     private final UtilisateurRepository utilisateurRepository;
-    private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-    
+    private final AuthenticationManager authenticationManager;
+
     public UtilisateurService(EtudiantRepository etudiantRepository,
                               ProfesseurRepository professeurRepository,
                               EmployeurRepository employeurRepository,
@@ -51,60 +54,60 @@ public class UtilisateurService {
     
     private static final List<String> VALID_ROLES = Arrays.asList("Etudiant", "Professeur", "Employeur", "Gestionnaire de Stage");
     
-    public UtilisateurDTO getUtilisateurById(Long id, String userType) {
-        switch (userType) {
-            case "Etudiant":
+    public UtilisateurDTO getUtilisateurById(Long id, Role role) {
+        switch (role) {
+            case ETUDIANT:
                 Etudiant etudiant = etudiantRepository.findById(id).orElse(null);
                 if (etudiant == null) {
                     throw new IllegalArgumentException("Etudiant avec ID: " + id + " n'existe pas");
                 }
                 return EtudiantDTO.toDTO(etudiant);
-            case "Professeur":
+            case PROFESSEUR:
                 Professeur professeur = professeurRepository.findById(id).orElse(null);
                 if (professeur == null) {
                     throw new IllegalArgumentException("Professeur avec ID: " + id + " n'existe pas");
                 }
                 return ProfesseurDTO.toDTO(professeur);
-            case "Employeur":
+            case EMPLOYEUR:
                 Employeur employeur = employeurRepository.findById(id).orElse(null);
                 if (employeur == null) {
                     throw new IllegalArgumentException("Employeur avec ID: " + id + " n'existe pas");
                 }
                 return EmployeurDTO.toDTO(employeur);
             default:
-                throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
+                throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
         }
     }
     
-    public void addUtilisateur(UtilisateurDTO utilisateurDTO, String userType) {
+    public void addUtilisateur(UtilisateurDTO utilisateurDTO, Role role) {
         Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
-        saveUtilisateur(utilisateur, userType);
+        saveUtilisateur(utilisateur, role);
     }
     
-    public void updateUtilisateur(UtilisateurDTO utilisateurDTO, String userType) {
+    public void updateUtilisateur(UtilisateurDTO utilisateurDTO, Role role) {
         Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
-        saveUtilisateur(utilisateur, userType);
+        saveUtilisateur(utilisateur, role);
     }
     
-    private void saveUtilisateur(Utilisateur utilisateur, String userType) {
-        switch (userType) {
-            case "Etudiant":
+    private void saveUtilisateur(Utilisateur utilisateur, Role role) {
+        switch (role) {
+            case ETUDIANT:
                 if (utilisateur instanceof Etudiant) {
                     etudiantRepository.save((Etudiant) utilisateur);
                 } else {
                     throw new IllegalArgumentException("L'utilisateur n'est pas de type Etudiant");
                 }
                 break;
-            case "Professeur":
+            case PROFESSEUR:
                 if (utilisateur instanceof Professeur) {
                     professeurRepository.save((Professeur) utilisateur);
                 } else {
                     throw new IllegalArgumentException("L'utilisateur n'est pas de type Professeur");
                 }
                 break;
-            case "Employeur":
+            case EMPLOYEUR:
                 if (utilisateur instanceof Employeur) {
                     employeurRepository.save((Employeur) utilisateur);
                 } else {
@@ -112,49 +115,49 @@ public class UtilisateurService {
                 }
                 break;
             default:
-                throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
+                throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
         }
     }
     
-    public void deleteUtilisateur(Long id, String userType) {
-        UtilisateurDTO utilisateur = getUtilisateurById(id, userType);
+    public void deleteUtilisateur(Long id, Role role) {
+        UtilisateurDTO utilisateur = getUtilisateurById(id, role);
         
         if (utilisateur == null) {
-            System.out.println("L'utilisateur de type " + userType + " n'existe pas.");
+            System.out.println("L'utilisateur de type " + role + " n'existe pas.");
             return;
         }
         
-        switch (userType) {
-            case "Etudiant":
+        switch (role) {
+            case ETUDIANT:
                 etudiantRepository.deleteById(id);
                 break;
-            case "Professeur":
+            case PROFESSEUR:
                 professeurRepository.deleteById(id);
                 break;
-            case "Employeur":
+            case EMPLOYEUR:
                 employeurRepository.deleteById(id);
                 break;
             default:
-                throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
+                throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
         }
-        System.out.println(userType + " avec id " + id + " a été supprimé avec succès.");
+        System.out.println(role.toString() + " avec id " + id + " a été supprimé avec succès.");
     }
     
-    public List<UtilisateurDTO> getUtilisateurs(String userType) {
-        return switch (userType) {
-            case "Etudiant" -> etudiantRepository.findAll()
+    public List<UtilisateurDTO> getUtilisateurs(Role role) {
+        return switch (role) {
+            case ETUDIANT -> etudiantRepository.findAll()
                     .stream()
                     .map(EtudiantDTO::toDTO)
                     .collect(Collectors.toList());
-            case "Professeur" -> professeurRepository.findAll()
+            case PROFESSEUR -> professeurRepository.findAll()
                     .stream()
                     .map(ProfesseurDTO::toDTO)
                     .collect(Collectors.toList());
-            case "Employeur" -> employeurRepository.findAll()
+            case EMPLOYEUR -> employeurRepository.findAll()
                     .stream()
                     .map(EmployeurDTO::toDTO)
                     .collect(Collectors.toList());
-            default -> throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
+            default -> throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
         };
     }
     

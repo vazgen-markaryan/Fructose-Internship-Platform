@@ -5,6 +5,7 @@ import fructose.security.exception.UserNotFoundException;
 import fructose.model.Utilisateur;
 import fructose.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

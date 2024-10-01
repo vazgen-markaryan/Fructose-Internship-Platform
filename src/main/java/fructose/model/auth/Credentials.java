@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,9 +21,17 @@ import java.util.Collections;
 @ToString
 public final class Credentials implements UserDetails {
 
-	@Column(unique = true, nullable = false)
+	@NotNull
+	@NotEmpty
+	@Size(min = 5, max = 100, message = "L'adresse courriel doit contenir entre 5 et 100 caractères")
+	@Column(unique = true, insertable = false, updatable = false)
+	@Email(message = "L'adresse courriel doit être valide")
 	private String email;
 
+	@NotNull
+	@NotEmpty
+	@Size(min = 8, message = "Le mot de passe doit contenir au moins 8 caractères")
+	@Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$", message = "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial")
 	@Column(nullable = false)
 	private String password;
 
@@ -34,6 +43,10 @@ public final class Credentials implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.singleton(new SimpleGrantedAuthority(role.name()));
+	}
+
+	public void setPassword(String password){
+		this.password = password;
 	}
 
 	@Override

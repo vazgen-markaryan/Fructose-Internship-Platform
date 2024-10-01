@@ -34,7 +34,7 @@ public class UtilisateurController {
             if (!utilisateurService.isValidRole(utilisateurDTO.getRole().toString())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rôle invalide.");
             }
-            utilisateurService.addUtilisateur(utilisateurDTO, utilisateurDTO.getRole().toString());
+            utilisateurService.addUtilisateur(utilisateurDTO, utilisateurDTO.getRole());
             return ResponseEntity.status(HttpStatus.CREATED).body("Utilisateur créé avec succès !");
         } catch (DataAccessException e) {
             String errorMessage = "Erreur lors de la création de l'utilisateur.";
