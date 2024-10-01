@@ -59,7 +59,7 @@ public class Utilisateur {
     }
 
     public void setPassword(String password){
-
+        credentials.setPassword(password);
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities(){

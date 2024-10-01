@@ -40,10 +40,12 @@ public class UtilisateurDTO {
         }
         utilisateur.setId(utilisateur_dto.getId());
         utilisateur.setFullName(utilisateur_dto.getFullName());
-        utilisateur.setCredentials(Credentials.builder().email(utilisateur_dto.getEmail()).password(utilisateur_dto.getPassword()).role(utilisateur_dto.getRole()).build());
         utilisateur.setMatricule(utilisateur_dto.getMatricule());
         utilisateur.setDepartement(utilisateur_dto.getDepartement());
         utilisateur.setCompanyName(utilisateur_dto.getCompanyName());
+        utilisateur.setCredentials(Credentials.builder().email(utilisateur_dto.getEmail()).password(utilisateur_dto.getPassword()).role(utilisateur_dto.getRole()).build());
+
+
         return utilisateur;
     }
 

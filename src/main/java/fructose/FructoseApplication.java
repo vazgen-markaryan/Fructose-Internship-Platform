@@ -70,7 +70,6 @@ public class FructoseApplication implements CommandLineRunner {
 	}
 
 	private void checkAndAddUtilisateur(UtilisateurDTO utilisateurDTO, Role role) {
-		System.out.println(); //Ajouté juste pour la lisibilité
 		List<UtilisateurDTO> utilisateurList = utilisateurService.getUtilisateurs(role);
 		boolean exists = utilisateurList
 				.stream()

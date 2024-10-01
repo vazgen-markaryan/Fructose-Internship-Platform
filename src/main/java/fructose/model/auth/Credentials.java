@@ -24,7 +24,7 @@ public final class Credentials implements UserDetails {
 	@NotNull
 	@NotEmpty
 	@Size(min = 5, max = 100, message = "L'adresse courriel doit contenir entre 5 et 100 caractères")
-	@Column(unique = true, insertable = false, updatable = false)
+	@Column(unique = true, updatable = false)
 	@Email(message = "L'adresse courriel doit être valide")
 	private String email;
 
