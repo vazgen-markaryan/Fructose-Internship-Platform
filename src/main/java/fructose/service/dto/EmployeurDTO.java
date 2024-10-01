@@ -1,6 +1,7 @@
 package fructose.service.dto;
 
 import fructose.model.Employeur;
+import fructose.model.auth.Role;
 import lombok.*;
 
 @Getter
@@ -15,7 +16,7 @@ public class EmployeurDTO extends UtilisateurDTO {
 		employeur_dto.setEmail(employeur.getEmail());
 		employeur_dto.setPassword(employeur.getPassword());
 		employeur_dto.setMatricule(employeur.getMatricule());
-		employeur_dto.setRole("Employeur");
+		employeur_dto.setRole(Role.EMPLOYEUR);
 		employeur_dto.setDepartement(employeur.getDepartement());
 		employeur_dto.setCompanyName(employeur.getCompanyName());
 		return employeur_dto;

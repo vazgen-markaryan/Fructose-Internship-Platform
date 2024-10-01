@@ -32,8 +32,14 @@ public class UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-
-    public UtilisateurService(EtudiantRepository etudiantRepository, ProfesseurRepository professeurRepository, EmployeurRepository employeurRepository, PasswordEncoder passwordEncoder, @Qualifier("utilisateurRepository") UtilisateurRepository utilisateurRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+    
+    public UtilisateurService(EtudiantRepository etudiantRepository,
+                              ProfesseurRepository professeurRepository,
+                              EmployeurRepository employeurRepository,
+                              PasswordEncoder passwordEncoder,
+                              @Qualifier("utilisateurRepository") UtilisateurRepository utilisateurRepository,
+                              AuthenticationManager authenticationManager,
+                              JwtTokenProvider jwtTokenProvider) {
         this.etudiantRepository = etudiantRepository;
         this.professeurRepository = professeurRepository;
         this.employeurRepository = employeurRepository;

@@ -1,5 +1,6 @@
 package fructose.controller;
 
+import fructose.model.auth.Role;
 import fructose.service.UtilisateurService;
 import fructose.service.dto.UtilisateurDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,9 +48,9 @@ class UtilisateurControllerTest {
     @Test
     void testCreerUtilisateur_Success() {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-        utilisateurDTO.setRole("Etudiant");
+        utilisateurDTO.setRole(Role.ETUDIANT);
         when(bindingResult.hasErrors()).thenReturn(false);
-        when(utilisateurService.isValidRole(utilisateurDTO.getRole())).thenReturn(true);
+        when(utilisateurService.isValidRole(String.valueOf(utilisateurDTO.getRole()))).thenReturn(true);
 
         ResponseEntity<?> response = utilisateurController.creerUtilisateur(utilisateurDTO, bindingResult);
 

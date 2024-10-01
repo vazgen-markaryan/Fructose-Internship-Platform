@@ -34,7 +34,7 @@ public class Utilisateur {
     @NotNull
     @NotEmpty
     @Size(min = 5, max = 100, message = "L'adresse courriel doit contenir entre 5 et 100 caractères")
-    @Column(unique = true)
+    @Column(unique = true, insertable = false, updatable = false)
     @Email(message = "L'adresse courriel doit être valide")
     private String email;
     
@@ -42,6 +42,7 @@ public class Utilisateur {
     @NotEmpty
     @Size(min = 8, message = "Le mot de passe doit contenir au moins 8 caractères")
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$", message = "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial")
+    @Column(insertable = false, updatable = false)
     private String password;
     
     @Column(unique = true)
@@ -52,7 +53,8 @@ public class Utilisateur {
     @NotEmpty
     @Size(min = 3, max = 50, message = "Le rôle doit contenir entre 3 et 50 caractères")
     @Pattern(regexp = "^[\\p{L}\\s]+$", message = "Le nom doit contenir uniquement des lettres et des espaces")
-    private String role;
+    @Column(insertable = false, updatable = false)
+    private Role role;
     
     @Size(max = 100, message = "Le nom du département doit contenir au maximum 100 caractères")
     @Pattern(regexp = "^[\\p{L}\\s_]+$", message = "Le nom du département doit contenir uniquement des lettres et des espaces")
@@ -81,7 +83,7 @@ public class Utilisateur {
         return credentials.getAuthorities();
     }
     
-    public Utilisateur(String fullName, String email, String password, String matricule, String role, String departement, String companyName) {
+    public Utilisateur(String fullName, String email, String password, String matricule, Role role, String departement, String companyName) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
@@ -91,11 +93,11 @@ public class Utilisateur {
         this.companyName = companyName;
     }
     
-    public static Utilisateur createUtilisateur(String type, String fullName, String email, String password, String matricule, String role, String departement, String companyName) {
+    public static Utilisateur createUtilisateur(String type, String fullName, String email, String password, String matricule, String departement, String companyName) {
 	    return switch (type.toLowerCase()) {
-		    case "etudiant" -> new Etudiant(fullName, email, password, matricule, role, departement, companyName);
-		    case "employeur" -> new Employeur(fullName, email, password, matricule, role, departement, companyName);
-		    case "professeur" -> new Professeur(fullName, email, password, matricule, role, departement, companyName);
+		    case "etudiant" -> new Etudiant(fullName, email, password, matricule, Role.ETUDIANT, departement, companyName);
+		    case "employeur" -> new Employeur(fullName, email, password, matricule, Role.EMPLOYEUR, departement, companyName);
+		    case "professeur" -> new Professeur(fullName, email, password, matricule, Role.PROFESSEUR, departement, companyName);
 		        default -> throw new IllegalArgumentException("Type d'utilisateur: " + type + " n'est pas supporté");
 	    };
     }

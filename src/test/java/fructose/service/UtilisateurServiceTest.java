@@ -4,6 +4,7 @@ import fructose.model.Employeur;
 import fructose.model.Etudiant;
 import fructose.model.Professeur;
 import fructose.model.Utilisateur;
+import fructose.model.auth.Role;
 import fructose.repository.vides.EmployeurRepository;
 import fructose.repository.vides.EtudiantRepository;
 import fructose.repository.UtilisateurRepository;
@@ -114,7 +115,7 @@ class UtilisateurServiceTest {
     void testAddUtilisateur_Success() {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
         utilisateurDTO.setPassword("password123");
-        utilisateurDTO.setRole("Etudiant");
+        utilisateurDTO.setRole(Role.ETUDIANT);
 
         when(passwordEncoder.encode(utilisateurDTO.getPassword())).thenReturn("encodedPassword");
 
@@ -127,7 +128,7 @@ class UtilisateurServiceTest {
     void testAddUtilisateur_Professeur_Success() {
         ProfesseurDTO professeurDTO = new ProfesseurDTO();
         professeurDTO.setPassword("password123");
-        professeurDTO.setRole("Professeur");
+        professeurDTO.setRole(Role.PROFESSEUR);
 
         when(passwordEncoder.encode(professeurDTO.getPassword())).thenReturn("encodedPassword");
 
@@ -140,7 +141,7 @@ class UtilisateurServiceTest {
     void testAddUtilisateur_Employeur_Success() {
         EmployeurDTO employeurDTO = new EmployeurDTO();
         employeurDTO.setPassword("password123");
-        employeurDTO.setRole("Employeur");
+        employeurDTO.setRole(Role.ETUDIANT);
 
         when(passwordEncoder.encode(employeurDTO.getPassword())).thenReturn("encodedPassword");
 
@@ -156,12 +157,12 @@ class UtilisateurServiceTest {
         etudiantDTO.setEmail("john@gmail.com");
         etudiantDTO.setPassword("Password123!");
         etudiantDTO.setMatricule("1111111");
-        etudiantDTO.setRole("Etudiant");
+        etudiantDTO.setRole(Role.ETUDIANT);
         etudiantDTO.setDepartement("Informatique");
         etudiantDTO.setCompanyName(null);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
-        utilisateurService.addUtilisateur(etudiantDTO, "Etudiant");
+        utilisateurService.addUtilisateur(etudiantDTO, Role.ETUDIANT);
 
         verify(etudiantRepository).save(any(Etudiant.class));
     }
@@ -173,7 +174,7 @@ class UtilisateurServiceTest {
         professeurDTO.setEmail("jane@gmai.com");
         professeurDTO.setPassword("Password123!");
         professeurDTO.setMatricule("2222222");
-        professeurDTO.setRole("Professeur");
+        professeurDTO.setRole(Role.PROFESSEUR);
         professeurDTO.setDepartement("Informatique");
         professeurDTO.setCompanyName(null);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
@@ -272,7 +273,7 @@ class UtilisateurServiceTest {
     public void test_successful_login_with_correct_email_and_password() {
         Utilisateur utilisateurVazgan = Utilisateur.createUtilisateur("Etudiant",
                 "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!",
-                "1111111", "Etudiant", "informatique", null);
+                "1111111", "informatique", null);
         utilisateurVazgan.setPassword(new BCryptPasswordEncoder().encode(utilisateurVazgan.getPassword()));
         String password = "Vazgen123!";
 
@@ -304,7 +305,7 @@ class UtilisateurServiceTest {
 
     @Test
     public void test_login_with_incorrect_password() {
-        Utilisateur utilisateurVazgan = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", "Etudiant", "informatique", null);
+        Utilisateur utilisateurVazgan = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", "informatique", null);
         utilisateurVazgan.setPassword(new BCryptPasswordEncoder().encode(utilisateurVazgan.getPassword()));
         when(utilisateurRepository.findByEmail(utilisateurVazgan.getEmail())).thenReturn(utilisateurVazgan);
 
@@ -317,7 +318,7 @@ class UtilisateurServiceTest {
 
     @Test
     void login_ValidCredentials_ReturnsUtilisateurDTO() {
-        Utilisateur utilisateur = new Utilisateur("John Doe", "john@example.com", "encodedPassword", "1234567", "Etudiant", null, null);
+        Utilisateur utilisateur = new Utilisateur("John Doe", "john@example.com", "encodedPassword", "1234567", Role.ETUDIANT, null, null);
         when(utilisateurRepository.findByEmail("john@example.com")).thenReturn(utilisateur);
         when(passwordEncoder.matches("Password123!", "encodedPassword")).thenReturn(true);
 
@@ -329,7 +330,7 @@ class UtilisateurServiceTest {
 
     @Test
     void login_InvalidCredentials_ThrowsException() {
-        Utilisateur utilisateur = new Utilisateur("John Doe", "john@example.com", "encodedPassword", "1234567", "Etudiant", null, null);
+        Utilisateur utilisateur = new Utilisateur("John Doe", "john@example.com", "encodedPassword", "1234567", Role.ETUDIANT, null, null);
         when(utilisateurRepository.findByEmail("john@example.com")).thenReturn(utilisateur);
         when(passwordEncoder.matches("wrongPassword", "encodedPassword")).thenReturn(false);
 

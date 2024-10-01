@@ -1,7 +1,9 @@
 package fructose.service.dto;
 
 import fructose.model.Professeur;
+import fructose.model.auth.Role;
 import lombok.*;
+import org.springframework.security.core.parameters.P;
 
 @Getter
 @Setter
@@ -15,7 +17,7 @@ public class ProfesseurDTO extends UtilisateurDTO {
 		professeur_dto.setEmail(professeur.getEmail());
 		professeur_dto.setPassword(professeur.getPassword());
 		professeur_dto.setMatricule(professeur.getMatricule());
-		professeur_dto.setRole("Professeur");
+		professeur_dto.setRole(Role.PROFESSEUR);
 		professeur_dto.setDepartement(professeur.getDepartement());
 		professeur_dto.setCompanyName(professeur.getCompanyName());
 		return professeur_dto;

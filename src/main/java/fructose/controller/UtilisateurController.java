@@ -31,10 +31,10 @@ public class UtilisateurController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
         }
         try {
-            if (!utilisateurService.isValidRole(utilisateurDTO.getRole())) {
+            if (!utilisateurService.isValidRole(utilisateurDTO.getRole().toString())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rôle invalide.");
             }
-            utilisateurService.addUtilisateur(utilisateurDTO, utilisateurDTO.getRole());
+            utilisateurService.addUtilisateur(utilisateurDTO, utilisateurDTO.getRole().toString());
             return ResponseEntity.status(HttpStatus.CREATED).body("Utilisateur créé avec succès !");
         } catch (DataAccessException e) {
             String errorMessage = "Erreur lors de la création de l'utilisateur.";

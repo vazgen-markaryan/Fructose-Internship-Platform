@@ -1,6 +1,7 @@
 package fructose.service.dto;
 
 import fructose.model.Etudiant;
+import fructose.model.auth.Role;
 import lombok.*;
 
 @Getter
@@ -15,7 +16,7 @@ public class EtudiantDTO extends UtilisateurDTO {
         etudiant_dto.setEmail(etudiant.getEmail());
         etudiant_dto.setPassword(etudiant.getPassword());
         etudiant_dto.setMatricule(etudiant.getMatricule());
-        etudiant_dto.setRole("Etudiant");
+        etudiant_dto.setRole(Role.ETUDIANT);
         etudiant_dto.setDepartement(etudiant.getDepartement());
         return etudiant_dto;
     }

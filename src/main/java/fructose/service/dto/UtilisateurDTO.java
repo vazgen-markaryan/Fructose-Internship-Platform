@@ -4,6 +4,7 @@ import fructose.model.Employeur;
 import fructose.model.Etudiant;
 import fructose.model.Professeur;
 import fructose.model.Utilisateur;
+import fructose.model.auth.Role;
 import lombok.*;
 
 @Getter
@@ -17,20 +18,20 @@ public class UtilisateurDTO {
     private String email;
     private String password;
     private String matricule;
-    private String role;
+    private Role role;
     private String departement;
     private String companyName;
     
     public static Utilisateur toEntity(UtilisateurDTO utilisateur_dto) {
         Utilisateur utilisateur;
         switch (utilisateur_dto.getRole()) {
-            case "Etudiant":
+            case Role.ETUDIANT:
                 utilisateur = new Etudiant();
                 break;
-            case "Professeur":
+            case Role.PROFESSEUR:
                 utilisateur = new Professeur();
                 break;
-            case "Employeur":
+            case Role.EMPLOYEUR:
                 utilisateur = new Employeur();
                 break;
             default:
@@ -50,13 +51,13 @@ public class UtilisateurDTO {
     public static UtilisateurDTO toDTO(Utilisateur utilisateur) {
         UtilisateurDTO utilisateur_dto;
         switch (utilisateur.getRole()) {
-            case "Etudiant":
+            case ETUDIANT:
                 utilisateur_dto = new EtudiantDTO();
                 break;
-            case "Professeur":
+            case PROFESSEUR:
                 utilisateur_dto = new ProfesseurDTO();
                 break;
-            case "Employeur":
+            case EMPLOYEUR:
                 utilisateur_dto = new EmployeurDTO();
                 break;
             default:
