@@ -55,8 +55,11 @@ public class FructoseApplication implements CommandLineRunner {
 		EmployeurDTO employeurUbisoft = EmployeurDTO.toDTO((Employeur) ubisoft);
 
 		try {
+			System.out.println();
 			checkAndAddUtilisateur(etudiantVazgen, Role.ETUDIANT);
+			System.out.println();
 			checkAndAddUtilisateur(professeurFrancois, Role.PROFESSEUR);
+			System.out.println();
 			checkAndAddUtilisateur(employeurUbisoft, Role.EMPLOYEUR);
 
 			// Test login
@@ -67,6 +70,14 @@ public class FructoseApplication implements CommandLineRunner {
 			System.out.println("Une erreur s'est produite : " + e.getMessage());
 			e.printStackTrace();
 		}
+
+		System.out.println();
+		String token = utilisateurService.authenticateUser("vazgen@gmail.com", "Vazgen123!");
+		System.out.println("Token JWT après la connexion avec le courriel de vaz:");
+		System.out.println(token);
+		System.out.println("Vérification du propriétaire du token: ");
+		UtilisateurDTO utilisateur = utilisateurService.getUtilisateurByToken(token);
+		System.out.println(utilisateur.getEmail());
 	}
 
 	private void checkAndAddUtilisateur(UtilisateurDTO utilisateurDTO, Role role) {

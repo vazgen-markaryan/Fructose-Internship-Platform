@@ -17,11 +17,14 @@ import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,7 +56,11 @@ public class UtilisateurService {
     }
     
     private static final List<String> VALID_ROLES = Arrays.asList("Etudiant", "Professeur", "Employeur", "Gestionnaire de Stage");
-    
+
+    public boolean isValidRole(String role) {
+        return VALID_ROLES.contains(role);
+    }
+
     public UtilisateurDTO getUtilisateurById(Long id, Role role) {
         switch (role) {
             case ETUDIANT:
@@ -82,17 +89,17 @@ public class UtilisateurService {
     public void addUtilisateur(UtilisateurDTO utilisateurDTO, Role role) {
         Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
-        saveUtilisateur(utilisateur, role);
+        saveUtilisateur(utilisateur);
     }
     
     public void updateUtilisateur(UtilisateurDTO utilisateurDTO, Role role) {
         Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
-        saveUtilisateur(utilisateur, role);
+        saveUtilisateur(utilisateur);
     }
     
-    private void saveUtilisateur(Utilisateur utilisateur, Role role) {
-        switch (role) {
+    private void saveUtilisateur(Utilisateur utilisateur) {
+        switch (utilisateur.getRole()) {
             case ETUDIANT:
                 if (utilisateur instanceof Etudiant) {
                     etudiantRepository.save((Etudiant) utilisateur);
@@ -115,7 +122,7 @@ public class UtilisateurService {
                 }
                 break;
             default:
-                throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
+                throw new IllegalArgumentException("Type d'utilisateur : " + utilisateur.getRole().toString() + " n'est pas valide");
         }
     }
     
@@ -160,10 +167,6 @@ public class UtilisateurService {
             default -> throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
         };
     }
-    
-    public boolean isValidRole(String role) {
-        return VALID_ROLES.contains(role);
-    }
 
     public boolean isEmailTaken(String email) {
         return utilisateurRepository.findByEmail(email) != null;
@@ -183,5 +186,46 @@ public class UtilisateurService {
         } else {
             throw new IllegalArgumentException("Mot de passe incorrect");
         }
+    }
+
+    /*
+        Authentication JWT
+     */
+    public String authenticateUser(String email, String password) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password));
+        return jwtTokenProvider.generateToken(authentication);
+    }
+
+    public UtilisateurDTO getUtilisateurByToken(String token) {
+        token = token.startsWith("Bearer") ? token.substring(7) : token;
+        String email = jwtTokenProvider.getEmailFromJWT(token);
+        Utilisateur user = utilisateurRepository.findByEmail(email);//.orElseThrow(UserNotFoundException::new);
+        UtilisateurDTO utilisateurDTO = switch(user.getRole()){
+            case ETUDIANT -> getEtudiantDtoById(user.getId());
+            case EMPLOYEUR -> getEmployeurDtoById(user.getId());
+            case PROFESSEUR -> getProfesseurDtoById(user.getId());
+            case ADMIN -> null; // TODO: Ajout Admin
+        };
+        if(utilisateurDTO != null){
+            return utilisateurDTO;
+        } else {
+            throw new IllegalArgumentException("L'utilisateur avec le token JWT '" + token + "' n'existe pas");
+        }
+    }
+
+    private EtudiantDTO getEtudiantDtoById(Long id) {
+        final Optional<Etudiant> etudiantOptional = etudiantRepository.findById(id);
+        return etudiantOptional.map(EtudiantDTO::toDTO).orElse(null);
+    }
+
+    private EmployeurDTO getEmployeurDtoById(Long id) {
+        final Optional<Employeur> employeurOptional = employeurRepository.findById(id);
+        return employeurOptional.map(EmployeurDTO::toDTO).orElse(null);
+    }
+
+    private ProfesseurDTO getProfesseurDtoById(Long id) {
+        final Optional<Professeur> professeurOptional = professeurRepository.findById(id);
+        return professeurOptional.map(ProfesseurDTO::toDTO).orElse(null);
     }
 }
