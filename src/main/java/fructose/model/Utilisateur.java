@@ -50,7 +50,7 @@ public class Utilisateur {
     private String role;
     
     @Size(max = 100, message = "Le nom du département doit contenir au maximum 100 caractères")
-    @Pattern(regexp = "^[\\p{L}\\s]+$", message = "Le nom du département doit contenir uniquement des lettres et des espaces")
+    @Pattern(regexp = "^[\\p{L}\\s_]+$", message = "Le nom du département doit contenir uniquement des lettres et des espaces")
     private String departement;
     
     @Size(min = 3, max = 100, message = "Le nom de l'entreprise doit contenir de 3 à 100 caractères")
