@@ -1,67 +1,72 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Icon from "@mdi/react";
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
+import {useTranslation} from "react-i18next";
 
 const MotDePasse = ({utilisateur, handleChange, switchStep}) => {
 
+    const {t} = useTranslation();
     const [confirmPassword, setConfirmPassword] = useState('');
-
     const [errors, setErrors] = useState({});
+
+    const handleInputChange = (event) => {
+        const { name } = event.target;
+        handleChange(event);
+        // Efface les erreurs pour le champ modifié
+        setErrors({ ...errors, [name]: '' });
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const errorMessage = validateFields();
-        if (Object.keys(errorMessage).length > 0) {
-            setErrors(errorMessage)
-        } else {
-            switchStep(true)
-        }
-    };
+        let validationErrors = {};
 
-    const handleConfirmPasswordChange = (event) => {
-        setConfirmPassword(event.target.value);
-    };
-
-    const validateFields = () => {
-        let errors = {};
         if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(utilisateur.password)) {
-            errors.password = "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial";
+            validationErrors.password = t("mot_de_passe_page.error.password_wrong");
         }
         if (utilisateur.password !== confirmPassword) {
-            errors.passwordConf = "Les mots de passe ne correspondent pas";
+            validationErrors.passwordConf = t("mot_de_passe_page.error.password_doesnt_match");
         }
-        return errors
-    }
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+        } else {
+            switchStep(true);
+        }
+    };
+
+    useEffect(() => {
+        setErrors(prevErrors => ({
+            password: prevErrors.password ? t("mot_de_passe_page.error.password_wrong") : '',
+            passwordConf: prevErrors.passwordConf ? t("mot_de_passe_page.error.password_doesnt_match") : ''
+        }));
+    }, [t]);
 
     return (
         <div className={"form-signup-condensed"}>
-            <h4>Créez votre mot de passe</h4>
-            <p>Un mot de passe complexe offre moins de chances d'être deviné par quelqu'un d'autre. Votre mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un symbole.</p>
+            <h4>{t("mot_de_passe_page.title")}</h4>
+            <p>{t("mot_de_passe_page.description")}.</p>
+            <p>{t("mot_de_passe_page.description_2")}.</p>
             <br/>
             <form onSubmit={handleSubmit}>
                 <div className={"input-container"}>
-                    <p>Mot de passe:</p>
-                    <input type="password" name="password" className={`${errors.password ? "field-invalid" : ""}`} onChange={handleChange} value={utilisateur.password} required />
-                    <p className={"field-invalid-text"}>{errors.password}</p>
+                    <p>{t("mot_de_passe_page.password")}:</p>
+                    <input type="password" name="password" className={`${errors.password ? "field-invalid" : ""}`} onChange={handleInputChange} value={utilisateur.password} required/>
+                    {errors.password && <p className={"field-invalid-text"}>{errors.password}</p>}
                 </div>
                 <div className={"input-container"}>
-                    <p>Confirmer le mot de passe:</p>
-                    <input type="password" name="confirmPassword" className={`${errors.passwordConf ? "field-invalid" : ""}`} onChange={handleConfirmPasswordChange} required />
-                    <p className={"field-invalid-text"}>{errors.passwordConf}</p>
+                    <p>{t("mot_de_passe_page.confirm_password")}:</p>
+                    <input type="password" name="confirmPassword" className={`${errors.passwordConf ? "field-invalid" : ""}`} onChange={(e) => { setConfirmPassword(e.target.value); setErrors({...errors, passwordConf: ''}); }} required/>
+                    {errors.passwordConf && <p className={"field-invalid-text"}>{errors.passwordConf}</p>}
                 </div>
                 <br/>
                 <div className="form-dock">
-                    <button onClick={() => {switchStep(false)}}>
-                        <Icon path={mdiChevronLeft} size={1}/>
-                    </button>
-                    <div className={"toolbar-spacer"}>
-
-                    </div>
-                    <button type="submit" className={"btn-filled"}>Soumettre<Icon path={mdiChevronRight} size={1}/></button>
+                    <button onClick={() => {switchStep(false)}}><Icon path={mdiChevronLeft} size={1}/></button>
+                    <div className={"toolbar-spacer"}></div>
+                    <button type="submit" className={"btn-filled"}>{t("mot_de_passe_page.submit")}<Icon path={mdiChevronRight} size={1}/></button>
                 </div>
             </form>
         </div>
     );
-}
+};
 
 export default MotDePasse;

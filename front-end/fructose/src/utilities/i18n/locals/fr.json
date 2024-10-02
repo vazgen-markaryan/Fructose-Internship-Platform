@@ -1,0 +1,139 @@
+{
+    "home_page": {
+        "carriere": "Votre carrière",
+        "commence": "commence ",
+        "ici": "ici",
+        "signup": "S'inscrire"
+    },
+
+    "connexion_page": {
+        "connexion": "Connexion",
+        "email": "Courriel",
+        "password": "Mot de passe",
+        "continue": "Continuer",
+
+        "error": {
+            "email": "Email est requis",
+            "password": "Mot de passe est requis"
+        }
+    },
+
+    "creer_utilisateur_page": {
+        "creer_compte": "Créer un compte",
+        "carriere": "Commencer votre carrière n'a jamais été aussi facile",
+        "profile": "Votre profil",
+        "profile_2": "Informations cruciales pour votre profil",
+        "school": "Informations scolaires",
+        "school_2": "Informations relatives à votre progression académique",
+        "security": "Sécurité",
+        "pasword": "Créez votre mot de passe",
+        "finalization": "Finalisation",
+        "dashboard": "Accéder au tableau de bord"
+    },
+
+    "selection_role_page": {
+        "who_are_you": "Qui êtes-vous?",
+        "description": "Sélectionner le type d'utilisateur qui vous correspond",
+        "student": "Étudiant",
+        "teacher": "Enseignant",
+        "employer": "Employeur",
+        "continue": "Continuer"
+    },
+
+    "information_base_page": {
+        "information": "Informations de base",
+        "description": "Entrez votre prénom, nom de famille et l'adresse courriel que vous utiliserez pour vous connecter à la plateforme à partir de maintenant.",
+        "first_name": "Prénom",
+        "last_name": "Nom de famille",
+        "email": "Courriel",
+        "continue": "Continuer",
+
+        "error": {
+            "first_name_short": "Votre prénom doit contenir au moins 2 caractères",
+            "first_name_letters_only": "Votre prénom doit contenir uniquement des lettres et des espaces.",
+            "last_name_short": "Votre nom de famille doit contenir au moins 2 caractères",
+            "last_name_letters_only": "Votre nom de famille doit contenir uniquement des lettres et des espaces.",
+            "email": "L'adresse courriel doit être valide : exemple@gmail.com"
+        }
+    },
+
+    "information_etudiant_page": {
+        "information": "Informations scolaires",
+        "description": "Entrez votre numéro de matricule défini par l'établissement ainsi que le programme d'études suivi.",
+        "matricule": "Numéro d'étudiant",
+        "program": "Programme",
+        "continue": "Continuer",
+        "select_program": "Sélectionner un programme",
+
+        "programme": {
+            "cinema": "Cinéma",
+            "gestion_commerce": "Gestion de commerces",
+            "gestion_operations_chaine_logistique": "Gestion des opérations et de la chaîne logistique",
+            "journalisme_multimedia": "Journalisme multimédia",
+            "langues_trilinguisme_cultures": "Langues – profil Trilinguisme et cultures",
+            "photographie_design_graphique": "Photographie et design graphique",
+            "sciences_nature": "Sciences de la nature",
+            "sciences_humaines_administration_economie": "Sciences humaines – profil Administration et économie",
+            "sciences_humaines_individu_relations_humaines": "Sciences humaines – profil Individu et relations humaines",
+            "sciences_humaines_monde_en_action": "Sciences humaines – profil Monde en action",
+            "soins_infirmiers": "Soins infirmiers",
+            "soins_infirmiers_auxiliaires": "Soins infirmiers pour auxiliaires",
+            "techniques_education_enfance": "Techniques d’éducation à l’enfance",
+            "techniques_bureautique": "Techniques de bureautique",
+            "techniques_comptabilite_gestion": "Techniques de comptabilité et de gestion",
+            "techniques_informatique": "Techniques de l’informatique",
+            "techniques_travail_social": "Techniques de travail social",
+            "technologie_architecture": "Technologie de l’architecture",
+            "technologie_estimation_evaluation_batiment": "Technologie de l’estimation et de l’évaluation en bâtiment",
+            "technologie_genie_civil": "Technologie du génie civil",
+            "technologie_genie_electrique": "Technologie du génie électrique : automatisation et contrôle",
+            "technologie_genie_physique": "Technologie du génie physique",
+            "tremplin_dec": "Tremplin DEC"
+        },
+
+        "error": {
+            "matricule": "Le numéro d'étudiant doit comporter 7 chiffres",
+            "department": "Aucun département n'est sélectionné"
+        }
+    },
+
+    "mot_de_passe_page": {
+        "title": "Créer votre mot de passe",
+        "description": "Un mot de passe complexe est moins susceptible d'être deviné par quelqu'un d'autre",
+        "description_2": "Votre mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un symbole",
+        "password": "Mot de passe",
+        "confirm_password": "Confirmer le mot de passe",
+        "submit": "Soumettre",
+
+        "error": {
+            "password_wrong": "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial",
+            "password_doesnt_match": "Les mots de passe ne correspondent pas."
+        }
+    },
+
+    "information_employeur_page": {
+        "title": "Informations sur l'employeur",
+        "description": "Entrez les informations requises sur l'entreprise offrant les stages",
+        "company_name": "Nom de l'entreprise",
+        "continue": "Continuer",
+
+        "error": {
+            "company_name_invalid": "Le nom de l'entreprise doit contenir uniquement des lettres et des espaces",
+            "company_name_lenght" : "Le nom de l'entreprise doit contenir entre 3 et 100 caractères"
+        }
+    },
+
+    "information_professeur_page": {
+        "title": "Informations sur votre emploi",
+        "description": "Entrez votre numéro d'employé défini par l'établissement ainsi que le département d'appartenance",
+        "employee_number": "Numéro d'employé",
+        "department": "Département",
+        "select_department": "Sélectionnez un département",
+        "continue": "Continuer",
+
+        "error": {
+            "employee_number": "Le numéro d'employé doit comporter 7 chiffres",
+            "department": "Aucun département n'est sélectionné"
+        }
+    }
+}

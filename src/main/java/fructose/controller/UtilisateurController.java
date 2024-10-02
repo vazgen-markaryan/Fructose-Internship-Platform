@@ -30,7 +30,6 @@ public class UtilisateurController {
                     .collect(Collectors.joining(", "));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
         }
-
         try {
             if (!utilisateurService.isValidRole(utilisateurDTO.getRole())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rôle invalide.");
@@ -46,6 +45,7 @@ public class UtilisateurController {
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         } catch (RuntimeException e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
         }
     }
@@ -58,11 +58,11 @@ public class UtilisateurController {
                     .collect(Collectors.joining(", "));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
         }
-
         try {
             UtilisateurDTO loggedInUser = utilisateurService.login(utilisateurDTO.getEmail(), utilisateurDTO.getPassword());
             return ResponseEntity.status(HttpStatus.OK).body(loggedInUser);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur s'est produite : " + e.getMessage());
         }
     }

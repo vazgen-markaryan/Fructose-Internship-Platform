@@ -1,7 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import Icon from "@mdi/react";
+import {useTranslation} from "react-i18next";
+
 const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
+    const {t} = useTranslation();
 
     const [errors, setErrors] = useState({});
 
@@ -17,49 +20,85 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
 
     const validateFields = () => {
         let errors = {};
-        if (!/^[A-Za-z\s]+$/.test(utilisateur.firstName)) {
-            errors.firstName = "Le prénom doit contenir uniquement des lettres et des espaces";
+
+        if (utilisateur.firstName.length < 2) {
+            errors.firstName = t("information_base_page.error.first_name_short");
+        } else if (!/^[A-Za-z\s]+$/.test(utilisateur.firstName)) {
+            errors.firstName = t("information_base_page.error.first_name_letters_only");
         }
-        if (!/^[A-Za-z\s]+$/.test(utilisateur.lastName)) {
-            errors.lastName = "Le nom doit contenir uniquement des lettres et des espaces";
+
+        if (utilisateur.lastName.length < 2) {
+            errors.lastName = t("information_base_page.error.last_name_short");
+        } else if (!/^[A-Za-z\s]+$/.test(utilisateur.lastName)) {
+            errors.lastName = t("information_base_page.error.last_name_letters_only");
         }
+
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(utilisateur.email)) {
-            errors.email = "L'adresse courriel doit être valide";
+            errors.email = t("information_base_page.error.email");
         }
+
         return errors;
-    }
+    };
+
+    const handleInputChange = (event) => {
+        const {name} = event.target;
+        handleChange(event);
+        setErrors((prevErrors) => ({...prevErrors, [name]: ""}));
+    };
+
+    useEffect(() => {
+        setErrors((prevErrors) => {
+            const updatedErrors = { ...prevErrors };
+
+            if (prevErrors.firstName) {
+                updatedErrors.firstName = utilisateur.firstName.length < 2
+                    ? t("information_base_page.error.first_name_short")
+                    : t("information_base_page.error.first_name_letters_only");
+            }
+
+            if (prevErrors.lastName) {
+                updatedErrors.lastName = utilisateur.lastName.length < 2
+                    ? t("information_base_page.error.last_name_short")
+                    : t("information_base_page.error.last_name_letters_only");
+            }
+
+            if (prevErrors.email) {
+                updatedErrors.email = t("information_base_page.error.email");
+            }
+
+            return updatedErrors;
+        });
+    }, [utilisateur.firstName, utilisateur.lastName, utilisateur.email, t]);
 
     return (
         <div className={"form-signup-condensed"}>
-            <h4>Informations de base</h4>
-            <p>Entrez votre Prénom, Nom, ainsi que le courriel que vous utiliserez pour dorénavant vous connecter à la plateforme.</p>
+            <h4>{t("information_base_page.information")}</h4>
+            <p>{t("information_base_page.description")}</p>
             <br/>
             <form onSubmit={handleSubmit}>
                 <div className={"input-container"}>
-                    <p>Nom:</p>
-                    <input className={`${errors.firstName ? "field-invalid" : ""}`} type="text" name="lastName" required value={utilisateur.lastName} onChange={handleChange}/>
+                    <p>{t("information_base_page.first_name")}:</p>
+                    <input className={`${errors.firstName ? "field-invalid" : ""}`} type="text" name="firstName" required value={utilisateur.firstName} onChange={handleInputChange}/>
                     <p className={"field-invalid-text"}>{errors.firstName}</p>
                 </div>
                 <div className={"input-container"}>
-                    <p>Prénom:</p>
-                    <input className={`${errors.lastName ? "field-invalid" : ""}`} type="text" name="firstName" required value={utilisateur.firstName} onChange={handleChange}/>
+                    <p>{t("information_base_page.last_name")}:</p>
+                    <input className={`${errors.lastName ? "field-invalid" : ""}`} type="text" name="lastName" required value={utilisateur.lastName} onChange={handleInputChange}/>
                     <p className={"field-invalid-text"}>{errors.lastName}</p>
                 </div>
                 <div className={"input-container"}>
-                    <p>Email:</p>
-                    <input className={`${errors.email ? "field-invalid" : ""}`} type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
+                    <p>{t("information_base_page.email")}:</p>
+                    <input className={`${errors.email ? "field-invalid" : ""}`} type="text" name="email" required value={utilisateur.email} onChange={handleInputChange}/>
                     <p className={"field-invalid-text"}>{errors.email}</p>
                 </div>
                 <br/>
 
                 <div className="form-dock">
-                    <button onClick={() => {switchStep(false)}}>
-                        <Icon path={mdiChevronLeft} size={1}/>
-                    </button>
+                    <button onClick={() => {switchStep(false)}}><Icon path={mdiChevronLeft} size={1}/></button>
                     <div className={"toolbar-spacer"}>
 
                     </div>
-                    <button type="submit" className={"btn-filled"}>Continuer<Icon path={mdiChevronRight} size={1}/></button>
+                    <button type="submit" className={"btn-filled"}>{t("information_base_page.continue")}<Icon path={mdiChevronRight} size={1}/></button>
                 </div>
             </form>
         </div>

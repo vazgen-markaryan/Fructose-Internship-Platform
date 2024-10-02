@@ -1,10 +1,12 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Icon from "@mdi/react";
-import {mdiArrowLeft, mdiChevronRight} from "@mdi/js";
-
+import {mdiChevronRight} from "@mdi/js";
+import {useTranslation} from "react-i18next";
 
 const ConnexionUtilisateur = () => {
+    const {t} = useTranslation();
+
     const [utilisateur, setUtilisateur] = useState({
         email: '',
         password: ''
@@ -30,11 +32,11 @@ const ConnexionUtilisateur = () => {
         let validationErrors = {};
 
         if (!utilisateur.email) {
-            validationErrors.email = 'Email est requis';
+            validationErrors.email = t("connexion_page.error.email");
         }
 
         if (!utilisateur.password) {
-            validationErrors.password = 'Mot de passe est requis';
+            validationErrors.password = t("connexion_page.error.password");
         }
 
         if (Object.keys(validationErrors).length > 0) {
@@ -64,6 +66,14 @@ const ConnexionUtilisateur = () => {
             });
     };
 
+    useEffect(() => {
+        // Si utilisateur change la langue pendant qu'erreur est affichée, traduire les messages d'erreur
+        setErrors(prevErrors => ({
+            email: prevErrors.email ? t("connexion_page.error.email") : '',
+            password: prevErrors.password ? t("connexion_page.error.password") : ''
+        }));
+    }, [t]);
+
     return (
         <div>
             <div className="bg-auth">
@@ -81,19 +91,18 @@ const ConnexionUtilisateur = () => {
                                 <Link to="/"><img src="/assets/logo/logo.svg" alt="" className={"logo"}/></Link>
                             </div>
                         </div>
-                        <h1>Connexion</h1>
+                        <h1>{t("connexion_page.connexion")}</h1>
                     </div>
                     <div className="login-content">
-
-
                         <div className="input-container">
-                            <p>Courriel:</p>
+                            <p>{t("connexion_page.email")}:</p>
                             <input className={`${errors.email ? "field-invalid" : ""}`} type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
                             {errors.email && <p className={"field-invalid-text"}>{errors.email}</p>}
                         </div>
                         <div className="input-container">
-                            <p>Mot de passe:</p>
-                            <input className={`${errors.password ? "field-invalid" : ""}`} type="password" name="password" onChange={handleChange} value={utilisateur.password} required/>
+                            <p>{t("connexion_page.password")}:</p>
+                            <input className={`${errors.password ? "field-invalid" : ""}`} type="password"
+                                   name="password" onChange={handleChange} value={utilisateur.password} required/>
                             {errors.password && <p className={"field-invalid-text"}>{errors.password}</p>}
                         </div>
 
@@ -102,7 +111,7 @@ const ConnexionUtilisateur = () => {
                         <div style={{display: 'flex', alignItems: 'center', marginTop: '20px'}}>
                             <div style={{flexGrow: 1}}></div>
                             <button className="btn-filled" onClick={handleSubmit}>
-                                Continuer <Icon path={mdiChevronRight} size={1}/>
+                                {t("connexion_page.continue")} <Icon path={mdiChevronRight} size={1}/>
                             </button>
                         </div>
                     </div>

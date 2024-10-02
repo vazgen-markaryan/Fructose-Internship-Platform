@@ -1,0 +1,139 @@
+{
+    "home_page": {
+        "carriere": "Your career",
+        "commence": "begins ",
+        "ici": "here",
+        "signup": "Sign up"
+    },
+
+    "connexion_page": {
+        "connexion": "Log in",
+        "email": "Email",
+        "password": "Password",
+        "continue": "Continue",
+
+        "error": {
+            "email": "Email is required",
+            "password": "Password is required"
+        }
+    },
+
+    "creer_utilisateur_page": {
+        "creer_compte": "Create an account",
+        "carriere": "Starting your career has never been easier",
+        "profile": "Your profile",
+        "profile_2": "Crucial information for your profile",
+        "school": "School information",
+        "school_2": "Information related to your academic progress",
+        "security": "Security",
+        "pasword": "Create your password",
+        "finalization": "Finalization",
+        "dashboard": "Access the dashboard"
+    },
+
+    "selection_role_page": {
+        "who_are_you": "Who are you?",
+        "description": "Select the user type that suits you",
+        "student": "Student",
+        "teacher": "Teacher",
+        "employer": "Employer",
+        "continue": "Continue"
+    },
+
+    "information_base_page": {
+        "information": "Basic information",
+        "description": "Enter your First Name, Last Name, and the Email address you will use to log in to the platform from now on.",
+        "first_name": "First name",
+        "last_name": "Last name",
+        "email": "Email",
+        "continue": "Continue",
+
+        "error": {
+            "first_name_short": "Your first name must contain at least 2 characters.",
+            "first_name_letters_only": "Your first name must contain only letters and spaces.",
+            "last_name_short": "Your last name must contain at least 2 characters.",
+            "last_name_letters_only": "Your last name must contain only letters and spaces.",
+            "email": "Email address must be valid: example@gmail.com"
+        }
+    },
+
+    "information_etudiant_page": {
+        "information": "School Information",
+        "description": "Enter your matriculation number defined by the establishment as well as the study program attended.",
+        "matricule": "Student number",
+        "program": "Program",
+        "continue": "Continue",
+        "select_program": "Select a program",
+
+        "programme": {
+            "cinema": "Cinema",
+            "gestion_commerce": "Business Management",
+            "gestion_operations_chaine_logistique": "Operations and Supply Chain Management",
+            "journalisme_multimedia": "Multimedia Journalism",
+            "langues_trilinguisme_cultures": "Languages – Trilingualism and Cultures",
+            "photographie_design_graphique": "Photography and Graphic Design",
+            "sciences_nature": "Natural Sciences",
+            "sciences_humaines_administration_economie": "Human Sciences – Administration and Economics Profile",
+            "sciences_humaines_individu_relations_humaines": "Human Sciences – Individual and Human Relations Profile",
+            "sciences_humaines_monde_en_action": "Human Sciences – World in Action Profile",
+            "soins_infirmiers": "Nursing",
+            "soins_infirmiers_auxiliaires": "Nursing for Assistants",
+            "techniques_education_enfance": "Early Childhood Education Techniques",
+            "techniques_bureautique": "Office Automation Techniques",
+            "techniques_comptabilite_gestion": "Accounting and Management Techniques",
+            "techniques_informatique": "Computer Techniques",
+            "techniques_travail_social": "Social Work Techniques",
+            "technologie_architecture": "Architecture Technology",
+            "technologie_estimation_evaluation_batiment": "Building Estimation and Evaluation Technology",
+            "technologie_genie_civil": "Civil Engineering Technology",
+            "technologie_genie_electrique": "Electrical Engineering Technology: Automation and Control",
+            "technologie_genie_physique": "Physical Engineering Technology",
+            "tremplin_dec": "DEC Transition Program"
+        },
+
+        "error": {
+            "matricule": "Student number must have 7 digits",
+            "department": "No Department is selected"
+        }
+    },
+
+    "mot_de_passe_page": {
+        "title": "Create your password",
+        "description": "A complex password is less likely to be guessed by someone else",
+        "description_2": "Your password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number and one symbol",
+        "password": "Password",
+        "confirm_password": "Confirm password",
+        "submit": "Submit",
+
+        "error": {
+            "password_wrong": "Password must contain at least one uppercase letter, one number and one special character",
+            "password_doesnt_match": "Passwords do not match."
+        }
+    },
+
+    "information_employeur_page": {
+        "title": "Employer information",
+        "description": "Enter the required information about the company offering the internships",
+        "company_name": "Company name",
+        "continue": "Continue",
+
+        "error": {
+            "company_name_invalid": "The company name must contain only letters and spaces",
+            "company_name_lenght" : "Company name must be between 3 and 100 characters"
+        }
+    },
+
+    "information_professeur_page": {
+        "title": "Information about your employment",
+        "description": "Enter your employee number defined by the establishment as well as the department of belonging",
+        "employee_number": "Employee number",
+        "department": "Department",
+        "select_department": "Select a department",
+        "continue": "Continue",
+
+        "error": {
+            "employee_number": "Employee number must have 7 digits",
+            "department": "No Department is selected"
+        }
+    }
+}

@@ -1,9 +1,10 @@
 import React from "react";
-import {mdiChevronLeft, mdiChevronRight, mdiDomain, mdiHumanMaleBoard, mdiSchool} from "@mdi/js";
+import {mdiChevronRight, mdiDomain, mdiHumanMaleBoard, mdiSchool} from "@mdi/js";
 import Icon from "@mdi/react";
+import {useTranslation} from "react-i18next";
 
 const SelectionRole = ({utilisateur, handleChange, switchStep}) => {
-
+    const {t} = useTranslation();
     const handleSubmit = (event) => {
         event.preventDefault();
         const errorMessage = validateFields();
@@ -22,40 +23,60 @@ const SelectionRole = ({utilisateur, handleChange, switchStep}) => {
 
     return (
         <div>
-            <h4>Qui êtes vous?</h4>
-            <p>Sélectionner le type d'utilisateur qui vous correspond</p>
+            <h4>{t("selection_role_page.who_are_you")}</h4>
+            <p>{t("selection_role_page.description")}</p>
             <br/>
             <form onSubmit={handleSubmit}>
-                <div style={{"margin":"auto"}}>
+                <div style={{"margin": "auto"}}>
                     <div className={"toolbar-items"} style={{"gap": "12px"}}>
-                        <div style={{"width": "30%", "border": "1px solid grey", "borderRadius": "5px", "textAlign": "center", "padding": "10px"}}>
-                            <Icon path={mdiSchool} size={2} />
+                        <div style={{
+                            "width": "30%",
+                            "border": "1px solid grey",
+                            "borderRadius": "5px",
+                            "textAlign": "center",
+                            "padding": "10px"
+                        }}>
+                            <Icon path={mdiSchool} size={2}/>
                             <br/>
-                            <h6><input id="etudiant" type="radio" name="role" value="Etudiant" onChange={handleChange} checked={utilisateur.role === "Etudiant"} /> Étudiant</h6>
+                            <h6>
+                                <input id="etudiant" type="radio" name="role" value="Etudiant" onChange={handleChange} checked={utilisateur.role === "Etudiant"}/>{t("selection_role_page.student")}
+                            </h6>
                         </div>
-                        <div style={{"width": "30%", "border": "1px solid grey", "borderRadius": "5px", "textAlign": "center", "padding": "10px"}}>
-                            <Icon path={mdiDomain} size={2} />
+                        <div style={{
+                            "width": "30%",
+                            "border": "1px solid grey",
+                            "borderRadius": "5px",
+                            "textAlign": "center",
+                            "padding": "10px"
+                        }}>
+                            <Icon path={mdiDomain} size={2}/>
                             <br/>
-                            <h6><input id="employeur" type="radio" name="role" value="Employeur" onChange={handleChange} checked={utilisateur.role === "Employeur"}/> Employeur</h6>
+                            <h6>
+                                <input id="employeur" type="radio" name="role" value="Employeur" onChange={handleChange} checked={utilisateur.role === "Employeur"}/>{t("selection_role_page.employer")}
+                            </h6>
                         </div>
-                        <div style={{"width": "30%", "border": "1px solid grey", "borderRadius": "5px", "textAlign": "center", "padding": "10px"}}>
-                            <Icon path={mdiHumanMaleBoard} size={2} />
+                        <div style={{
+                            "width": "30%",
+                            "border": "1px solid grey",
+                            "borderRadius": "5px",
+                            "textAlign": "center",
+                            "padding": "10px"
+                        }}>
+                            <Icon path={mdiHumanMaleBoard} size={2}/>
                             <br/>
-                            <h6><input id="professeur" type="radio" name="role" value="Professeur" onChange={handleChange} checked={utilisateur.role === "Professeur"}/> Professeur</h6>
+                            <h6>
+                                <input id="professeur" type="radio" name="role" value="Professeur" onChange={handleChange} checked={utilisateur.role === "Professeur"}/>{t("selection_role_page.teacher")}
+                            </h6>
                         </div>
 
                     </div>
                 </div>
-
-
                 <div className="form-dock">
                     <div className={"toolbar-spacer"}>
 
                     </div>
-                    <button type="submit" className={"btn-filled"}>Continuer<Icon path={mdiChevronRight} size={1}/></button>
+                    <button type="submit" className={"btn-filled"}>{t("selection_role_page.continue")}<Icon path={mdiChevronRight} size={1}/></button>
                 </div>
-
-
             </form>
         </div>
     );
