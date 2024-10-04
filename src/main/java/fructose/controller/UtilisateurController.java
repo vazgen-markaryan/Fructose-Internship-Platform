@@ -2,11 +2,16 @@ package fructose.controller;
 
 import fructose.service.UtilisateurService;
 import fructose.service.dto.UtilisateurDTO;
+import fructose.service.dto.auth.LoginDTO;
 import jakarta.validation.Valid;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 
@@ -30,6 +35,7 @@ public class UtilisateurController {
                     .collect(Collectors.joining(", "));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
         }
+
         try {
             if (!utilisateurService.isValidRole(utilisateurDTO.getRole().toString())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rôle invalide.");
@@ -67,19 +73,42 @@ public class UtilisateurController {
     }
 
     @PostMapping("/connexion")
-    public ResponseEntity<?> connexion(@RequestBody @Valid UtilisateurDTO utilisateurDTO, BindingResult result) {
+    public ResponseEntity<?> connexion(@RequestBody @Valid LoginDTO loginDTO, BindingResult result) {
         if (result.hasErrors()) {
             String errorMessages = result.getFieldErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.joining(", "));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
         }
+
         try {
-            UtilisateurDTO loggedInUser = utilisateurService.login(utilisateurDTO.getEmail(), utilisateurDTO.getPassword());
-            return ResponseEntity.status(HttpStatus.OK).body(loggedInUser);
+            String token = utilisateurService.authenticateUser(loginDTO.getEmail(), loginDTO.getPassword());
+            return ResponseEntity.status(HttpStatus.OK).body("Token : "+ token);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur s'est produite : " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/valider-token")
+    public ResponseEntity<?> validerToken(@RequestHeader("Authorization") String token) {
+        try {
+            //Format de la requête: Authorization: Bearer <token>
+            String tokenFiltrer = token.startsWith("Bearer ") ? token.substring(7) : token;
+            boolean estValide = utilisateurService.validationToken(tokenFiltrer);
+            return ResponseEntity.status(HttpStatus.OK).body("Token valide : " + estValide);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token invalide.");
+        }
+    }
+
+    @PostMapping("/infos-utilisateur")
+    public ResponseEntity<?> getInfosUtilisateur(@RequestHeader("Authorization") String token) {
+        try {
+            UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
+            return ResponseEntity.status(HttpStatus.OK).body(utilisateurDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossible de récupérer les infos utilisateur : " + e.getMessage());
         }
     }
 }

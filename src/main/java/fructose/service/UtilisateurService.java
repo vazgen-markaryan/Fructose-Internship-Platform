@@ -10,6 +10,7 @@ import fructose.repository.vides.EtudiantRepository;
 import fructose.repository.vides.ProfesseurRepository;
 import fructose.repository.UtilisateurRepository;
 import fructose.security.JwtTokenProvider;
+import fructose.security.exception.InvalidJwtTokenException;
 import fructose.service.dto.EmployeurDTO;
 import fructose.service.dto.EtudiantDTO;
 import fructose.service.dto.ProfesseurDTO;
@@ -227,5 +228,14 @@ public class UtilisateurService {
     private ProfesseurDTO getProfesseurDtoById(Long id) {
         final Optional<Professeur> professeurOptional = professeurRepository.findById(id);
         return professeurOptional.map(ProfesseurDTO::toDTO).orElse(null);
+    }
+
+    public boolean validationToken(String token){
+        try {
+            jwtTokenProvider.validateToken(token);
+            return true;
+        } catch (InvalidJwtTokenException ex) {
+            return false;
+        }
     }
 }
