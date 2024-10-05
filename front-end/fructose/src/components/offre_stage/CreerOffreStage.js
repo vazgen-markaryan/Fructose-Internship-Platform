@@ -1,4 +1,4 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 
 const CreerOffreStage = () => {
@@ -88,7 +88,7 @@ const CreerOffreStage = () => {
         else if (nombreHeuresSemaine > 168) {
             errors.nombreHeuresSemaine = "Le nombre d'heures par semaine ne doit pas dépasser 168 heures";
         }
-        if (nombrePostes < 0) {
+        if (nombrePostes < 1) {
             errors.nombrePostes = "Le nombre de postes doit être positif";
         }
         if (dateLimiteCandidature < new Date()) {
@@ -122,29 +122,27 @@ const CreerOffreStage = () => {
         if (Object.keys(errorMessage).length > 0) {
             setErrors(errorMessage);
         } else {
-            console.log(offreStage);
-        }
-
-        fetch('/creer-offre-stage', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(offreStage)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text();
-                }
-                return response;
-            }).then(() => {
+            fetch('/creer-offre-stage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(offreStage)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text();
+                    }
+                    return response;
+                }).then(() => {
                 // Rediriger l'utilisateur vers la page d'accueil
                 navigate('/');
             }).catch(error => {
-                setErrors('Erreur: ${error.message}');
-                console.error('Erreur:', error);
-            }
-        );
+                    setErrors('Erreur: ${error.message}');
+                    console.error('Erreur:', error);
+                }
+            );
+        }
     };
 
     return (
@@ -152,28 +150,45 @@ const CreerOffreStage = () => {
             <h1>Offre de stage</h1>
             <form onSubmit={handleSubmit}>
                 <label>Nom:</label>
-                <input className={`${errors.nom ? "field-invalid" : ""}`} value={offreStage.nom} type="text" name="nom" onChange={handleInputChange} required/>
+                <input className={`${errors.nom ? "field-invalid" : ""}`} value={offreStage.nom} type="text" name="nom"
+                       onChange={handleInputChange} required/>
+                <p className={"field-invalid-text"}>{errors.nom}</p>
 
                 <label>Poste:</label>
-                <input className={`${errors.poste ? "field-invalid" : ""}`} value={offreStage.poste} type="text" name="poste" onChange={handleInputChange} required/>
+                <input className={`${errors.poste ? "field-invalid" : ""}`} value={offreStage.poste} type="text"
+                       name="poste" onChange={handleInputChange} required/>
+                <p className={"field-invalid-text"}>{errors.poste}</p>
 
                 <label>Description:</label>
-                <input className={`${errors.description ? "field-invalid" : ""}`} value={offreStage.description} type="text" name="description" onChange={handleInputChange} required/>
+                <input className={`${errors.description ? "field-invalid" : ""}`} value={offreStage.description}
+                       type="text" name="description" onChange={handleInputChange} required/>
+                <p className={"field-invalid-text"}>{errors.description}</p>
 
                 <label>Compagnie:</label>
-                <input className={`${errors.compagnie ? "field-invalid" : ""}`} value={offreStage.compagnie} type="text" name="compagnie" onChange={handleInputChange} required/>
+                <input className={`${errors.compagnie ? "field-invalid" : ""}`} value={offreStage.compagnie} type="text"
+                       name="compagnie" onChange={handleInputChange} required/>
+                <p className={"field-invalid-text"}>{errors.compagnie}</p>
 
-                <label>Programme d'étude:</label>
-                <select name="programmeEtude" onChange={handleInputChange} value={offreStage.programmeEtude} required>
-                    <option value={"select"}>Sélectionner un programme</option>
-                    <option value="Informatique">Technique de l'informatique</option>
-                    <option value="Physique">Genie physique</option>
-                    <option value="Infirmiers">Soin infirmiers</option>
-                </select>
-
+                <label>Adresse:</label>
+                <input className={`${errors.adresse ? "field-invalid" : ""}`} value={offreStage.adresse} type="text"
+                       name="adresse" onChange={handleInputChange} required/>
+                <p className={"field-invalid-text"}>{errors.adresse}</p>
 
                 <label>Taux horaire:</label>
-                <input className={`${errors.tauxHoraire ? "field-invalid" : ""}`} value={offreStage.tauxHoraire} type="number" name="tauxHoraire" onChange={handleInputChange} required/>
+                <input className={`${errors.tauxHoraire ? "field-invalid" : ""}`} value={offreStage.tauxHoraire}
+                       type="number" name="tauxHoraire" onChange={handleInputChange} required/>
+                <p className={"field-invalid-text"}>{errors.tauxHoraire}</p>
+
+                <label>Nombre d'heures par semaine:</label>
+                <input className={`${errors.nombreHeuresSemaine ? "field-invalid" : ""}`}
+                       value={offreStage.nombreHeuresSemaine} type="number" name="nombreHeuresSemaine"
+                       onChange={handleInputChange} required/>
+                <p className={"field-invalid-text"}>{errors.nombreHeuresSemaine}</p>
+
+                <label>Nombre de postes:</label>
+                <input className={`${errors.nombrePostes ? "field-invalid" : ""}`} value={offreStage.nombrePostes}
+                       type="number" name="nombrePostes" onChange={handleInputChange} required/>
+                <p className={"field-invalid-text"}>{errors.nombrePostes}</p>
 
                 <label>Type d'emploi:</label>
                 <select name="typeEmploi" onChange={handleInputChange} value={offreStage.typeEmploi} required>
@@ -182,9 +197,16 @@ const CreerOffreStage = () => {
                     <option value="Virtuel">Virtuel</option>
                     <option value="Hybride">Hybride</option>
                 </select>
+                <p className={"field-invalid-text"}>{errors.typeEmploi}</p>
 
-                <label>Adresse:</label>
-                <input className={`${errors.adresse ? "field-invalid" : ""}`} value={offreStage.adresse} type="text" name="adresse" onChange={handleInputChange} required/>
+                <label>Programme d'étude:</label>
+                <select name="programmeEtude" onChange={handleInputChange} value={offreStage.programmeEtude} required>
+                    <option value={"select"}>Sélectionner un programme</option>
+                    <option value="Informatique">Technique de l'informatique</option>
+                    <option value="Physique">Genie physique</option>
+                    <option value="Infirmiers">Soin infirmiers</option>
+                </select>
+                <p className={"field-invalid-text"}>{errors.programmeEtude}</p>
 
                 <label>Modalité de travail:</label>
                 <select name="modaliteTravail" onChange={handleInputChange} value={offreStage.modaliteTravail} required>
@@ -192,6 +214,7 @@ const CreerOffreStage = () => {
                     <option value="Tempsplein">Temps plein</option>
                     <option value="Tempspartiel">Temps partiel</option>
                 </select>
+                <p className={"field-invalid-text"}>{errors.modaliteTravail}</p>
 
                 <label>Date limite de candidature:</label>
                 <input
@@ -203,6 +226,7 @@ const CreerOffreStage = () => {
                     required
                     min={new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]}
                 />
+                <p className={"field-invalid-text"}>{errors.dateLimiteCandidature}</p>
 
                 <label>Date de début:</label>
                 <input
@@ -214,6 +238,7 @@ const CreerOffreStage = () => {
                     required
                     min={new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1)).toISOString().split('T')[0]}
                 />
+                <p className={"field-invalid-text"}>{errors.dateDebut}</p>
 
                 <label>Date de fin:</label>
                 <input
@@ -225,12 +250,8 @@ const CreerOffreStage = () => {
                     required
                     min={new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1)).toISOString().split('T')[0]}
                 />
+                <p className={"field-invalid-text"}>{errors.dateFin}</p>
 
-                <label>Nombre d'heures par semaine:</label>
-                <input className={`${errors.nombreHeuresSemaine ? "field-invalid" : ""}`} value={offreStage.nombreHeuresSemaine} type="number" name="nombreHeuresSemaine" onChange={handleInputChange} required/>
-
-                <label>Nombre de postes:</label>
-                <input className={`${errors.nombrePostes ? "field-invalid" : ""}`} value={offreStage.nombrePostes} type="number" name="nombrePostes" onChange={handleInputChange} required/>
 
                 <br/>
                 <br/>
