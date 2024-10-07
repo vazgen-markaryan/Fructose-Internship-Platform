@@ -11,18 +11,13 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const errorMessage = validateFields();
+        const emailTaken = await isEmailTaken(utilisateur.email);
+        if (emailTaken) {
+            errorMessage.email = t("information_base_page.error.email_taken");
+        }
         if (Object.keys(errorMessage).length > 0) {
-            const emailTaken = await isEmailTaken(utilisateur.email);
-            if (emailTaken) {
-                errorMessage.email = t("information_base_page.error.email_taken");
-            }
             setErrors(errorMessage);
         } else {
-            const emailTaken = await isEmailTaken(utilisateur.email);
-            if (emailTaken) {
-                setErrors({email: t("information_base_page.error.email_taken")});
-                return;
-            }
             switchStep(true);
         }
     };

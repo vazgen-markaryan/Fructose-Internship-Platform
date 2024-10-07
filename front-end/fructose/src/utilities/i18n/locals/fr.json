@@ -94,7 +94,8 @@
 
         "error": {
             "matricule": "Le numéro d'étudiant doit comporter 7 chiffres",
-            "department": "Aucun département n'est sélectionné"
+            "department": "Aucun département n'est sélectionné",
+            "matricule_taken" : "Le numéro d'étudiant est déjà utilisé"
         }
     },
 

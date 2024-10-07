@@ -66,6 +66,7 @@
         "continue": "Continue",
         "select_program": "Select a program",
 
+
         "programme": {
             "cinema": "Cinema",
             "gestion_commerce": "Business Management",
@@ -94,7 +95,8 @@
 
         "error": {
             "matricule": "Student number must have 7 digits",
-            "department": "No Department is selected"
+            "department": "No Department is selected",
+            "matricule_taken" : "Student number is already taken"
         }
     },
 

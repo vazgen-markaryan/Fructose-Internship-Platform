@@ -9,15 +9,31 @@ const InformationsEtudiant = ({ utilisateur, handleChange, switchStep }) => {
 
     const [errors, setErrors] = useState({});
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const errorMessage = validateFields(utilisateur);
+
+        const matriculeTaken = await isMatriculeTaken(utilisateur.matricule);
+        if (matriculeTaken) {
+            errorMessage.matricule = t("information_etudiant_page.error.matricule_taken");
+        }
         if (Object.keys(errorMessage).length > 0) {
             setErrors(errorMessage);
         } else {
             switchStep(true);
         }
     };
+
+    const isMatriculeTaken = async (matricule) => {
+        try {
+            const response = await fetch(`/check-matricule?matricule=${encodeURIComponent(matricule)}`);
+            const data = await response.json();
+            return data.matriculeTaken;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    }
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -50,6 +66,10 @@ const InformationsEtudiant = ({ utilisateur, handleChange, switchStep }) => {
 
             if (utilisateur.matricule && !/^\d{7}$/.test(utilisateur.matricule)) {
                 updatedErrors.matricule = t("information_etudiant_page.error.matricule");
+            }
+
+            if (prevErrors.matricule && isMatriculeTaken(utilisateur.matricule)) {
+                updatedErrors.matricule = t("information_etudiant_page.error.matricule_taken");
             }
 
             else if (utilisateur.departement && utilisateur.departement.length === 0) {

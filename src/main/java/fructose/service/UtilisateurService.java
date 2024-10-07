@@ -154,6 +154,10 @@ public class UtilisateurService {
         return utilisateurRepository.findByEmail(email) != null;
     }
 
+    public boolean isMatriculeTaken(String matricule) {
+        return utilisateurRepository.findByMatricule(matricule) != null;
+    }
+
     public UtilisateurDTO login(String email, String password) {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
         if (utilisateur == null) {

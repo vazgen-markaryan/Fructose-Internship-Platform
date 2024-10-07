@@ -22,6 +22,7 @@ public class SecurityConfig {
                         .requestMatchers("/creer-utilisateur").permitAll()
                         .requestMatchers("/connexion").permitAll()// Permettre l'accès à /creer-utilisateur sans authentification
                         .requestMatchers(HttpMethod.GET, "/check-email").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/check-matricule").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

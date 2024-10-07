@@ -8,4 +8,7 @@ import org.springframework.data.repository.query.Param;
 public interface UtilisateurRepository<T extends Utilisateur, ID> extends JpaRepository<T, ID> {
     @Query("SELECT u FROM Utilisateur u WHERE u.email = ?1")
     Utilisateur findByEmail(@Param("email") String email);
+
+    @Query("SELECT u FROM Utilisateur u WHERE u.matricule = ?1")
+    Utilisateur findByMatricule(@Param("matricule")String matricule);
 }

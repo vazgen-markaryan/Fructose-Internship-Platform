@@ -58,6 +58,14 @@ public class UtilisateurController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/check-matricule")
+    public ResponseEntity<Map<String, Boolean>> checkMatricule(@RequestParam String matricule) {
+        boolean matriculeTaken = utilisateurService.isMatriculeTaken(matricule);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("matriculeTaken", matriculeTaken);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/connexion")
     public ResponseEntity<?> connexion(@RequestBody @Valid UtilisateurDTO utilisateurDTO, BindingResult result) {
         if (result.hasErrors()) {
