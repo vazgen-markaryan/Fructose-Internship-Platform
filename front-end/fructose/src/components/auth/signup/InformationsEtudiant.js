@@ -72,7 +72,7 @@ const InformationsEtudiant = ({ utilisateur, handleChange, switchStep }) => {
                 updatedErrors.matricule = t("information_etudiant_page.error.matricule_taken");
             }
 
-            else if (utilisateur.departement && utilisateur.departement.length === 0) {
+            if (utilisateur.departement && utilisateur.departement.length === 0) {
                 updatedErrors.departement = t("information_etudiant_page.error.department");
             }
 

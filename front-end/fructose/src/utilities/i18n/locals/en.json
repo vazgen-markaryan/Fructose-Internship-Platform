@@ -136,7 +136,8 @@
 
         "error": {
             "employee_number": "Employee number must have 7 digits",
-            "department": "No Department is selected"
+            "department": "No Department is selected",
+            "employee_number_taken": "Employee number is already taken"
         }
     }
 }

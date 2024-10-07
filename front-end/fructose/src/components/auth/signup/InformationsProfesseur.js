@@ -9,15 +9,30 @@ const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
 
     const [errors, setErrors] = useState({});
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const errorMessage = validateFields(utilisateur);
+        const matriculeTaken = await isMatriculeTaken(utilisateur.matricule);
+        if (matriculeTaken) {
+            errorMessage.matricule = t("information_professeur_page.error.employee_number_taken");
+        }
         if (Object.keys(errorMessage).length > 0) {
             setErrors(errorMessage);
         } else {
             switchStep(true);
         }
     };
+
+    const isMatriculeTaken = async (matricule) => {
+        try {
+            const response = await fetch(`/check-matricule?matricule=${encodeURIComponent(matricule)}`);
+            const data = await response.json();
+            return data.matriculeTaken;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    }
 
     const handleInputChange = (event) => {
         const {name, value} = event.target;
@@ -48,17 +63,16 @@ const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
         setErrors((prevErrors) => {
             const updatedErrors = {...prevErrors};
 
-            if (utilisateur.matricule && !/^\d{7}$/.test(utilisateur.matricule)) {
+            if (prevErrors.matricule && !/^\d{7}$/.test(utilisateur.matricule)) {
                 updatedErrors.matricule = t("information_professeur_page.error.employee_number");
             }
 
-            else if (utilisateur.departement && utilisateur.departement.length === 0) {
-                updatedErrors.departement = t("information_professeur_page.error.department");
+            if (prevErrors.matricule && isMatriculeTaken(utilisateur.matricule)) {
+                updatedErrors.matricule = t("information_professeur_page.error.employee_number_taken");
             }
 
-            else {
-                delete updatedErrors.departement;
-                delete updatedErrors.matricule;
+            if (prevErrors.departement && prevErrors.departement.length === 0) {
+                updatedErrors.departement = t("information_professeur_page.error.department");
             }
 
             return updatedErrors;

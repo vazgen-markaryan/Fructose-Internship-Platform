@@ -135,7 +135,8 @@
 
         "error": {
             "employee_number": "Le numéro d'employé doit comporter 7 chiffres",
-            "department": "Aucun département n'est sélectionné"
+            "department": "Aucun département n'est sélectionné",
+            "employee_number_taken": "Le numéro d'employé est déjà utilisé"
         }
     }
 }
