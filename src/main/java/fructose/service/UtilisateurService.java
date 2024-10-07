@@ -22,13 +22,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class UtilisateurService {
-    
+
     private final EtudiantRepository etudiantRepository;
     private final ProfesseurRepository professeurRepository;
     private final EmployeurRepository employeurRepository;
     private final PasswordEncoder passwordEncoder;
     private final UtilisateurRepository utilisateurRepository;
-    
+
     public UtilisateurService(EtudiantRepository etudiantRepository, ProfesseurRepository professeurRepository, EmployeurRepository employeurRepository, PasswordEncoder passwordEncoder, @Qualifier("utilisateurRepository") UtilisateurRepository utilisateurRepository) {
         this.etudiantRepository = etudiantRepository;
         this.professeurRepository = professeurRepository;
@@ -36,9 +36,9 @@ public class UtilisateurService {
         this.passwordEncoder = passwordEncoder;
         this.utilisateurRepository = utilisateurRepository;
     }
-    
+
     private static final List<String> VALID_ROLES = Arrays.asList("Etudiant", "Professeur", "Employeur", "Gestionnaire de Stage");
-    
+
     public UtilisateurDTO getUtilisateurById(Long id, String userType) {
         switch (userType) {
             case "Etudiant":
@@ -63,19 +63,19 @@ public class UtilisateurService {
                 throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
         }
     }
-    
+
     public void addUtilisateur(UtilisateurDTO utilisateurDTO, String userType) {
         Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
         saveUtilisateur(utilisateur, userType);
     }
-    
+
     public void updateUtilisateur(UtilisateurDTO utilisateurDTO, String userType) {
         Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
         saveUtilisateur(utilisateur, userType);
     }
-    
+
     private void saveUtilisateur(Utilisateur utilisateur, String userType) {
         switch (userType) {
             case "Etudiant":
@@ -103,15 +103,15 @@ public class UtilisateurService {
                 throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
         }
     }
-    
+
     public void deleteUtilisateur(Long id, String userType) {
         UtilisateurDTO utilisateur = getUtilisateurById(id, userType);
-        
+
         if (utilisateur == null) {
             System.out.println("L'utilisateur de type " + userType + " n'existe pas.");
             return;
         }
-        
+
         switch (userType) {
             case "Etudiant":
                 etudiantRepository.deleteById(id);
@@ -127,7 +127,7 @@ public class UtilisateurService {
         }
         System.out.println(userType + " avec id " + id + " a été supprimé avec succès.");
     }
-    
+
     public List<UtilisateurDTO> getUtilisateurs(String userType) {
         return switch (userType) {
             case "Etudiant" -> etudiantRepository.findAll()
@@ -145,11 +145,15 @@ public class UtilisateurService {
             default -> throw new IllegalArgumentException("Type d'utilisateur : " + userType + " n'est pas valide");
         };
     }
-    
+
     public boolean isValidRole(String role) {
         return VALID_ROLES.contains(role);
     }
-    
+
+    public boolean isEmailTaken(String email) {
+        return utilisateurRepository.findByEmail(email) != null;
+    }
+
     public UtilisateurDTO login(String email, String password) {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
         if (utilisateur == null) {

@@ -53,7 +53,8 @@
             "first_name_letters_only": "Votre prénom doit contenir uniquement des lettres et des espaces.",
             "last_name_short": "Votre nom de famille doit contenir au moins 2 caractères",
             "last_name_letters_only": "Votre nom de famille doit contenir uniquement des lettres et des espaces.",
-            "email": "L'adresse courriel doit être valide : exemple@gmail.com"
+            "email": "L'adresse courriel doit être valide : exemple@gmail.com",
+            "email_taken" : "L'adresse courriel est déjà utilisée"
         }
     },
 

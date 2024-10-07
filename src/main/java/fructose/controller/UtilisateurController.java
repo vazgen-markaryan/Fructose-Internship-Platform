@@ -7,11 +7,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -48,6 +48,14 @@ public class UtilisateurController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
         }
+    }
+
+    @GetMapping("/check-email")
+    public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestParam String email) {
+        boolean emailTaken = utilisateurService.isEmailTaken(email);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("emailTaken", emailTaken);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/connexion")

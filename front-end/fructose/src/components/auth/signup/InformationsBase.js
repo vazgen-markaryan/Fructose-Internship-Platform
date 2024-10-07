@@ -8,15 +8,35 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
 
     const [errors, setErrors] = useState({});
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const errorMessage = validateFields();
         if (Object.keys(errorMessage).length > 0) {
+            const emailTaken = await isEmailTaken(utilisateur.email);
+            if (emailTaken) {
+                errorMessage.email = t("information_base_page.error.email_taken");
+            }
             setErrors(errorMessage);
         } else {
+            const emailTaken = await isEmailTaken(utilisateur.email);
+            if (emailTaken) {
+                setErrors({email: t("information_base_page.error.email_taken")});
+                return;
+            }
             switchStep(true);
         }
     };
+
+    const isEmailTaken = async (email) => {
+        try {
+            const response = await fetch(`/check-email?email=${encodeURIComponent(email)}`);
+            const data = await response.json();
+            return data.emailTaken;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    }
 
     const validateFields = () => {
         let errors = {};
@@ -40,35 +60,37 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
         return errors;
     };
 
+    useEffect(() => {
+        setErrors((prevErrors) => {
+            const updatedErrors = { ...prevErrors };
+
+            if (prevErrors.firstName && utilisateur.firstName.length < 2) {
+                updatedErrors.firstName = t("information_base_page.error.first_name_short");
+            }
+
+            if (prevErrors.lastName && utilisateur.lastName.length < 2) {
+                updatedErrors.lastName = t("information_base_page.error.last_name_short");
+            }
+
+            if (prevErrors.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(utilisateur.email)) {
+                updatedErrors.email = t("information_base_page.error.email");
+            }
+
+            if (prevErrors.email && isEmailTaken(utilisateur.email)) {
+                updatedErrors.email = t("information_base_page.error.email_taken");
+            }
+
+            return updatedErrors;
+        });
+    }, [utilisateur.firstName, utilisateur.lastName, utilisateur.email, t]);
+
     const handleInputChange = (event) => {
         const {name} = event.target;
         handleChange(event);
         setErrors((prevErrors) => ({...prevErrors, [name]: ""}));
     };
 
-    useEffect(() => {
-        setErrors((prevErrors) => {
-            const updatedErrors = { ...prevErrors };
 
-            if (prevErrors.firstName) {
-                updatedErrors.firstName = utilisateur.firstName.length < 2
-                    ? t("information_base_page.error.first_name_short")
-                    : t("information_base_page.error.first_name_letters_only");
-            }
-
-            if (prevErrors.lastName) {
-                updatedErrors.lastName = utilisateur.lastName.length < 2
-                    ? t("information_base_page.error.last_name_short")
-                    : t("information_base_page.error.last_name_letters_only");
-            }
-
-            if (prevErrors.email) {
-                updatedErrors.email = t("information_base_page.error.email");
-            }
-
-            return updatedErrors;
-        });
-    }, [utilisateur.firstName, utilisateur.lastName, utilisateur.email, t]);
 
     return (
         <div className={"form-signup-condensed"}>

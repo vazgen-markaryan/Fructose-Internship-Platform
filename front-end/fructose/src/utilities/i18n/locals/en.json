@@ -53,7 +53,8 @@
             "first_name_letters_only": "Your first name must contain only letters and spaces.",
             "last_name_short": "Your last name must contain at least 2 characters.",
             "last_name_letters_only": "Your last name must contain only letters and spaces.",
-            "email": "Email address must be valid: example@gmail.com"
+            "email": "Email address must be valid: example@gmail.com",
+            "email_taken" : "Email address is already taken"
         }
     },
 
