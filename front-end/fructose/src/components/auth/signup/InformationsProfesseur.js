@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import Icon from "@mdi/react";
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
+import { isMatriculeTaken } from '../../../utilities/api/apiService';
 
 const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
 
@@ -22,17 +23,6 @@ const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
             switchStep(true);
         }
     };
-
-    const isMatriculeTaken = async (matricule) => {
-        try {
-            const response = await fetch(`/check-matricule?matricule=${encodeURIComponent(matricule)}`);
-            const data = await response.json();
-            return data.matriculeTaken;
-        } catch (error) {
-            console.error(error);
-            return false;
-        }
-    }
 
     const handleInputChange = (event) => {
         const {name, value} = event.target;
