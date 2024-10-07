@@ -89,7 +89,7 @@ public class FructoseApplication implements CommandLineRunner {
 		if (exists) {
 			System.out.println(role.toString() + " avec email " + utilisateurDTO.getEmail() + " existe déjà dans la base de données");
 		} else {
-			utilisateurService.addUtilisateur(utilisateurDTO, role);
+			utilisateurService.addUtilisateur(utilisateurDTO);
 			System.out.println(role.toString() + " avec email " + utilisateurDTO.getEmail() + " a été ajouté avec succès");
 		}
 	}

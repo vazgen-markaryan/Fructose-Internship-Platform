@@ -4,6 +4,7 @@ import fructose.model.Employeur;
 import fructose.model.Etudiant;
 import fructose.model.Professeur;
 import fructose.model.Utilisateur;
+import fructose.model.auth.Credentials;
 import fructose.model.auth.Role;
 import fructose.repository.vides.EmployeurRepository;
 import fructose.repository.vides.EtudiantRepository;
@@ -59,7 +60,7 @@ class UtilisateurServiceTest {
 
     @BeforeEach
     public void setUp() {
-        utilisateurService = new UtilisateurService(etudiantRepository, professeurRepository, employeurRepository, passwordEncoder, utilisateurRepository, authenticationManager, jwtTokenProvider);
+        utilisateurService = new UtilisateurService(etudiantRepository, professeurRepository, employeurRepository, passwordEncoder, utilisateurRepository, jwtTokenProvider,authenticationManager);
     }
 
     // ------------------- GET UTILISATEUR BY ID ------------------- //
@@ -69,9 +70,15 @@ class UtilisateurServiceTest {
         Long id = 1L;
         Etudiant etudiant = new Etudiant();
         etudiant.setId(id);
+        etudiant.setCredentials(Credentials.builder()
+                .email("test@example.com")
+                .password("Password123!")
+                .role(Role.ETUDIANT)
+                .build());
+
         when(etudiantRepository.findById(id)).thenReturn(Optional.of(etudiant));
 
-        UtilisateurDTO result = utilisateurService.getUtilisateurById(id, "Etudiant");
+        UtilisateurDTO result = utilisateurService.getUtilisateurById(id, Role.ETUDIANT);
         assertNotNull(result);
     }
 
@@ -80,9 +87,14 @@ class UtilisateurServiceTest {
         Long id = 1L;
         Professeur professeur = new Professeur();
         professeur.setId(id);
+        professeur.setCredentials(Credentials.builder()
+                .email("professeur@example.com")
+                .password("Password123!")
+                .role(Role.PROFESSEUR)
+                .build());
         when(professeurRepository.findById(id)).thenReturn(Optional.of(professeur));
 
-        UtilisateurDTO result = utilisateurService.getUtilisateurById(id, "Professeur");
+        UtilisateurDTO result = utilisateurService.getUtilisateurById(id, Role.PROFESSEUR);
         assertNotNull(result);
         verify(professeurRepository).findById(id);
     }
@@ -92,9 +104,14 @@ class UtilisateurServiceTest {
         Long id = 1L;
         Employeur employeur = new Employeur();
         employeur.setId(id);
+        employeur.setCredentials(Credentials.builder()
+                .email("employeur@example.com")
+                .password("Password123!")
+                .role(Role.EMPLOYEUR)
+                .build());
         when(employeurRepository.findById(id)).thenReturn(Optional.of(employeur));
 
-        UtilisateurDTO result = utilisateurService.getUtilisateurById(id, "Employeur");
+        UtilisateurDTO result = utilisateurService.getUtilisateurById(id, Role.EMPLOYEUR);
         assertNotNull(result);
         verify(employeurRepository).findById(id);
     }
@@ -105,7 +122,7 @@ class UtilisateurServiceTest {
         when(etudiantRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.getUtilisateurById(id, "Etudiant");
+            utilisateurService.getUtilisateurById(id, Role.ETUDIANT);
         });
     }
 
@@ -119,7 +136,7 @@ class UtilisateurServiceTest {
 
         when(passwordEncoder.encode(utilisateurDTO.getPassword())).thenReturn("encodedPassword");
 
-        utilisateurService.addUtilisateur(utilisateurDTO, "Etudiant");
+        utilisateurService.addUtilisateur(utilisateurDTO);
 
         verify(etudiantRepository, times(1)).save(any(Etudiant.class));
     }
@@ -132,7 +149,7 @@ class UtilisateurServiceTest {
 
         when(passwordEncoder.encode(professeurDTO.getPassword())).thenReturn("encodedPassword");
 
-        utilisateurService.addUtilisateur(professeurDTO, "Professeur");
+        utilisateurService.addUtilisateur(professeurDTO);
 
         verify(professeurRepository, times(1)).save(any(Professeur.class));
     }
@@ -141,11 +158,11 @@ class UtilisateurServiceTest {
     void testAddUtilisateur_Employeur_Success() {
         EmployeurDTO employeurDTO = new EmployeurDTO();
         employeurDTO.setPassword("password123");
-        employeurDTO.setRole(Role.ETUDIANT);
+        employeurDTO.setRole(Role.EMPLOYEUR);
 
         when(passwordEncoder.encode(employeurDTO.getPassword())).thenReturn("encodedPassword");
 
-        utilisateurService.addUtilisateur(employeurDTO, "Employeur");
+        utilisateurService.addUtilisateur(employeurDTO);
 
         verify(employeurRepository, times(1)).save(any(Employeur.class));
     }
@@ -162,7 +179,7 @@ class UtilisateurServiceTest {
         etudiantDTO.setCompanyName(null);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
-        utilisateurService.addUtilisateur(etudiantDTO, Role.ETUDIANT);
+        utilisateurService.addUtilisateur(etudiantDTO);
 
         verify(etudiantRepository).save(any(Etudiant.class));
     }
@@ -179,10 +196,11 @@ class UtilisateurServiceTest {
         professeurDTO.setCompanyName(null);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
-        utilisateurService.updateUtilisateur(professeurDTO, "Professeur");
+        utilisateurService.updateUtilisateur(professeurDTO, Role.PROFESSEUR);
 
         verify(professeurRepository).save(any(Professeur.class));
     }
+
 
     // ------------------- DELETE UTILISATEUR ------------------- //
 
@@ -191,9 +209,11 @@ class UtilisateurServiceTest {
         Long id = 1L;
         Etudiant etudiant = new Etudiant();
         etudiant.setId(id);
+        etudiant.setCredentials(new Credentials("etudiant@example.com", "password123", Role.ETUDIANT));
+
         when(etudiantRepository.findById(id)).thenReturn(Optional.of(etudiant));
 
-        utilisateurService.deleteUtilisateur(id, "Etudiant");
+        utilisateurService.deleteUtilisateur(id, Role.ETUDIANT);
 
         verify(etudiantRepository, times(1)).deleteById(id);
     }
@@ -203,9 +223,11 @@ class UtilisateurServiceTest {
         Long id = 1L;
         Professeur professeur = new Professeur();
         professeur.setId(id);
+        professeur.setCredentials(new Credentials("professeur@example.com", "password123", Role.PROFESSEUR));
+
         when(professeurRepository.findById(id)).thenReturn(Optional.of(professeur));
 
-        utilisateurService.deleteUtilisateur(id, "Professeur");
+        utilisateurService.deleteUtilisateur(id, Role.PROFESSEUR);
 
         verify(professeurRepository, times(1)).deleteById(id);
     }
@@ -215,9 +237,11 @@ class UtilisateurServiceTest {
         Long id = 1L;
         Employeur employeur = new Employeur();
         employeur.setId(id);
+        employeur.setCredentials(new Credentials("employeur@example.com", "password123", Role.EMPLOYEUR));
+
         when(employeurRepository.findById(id)).thenReturn(Optional.of(employeur));
 
-        utilisateurService.deleteUtilisateur(id, "Employeur");
+        utilisateurService.deleteUtilisateur(id, Role.EMPLOYEUR);
 
         verify(employeurRepository, times(1)).deleteById(id);
     }
@@ -228,41 +252,61 @@ class UtilisateurServiceTest {
         when(etudiantRepository.findById(id)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.deleteUtilisateur(id, "Etudiant");
+            utilisateurService.deleteUtilisateur(id, Role.ETUDIANT);
         });
 
         assertEquals("Etudiant avec ID: " + id + " n'existe pas", exception.getMessage());
         verify(etudiantRepository, never()).deleteById(id);
     }
 
+
+
     // ------------------- GET ALL UTILISATEURS ------------------- //
 
     @Test
     void testGetUtilisateurs() {
-        List<Etudiant> etudiants = List.of(new Etudiant(), new Etudiant());
+
+        Etudiant etudiant1 = new Etudiant();
+        etudiant1.setCredentials(new Credentials("etudiant1@example.com", "password123", Role.ETUDIANT));
+        Etudiant etudiant2 = new Etudiant();
+        etudiant2.setCredentials(new Credentials("etudiant2@example.com", "password123", Role.ETUDIANT));
+
+        List<Etudiant> etudiants = List.of(etudiant1,etudiant2);
         when(etudiantRepository.findAll()).thenReturn(etudiants);
 
-        List<UtilisateurDTO> utilisateurs = utilisateurService.getUtilisateurs("Etudiant");
+        List<UtilisateurDTO> utilisateurs = utilisateurService.getUtilisateurs(Role.ETUDIANT);
 
         assertEquals(2, utilisateurs.size());
     }
 
     @Test
     void testGetUtilisateurs_Professeur() {
-        List<Professeur> professeurs = List.of(new Professeur(), new Professeur());
+        Professeur professeur1 = new Professeur();
+        professeur1.setCredentials(new Credentials("professeur1@example.com", "password123", Role.PROFESSEUR));
+        Professeur professeur2 = new Professeur();
+        professeur2.setCredentials(new Credentials("professeur2@example.com", "password123", Role.PROFESSEUR));
+
+
+        List<Professeur> professeurs = List.of(professeur1, professeur2);
         when(professeurRepository.findAll()).thenReturn(professeurs);
 
-        List<UtilisateurDTO> utilisateurs = utilisateurService.getUtilisateurs("Professeur");
+        List<UtilisateurDTO> utilisateurs = utilisateurService.getUtilisateurs(Role.PROFESSEUR);
 
         assertEquals(2, utilisateurs.size());
     }
 
     @Test
     void testGetUtilisateurs_Employeur() {
-        List<Employeur> employeurs = List.of(new Employeur(), new Employeur());
+
+        Employeur employeur1 = new Employeur();
+        employeur1.setCredentials(new Credentials("employeur1@example.com", "password123", Role.EMPLOYEUR));
+        Employeur employeur2 = new Employeur();
+        employeur2.setCredentials(new Credentials("employeur2@example.com", "password123", Role.EMPLOYEUR));
+
+        List<Employeur> employeurs = List.of(employeur1,employeur2);
         when(employeurRepository.findAll()).thenReturn(employeurs);
 
-        List<UtilisateurDTO> utilisateurs = utilisateurService.getUtilisateurs("Employeur");
+        List<UtilisateurDTO> utilisateurs = utilisateurService.getUtilisateurs(Role.EMPLOYEUR);
 
         assertEquals(2, utilisateurs.size());
     }
@@ -274,6 +318,7 @@ class UtilisateurServiceTest {
         Utilisateur utilisateurVazgan = Utilisateur.createUtilisateur("Etudiant",
                 "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!",
                 "1111111", "informatique", null);
+        utilisateurVazgan.setCredentials(new Credentials("vazgen@gmail.com", "Vazgen123!", Role.ETUDIANT));
         utilisateurVazgan.setPassword(new BCryptPasswordEncoder().encode(utilisateurVazgan.getPassword()));
         String password = "Vazgen123!";
 
@@ -291,8 +336,6 @@ class UtilisateurServiceTest {
     public void test_login_with_incorrect_email() {
         String email = "vazgen2@gmail.com";
         String password = "Vazgen";
-        Utilisateur utilisateur = new Utilisateur();
-        utilisateur.setEmail("vazgen@gmail.com");
 
         when(utilisateurRepository.findByEmail(email)).thenReturn(null);
 

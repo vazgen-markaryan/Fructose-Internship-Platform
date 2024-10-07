@@ -87,7 +87,7 @@ public class UtilisateurService {
         }
     }
     
-    public void addUtilisateur(UtilisateurDTO utilisateurDTO, Role role) {
+    public void addUtilisateur(UtilisateurDTO utilisateurDTO) {
         Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
         saveUtilisateur(utilisateur);
