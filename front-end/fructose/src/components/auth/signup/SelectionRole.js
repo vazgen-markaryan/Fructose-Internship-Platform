@@ -4,7 +4,9 @@ import Icon from "@mdi/react";
 import {useTranslation} from "react-i18next";
 
 const SelectionRole = ({utilisateur, handleChange, switchStep}) => {
+
     const {t} = useTranslation();
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const errorMessage = validateFields();

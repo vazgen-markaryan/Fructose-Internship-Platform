@@ -2,16 +2,17 @@ import React, {useEffect, useState} from "react";
 import Icon from "@mdi/react";
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
-import { isMatriculeTaken } from '../../../utilities/api/apiService';
+import {isMatriculeTaken} from '../../../utilities/api/apiService';
 
 const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
 
     const {t} = useTranslation();
-
     const [errors, setErrors] = useState({});
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setFormSubmitted(true);
         const errorMessage = validateFields(utilisateur);
         const matriculeTaken = await isMatriculeTaken(utilisateur.matricule);
         if (matriculeTaken) {
@@ -25,48 +26,45 @@ const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
     };
 
     const handleInputChange = (event) => {
-        const {name, value} = event.target;
-
+        const {name} = event.target;
         handleChange(event);
-
         setErrors((prevErrors) => ({...prevErrors, [name]: ""}));
-
-        const newErrors = validateFields({...utilisateur, [name]: value});
-        setErrors(newErrors);
     };
 
     const validateFields = (user = {}) => {
-        let validationErrors = {};
+        let errors = {};
 
         if (user.matricule && !/^\d{7}$/.test(user.matricule)) {
-            validationErrors.matricule = t("information_professeur_page.error.employee_number");
+            errors.matricule = t("information_professeur_page.error.employee_number");
         }
 
         if (user.departement && user.departement.length === 0) {
-            validationErrors.departement = t("information_professeur_page.error.department");
+            errors.departement = t("information_professeur_page.error.department");
         }
 
-        return validationErrors;
+        return errors;
     };
 
     useEffect(() => {
-        setErrors((prevErrors) => {
-            const updatedErrors = {...prevErrors};
+        if (formSubmitted) {
+            setErrors((prevErrors) => {
+                const updatedErrors = {...prevErrors};
 
-            if (prevErrors.matricule && !/^\d{7}$/.test(utilisateur.matricule)) {
-                updatedErrors.matricule = t("information_professeur_page.error.employee_number");
-            }
+                if (utilisateur.matricule && !/^\d{7}$/.test(utilisateur.matricule)) {
+                    updatedErrors.matricule = t("information_professeur_page.error.employee_number");
+                } else {
+                    delete updatedErrors.matricule;
+                }
 
-            if (prevErrors.matricule && isMatriculeTaken(utilisateur.matricule)) {
-                updatedErrors.matricule = t("information_professeur_page.error.employee_number_taken");
-            }
+                if (utilisateur.departement && utilisateur.departement.length === 0) {
+                    updatedErrors.departement = t("information_professeur_page.error.department");
+                } else {
+                    delete updatedErrors.departement;
+                }
 
-            if (prevErrors.departement && prevErrors.departement.length === 0) {
-                updatedErrors.departement = t("information_professeur_page.error.department");
-            }
-
-            return updatedErrors;
-        });
+                return updatedErrors;
+            });
+        }
     }, [utilisateur.matricule, utilisateur.departement, t]);
 
     return (
@@ -78,12 +76,11 @@ const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
                 <div className={"input-container"}>
                     <p>{t("information_professeur_page.employee_number")}:</p>
                     <input type="text" name="matricule" className={`${errors.matricule ? "field-invalid" : ""}`} required value={utilisateur.matricule || ""} onChange={handleInputChange}/>
-                    <p className={"field-invalid-text"}>{errors.matricule}</p>
+                    {formSubmitted && <p className={"field-invalid-text"}>{errors.matricule}</p>}
                 </div>
                 <div className={"input-container"}>
                     <p>{t("information_professeur_page.department")}:</p>
-                    <select name="departement" className={`${errors.departement ? "field-invalid" : ""}`}
-                            onChange={handleInputChange} value={utilisateur.departement || ""} required>
+                    <select name="departement" className={`${errors.departement ? "field-invalid" : ""}`} onChange={handleInputChange} value={utilisateur.departement || ""} required>
                         <option value="">{t("information_etudiant_page.select_program")}</option>
                         <option value="cinema">{t("information_etudiant_page.programme.cinema")}</option>
                         <option value="gestion_commerce">{t("information_etudiant_page.programme.gestion_commerce")}</option>
@@ -109,17 +106,13 @@ const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
                         <option value="technologie_genie_physique">{t("information_etudiant_page.programme.technologie_genie_physique")}</option>
                         <option value="tremplin_dec">{t("information_etudiant_page.programme.tremplin_dec")}</option>
                     </select>
-                    <p className={"field-invalid-text"}>{errors.departement}</p>
+                    {formSubmitted && <p className={"field-invalid-text"}>{errors.departement}</p>}
                 </div>
                 <br/>
-
                 <div className="form-dock">
-                    <button onClick={() => {
-                        switchStep(false)
-                    }}><Icon path={mdiChevronLeft} size={1}/></button>
+                    <button type="button" onClick={() => {switchStep(false)}}><Icon path={mdiChevronLeft} size={1}/></button>
                     <div className={"toolbar-spacer"}></div>
-                    <button type="submit" className={"btn-filled"}>{t("information_professeur_page.continue")}<Icon
-                        path={mdiChevronRight} size={1}/></button>
+                    <button type="submit" className={"btn-filled"}>{t("information_professeur_page.continue")}<Icon path={mdiChevronRight} size={1}/></button>
                 </div>
             </form>
         </div>

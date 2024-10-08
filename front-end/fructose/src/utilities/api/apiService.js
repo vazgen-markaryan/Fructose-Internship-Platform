@@ -1,5 +1,3 @@
-// apiService.js
-
 export const isMatriculeTaken = async (matricule) => {
     try {
         const response = await fetch(`/check-matricule?matricule=${encodeURIComponent(matricule)}`);

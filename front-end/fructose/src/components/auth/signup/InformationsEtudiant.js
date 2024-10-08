@@ -6,12 +6,13 @@ import { isMatriculeTaken } from '../../../utilities/api/apiService';
 
 const InformationsEtudiant = ({ utilisateur, handleChange, switchStep }) => {
 
-    const { t } = useTranslation();
-
+    const {t} = useTranslation();
     const [errors, setErrors] = useState({});
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setFormSubmitted(true);
         const errorMessage = validateFields(utilisateur);
 
         const matriculeTaken = await isMatriculeTaken(utilisateur.matricule);
@@ -26,53 +27,45 @@ const InformationsEtudiant = ({ utilisateur, handleChange, switchStep }) => {
     };
 
     const handleInputChange = (event) => {
-        const { name, value } = event.target;
-
+        const { name } = event.target;
         handleChange(event);
-
         setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
-
-        const newErrors = validateFields({ ...utilisateur, [name]: value });
-        setErrors(newErrors);
     };
 
     const validateFields = (user = {}) => {
-        let validationErrors = {};
+        let errors = {};
 
         if (user.matricule && !/^\d{7}$/.test(user.matricule)) {
-            validationErrors.matricule = t("information_etudiant_page.error.matricule");
+            errors.matricule = t("information_etudiant_page.error.matricule");
         }
 
         if (user.departement && user.departement?.length === 0) {
-            validationErrors.departement = t("information_etudiant_page.error.department");
+            errors.departement = t("information_etudiant_page.error.department");
         }
 
-        return validationErrors;
+        return errors;
     };
 
     useEffect(() => {
-        setErrors((prevErrors) => {
-            const updatedErrors = { ...prevErrors };
+        if (formSubmitted) {
+            setErrors((prevErrors) => {
+                const updatedErrors = { ...prevErrors };
 
-            if (utilisateur.matricule && !/^\d{7}$/.test(utilisateur.matricule)) {
-                updatedErrors.matricule = t("information_etudiant_page.error.matricule");
-            }
+                if (utilisateur.matricule && !/^\d{7}$/.test(utilisateur.matricule)) {
+                    updatedErrors.matricule = t("information_etudiant_page.error.matricule");
+                } else {
+                    delete updatedErrors.matricule;
+                }
 
-            if (prevErrors.matricule && isMatriculeTaken(utilisateur.matricule)) {
-                updatedErrors.matricule = t("information_etudiant_page.error.matricule_taken");
-            }
+                if (utilisateur.departement && utilisateur.departement.length === 0) {
+                    updatedErrors.departement = t("information_etudiant_page.error.department");
+                } else {
+                    delete updatedErrors.departement;
+                }
 
-            if (utilisateur.departement && utilisateur.departement.length === 0) {
-                updatedErrors.departement = t("information_etudiant_page.error.department");
-            }
-
-            else {
-                delete updatedErrors.departement;
-                delete updatedErrors.matricule;
-            }
-
-            return updatedErrors;
-        });
+                return updatedErrors;
+            });
+        }
     }, [utilisateur.matricule, utilisateur.departement, t]);
 
     return (
@@ -84,7 +77,7 @@ const InformationsEtudiant = ({ utilisateur, handleChange, switchStep }) => {
                 <div className={"input-container"}>
                     <p>{t("information_etudiant_page.matricule")}:</p>
                     <input type="text" name="matricule" className={`${errors.matricule ? "field-invalid" : ""}`} required value={utilisateur.matricule || ""} onChange={handleInputChange}/>
-                    <p className={"field-invalid-text"}>{errors.matricule}</p>
+                    {formSubmitted && <p className={"field-invalid-text"}>{errors.matricule}</p>}
                 </div>
                 <div className={"input-container"}>
                     <p>{t("information_etudiant_page.program")}:</p>
@@ -119,7 +112,7 @@ const InformationsEtudiant = ({ utilisateur, handleChange, switchStep }) => {
                 <br/>
 
                 <div className="form-dock">
-                    <button onClick={() => { switchStep(false) }}><Icon path={mdiChevronLeft} size={1}/></button>
+                    <button type="button" onClick={() => { switchStep(false) }}><Icon path={mdiChevronLeft} size={1}/></button>
                     <div className={"toolbar-spacer"}></div>
                     <button type="submit" className={"btn-filled"}>{t("information_etudiant_page.continue")}<Icon path={mdiChevronRight} size={1}/></button>
                 </div>
