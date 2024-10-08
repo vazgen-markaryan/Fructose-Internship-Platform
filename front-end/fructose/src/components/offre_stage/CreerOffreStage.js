@@ -38,27 +38,16 @@ const CreerOffreStage = () => {
 
         const errors = {};
 
-        if (!/^[A-Za-z\s]+$/.test(nom)) {
-            errors.nom = "Le nom doit contenir uniquement des lettres et des espaces";
-        }else if (nom.length < 3 || nom.length > 100) {
+        if (nom.length < 3 || nom.length > 100) {
             errors.nom = "Le nom doit contenir entre 3 et 100 caractères";
         }
-        if (!/^[A-Za-z\s]+$/.test(poste)) {
-            errors.poste = "Le poste doit contenir uniquement des lettres et des espaces";
-        }
-        else if (poste.length < 3 || poste.length > 100) {
+        if (poste.length < 3 || poste.length > 100) {
             errors.poste = "Le poste doit contenir entre 3 et 100 caractères";
         }
-        if (!/^[\x20-\x7E]*$/.test(description)) {
-            errors.description = "La description doit contenir uniquement des caractères ASCII";
-        }
-        else if (description.length < 10 || description.length > 500) {
+        if (description.length < 10 || description.length > 500) {
             errors.description = "La description doit contenir entre 10 et 500 caractères";
         }
-        if (!/^[\x20-\x7E]*$/.test(compagnie)) {
-            errors.compagnie =  "La compagnie doit contenir uniquement des caractères ASCII";
-        }
-        else if (compagnie.length < 3 || compagnie.length > 100) {
+        if (compagnie.length < 3 || compagnie.length > 100) {
             errors.compagnie = "La compagnie doit contenir entre 3 et 100 caractères";
         }
         if (tauxHoraire < 0) {
@@ -67,10 +56,7 @@ const CreerOffreStage = () => {
         if (typeEmploi.length < 3 || typeEmploi.length > 100) {
             errors.typeEmploi = "Le type d'emploi doit contenir entre 3 et 100 caractères";
         }
-        if(!/^[\x20-\x7E]*$/.test(adresse)) {
-            errors.adresse =  "L'adresse doit contenir uniquement des caractères ASCII";
-        }
-        else if (adresse.length < 3 || adresse.length > 100) {
+        if (adresse.length < 3 || adresse.length > 100) {
             errors.adresse = "L'adresse doit contenir entre 3 et 100 caractères";
         }
         if (modaliteTravail.length < 3 || modaliteTravail.length > 100) {
