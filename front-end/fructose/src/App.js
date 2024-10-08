@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
@@ -9,6 +9,18 @@ import CreerOffreStage from "./components/offre_stage/CreerOffreStage";
 import ConnexionUtilisateur from "./components/ConnexionUtilisateur";
 import TemporaireFooterLanguage from "./components/TemporaireFooterLanguage";
 function App() {
+    const [currentUser, setCurrentUser] = useState({});
+    const [userToken, setUserToken] = useState({});
+
+    useEffect(() =>{
+        //AuthProvider.InitUser();
+    }, [])
+
+
+    const InitLang = () => {
+        // TODO: Langue
+    }
+
     return (
         <BrowserRouter>
             <div style={{minHeight: '100vh', position: 'relative'}}>

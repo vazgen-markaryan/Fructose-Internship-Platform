@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Icon from "@mdi/react";
+import {mdiArrowLeft, mdiChevronRight} from "@mdi/js";
+import AuthService from "../services/AuthService";
+
 import {mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
 
@@ -44,26 +47,19 @@ const ConnexionUtilisateur = () => {
             return;
         }
 
-        fetch('/connexion', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(utilisateur),
-        })
-            .then(response => {
+        AuthService.SignInUser(utilisateur.email, utilisateur.password)
+            .then(async response => {
                 if (!response.ok) {
-                    return response.text().then(text => { throw new Error(text) });
+                    localStorage.setItem("FOSE_AUTH", await response.text());
                 }
-                return response;
+
             })
             .then(() => {
-                //TODO navigation temporaire car la page de connexion n'est pas encore créée
                 navigate('/');
             })
             .catch(error => {
                 setBackendError(error.message);
-            });
+            })
     };
 
     useEffect(() => {
