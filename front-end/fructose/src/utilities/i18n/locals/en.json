@@ -139,5 +139,42 @@
             "department": "No Department is selected",
             "employee_number_taken": "Employee number is already taken"
         }
+    },
+
+    "creer_offre_stage_page" : {
+        "title": "Create an internship offer",
+        "nom": "Name",
+        "poste": "Position",
+        "description": "Description",
+        "compagnie": "Company",
+        "address": "Address",
+        "taux_horaire": "Hourly rate",
+        "nombre_heures_semaine": "Number of hours per week",
+        "nombre_postes": "Number of positions",
+        "type_emploi": "Type of employment",
+        "types_emploi" : {
+            "select" : "Select a type of employment",
+            "temps_partiel": "Part-time",
+            "temps_plein": "Full-time"
+        },
+        "programme_etudes": "Study program",
+        "programmes_etudes" : {
+            "select": "Select a program",
+            "technique_informatiques": "Computer Techniques",
+            "soins_infirmiers": "Nursing",
+            "genie_electrique": "Electrical Engineering"
+        },
+        "modalite_travail": "Work modality",
+        "modalites_travail" : {
+            "select": "Select a work modality",
+            "teletravail": "Remote work",
+            "presentiel": "On-site",
+            "hybride": "Hybrid"
+        },
+        "date_limite_candidate": "Application deadline",
+        "date_debut": "Start date",
+        "date_fin": "End date",
+        "creer_offre_stage": "Create the internship offer",
+        "retour": "Return to home"
     }
 }
