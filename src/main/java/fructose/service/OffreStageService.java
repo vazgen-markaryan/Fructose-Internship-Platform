@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Validated
@@ -61,5 +62,11 @@ public class OffreStageService {
         }
         OffreStage offreStage = offreStageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("L'offre stage avec l'ID: " + id + " n'existe pas, alors il ne peut pas être récupéré"));
         return OffreStageDTO.toDTO(offreStage);
+    }
+
+    public List<OffreStageDTO> getOffresStage() {
+        // If null, throw IllegalArgumentException
+        List<OffreStage> offresStage = offreStageRepository.findAll();
+        return OffreStageDTO.toDTOs(offresStage);
     }
 }

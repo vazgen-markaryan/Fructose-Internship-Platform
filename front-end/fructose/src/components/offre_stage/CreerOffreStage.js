@@ -52,8 +52,8 @@ const CreerOffreStage = () => {
         if (!/^[\x20-\x7E]*$/.test(description)) {
             errors.description = "La description doit contenir uniquement des caractères ASCII";
         }
-        else if (description.length < 3 || description.length > 500) {
-            errors.description = "La description doit contenir entre 3 et 500 caractères";
+        else if (description.length < 10 || description.length > 500) {
+            errors.description = "La description doit contenir entre 10 et 500 caractères";
         }
         if (!/^[\x20-\x7E]*$/.test(compagnie)) {
             errors.compagnie =  "La compagnie doit contenir uniquement des caractères ASCII";
@@ -122,6 +122,9 @@ const CreerOffreStage = () => {
         if (Object.keys(errorMessage).length > 0) {
             setErrors(errorMessage);
         } else {
+            offreStage.dateDebut = offreStage.dateDebut.toISOString().split('T')[0];
+            offreStage.dateFin = offreStage.dateFin.toISOString().split('T')[0];
+            offreStage.dateLimiteCandidature = offreStage.dateLimiteCandidature.toISOString().split('T')[0];
             fetch('/creer-offre-stage', {
                 method: 'POST',
                 headers: {
@@ -193,26 +196,26 @@ const CreerOffreStage = () => {
                 <label>Type d'emploi:</label>
                 <select name="typeEmploi" onChange={handleInputChange} value={offreStage.typeEmploi} required>
                     <option value={"select"}>Sélectionner un type d'emploie</option>
-                    <option value="Presentiel">Présentiel</option>
-                    <option value="Virtuel">Virtuel</option>
-                    <option value="Hybride">Hybride</option>
+                    <option value="presentiel">Présentiel</option>
+                    <option value="virtuel">Virtuel</option>
+                    <option value="hybride">Hybride</option>
                 </select>
                 <p className={"field-invalid-text"}>{errors.typeEmploi}</p>
 
                 <label>Programme d'étude:</label>
                 <select name="programmeEtude" onChange={handleInputChange} value={offreStage.programmeEtude} required>
                     <option value={"select"}>Sélectionner un programme</option>
-                    <option value="Informatique">Technique de l'informatique</option>
-                    <option value="Physique">Genie physique</option>
-                    <option value="Infirmiers">Soin infirmiers</option>
+                    <option value="techniques_informatique">Technique de l'informatique</option>
+                    <option value="technologie_genie_electrique">Genie électrique</option>
+                    <option value="soins_infirmiers">Soin infirmiers</option>
                 </select>
                 <p className={"field-invalid-text"}>{errors.programmeEtude}</p>
 
                 <label>Modalité de travail:</label>
                 <select name="modaliteTravail" onChange={handleInputChange} value={offreStage.modaliteTravail} required>
                     <option value="select">Sélectionner une modalité de travail</option>
-                    <option value="Tempsplein">Temps plein</option>
-                    <option value="Tempspartiel">Temps partiel</option>
+                    <option value="temps_plein">Temps plein</option>
+                    <option value="temps_partiel">Temps partiel</option>
                 </select>
                 <p className={"field-invalid-text"}>{errors.modaliteTravail}</p>
 

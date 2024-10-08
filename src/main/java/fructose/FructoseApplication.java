@@ -1,30 +1,33 @@
 package fructose;
 
+import fructose.model.*;
+import fructose.service.OffreStageService;
 import fructose.model.Employeur;
 import fructose.model.Etudiant;
 import fructose.model.Professeur;
 import fructose.model.Utilisateur;
 import fructose.model.auth.Role;
 import fructose.service.UtilisateurService;
-import fructose.service.dto.EmployeurDTO;
-import fructose.service.dto.EtudiantDTO;
-import fructose.service.dto.ProfesseurDTO;
-import fructose.service.dto.UtilisateurDTO;
+import fructose.service.dto.*;
+import net.bytebuddy.asm.Advice;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootApplication
 public class FructoseApplication implements CommandLineRunner {
 
 	private final UtilisateurService utilisateurService;
+	private final OffreStageService offreStageService;
 
-	public FructoseApplication(UtilisateurService utilisateurService) {
+	public FructoseApplication(UtilisateurService utilisateurService, OffreStageService offreStageService) {
 		this.utilisateurService = utilisateurService;
+		this.offreStageService = offreStageService;
 	}
-
+	
 	public static void main(String[] args) {
 		SpringApplication.run(FructoseApplication.class, args);
 
@@ -54,6 +57,15 @@ public class FructoseApplication implements CommandLineRunner {
 		Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, "Informatique", "Ubisoft Incorporé");
 		EmployeurDTO employeurUbisoft = EmployeurDTO.toDTO((Employeur) ubisoft);
 
+		OffreStage offreStage = OffreStage.createOffreStage("Développeur de jeux video", "Développeur Unity", "Développer des jeux video en utilisant Unity", "Ubisoft", "techniques_informatique", 25.0, "virtuel", "Montréal", "temps_plein", LocalDate.now().plusMonths(3), LocalDate.now().plusMonths(6), 20, 1, LocalDate.now().plusMonths(2));
+		OffreStageDTO offreStageDTO = OffreStageDTO.toDTO(offreStage);
+		try {
+			checkAndAddOffreStage(offreStageDTO);
+		}catch (Exception e){
+			System.out.println("Une erreur s'est produite : " + e.getMessage());
+			e.printStackTrace();
+		}
+
 		try {
 			System.out.println();
 			checkAndAddUtilisateur(etudiantVazgen, Role.ETUDIANT);
@@ -65,6 +77,21 @@ public class FructoseApplication implements CommandLineRunner {
 		} catch (Exception e) {
 			System.out.println("Une erreur s'est produite : " + e.getMessage());
 			e.printStackTrace();
+		}
+	}
+
+	private void checkAndAddOffreStage(OffreStageDTO offreStage) {
+		System.out.println(); //Ajouté juste pour la lisibilité
+		List<OffreStageDTO> offreStageList = offreStageService.getOffresStage();
+		boolean exists = offreStageList
+				.stream()
+				.anyMatch(offre -> offre.getNom().equals(offreStage.getNom()));
+
+		if (exists) {
+			System.out.println("Offre de stage avec nom " + offreStage.getNom() + " existe déjà dans la base de données");
+		} else {
+			offreStageService.addOffreStage(offreStage);
+			System.out.println("Offre de stage avec nom " + offreStage.getNom() + " a été ajoutée avec succès");
 		}
 	}
 

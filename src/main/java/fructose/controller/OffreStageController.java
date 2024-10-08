@@ -24,6 +24,8 @@ public class OffreStageController {
 
     @PostMapping("/creer-offre-stage")
     public ResponseEntity<?> creerOffreStage(@RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
+        System.out.println(offreStageDTO.toString());
+        System.out.println(result.toString());
         if (result.hasErrors()) {
             String errorMessages = result.getFieldErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)

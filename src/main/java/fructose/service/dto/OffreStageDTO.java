@@ -2,45 +2,39 @@ package fructose.service.dto;
 
 import fructose.model.OffreStage;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class OffreStageDTO {
 
-    @NotNull(message = "L'identifiant ne peut pas être null")
     private Long id;
 
     @NotEmpty(message = "Le nom ne peut pas être vide")
     @Size(min = 3, max = 100, message = "Le nom doit contenir au moins 3 caractères et au plus 100 caractères")
-    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Le nom doit contenir uniquement des lettres et des espaces")
     private String nom;
 
     @NotEmpty(message = "Le poste ne peut pas être vide")
     @Size(min = 3, max = 100, message = "Le poste doit contenir au moins 3 caractères et au plus 100 caractères")
-    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Le poste doit contenir uniquement des lettres et des espaces")
     private String poste;
 
     @NotEmpty(message = "La description ne peut pas être vide")
     @Size(min = 10, max = 500, message = "La description doit contenir au moins 10 caractères et au plus 500 caractères")
-    @Pattern(regexp = "^[\\x20-\\x7E]*$", message = "La description ne peut contenir que des caractères ASCII valides")
     private String description;
 
     @NotEmpty(message = "La compagnie ne peut pas être vide")
     @Size(min = 3, max = 100, message = "La compagnie doit contenir au moins 3 caractères et au plus 100 caractères")
-    @Pattern(regexp = "^[\\x20-\\x7E]*$", message = "La compagnie ne peut contenir que des caractères ASCII valides")
     private String compagnie;
 
     @NotEmpty(message = "Le programme d'étude ne peut pas être vide")
-    @Pattern(regexp = "^(Technique de l'informatique|Genie physique|Soin infirmiers)$", message = "Le programme d'étude doit être l'un des suivants : Technique de l'informatique, Génie physique, Soin infirmiers")
+    @Pattern(regexp = "^(soins_infirmiers|techniques_informatique|technologie_genie_electrique)$", message = "Le programme d'étude doit être l'un des suivants : Technique de l'informatique, Génie physique, Soin infirmiers")
     private String programmeEtude;
 
     @NotNull(message = "Le taux horaire ne peut pas être null")
@@ -48,16 +42,15 @@ public class OffreStageDTO {
     private Double tauxHoraire;
 
     @NotNull(message = "Le type d'emploi ne peut pas être null")
-    @Pattern(regexp = "^(Presentiel|Virtuel|Hybride)$", message = "Le type d'emploi doit être l'un des suivants : Presentiel, Virtuel, Hybride")
+    @Pattern(regexp = "^(presentiel|virtuel|hybride)$", message = "Le type d'emploi doit être l'un des suivants : Presentiel, Virtuel, Hybride")
     private String typeEmploi;
 
     @NotEmpty(message = "L'adresse ne peut pas être vide")
     @Size(min = 3, max = 100, message = "L'adresse doit contenir au moins 3 caractères et au plus 100 caractères")
-    @Pattern(regexp = "^[\\x20-\\x7E]*$", message = "L'adresse ne peut contenir que des caractères ASCII valides")
     private String adresse;
 
     @NotEmpty(message = "La modalité de travail ne peut pas être vide")
-    @Pattern(regexp = "^(Temps plein|Temps partiel)$", message = "La modalité de travail doit être l'une des suivantes : Temps plein, Temps partiel")
+    @Pattern(regexp = "^(temps_plein|temps_partiel)$", message = "La modalité de travail doit être l'une des suivantes : Temps plein, Temps partiel")
     private String modaliteTravail;
 
     @NotNull(message = "La date de début ne peut pas être null")
@@ -114,5 +107,9 @@ public class OffreStageDTO {
         offreStage.setNombrePostes(offreStageDTO.getNombrePostes());
         offreStage.setDateLimiteCandidature(offreStageDTO.getDateLimiteCandidature());
         return offreStage;
+    }
+
+    public static List<OffreStageDTO> toDTOs(List<OffreStage> offresStage) {
+        return offresStage.stream().map(OffreStageDTO::toDTO).toList();
     }
 }

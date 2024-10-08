@@ -37,11 +37,11 @@ public class OffreStageServiceTest {
         offreStageDTO.setPoste("Developpeur Java");
         offreStageDTO.setDescription("Faire du developpement Java chez Google");
         offreStageDTO.setCompagnie("Google");
-        offreStageDTO.setProgrammeEtude("Technique de l'informatique");
+        offreStageDTO.setProgrammeEtude("techniques_informatique");
         offreStageDTO.setTauxHoraire(23.75);
         offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, Etats-Unis");
-        offreStageDTO.setTypeEmploi("Presentiel");
-        offreStageDTO.setModaliteTravail("Temps plein");
+        offreStageDTO.setTypeEmploi("presentiel");
+        offreStageDTO.setModaliteTravail("temps_plein");
         offreStageDTO.setDateDebut(LocalDate.now().plusMonths(1));
         offreStageDTO.setDateFin(LocalDate.now().plusMonths(6));
         offreStageDTO.setNombreHeuresSemaine(40);
@@ -54,15 +54,6 @@ public class OffreStageServiceTest {
         offreStageService.addOffreStage(offreStageDTO);
 
         verify(offreStageRepository, times(1)).save(any(OffreStage.class));
-    }
-
-    @Test
-    void testAddOffreStageIdNull() {
-        offreStageDTO.setId(null);
-        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
-            offreStageService.addOffreStage(offreStageDTO);
-        });
-        assertEquals("id: L'identifiant ne peut pas être null", exception.getMessage());
     }
 
     @Test
@@ -103,15 +94,6 @@ public class OffreStageServiceTest {
             offreStageService.addOffreStage(offreStageDTO);
         });
         assertEquals("nom: Le nom doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
-    }
-
-    @Test
-    void testAddOffreStageNomInvalide() {
-        offreStageDTO.setNom("Google123");
-        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
-            offreStageService.addOffreStage(offreStageDTO);
-        });
-        assertEquals("nom: Le nom doit contenir uniquement des lettres et des espaces", exception.getMessage());
     }
 
     @Test
@@ -159,15 +141,6 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void testAddOffreStagePosteInvalide() {
-        offreStageDTO.setPoste("Developpeur Java123");
-        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
-            offreStageService.addOffreStage(offreStageDTO);
-        });
-        assertEquals("poste: Le poste doit contenir uniquement des lettres et des espaces", exception.getMessage());
-    }
-
-    @Test
     void testAddOffreStageDescriptionNull() {
         offreStageDTO.setDescription(null);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
@@ -212,15 +185,6 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void testAddOffreStageDescriptionInvalide() {
-        offreStageDTO.setDescription("Gustave & Cieàâäéèêëîïôöùûüÿç");
-        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
-            offreStageService.addOffreStage(offreStageDTO);
-        });
-        assertEquals("description: La description ne peut contenir que des caractères ASCII valides", exception.getMessage());
-    }
-
-    @Test
     void testAddOffreStageCompagnieNull() {
         offreStageDTO.setCompagnie(null);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
@@ -262,15 +226,6 @@ public class OffreStageServiceTest {
             offreStageService.addOffreStage(offreStageDTO);
         });
         assertEquals("compagnie: La compagnie doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
-    }
-
-    @Test
-    void testAddOffreStageCompagnieInvalide() {
-        offreStageDTO.setCompagnie("Gustave & Cieàâäéèêëîïôöùûüÿç");
-        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
-            offreStageService.addOffreStage(offreStageDTO);
-        });
-        assertEquals("compagnie: La compagnie ne peut contenir que des caractères ASCII valides", exception.getMessage());
     }
 
     @Test
@@ -369,15 +324,6 @@ public class OffreStageServiceTest {
             offreStageService.addOffreStage(offreStageDTO);
         });
         assertEquals("adresse: L'adresse doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
-    }
-
-    @Test
-    void testAddOffreStageAdresseInvalide() {
-        offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, États-Unis");
-        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
-            offreStageService.addOffreStage(offreStageDTO);
-        });
-        assertEquals("adresse: L'adresse ne peut contenir que des caractères ASCII valides", exception.getMessage());
     }
 
     @Test
