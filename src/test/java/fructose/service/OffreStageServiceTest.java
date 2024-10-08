@@ -73,8 +73,7 @@ public class OffreStageServiceTest {
         });
         for (String errorMessage : exception.getMessage().split(", ")) {
             assertTrue(errorMessage.equals("nom: Le nom ne peut pas être vide") ||
-                    errorMessage.equals("nom: Le nom doit contenir au moins 3 caractères et au plus 100 caractères") ||
-                    errorMessage.equals("nom: Le nom doit contenir uniquement des lettres et des espaces"));
+                    errorMessage.equals("nom: Le nom doit contenir au moins 3 caractères et au plus 100 caractères"));
         }
     }
 
@@ -113,8 +112,7 @@ public class OffreStageServiceTest {
         });
         for (String errorMessage : exception.getMessage().split(", ")) {
             assertTrue(errorMessage.equals("poste: Le poste ne peut pas être vide") ||
-                    errorMessage.equals("poste: Le poste doit contenir au moins 3 caractères et au plus 100 caractères") ||
-                    errorMessage.equals("poste: Le poste doit contenir uniquement des lettres et des espaces"));
+                    errorMessage.equals("poste: Le poste doit contenir au moins 3 caractères et au plus 100 caractères"));
         }
     }
 
@@ -156,9 +154,7 @@ public class OffreStageServiceTest {
             offreStageService.addOffreStage(offreStageDTO);
         });
         for (String errorMessage : exception.getMessage().split(", ")) {
-            assertTrue(errorMessage.equals("description: La description ne peut pas être vide") ||
-                    errorMessage.equals("description: La description doit contenir au moins 10 caractères et au plus 500 caractères") ||
-                    errorMessage.equals("description: La description ne peut contenir que des caractères ASCII valides"));
+            assertTrue(errorMessage.equals("description: La description ne peut pas être vide") || errorMessage.equals("description: La description doit contenir au moins 10 caractères et au plus 500 caractères"));
         }
     }
 
@@ -201,8 +197,7 @@ public class OffreStageServiceTest {
         });
         for (String errorMessage : exception.getMessage().split(", ")) {
             assertTrue(errorMessage.equals("compagnie: La compagnie ne peut pas être vide") ||
-                    errorMessage.equals("compagnie: La compagnie doit contenir au moins 3 caractères et au plus 100 caractères") ||
-                    errorMessage.equals("compagnie: La compagnie ne peut contenir que des caractères ASCII valides"));
+                    errorMessage.equals("compagnie: La compagnie doit contenir au moins 3 caractères et au plus 100 caractères"));
         }
     }
 
@@ -299,8 +294,7 @@ public class OffreStageServiceTest {
         });
         for (String errorMessage : exception.getMessage().split(", ")) {
             assertTrue(errorMessage.equals("adresse: L'adresse ne peut pas être vide") ||
-                    errorMessage.equals("adresse: L'adresse doit contenir au moins 3 caractères et au plus 100 caractères") ||
-                    errorMessage.equals("adresse: L'adresse ne peut contenir que des caractères ASCII valides"));
+                    errorMessage.equals("adresse: L'adresse doit contenir au moins 3 caractères et au plus 100 caractères"));
         }
     }
 
