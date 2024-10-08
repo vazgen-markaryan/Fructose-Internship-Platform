@@ -174,6 +174,21 @@
         "date_debut": "Date de début",
         "date_fin": "Date de fin",
         "creer_offre_stage": "Créer l'offre de stage",
-        "retour": "Retour a l'accueil"
+        "retour": "Retour a l'accueil",
+
+        "errors" : {
+            "nom": "Le nom doit contenir entre 3 et 100 caractères",
+            "poste": "Le poste doit contenir entre 3 et 100 caractères",
+            "description": "La description doit contenir entre 10 et 500 caractères",
+            "compagnie": "Le nom de la compagnie doit contenir entre 3 et 100 caractères",
+            "address": "L'adresse doit contenir entre 3 et 100 caractères",
+            "taux_horaire": "Le taux horaire doit être un nombre positif",
+            "nombre_heures_semaine_inferieur": "Le nombre d'heures par semaine doit être supérieur à 0",
+            "nombre_heures_semaine_superieur": "Le nombre d'heures par semaine doit être inférieur à 168",
+            "nombre_postes": "Le nombre de postes doit être un nombre positif",
+            "programme_etudes_select": "Le programme d'études doit être sélectionné",
+            "modalite_travail_select": "La modalité de travail doit être sélectionnée",
+            "type_emploi_select": "Le type d'emploi doit être sélectionné"
+        }
     }
 }

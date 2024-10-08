@@ -42,64 +42,40 @@ const CreerOffreStage = () => {
         const errors = {};
 
         if (nom.length < 3 || nom.length > 100) {
-            errors.nom = "Le nom doit contenir entre 3 et 100 caractères";
+            errors.nom = t("creer_offre_stage_page.errors.nom");
         }
         if (poste.length < 3 || poste.length > 100) {
-            errors.poste = "Le poste doit contenir entre 3 et 100 caractères";
+            errors.poste = t("creer_offre_stage_page.errors.poste");
         }
         if (description.length < 10 || description.length > 500) {
-            errors.description = "La description doit contenir entre 10 et 500 caractères";
+            errors.description = t("creer_offre_stage_page.errors.description");
         }
         if (compagnie.length < 3 || compagnie.length > 100) {
-            errors.compagnie = "La compagnie doit contenir entre 3 et 100 caractères";
+            errors.compagnie = t("creer_offre_stage_page.errors.compagnie");
         }
         if (tauxHoraire < 0) {
-            errors.tauxHoraire =  "Le taux horaire doit être positif";
-        }
-        if (typeEmploi.length < 3 || typeEmploi.length > 100) {
-            errors.typeEmploi = "Le type d'emploi doit contenir entre 3 et 100 caractères";
+            errors.tauxHoraire = t("creer_offre_stage_page.errors.taux_horaire");
         }
         if (adresse.length < 3 || adresse.length > 100) {
-            errors.adresse = "L'adresse doit contenir entre 3 et 100 caractères";
-        }
-        if (modaliteTravail.length < 3 || modaliteTravail.length > 100) {
-            errors.modaliteTravail = "La modalité de travail doit contenir entre 3 et 100 caractères";
-        }
-        if (dateDebut < new Date()) {
-            errors.dateDebut = "La date de début doit être dans le futur";
-        }
-        if (dateFin < dateDebut) {
-            errors.dateFin = "La date de fin doit être après la date de début";
+            errors.adresse = t("creer_offre_stage_page.errors.address");
         }
         if (nombreHeuresSemaine < 1) {
-            errors.nombreHeuresSemaine = "Le nombre d'heures par semaine ne peut pas être inférieur à 1";
+            errors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_inferieur");
         }
         else if (nombreHeuresSemaine > 168) {
-            errors.nombreHeuresSemaine = "Le nombre d'heures par semaine ne doit pas dépasser 168 heures";
+            errors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_superieur");
         }
         if (nombrePostes < 1) {
-            errors.nombrePostes = "Le nombre de postes doit être positif";
-        }
-        if (dateLimiteCandidature < new Date()) {
-            errors.dateLimiteCandidature = "La date limite de candidature doit être au moins 7 jours après aujourd'hui";
+            errors.nombrePostes = t("creer_offre_stage_page.errors.nombre_postes");
         }
         if (programmeEtude === "select" || programmeEtude === "") {
-            errors.programmeEtude = "Veuillez sélectionner un programme d'étude";
+            errors.programmeEtude = t("creer_offre_stage_page.errors.programme_etudes_select");
         }
         if (typeEmploi === "select" || typeEmploi === "") {
-            errors.typeEmploi = "Veuillez sélectionner un type d'emploi";
+            errors.typeEmploi = t("creer_offre_stage_page.errors.type_emploi_select");
         }
         if (modaliteTravail === "select" || modaliteTravail === "") {
-            errors.modaliteTravail = "Veuillez sélectionner une modalité de travail";
-        }
-
-
-        for (const key in offreStage) {
-            console.log(key, offreStage[key]);
-        }
-
-        for (const key in errors) {
-            console.log(key, errors[key]);
+            errors.modaliteTravail = t("creer_offre_stage_page.errors.modalite_travail_select");
         }
 
         return errors;
