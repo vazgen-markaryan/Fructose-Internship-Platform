@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 
@@ -80,6 +80,48 @@ const CreerOffreStage = () => {
 
         return errors;
     }
+
+    useEffect(() => {
+        setErrors((prevErrors) => {
+            const updatedErrors = { ...prevErrors };
+
+            if (prevErrors.nom) {
+                updatedErrors.nom = t("creer_offre_stage_page.errors.nom");
+            }
+            if (prevErrors.poste) {
+                updatedErrors.poste = t("creer_offre_stage_page.errors.poste");
+            }
+            if (prevErrors.description) {
+                updatedErrors.description = t("creer_offre_stage_page.errors.description");
+            }
+            if (prevErrors.compagnie) {
+                updatedErrors.compagnie = t("creer_offre_stage_page.errors.compagnie");
+            }
+            if (prevErrors.tauxHoraire) {
+                updatedErrors.tauxHoraire = t("creer_offre_stage_page.errors.taux_horaire");
+            }
+            if (prevErrors.adresse) {
+                updatedErrors.adresse = t("creer_offre_stage_page.errors.address");
+            }
+            if (prevErrors.nombreHeuresSemaine) {
+                updatedErrors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_inferieur");
+            }
+            if (prevErrors.nombrePostes) {
+                updatedErrors.nombrePostes = t("creer_offre_stage_page.errors.nombre_postes");
+            }
+            if (prevErrors.programmeEtude) {
+                updatedErrors.programmeEtude = t("creer_offre_stage_page.errors.programme_etudes_select");
+            }
+            if (prevErrors.typeEmploi) {
+                updatedErrors.typeEmploi = t("creer_offre_stage_page.errors.type_emploi_select");
+            }
+            if (prevErrors.modaliteTravail) {
+                updatedErrors.modaliteTravail = t("creer_offre_stage_page.errors.modalite_travail_select");
+            }
+
+            return updatedErrors;
+        });
+    }, [t]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
