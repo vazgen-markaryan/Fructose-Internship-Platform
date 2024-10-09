@@ -126,6 +126,80 @@ class UtilisateurServiceTest {
         });
     }
 
+    @Test
+    void testGetUtilisateurById_Professeur_NotFound() {
+        Long id = 1L;
+        when(professeurRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.getUtilisateurById(id, Role.PROFESSEUR);
+        });
+    }
+
+    @Test
+    void testGetUtilisateurById_Employeur_NotFound() {
+        Long id = 1L;
+        when(employeurRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.getUtilisateurById(id, Role.EMPLOYEUR);
+        });
+    }
+
+    @Test
+    void getUtilisateurById_Invalid_Role() {
+        Long id = 1L;
+        assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.getUtilisateurById(id, Role.ADMIN);
+        });
+    }
+
+    @Test
+    void deleteUtilisateur_Role_Admin() {
+        Long id = 1L;
+        assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.deleteUtilisateur(id, Role.ADMIN);
+        });
+    }
+
+    @Test
+    void authenticate_ValidCredentials_ReturnsToken() {
+        utilisateurService.authenticateUser("joe@doe.com", "1234");
+        verify(authenticationManager).authenticate(any());
+    }
+
+    @Test
+    void authenticate_InvalidCredentials_ThrowsException() {
+        doThrow(new IllegalArgumentException("Invalid credentials")).when(authenticationManager).authenticate(any());
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> utilisateurService.authenticateUser("joe@doe.com", "1234"));
+        assertEquals("Invalid credentials", exception.getMessage());
+    }
+
+    @Test
+    void isEmailTaken_EmailExists_ReturnsTrue() {
+        when(utilisateurRepository.findByEmail("joe@doe.com")).thenReturn(new Utilisateur());
+        assertTrue(utilisateurService.isEmailTaken("joe@doe.com"));
+
+    }
+
+    @Test
+    void isEmailTaken_EmailDoesNotExist_ReturnsFalse() {
+        when(utilisateurRepository.findByEmail("joe@doe.com")).thenReturn(null);
+        assertFalse(utilisateurService.isEmailTaken("joe@doe.com"));
+    }
+
+    @Test
+    void idMatriculeTaken_MatriculeExists_ReturnsTrue() {
+        when(utilisateurRepository.findByMatricule("1234567")).thenReturn(new Utilisateur());
+        assertTrue(utilisateurService.isMatriculeTaken("1234567"));
+    }
+
+    @Test
+    void isMatriculeTaken_MatriculeDoesNotExist_ReturnsFalse() {
+        when(utilisateurRepository.findByMatricule("1234567")).thenReturn(null);
+        assertFalse(utilisateurService.isMatriculeTaken("1234567"));
+    }
+
     // ------------------- ADD UTILISATEUR ------------------- //
 
     @Test

@@ -85,38 +85,19 @@ public class UtilisateurService {
     private void saveUtilisateur(Utilisateur utilisateur) {
         switch (utilisateur.getRole()) {
             case ETUDIANT:
-                if (utilisateur instanceof Etudiant) {
                     etudiantRepository.save((Etudiant) utilisateur);
-                } else {
-                    throw new IllegalArgumentException("L'utilisateur n'est pas de type Etudiant");
-                }
                 break;
             case PROFESSEUR:
-                if (utilisateur instanceof Professeur) {
                     professeurRepository.save((Professeur) utilisateur);
-                } else {
-                    throw new IllegalArgumentException("L'utilisateur n'est pas de type Professeur");
-                }
                 break;
             case EMPLOYEUR:
-                if (utilisateur instanceof Employeur) {
                     employeurRepository.save((Employeur) utilisateur);
-                } else {
-                    throw new IllegalArgumentException("L'utilisateur n'est pas de type Employeur");
-                }
                 break;
-            default:
-                throw new IllegalArgumentException("Type d'utilisateur : " + utilisateur.getRole().toString() + " n'est pas valide");
         }
     }
 
     public void deleteUtilisateur(Long id, Role role) {
-        UtilisateurDTO utilisateur = getUtilisateurById(id, role);
-
-        if (utilisateur == null) {
-            System.out.println("L'utilisateur de type " + role + " n'existe pas.");
-            return;
-        }
+        getUtilisateurById(id, role);
 
         switch (role) {
             case ETUDIANT:
@@ -128,10 +109,8 @@ public class UtilisateurService {
             case EMPLOYEUR:
                 employeurRepository.deleteById(id);
                 break;
-            default:
-                throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
         }
-        System.out.println(role.toString() + " avec id " + id + " a été supprimé avec succès.");
+        System.out.println(role + " avec id " + id + " a été supprimé avec succès.");
     }
 
     public List<UtilisateurDTO> getUtilisateurs(Role role) {
@@ -148,7 +127,7 @@ public class UtilisateurService {
                     .stream()
                     .map(EmployeurDTO::toDTO)
                     .collect(Collectors.toList());
-            default -> throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
+            case ADMIN -> null;
         };
     }
 
@@ -185,32 +164,12 @@ public class UtilisateurService {
         token = token.startsWith("Bearer") ? token.substring(7) : token;
         String email = jwtTokenProvider.getEmailFromJWT(token);
         Utilisateur user = utilisateurRepository.findByEmail(email);//.orElseThrow(UserNotFoundException::new);
-        UtilisateurDTO utilisateurDTO = switch(user.getRole()){
-            case ETUDIANT -> getEtudiantDtoById(user.getId());
-            case EMPLOYEUR -> getEmployeurDtoById(user.getId());
-            case PROFESSEUR -> getProfesseurDtoById(user.getId());
-            case ADMIN -> null; // TODO: Ajout Admin
+        return switch (user.getRole()) {
+            case ETUDIANT -> etudiantRepository.findById(user.getId()).map(EtudiantDTO::toDTO).orElse(null);
+            case EMPLOYEUR -> employeurRepository.findById(user.getId()).map(EmployeurDTO::toDTO).orElse(null);
+            case PROFESSEUR -> professeurRepository.findById(user.getId()).map(ProfesseurDTO::toDTO).orElse(null);
+            default -> throw new IllegalArgumentException("Type d'utilisateur : " + user.getRole().toString() + " n'est pas valide");
         };
-        if(utilisateurDTO != null){
-            return utilisateurDTO;
-        } else {
-            throw new IllegalArgumentException("L'utilisateur avec le token JWT '" + token + "' n'existe pas");
-        }
-    }
-
-    private EtudiantDTO getEtudiantDtoById(Long id) {
-        final Optional<Etudiant> etudiantOptional = etudiantRepository.findById(id);
-        return etudiantOptional.map(EtudiantDTO::toDTO).orElse(null);
-    }
-
-    private EmployeurDTO getEmployeurDtoById(Long id) {
-        final Optional<Employeur> employeurOptional = employeurRepository.findById(id);
-        return employeurOptional.map(EmployeurDTO::toDTO).orElse(null);
-    }
-
-    private ProfesseurDTO getProfesseurDtoById(Long id) {
-        final Optional<Professeur> professeurOptional = professeurRepository.findById(id);
-        return professeurOptional.map(ProfesseurDTO::toDTO).orElse(null);
     }
 
     public boolean validationToken(String token){
