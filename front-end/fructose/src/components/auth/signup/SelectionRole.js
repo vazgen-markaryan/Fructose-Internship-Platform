@@ -8,6 +8,8 @@ const SelectionRole = ({utilisateur, handleChange, switchStep}) => {
     const {t} = useTranslation();
 
     const handleSubmit = (event) => {
+        // SI TU TOUCHES UPPERCASE LE WEBSITE VA EXPLOSER!
+        utilisateur.role = utilisateur.role.toUpperCase();
         event.preventDefault();
         const errorMessage = validateFields();
         if (errorMessage) {

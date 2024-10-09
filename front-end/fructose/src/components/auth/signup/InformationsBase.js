@@ -66,7 +66,7 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
     useEffect(() => {
         if (formSubmitted) {
             setErrors((prevErrors) => {
-                const updatedErrors = { ...prevErrors };
+                const updatedErrors = {...prevErrors};
 
                 if (utilisateur.firstName.length < 2) {
                     updatedErrors.firstName = t("information_base_page.error.first_name_short");

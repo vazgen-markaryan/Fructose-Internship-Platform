@@ -27,17 +27,11 @@ const CreerUtilisateur = () => {
         const {name, value} = event.target;
 
         setUtilisateur({...utilisateur, [name]: value});
-
-        //TODO Seulement poour le futur Debug
-        if (name === 'role') {
-            console.log('Rôle sélectionné :', value);
-        }
     };
 
     const handleSubmit = () => {
         setError("")
         utilisateur.fullName = utilisateur.firstName + " " + utilisateur.lastName
-        console.log(utilisateur.fullName)
         fetch('/creer-utilisateur', {
             method: 'POST',
             headers: {
@@ -90,11 +84,11 @@ const CreerUtilisateur = () => {
         } else if (currentStep === 1) {
             return <InformationsBase utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsBase>;
         } else if (currentStep === 2) {
-            if (utilisateur.role === "Etudiant") {
+            if (utilisateur.role === "ETUDIANT") {
                 return <InformationsEtudiant utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsEtudiant>
-            } else if (utilisateur.role === "Employeur") {
+            } else if (utilisateur.role === "EMPLOYEUR") {
                 return <InformationsEmployeur utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsEmployeur>
-            } else if (utilisateur.role === "Professeur") {
+            } else if (utilisateur.role === "PROFESSEUR") {
                 return <InformationsProfesseur utilisateur={utilisateur} handleChange={handleChange} switchStep={switchStep}></InformationsProfesseur>
             }
 
