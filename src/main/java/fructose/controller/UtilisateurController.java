@@ -93,7 +93,6 @@ public class UtilisateurController {
     @PostMapping("/valider-token")
     public ResponseEntity<?> validerToken(@RequestHeader("Authorization") String token) {
         try {
-            //Format de la requête: Authorization: Bearer <token>
             String tokenFiltrer = token.startsWith("Bearer ") ? token.substring(7) : token;
             boolean estValide = utilisateurService.validationToken(tokenFiltrer);
             return ResponseEntity.status(HttpStatus.OK).body("Token valide : " + estValide);

@@ -62,22 +62,10 @@ public class FructoseApplication implements CommandLineRunner {
 			System.out.println();
 			checkAndAddUtilisateur(employeurUbisoft, Role.EMPLOYEUR);
 
-			// Test login
-			// UtilisateurDTO loggedInUser = utilisateurService.login("1111111", "Vazgen123!");
-			// System.out.println("Login successful for user: " + loggedInUser.getFullName());
-
 		} catch (Exception e) {
 			System.out.println("Une erreur s'est produite : " + e.getMessage());
 			e.printStackTrace();
 		}
-
-		System.out.println();
-		String token = utilisateurService.authenticateUser("vazgen@gmail.com", "Vazgen123!");
-		System.out.println("Token JWT après la connexion avec le courriel de vaz:");
-		System.out.println(token);
-		System.out.println("Vérification du propriétaire du token: ");
-		UtilisateurDTO utilisateur = utilisateurService.getUtilisateurByToken(token);
-		System.out.println(utilisateur.getEmail());
 	}
 
 	private void checkAndAddUtilisateur(UtilisateurDTO utilisateurDTO, Role role) {

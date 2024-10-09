@@ -40,22 +40,6 @@ public class UtilisateurService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
-    public UtilisateurService(EtudiantRepository etudiantRepository,
-                              ProfesseurRepository professeurRepository,
-                              EmployeurRepository employeurRepository,
-                              PasswordEncoder passwordEncoder,
-                              @Qualifier("utilisateurRepository") UtilisateurRepository utilisateurRepository,
-                              AuthenticationManager authenticationManager,
-                              JwtTokenProvider jwtTokenProvider) {
-        this.etudiantRepository = etudiantRepository;
-        this.professeurRepository = professeurRepository;
-        this.employeurRepository = employeurRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.utilisateurRepository = utilisateurRepository;
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
-    
     private static final List<String> VALID_ROLES = Arrays.asList("Etudiant", "Professeur", "Employeur", "Gestionnaire de Stage");
 
     public boolean isValidRole(String role) {
