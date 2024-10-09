@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import Icon from "@mdi/react";
-import {mdiAccount, mdiMessage, mdiMessageOutline, mdiViewDashboard, mdiViewDashboardOutline} from "@mdi/js";
-import React, {useContext, useEffect, useState} from "react";
+import {mdiAccount, mdiMessage, mdiMessageOutline, mdiViewDashboardOutline} from "@mdi/js";
+import React, {useContext, useState} from "react";
 import {AuthContext} from "../../../providers/AuthProvider";
 import {useTranslation} from "react-i18next";
 
@@ -39,7 +39,7 @@ const HeaderMain = ({theme}) => {
                         <button style={{"backgroundColor": "transparent", "color": "inherit"}}><Icon path={mdiAccount} size={1}/></button>
                     </Link>
                     <Link to="/creer-utilisateur">
-                        <button style={{"fontSize": "18px"}} className={"btn-filled"}>{t("home_page.signup")}</button>
+                        <button style={{"fontSize": "18px"}} className={"btn-filled"}>{t("header_main_page.signup")}</button>
                     </Link>
                 </>
             )
