@@ -1,18 +1,33 @@
 import {Link} from "react-router-dom";
 import Icon from "@mdi/react";
-import {mdiAccount, mdiViewDashboard} from "@mdi/js";
+import {mdiAccount, mdiMessage, mdiMessageOutline, mdiViewDashboard, mdiViewDashboardOutline} from "@mdi/js";
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../../providers/AuthProvider";
 
 const HeaderMain = ({theme}) => {
     const [menuOpen, setMenuOpen] = useState(false)
-
+    const [notificationMenuOpen, setNotificationMenuOpen] = useState(false)
 
     const { currentUser, SignOutUser } = useContext(AuthContext);
 
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
+        setNotificationMenuOpen(false);
+    }
+
+    const toggleNotificationMenu = () => {
+        setNotificationMenuOpen(!notificationMenuOpen);
+        setMenuOpen(false);
+    }
+
+    const closeAllMenus = () => {
+        setMenuOpen(false);
+        setNotificationMenuOpen(false);
+    }
+
+    const isMenuOpen = () => {
+        return menuOpen || notificationMenuOpen;
     }
 
     const GetHeaderOptions = () => {
@@ -26,17 +41,26 @@ const HeaderMain = ({theme}) => {
         } else {
             return (
                 <>
-                    <Link to="/dashboard"><button style={{"backgroundColor":"transparent", "color":"inherit"}}><Icon path={mdiViewDashboard} size={1} /></button></Link>
+                    <div onClick={() => {closeAllMenus()}} className={"header-user-menu-obstruct"} style={{"display": (isMenuOpen())?"block":"none"}}></div>
+
+                    <Link to="/dashboard"><button style={{"backgroundColor":"transparent", "color":"inherit", "padding": "0"}}><Icon path={mdiViewDashboardOutline} size={1} /></button></Link>
+                    <button onClick={() => {toggleNotificationMenu()}} style={{"backgroundColor":"transparent", "color":"inherit", "padding": "0 16px"}}><Icon path={mdiMessageOutline} size={1} /></button>
+
                     <button onClick={() => {toggleMenu()}} style={{"backgroundColor":"black", "color":"white", "background": "url('/assets/auth/default-profile.jpg') center / cover", "width": "42px", "height": "42px", "borderRadius": "50%"}}></button>
                     <div className={"header-user-menu"} style={{"display": (menuOpen)?"block":"none"}}>
                         <div className={"header-user-menu-profile"}>
-                            <h6>{(currentUser != null)?currentUser.fullName:<div className={"loading-placeholder"}></div>}</h6>
-                            <p className={"text-dark"}>{(currentUser != null)?currentUser.email:<div className={"loading-placeholder"}></div>}</p>
+                            <h6>{currentUser.fullName}</h6>
+                            <p className={"text-dark"}>{currentUser.email}</p>
                         </div>
 
                         <button onClick={()=>{SignOutUser()}}>
                             Deconnexion
                         </button>
+                    </div>
+                    <div className={"header-user-menu"} style={{"display": (notificationMenuOpen)?"block":"none"}}>
+                        <div className={"header-user-menu-profile"}>
+                            <h6><Icon path={mdiMessage} size={1} /> Notifications</h6>
+                        </div>
                     </div>
                 </>
             )

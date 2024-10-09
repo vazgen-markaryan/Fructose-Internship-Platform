@@ -229,6 +229,7 @@ header{
     box-sizing: border-box;
     border: 1px solid grey;
     border-radius: var(--border-radius);
+    z-index: 10;
 }
 
 .header-user-menu-profile{
@@ -237,6 +238,14 @@ header{
 
 .header-user-menu-profile > h6{
     margin: 0 0 2px 0;
+}
+
+.header-user-menu-obstruct{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
 
 
