@@ -385,7 +385,7 @@ class UtilisateurServiceTest {
 
     @Test
     void testIsValidRole() {
-        assertTrue(utilisateurService.isValidRole("Etudiant"));
+        assertTrue(utilisateurService.isValidRole("ETUDIANT"));
         assertFalse(utilisateurService.isValidRole("InvalidRole"));
     }
 }

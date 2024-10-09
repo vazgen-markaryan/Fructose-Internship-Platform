@@ -17,15 +17,21 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+
 import org.springframework.http.MediaType;
 
 class UtilisateurControllerTest {
@@ -80,7 +86,8 @@ class UtilisateurControllerTest {
         utilisateurDTO.setRole(Role.ETUDIANT);
         when(bindingResult.hasErrors()).thenReturn(false);
         when(utilisateurService.isValidRole(utilisateurDTO.getRole().toString())).thenReturn(true);
-        doThrow(new DataAccessException("Database error") {}).when(utilisateurService).addUtilisateur(utilisateurDTO);
+        doThrow(new DataAccessException("Database error") {
+        }).when(utilisateurService).addUtilisateur(utilisateurDTO);
 
         ResponseEntity<?> response = utilisateurController.creerUtilisateur(utilisateurDTO, bindingResult);
 
@@ -117,7 +124,8 @@ class UtilisateurControllerTest {
                         "email"
                 );
 
-        doThrow(new DataAccessException("Database error", violationException) {}).when(utilisateurService).addUtilisateur(utilisateurDTO);
+        doThrow(new DataAccessException("Database error", violationException) {
+        }).when(utilisateurService).addUtilisateur(utilisateurDTO);
 
         ResponseEntity<?> response = utilisateurController.creerUtilisateur(utilisateurDTO, bindingResult);
 
@@ -127,7 +135,7 @@ class UtilisateurControllerTest {
 
     @Test
     public void testConnexionWithValidationErrors() {
-        // Cas où il y a des erreurs de validation
+
         LoginDTO loginDTO = new LoginDTO("invalid", "123");
 
         when(bindingResult.hasErrors()).thenReturn(true);
@@ -135,17 +143,16 @@ class UtilisateurControllerTest {
 
         ResponseEntity<?> response = utilisateurController.connexion(loginDTO, bindingResult);
 
-        assertEquals(400, response.getStatusCodeValue());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Erreur de validation : Email invalide", response.getBody());
     }
 
     @Test
     public void testConnexion_Success() throws Exception {
-        // Arrange
+
         LoginDTO loginDTO = new LoginDTO("user@example.com", "password");
         when(utilisateurService.authenticateUser(anyString(), anyString())).thenReturn("mockToken");
 
-        // Act & Assert
         mockMvc.perform(post("/connexion")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(loginDTO)))
@@ -155,15 +162,110 @@ class UtilisateurControllerTest {
 
     @Test
     public void testConnexionException() throws Exception {
-        // Arrange
+
         LoginDTO loginDTO = new LoginDTO("user@example.com", "wrongPassword");
         when(utilisateurService.authenticateUser(anyString(), anyString())).thenThrow(new RuntimeException("Authentication failed"));
 
-        // Act & Assert
         mockMvc.perform(post("/connexion")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(loginDTO)))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string("Une erreur s'est produite : Authentication failed"));
+    }
+
+    @Test
+    void testCheckEmail() {
+        String email = "test@example.com";
+
+        when(utilisateurService.isEmailTaken(email)).thenReturn(true);
+        ResponseEntity<Map<String, Boolean>> response = utilisateurController.checkEmail(email);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).get("emailTaken"));
+    }
+
+    @Test
+    void testCheckMatricule() {
+        String matricule = "123456";
+        when(utilisateurService.isMatriculeTaken(matricule)).thenReturn(true);
+
+        ResponseEntity<Map<String, Boolean>> response = utilisateurController.checkMatricule(matricule);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).get("matriculeTaken"));
+    }
+
+    @Test
+    void testValiderToken_Valid() {
+        String token = "Bearer validToken";
+        when(utilisateurService.validationToken("validToken")).thenReturn(true);
+
+        ResponseEntity<?> response = utilisateurController.validerToken(token);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Token valide : true", response.getBody());
+    }
+
+    @Test
+    void testValiderToken_Invalid() {
+        String token = "Bearer invalidToken";
+        when(utilisateurService.validationToken("invalidToken")).thenReturn(false);
+
+        ResponseEntity<?> response = utilisateurController.validerToken(token);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Token valide : false", response.getBody());
+    }
+
+    @Test
+    void testCreerUtilisateur_InvalidRole() {
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        utilisateurDTO.setRole(Role.ETUDIANT);
+
+        when(bindingResult.hasErrors()).thenReturn(false);
+        when(utilisateurService.isValidRole(utilisateurDTO.getRole().toString())).thenReturn(false); // Rôle invalide
+
+        ResponseEntity<?> response = utilisateurController.creerUtilisateur(utilisateurDTO, bindingResult);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Rôle invalide.", response.getBody());
+    }
+
+    @Test
+    void testValiderToken_Exception() {
+        String token = "Bearer invalidToken";
+
+        when(utilisateurService.validationToken("invalidToken")).thenThrow(new RuntimeException("Invalid token"));
+
+        ResponseEntity<?> response = utilisateurController.validerToken(token);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Token invalide.", response.getBody());
+    }
+
+    @Test
+    void testGetInfosUtilisateur_Exception() {
+        String token = "Bearer validToken";
+
+        when(utilisateurService.getUtilisateurByToken(token)).thenThrow(new RuntimeException("Utilisateur non trouvé"));
+
+        ResponseEntity<?> response = utilisateurController.getInfosUtilisateur(token);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Impossible de récupérer les infos utilisateur : Utilisateur non trouvé", response.getBody());
+    }
+
+    @Test
+    void testGetInfosUtilisateur_Success() {
+        String token = "Bearer validToken";
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        utilisateurDTO.setRole(Role.ETUDIANT);
+
+        when(utilisateurService.getUtilisateurByToken(token)).thenReturn(utilisateurDTO);
+
+        ResponseEntity<?> response = utilisateurController.getInfosUtilisateur(token);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(utilisateurDTO, response.getBody());
     }
 }
