@@ -10,6 +10,7 @@ import {
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../../providers/AuthProvider";
+import {Link} from "react-router-dom";
 
 const Dashboard = () => {
     const { currentUser } = useContext(AuthContext);
@@ -37,7 +38,7 @@ const Dashboard = () => {
                     <section>
                         <div className={"toolbar-items"}>
                             <h4 className={"m-0 toolbar-spacer"}>Mes offres de stage</h4>
-                            <button className={"btn-filled"}>Ajouter <Icon path={mdiBriefcasePlusOutline} size={1} /></button>
+                            <Link to="/creer-offre-stage"><button className={"btn-filled"}>Ajouter <Icon path={mdiBriefcasePlusOutline} size={1} /></button></Link>
                         </div>
                         <div style={{"padding": "10px 0"}}>
                             <div style={{"width": "400px", "height": "320px", "display": "flex", "alignItems": "center", "justifyContent": "center", "backgroundColor": "#eee", "borderRadius": "5px"}}>
