@@ -62,7 +62,7 @@ const CreerOffreStage = () => {
         if (nombreHeuresSemaine < 1) {
             errors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_inferieur");
         }
-        else if (nombreHeuresSemaine > 168) {
+        else if (nombreHeuresSemaine > 40) {
             errors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_superieur");
         }
         if (nombrePostes < 1) {
@@ -202,9 +202,10 @@ const CreerOffreStage = () => {
 
                 <label>{t("creer_offre_stage_page.type_emploi")}</label>
                 <select name="typeEmploi" onChange={handleInputChange} value={offreStage.typeEmploi} required>
-                    <option value={"select"}>{t("creer_offre_stage_page.types_emploi.select")}</option>
-                    <option value="temps_partiel">{t("creer_offre_stage_page.types_emploi.temps_partiel")}</option>
-                    <option value="temps_plein">{t("creer_offre_stage_page.types_emploi.temps_plein")}</option>
+                    <option value="select">{t("creer_offre_stage_page.modalites_travail.select")}</option>
+                    <option value="virtuel">{t("creer_offre_stage_page.modalites_travail.teletravail")}</option>
+                    <option value="presentiel">{t("creer_offre_stage_page.modalites_travail.presentiel")}</option>
+                    <option value="hybride">{t("creer_offre_stage_page.modalites_travail.hybride")}</option>
                 </select>
                 <p className={"field-invalid-text"}>{errors.typeEmploi}</p>
 
@@ -222,10 +223,9 @@ const CreerOffreStage = () => {
 
                 <label>{t("creer_offre_stage_page.modalite_travail")}</label>
                 <select name="modaliteTravail" onChange={handleInputChange} value={offreStage.modaliteTravail} required>
-                    <option value="select">{t("creer_offre_stage_page.modalites_travail.select")}</option>
-                    <option value="teletravail">{t("creer_offre_stage_page.modalites_travail.teletravail")}</option>
-                    <option value="presentiel">{t("creer_offre_stage_page.modalites_travail.presentiel")}</option>
-                    <option value="hybride">{t("creer_offre_stage_page.modalites_travail.hybride")}</option>
+                    <option value={"select"}>{t("creer_offre_stage_page.types_emploi.select")}</option>
+                    <option value="temps_partiel">{t("creer_offre_stage_page.types_emploi.temps_partiel")}</option>
+                    <option value="temps_plein">{t("creer_offre_stage_page.types_emploi.temps_plein")}</option>
                 </select>
                 <p className={"field-invalid-text"}>{errors.modaliteTravail}</p>
 
