@@ -1,3 +1,4 @@
+
 package fructose.service;
 
 import fructose.model.Employeur;
@@ -16,7 +17,6 @@ import fructose.service.dto.EtudiantDTO;
 import fructose.service.dto.ProfesseurDTO;
 import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UtilisateurService {
-    
+
     private final EtudiantRepository etudiantRepository;
     private final ProfesseurRepository professeurRepository;
     private final EmployeurRepository employeurRepository;
@@ -40,10 +40,9 @@ public class UtilisateurService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
-    private static final List<String> VALID_ROLES = Arrays.asList("Etudiant", "Professeur", "Employeur", "Gestionnaire de Stage");
 
     public boolean isValidRole(String role) {
-        return VALID_ROLES.contains(role);
+        return Arrays.stream(Role.values()).anyMatch((t) -> t.name().equals(role));
     }
 
     public UtilisateurDTO getUtilisateurById(Long id, Role role) {
@@ -70,19 +69,19 @@ public class UtilisateurService {
                 throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
         }
     }
-    
+
     public void addUtilisateur(UtilisateurDTO utilisateurDTO) {
         Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
         saveUtilisateur(utilisateur);
     }
-    
+
     public void updateUtilisateur(UtilisateurDTO utilisateurDTO, Role role) {
         Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
         saveUtilisateur(utilisateur);
     }
-    
+
     private void saveUtilisateur(Utilisateur utilisateur) {
         switch (utilisateur.getRole()) {
             case ETUDIANT:
@@ -110,15 +109,15 @@ public class UtilisateurService {
                 throw new IllegalArgumentException("Type d'utilisateur : " + utilisateur.getRole().toString() + " n'est pas valide");
         }
     }
-    
+
     public void deleteUtilisateur(Long id, Role role) {
         UtilisateurDTO utilisateur = getUtilisateurById(id, role);
-        
+
         if (utilisateur == null) {
             System.out.println("L'utilisateur de type " + role + " n'existe pas.");
             return;
         }
-        
+
         switch (role) {
             case ETUDIANT:
                 etudiantRepository.deleteById(id);
@@ -134,7 +133,7 @@ public class UtilisateurService {
         }
         System.out.println(role.toString() + " avec id " + id + " a été supprimé avec succès.");
     }
-    
+
     public List<UtilisateurDTO> getUtilisateurs(Role role) {
         return switch (role) {
             case ETUDIANT -> etudiantRepository.findAll()

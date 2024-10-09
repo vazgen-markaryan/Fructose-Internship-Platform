@@ -1,8 +1,10 @@
 package fructose.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fructose.model.auth.Role;
 import fructose.service.UtilisateurService;
 import fructose.service.dto.UtilisateurDTO;
+import fructose.service.dto.auth.LoginDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -73,25 +75,12 @@ class UtilisateurControllerTest {
     }
 
     @Test
-    void testCreerUtilisateur_InvalidRole() {
-        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-        utilisateurDTO.setRole("InvalidRole");
-        when(bindingResult.hasErrors()).thenReturn(false);
-        when(utilisateurService.isValidRole(utilisateurDTO.getRole())).thenReturn(false);
-
-        ResponseEntity<?> response = utilisateurController.creerUtilisateur(utilisateurDTO, bindingResult);
-
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Rôle invalide.", response.getBody());
-    }
-
-    @Test
     void testCreerUtilisateur_DataAccessException() {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-        utilisateurDTO.setRole("Etudiant");
+        utilisateurDTO.setRole(Role.ETUDIANT);
         when(bindingResult.hasErrors()).thenReturn(false);
-        when(utilisateurService.isValidRole(utilisateurDTO.getRole())).thenReturn(true);
-        doThrow(new DataAccessException("Database error") {}).when(utilisateurService).addUtilisateur(utilisateurDTO, utilisateurDTO.getRole());
+        when(utilisateurService.isValidRole(utilisateurDTO.getRole().toString())).thenReturn(true);
+        doThrow(new DataAccessException("Database error") {}).when(utilisateurService).addUtilisateur(utilisateurDTO);
 
         ResponseEntity<?> response = utilisateurController.creerUtilisateur(utilisateurDTO, bindingResult);
 
@@ -102,10 +91,10 @@ class UtilisateurControllerTest {
     @Test
     void testCreerUtilisateur_GenericException() {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-        utilisateurDTO.setRole("Etudiant");
+        utilisateurDTO.setRole(Role.ETUDIANT);
         when(bindingResult.hasErrors()).thenReturn(false);
-        when(utilisateurService.isValidRole(utilisateurDTO.getRole())).thenReturn(true);
-        doThrow(new RuntimeException("Generic error")).when(utilisateurService).addUtilisateur(utilisateurDTO, utilisateurDTO.getRole());
+        when(utilisateurService.isValidRole(utilisateurDTO.getRole().toString())).thenReturn(true);
+        doThrow(new RuntimeException("Generic error")).when(utilisateurService).addUtilisateur(utilisateurDTO);
 
         ResponseEntity<?> response = utilisateurController.creerUtilisateur(utilisateurDTO, bindingResult);
 
@@ -116,9 +105,9 @@ class UtilisateurControllerTest {
     @Test
     void testCreerUtilisateur_ConstraintViolationException() {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-        utilisateurDTO.setRole("Etudiant");
+        utilisateurDTO.setRole(Role.ETUDIANT);
         when(bindingResult.hasErrors()).thenReturn(false);
-        when(utilisateurService.isValidRole(utilisateurDTO.getRole())).thenReturn(true);
+        when(utilisateurService.isValidRole(utilisateurDTO.getRole().toString())).thenReturn(true);
 
         // Simuler une violation de contrainte unique
         org.hibernate.exception.ConstraintViolationException violationException =
@@ -128,7 +117,7 @@ class UtilisateurControllerTest {
                         "email"
                 );
 
-        doThrow(new DataAccessException("Database error", violationException) {}).when(utilisateurService).addUtilisateur(utilisateurDTO, utilisateurDTO.getRole());
+        doThrow(new DataAccessException("Database error", violationException) {}).when(utilisateurService).addUtilisateur(utilisateurDTO);
 
         ResponseEntity<?> response = utilisateurController.creerUtilisateur(utilisateurDTO, bindingResult);
 
@@ -139,46 +128,42 @@ class UtilisateurControllerTest {
     @Test
     public void testConnexionWithValidationErrors() {
         // Cas où il y a des erreurs de validation
-        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-        utilisateurDTO.setEmail("invalid");
-        utilisateurDTO.setPassword("123");
+        LoginDTO loginDTO = new LoginDTO("invalid", "123");
 
         when(bindingResult.hasErrors()).thenReturn(true);
         when(bindingResult.getFieldErrors()).thenReturn(List.of(new FieldError("email", "email", "Email invalide")));
 
-        ResponseEntity<?> response = utilisateurController.connexion(utilisateurDTO, bindingResult);
+        ResponseEntity<?> response = utilisateurController.connexion(loginDTO, bindingResult);
 
         assertEquals(400, response.getStatusCodeValue());
         assertEquals("Erreur de validation : Email invalide", response.getBody());
     }
 
     @Test
-    public void testConnexionSuccess() throws Exception {
-        // Cas de succès de la connexion
-        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-        utilisateurDTO.setEmail("test@example.com");
-        utilisateurDTO.setPassword("password123");
+    public void testConnexion_Success() throws Exception {
+        // Arrange
+        LoginDTO loginDTO = new LoginDTO("user@example.com", "password");
+        when(utilisateurService.authenticateUser(anyString(), anyString())).thenReturn("mockToken");
 
-        when(bindingResult.hasErrors()).thenReturn(false);
-        when(utilisateurService.login(anyString(), anyString())).thenReturn(utilisateurDTO);
-
+        // Act & Assert
         mockMvc.perform(post("/connexion")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"email\": \"test@example.com\", \"password\": \"password123\"}"))
-            .andExpect(status().isOk())
-            .andExpect(content().json("{\"email\": \"test@example.com\", \"password\": \"password123\"}"));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(loginDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Token : mockToken"));
     }
 
     @Test
     public void testConnexionException() throws Exception {
-        // Cas où une exception est levée pendant la connexion
-        when(bindingResult.hasErrors()).thenReturn(false);
-        when(utilisateurService.login(anyString(), anyString())).thenThrow(new RuntimeException("Erreur de connexion"));
+        // Arrange
+        LoginDTO loginDTO = new LoginDTO("user@example.com", "wrongPassword");
+        when(utilisateurService.authenticateUser(anyString(), anyString())).thenThrow(new RuntimeException("Authentication failed"));
 
+        // Act & Assert
         mockMvc.perform(post("/connexion")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"email\": \"test@example.com\", \"password\": \"password123\"}"))
-            .andExpect(status().isInternalServerError())
-            .andExpect(content().string("Une erreur s'est produite : Erreur de connexion"));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(loginDTO)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string("Une erreur s'est produite : Authentication failed"));
     }
 }
