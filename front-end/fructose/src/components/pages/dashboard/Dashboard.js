@@ -68,10 +68,10 @@ const Dashboard = () => {
                         <button>Parametres <Icon path={mdiCogOutline} size={1} /></button>
                     </div>
                     <ul>
-                        <li><p>Nom Complet: {(currentUser != null)?currentUser.fullName:<div className={"loading-placeholder"}></div>}</p></li>
-                        <li><p>Courriel: {(currentUser != null)?currentUser.email:<div className={"loading-placeholder"}></div>}</p></li>
-                        <li><p>Matricule/Num employe: {(currentUser != null)?currentUser.matricule:<div className={"loading-placeholder"}></div>}</p></li>
-                        <li><p>Role: {(currentUser != null)?currentUser.role:<div className={"loading-placeholder"}></div>}</p></li>
+                        <li><p>Nom Complet: {(currentUser != null)?currentUser.fullName:<span className={"loading-placeholder"}></span>}</p></li>
+                        <li><p>Courriel: {(currentUser != null)?currentUser.email:<span className={"loading-placeholder"}></span>}</p></li>
+                        <li><p>Matricule/Num employe: {(currentUser != null)?currentUser.matricule:<span className={"loading-placeholder"}></span>}</p></li>
+                        <li><p>Role: {(currentUser != null)?currentUser.role:<span className={"loading-placeholder"}></span>}</p></li>
                     </ul>
                 </section>
             </div>
