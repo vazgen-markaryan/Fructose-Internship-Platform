@@ -29,8 +29,12 @@ const ConnexionUtilisateur = () => {
         setErrors({ ...errors, [name]: '' });
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
         let validationErrors = {};
+        setBackendError("")
+
 
         if (!utilisateur.email) {
             validationErrors.email = t("connexion_page.error.email");
@@ -45,13 +49,14 @@ const ConnexionUtilisateur = () => {
             return;
         }
 
-        SignInUser(utilisateur.email, utilisateur.password)
-            .then(() => {
-                navigate('/dashboard');
-            })
-            .catch(error => {
-                setBackendError(error.message);
-            })
+        try {
+            await SignInUser(utilisateur.email, utilisateur.password)
+            if (Object.keys(validationErrors).length === 0) {
+                navigate("/dashboard")
+            }
+        } catch (error) {
+            setBackendError(error.toString());
+        }
     };
 
     useEffect(() => {
@@ -82,26 +87,28 @@ const ConnexionUtilisateur = () => {
                         <h1>{t("connexion_page.connexion")}</h1>
                     </div>
                     <div className="login-content">
-                        <div className="input-container">
-                            <p>{t("connexion_page.email")}:</p>
-                            <input className={`${errors.email ? "field-invalid" : ""}`} type="text" name="email" required value={utilisateur.email} onChange={handleChange}/>
-                            {errors.email && <p className={"field-invalid-text"}>{errors.email}</p>}
-                        </div>
-                        <div className="input-container">
-                            <p>{t("connexion_page.password")}:</p>
-                            <input className={`${errors.password ? "field-invalid" : ""}`} type="password"
-                                   name="password" onChange={handleChange} value={utilisateur.password} required/>
-                            {errors.password && <p className={"field-invalid-text"}>{errors.password}</p>}
-                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <div className="input-container">
+                                <p>{t("connexion_page.email")}:</p>
+                                <input className={`${errors.email ? "field-invalid" : ""}`} type="email" name="email" required value={utilisateur.email} onChange={handleChange}/>
+                                {errors.email && <p className={"field-invalid-text"}>{errors.email}</p>}
+                            </div>
+                            <div className="input-container">
+                                <p>{t("connexion_page.password")}:</p>
+                                <input className={`${errors.password ? "field-invalid" : ""}`} type="password"
+                                       name="password" onChange={handleChange} value={utilisateur.password} required/>
+                                {errors.password && <p className={"field-invalid-text"}>{errors.password}</p>}
+                            </div>
 
-                        {backendError && <p style={{color: 'red', textAlign: 'center'}}>{backendError}</p>}
+                            {backendError && <p style={{color: 'red', textAlign: 'center'}}>{backendError}</p>}
 
-                        <div style={{display: 'flex', alignItems: 'center', marginTop: '20px'}}>
-                            <div style={{flexGrow: 1}}></div>
-                            <button className="btn-filled" onClick={handleSubmit}>
-                                {t("connexion_page.continue")} <Icon path={mdiChevronRight} size={1}/>
-                            </button>
-                        </div>
+                            <div style={{display: 'flex', alignItems: 'center', marginTop: '20px'}}>
+                                <div style={{flexGrow: 1}}></div>
+                                <button className="btn-filled" type="submit">
+                                    {t("connexion_page.continue")} <Icon path={mdiChevronRight} size={1}/>
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
                 </div>

@@ -169,7 +169,7 @@ class UtilisateurControllerTest {
         mockMvc.perform(post("/connexion")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(loginDTO)))
-                .andExpect(status().isInternalServerError())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string("Une erreur s'est produite : Authentication failed"));
     }
 

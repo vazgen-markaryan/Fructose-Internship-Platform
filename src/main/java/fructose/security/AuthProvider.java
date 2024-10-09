@@ -7,6 +7,7 @@ import fructose.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,13 +23,18 @@ public class AuthProvider implements AuthenticationProvider{
 
 	@Override
 	public Authentication authenticate(Authentication authentication) {
-		Utilisateur user = loadUserByEmail(authentication.getPrincipal().toString());
-		validateAuthentication(authentication, user);
-		return new UsernamePasswordAuthenticationToken(
-			user.getEmail(),
-			user.getPassword(),
-			user.getAuthorities()
-		);
+		try{
+			Utilisateur user = loadUserByEmail(authentication.getPrincipal().toString());
+
+			validateAuthentication(authentication, user);
+			return new UsernamePasswordAuthenticationToken(
+					user.getEmail(),
+					user.getPassword(),
+					user.getAuthorities()
+			);
+		} catch (Exception e){
+			throw new IllegalArgumentException("Courriel ou mot de passe invalide");
+		}
 	}
 
 	@Override

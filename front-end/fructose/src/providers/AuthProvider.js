@@ -39,19 +39,25 @@ const AuthProvider = ({ children }) => {
         return null
     };
 
-    const SignInUser = (email, password) => {
-        return fetch('/connexion', {
+    const SignInUser = async (email, password) => {
+        return await fetch('/connexion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ email, password })
         })
+            .then(async response => {
+                if (response.ok !== true) {
+                    throw new Error(await response.text());
+                }
+                return response
+            })
             .then(response => response.text())
-            .then(token => {
-                localStorage.setItem("FOSE_AUTH", token.substring(7));
-                setCurrentUser(GetUserByToken(token.substring(7)));
-            });
+            .then(response => {
+                localStorage.setItem("FOSE_AUTH", response.substring(7));
+                setCurrentUser(GetUserByToken(response.substring(7)));
+            })
     };
 
     const SignOutUser = () => {
