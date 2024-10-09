@@ -113,17 +113,4 @@ public class OffreStage {
         offreStage.setDateLimiteCandidature(dateLimiteCandidature);
         return offreStage;
     }
-
-    public void addEtudiant(Etudiant etudiant) {
-        this.etudiants.add(etudiant);
-    }
-
-    public void removeEtudiant(Etudiant etudiant) {
-        this.etudiants.remove(etudiant);
-    }
-
-    public void removeAllEtudiants() {
-        this.etudiants.clear();
-    }
-
 }

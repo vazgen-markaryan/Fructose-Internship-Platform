@@ -1,6 +1,5 @@
-package fructose.repository.vides;
+package fructose.repository;
 
 import fructose.model.Professeur;
-import fructose.repository.UtilisateurRepository;
 
 public interface ProfesseurRepository extends UtilisateurRepository<Professeur, Long> {}

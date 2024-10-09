@@ -6,11 +6,12 @@ import fructose.model.Professeur;
 import fructose.model.Utilisateur;
 import fructose.model.auth.Credentials;
 import fructose.model.auth.Role;
-import fructose.repository.vides.EmployeurRepository;
-import fructose.repository.vides.EtudiantRepository;
+import fructose.repository.EmployeurRepository;
+import fructose.repository.EtudiantRepository;
 import fructose.repository.UtilisateurRepository;
-import fructose.repository.vides.ProfesseurRepository;
+import fructose.repository.ProfesseurRepository;
 import fructose.security.JwtTokenProvider;
+import fructose.security.exception.InvalidJwtTokenException;
 import fructose.service.dto.EmployeurDTO;
 import fructose.service.dto.EtudiantDTO;
 import fructose.service.dto.ProfesseurDTO;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -461,5 +463,91 @@ class UtilisateurServiceTest {
     void testIsValidRole() {
         assertTrue(utilisateurService.isValidRole("ETUDIANT"));
         assertFalse(utilisateurService.isValidRole("InvalidRole"));
+    }
+    
+    @Test
+    void testGetUtilisateurByToken_Etudiant() {
+        String token = "Bearer validToken";
+        String email = "etudiant@example.com";
+        Etudiant etudiant = new Etudiant();
+        etudiant.setId(1L);
+        etudiant.setCredentials(new Credentials(email, "password123", Role.ETUDIANT));
+        
+        when(jwtTokenProvider.getEmailFromJWT("validToken")).thenReturn(email);
+        when(utilisateurRepository.findByEmail(email)).thenReturn(etudiant);
+        when(etudiantRepository.findById(1L)).thenReturn(Optional.of(etudiant));
+        
+        UtilisateurDTO result = utilisateurService.getUtilisateurByToken(token);
+        
+        assertNotNull(result);
+        assertEquals(email, result.getEmail());
+    }
+    
+    @Test
+    void testGetUtilisateurByToken_Employeur() {
+        String token = "Bearer validToken";
+        String email = "employeur@example.com";
+        Employeur employeur = new Employeur();
+        employeur.setId(1L);
+        employeur.setCredentials(new Credentials(email, "password123", Role.EMPLOYEUR));
+        
+        when(jwtTokenProvider.getEmailFromJWT("validToken")).thenReturn(email);
+        when(utilisateurRepository.findByEmail(email)).thenReturn(employeur);
+        when(employeurRepository.findById(1L)).thenReturn(Optional.of(employeur));
+        
+        UtilisateurDTO result = utilisateurService.getUtilisateurByToken(token);
+        
+        assertNotNull(result);
+        assertEquals(email, result.getEmail());
+    }
+    
+    @Test
+    void testGetUtilisateurByToken_Professeur() {
+        String token = "Bearer validToken";
+        String email = "professeur@example.com";
+        Professeur professeur = new Professeur();
+        professeur.setId(1L);
+        professeur.setCredentials(new Credentials(email, "password123", Role.PROFESSEUR));
+        
+        when(jwtTokenProvider.getEmailFromJWT("validToken")).thenReturn(email);
+        when(utilisateurRepository.findByEmail(email)).thenReturn(professeur);
+        when(professeurRepository.findById(1L)).thenReturn(Optional.of(professeur));
+        
+        UtilisateurDTO result = utilisateurService.getUtilisateurByToken(token);
+        
+        assertNotNull(result);
+        assertEquals(email, result.getEmail());
+    }
+    
+    @Test
+    void testGetUtilisateurByToken_InvalidRole() {
+        String token = "Bearer validToken";
+        String email = "admin@example.com";
+        Utilisateur admin = new Utilisateur();
+        admin.setId(1L);
+        admin.setCredentials(new Credentials(email, "password123", Role.ADMIN));
+        
+        when(jwtTokenProvider.getEmailFromJWT("validToken")).thenReturn(email);
+        when(utilisateurRepository.findByEmail(email)).thenReturn(admin);
+        
+        assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.getUtilisateurByToken(token);
+        });
+    }
+    
+    @Test
+    void testValidationToken_ValidToken() {
+        String token = "validToken";
+        doNothing().when(jwtTokenProvider).validateToken(token);
+        boolean result = utilisateurService.validationToken(token);
+        assertTrue(result);
+    }
+    
+    @Test
+    void testValidationToken_InvalidToken() {
+        String token = "invalidToken";
+        doThrow(new InvalidJwtTokenException(HttpStatus.BAD_REQUEST, "Invalid token")).when(jwtTokenProvider).validateToken(token);
+        boolean result = utilisateurService.validationToken(token);
+        assertFalse(result);
     }
 }

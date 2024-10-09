@@ -17,38 +17,38 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AuthProvider implements AuthenticationProvider{
+public class AuthProvider implements AuthenticationProvider {
 	private final PasswordEncoder passwordEncoder;
 	private final UtilisateurRepository userAppRepository;
-
+	
 	@Override
 	public Authentication authenticate(Authentication authentication) {
-		try{
+		try {
 			Utilisateur user = loadUserByEmail(authentication.getPrincipal().toString());
-
+			
 			validateAuthentication(authentication, user);
 			return new UsernamePasswordAuthenticationToken(
 					user.getEmail(),
 					user.getPassword(),
 					user.getAuthorities()
 			);
-		} catch (Exception e){
-			throw new IllegalArgumentException("Courriel ou mot de passe invalide");
+		} catch (Exception e) {
+			throw new AuthenticationException(HttpStatus.FORBIDDEN, "Courriel ou mot de passe invalide");
 		}
 	}
-
+	
 	@Override
-	public boolean supports(Class<?> authentication){
+	public boolean supports(Class<?> authentication) {
 		return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
 	}
-
-	private Utilisateur loadUserByEmail(String email) throws UsernameNotFoundException{
+	
+	private Utilisateur loadUserByEmail(String email) throws UsernameNotFoundException {
 		return userAppRepository.findByEmail(email);
-			//.orElseThrow(UserNotFoundException::new);
 	}
-
-	private void validateAuthentication(Authentication authentication, Utilisateur user){
-		if(!passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword()))
+	
+	private void validateAuthentication(Authentication authentication, Utilisateur user) {
+		if (!passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword())) {
 			throw new AuthenticationException(HttpStatus.FORBIDDEN, "Incorrect username or password");
+		}
 	}
 }

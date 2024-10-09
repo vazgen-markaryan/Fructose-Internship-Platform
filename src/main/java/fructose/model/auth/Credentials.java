@@ -15,6 +15,7 @@ import java.util.Collections;
 
 @Embeddable
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,10 +44,6 @@ public final class Credentials implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.singleton(new SimpleGrantedAuthority(role.name()));
-	}
-
-	public void setPassword(String password){
-		this.password = password;
 	}
 
 	@Override

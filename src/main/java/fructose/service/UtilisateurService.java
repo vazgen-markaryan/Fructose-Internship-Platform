@@ -6,9 +6,9 @@ import fructose.model.Etudiant;
 import fructose.model.Professeur;
 import fructose.model.Utilisateur;
 import fructose.model.auth.Role;
-import fructose.repository.vides.EmployeurRepository;
-import fructose.repository.vides.EtudiantRepository;
-import fructose.repository.vides.ProfesseurRepository;
+import fructose.repository.EmployeurRepository;
+import fructose.repository.EtudiantRepository;
+import fructose.repository.ProfesseurRepository;
 import fructose.repository.UtilisateurRepository;
 import fructose.security.JwtTokenProvider;
 import fructose.security.exception.InvalidJwtTokenException;
@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -150,10 +149,7 @@ public class UtilisateurService {
             throw new IllegalArgumentException("Mot de passe incorrect");
         }
     }
-
-    /*
-        Authentication JWT
-     */
+    
     public String authenticateUser(String email, String password) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password));
