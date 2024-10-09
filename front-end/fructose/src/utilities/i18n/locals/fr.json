@@ -1,9 +1,14 @@
 {
+    "header_main_page" : {
+        "signup": "S'inscrire",
+        "disconnect": "Déconnexion",
+        "notifications": "Notifications"
+    },
+
     "home_page": {
         "carriere": "Votre carrière",
         "commence": "commence ",
-        "ici": "ici",
-        "signup": "S'inscrire"
+        "ici": "ici"
     },
 
     "connexion_page": {
