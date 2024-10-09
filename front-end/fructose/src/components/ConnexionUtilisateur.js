@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useState, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Icon from "@mdi/react";
 import {mdiArrowLeft, mdiChevronRight} from "@mdi/js";
-import AuthService from "../services/AuthService";
+import {AuthContext} from "../providers/AuthProvider";
 
 import {mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
 
 const ConnexionUtilisateur = () => {
+    const { SignInUser } = useContext(AuthContext);
+
     const {t} = useTranslation();
 
     const [utilisateur, setUtilisateur] = useState({
@@ -26,8 +28,6 @@ const ConnexionUtilisateur = () => {
     const handleChange = (event) => {
         const { name, value } = event.target;
         setUtilisateur({ ...utilisateur, [name]: value });
-
-        // Effacer le message d'erreur lorsque l'utilisateur commence à taper
         setErrors({ ...errors, [name]: '' });
     };
 
@@ -47,15 +47,9 @@ const ConnexionUtilisateur = () => {
             return;
         }
 
-        AuthService.SignInUser(utilisateur.email, utilisateur.password)
-            .then(async response => {
-                if (!response.ok) {
-                    localStorage.setItem("FOSE_AUTH", await response.text());
-                }
-
-            })
+        SignInUser(utilisateur.email, utilisateur.password)
             .then(() => {
-                navigate('/');
+                navigate('/dashboard');
             })
             .catch(error => {
                 setBackendError(error.message);

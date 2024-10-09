@@ -91,6 +91,10 @@ p {
     margin: 0;
 }
 
+.text-dark{
+    color: grey;
+}
+
 /*
   Boutons
  */
@@ -201,6 +205,38 @@ img.logo{
 
 a{
     color: inherit;
+}
+
+
+header{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 70px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.header-user-menu{
+    position: absolute;
+    width: 260px;
+    height: auto;
+    background-color: white;
+    top: 70px;
+    right: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid grey;
+    border-radius: var(--border-radius);
+}
+
+.header-user-menu-profile{
+
+}
+
+.header-user-menu-profile > h6{
+    margin: 0 0 2px 0;
 }
 
 
@@ -373,4 +409,49 @@ a{
     width: 4px;
     border-radius: 4px;
     background-color: #e0e0e0;
+}
+
+
+/*
+    Dahboard
+*/
+
+.dashboard-layout{
+    width: 100%;
+    max-width: 1280px;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+section{
+    width: 100%;
+    padding: 20px 16px;
+    box-sizing: border-box;
+}
+
+
+
+.loading-placeholder{
+    width: 100px;
+    height: 22px;
+    background-color: rgba(128, 128, 128, 0.3);
+    display: inline-block;
+    vertical-align: bottom;
+    margin: 0 2px;
+    animation-name: loading-placeholder-fade;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    border-radius: var(--border-radius);
+}
+
+@keyframes loading-placeholder-fade{
+    0%{
+        opacity: 1;
+    }
+    50%{
+        opacity: 0.5;
+    }
+    100%{
+        opacity: 1;
+    }
 }
