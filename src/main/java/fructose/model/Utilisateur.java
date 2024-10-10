@@ -8,6 +8,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Setter
@@ -45,6 +46,10 @@ public class Utilisateur {
 
     @Embedded
     private Credentials credentials;
+
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cv> cvs;
+
 
     public String getEmail(){
         return credentials.getEmail();
