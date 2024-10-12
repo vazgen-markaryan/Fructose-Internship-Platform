@@ -498,4 +498,46 @@ public class OffreStageServiceTest {
 
         assertEquals("ID ne peut pas être nul", exception.getMessage());
     }
+
+    @Test
+    void updateOffreStageSuccess() {
+        OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(offreStage));
+
+        offreStageDTO.setNom("Microsoft");
+        offreStageService.updateOffreStage(offreStageDTO.getId(), offreStageDTO);
+
+        verify(offreStageRepository, times(1)).save(argThat(savedOffreStage ->
+                savedOffreStage.getNom().equals("Microsoft")));
+    }
+
+    @Test
+    void updateOffreStageIdNull() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.updateOffreStage(null, offreStageDTO);
+        });
+
+        assertEquals("ID ne peut pas être nul", exception.getMessage());
+    }
+
+    @Test
+    void updateOffreStageNotFound() {
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.updateOffreStage(offreStageDTO.getId(), offreStageDTO);
+        });
+
+        assertEquals("L'offre stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être mis à jour", exception.getMessage());
+    }
+
+    @Test
+    void updateOffreStageNull() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.updateOffreStage(1L, null);
+        });
+
+        assertEquals("OffreStageDTO ne peut pas être nul", exception.getMessage());
+    }
+    
 }
