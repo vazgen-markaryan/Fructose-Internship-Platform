@@ -76,9 +76,7 @@ const SelectionRole = ({utilisateur, handleChange, switchStep}) => {
                     </div>
                 </div>
                 <div className="form-dock">
-                    <div className={"toolbar-spacer"}>
-
-                    </div>
+                    <div className={"toolbar-spacer"}></div>
                     <button type="submit" className={"btn-filled"}>{t("selection_role_page.continue")}<Icon path={mdiChevronRight} size={1}/></button>
                 </div>
             </form>

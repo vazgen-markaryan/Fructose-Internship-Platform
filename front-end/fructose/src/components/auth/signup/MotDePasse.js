@@ -10,10 +10,9 @@ const MotDePasse = ({utilisateur, handleChange, switchStep}) => {
     const [errors, setErrors] = useState({});
 
     const handleInputChange = (event) => {
-        const { name } = event.target;
+        const {name} = event.target;
         handleChange(event);
-        // Efface les erreurs pour le champ modifié
-        setErrors({ ...errors, [name]: '' });
+        setErrors({...errors, [name]: ''});
     };
 
     const handleSubmit = (event) => {
@@ -55,7 +54,7 @@ const MotDePasse = ({utilisateur, handleChange, switchStep}) => {
                 </div>
                 <div className={"input-container"}>
                     <p>{t("mot_de_passe_page.confirm_password")}:</p>
-                    <input type="password" name="confirmPassword" className={`${errors.passwordConf ? "field-invalid" : ""}`} onChange={(e) => { setConfirmPassword(e.target.value); setErrors({...errors, passwordConf: ''}); }} required/>
+                    <input type="password" name="confirmPassword" className={`${errors.passwordConf ? "field-invalid" : ""}`} onChange={(e) => {setConfirmPassword(e.target.value); setErrors({...errors, passwordConf: ''});}} required/>
                     {errors.passwordConf && <p className={"field-invalid-text"}>{errors.passwordConf}</p>}
                 </div>
                 <br/>

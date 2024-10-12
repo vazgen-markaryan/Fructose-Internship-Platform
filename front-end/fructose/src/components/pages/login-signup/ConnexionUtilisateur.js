@@ -1,14 +1,16 @@
 import React, {useContext, useState, useEffect} from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Icon from "@mdi/react";
-import {AuthContext} from "../providers/AuthProvider";
+import {AuthContext} from "../../../providers/AuthProvider";
 import {mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
 
 const ConnexionUtilisateur = () => {
-    const { SignInUser } = useContext(AuthContext);
 
+    const {SignInUser} = useContext(AuthContext);
     const {t} = useTranslation();
+    const navigate = useNavigate();
+    const [backendError, setBackendError] = useState('');
 
     const [utilisateur, setUtilisateur] = useState({
         email: '',
@@ -20,13 +22,10 @@ const ConnexionUtilisateur = () => {
         password: ''
     });
 
-    const navigate = useNavigate();
-    const [backendError, setBackendError] = useState('');
-
     const handleChange = (event) => {
-        const { name, value } = event.target;
-        setUtilisateur({ ...utilisateur, [name]: value });
-        setErrors({ ...errors, [name]: '' });
+        const {name, value} = event.target;
+        setUtilisateur({...utilisateur, [name]: value});
+        setErrors({...errors, [name]: ''});
     };
 
     const handleSubmit = async (e) => {
@@ -34,7 +33,6 @@ const ConnexionUtilisateur = () => {
 
         let validationErrors = {};
         setBackendError("")
-
 
         if (!utilisateur.email) {
             validationErrors.email = t("connexion_page.error.email");
@@ -95,8 +93,7 @@ const ConnexionUtilisateur = () => {
                             </div>
                             <div className="input-container">
                                 <p>{t("connexion_page.password")}:</p>
-                                <input className={`${errors.password ? "field-invalid" : ""}`} type="password"
-                                       name="password" onChange={handleChange} value={utilisateur.password} required/>
+                                <input className={`${errors.password ? "field-invalid" : ""}`} type="password" name="password" onChange={handleChange} value={utilisateur.password} required/>
                                 {errors.password && <p className={"field-invalid-text"}>{errors.password}</p>}
                             </div>
 

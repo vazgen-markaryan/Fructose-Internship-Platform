@@ -1,12 +1,15 @@
 package fructose.service.dto;
 
 import fructose.model.OffreStage;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
-
 
 @Getter
 @Setter
@@ -18,23 +21,23 @@ public class OffreStageDTO {
     private Long id;
 
     @NotEmpty(message = "Le nom ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "Le nom doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Size(min = 3, max = 100, message = "Le nom doit contenir entre 3 et 100 caractères")
     private String nom;
 
     @NotEmpty(message = "Le poste ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "Le poste doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Size(min = 3, max = 100, message = "Le poste doit contenir entre 3 et 100 caractères")
     private String poste;
 
     @NotEmpty(message = "La description ne peut pas être vide")
-    @Size(min = 10, max = 500, message = "La description doit contenir au moins 10 caractères et au plus 500 caractères")
+    @Size(min = 10, max = 500, message = "La description doit contenir entre 10 et 500 caractères")
     private String description;
 
-    @NotEmpty(message = "La compagnie ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "La compagnie doit contenir au moins 3 caractères et au plus 100 caractères")
+    @NotEmpty(message = "Le nom de la compagnie ne peut pas être vide")
+    @Size(min = 3, max = 100, message = "Le nom de la compagnie doit contenir entre 3 et 100 caractères")
     private String compagnie;
 
-    @NotEmpty(message = "Le programme d'étude ne peut pas être vide")
-    @Pattern(regexp = "^(soins_infirmiers|techniques_informatique|technologie_genie_electrique)$", message = "Le programme d'étude doit être l'un des suivants : Technique de l'informatique, Génie physique, Soin infirmiers")
+    @NotEmpty(message = "Le programme d'études ne peut pas être vide")
+    @Pattern(regexp = "^[A-Za-z_]+$", message = "La programme d'études doit contenir uniquement des lettres et des underscores")
     private String programmeEtude;
 
     @NotNull(message = "Le taux horaire ne peut pas être null")
@@ -46,7 +49,7 @@ public class OffreStageDTO {
     private String typeEmploi;
 
     @NotEmpty(message = "L'adresse ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "L'adresse doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Size(min = 3, max = 100, message = "L'adresse doit contenir entre 3 et 100 caractères")
     private String adresse;
 
     @NotEmpty(message = "La modalité de travail ne peut pas être vide")

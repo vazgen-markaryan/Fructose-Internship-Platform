@@ -30,15 +30,15 @@ public class Utilisateur {
     @Size(min = 5, max = 50, message = "Le nom complet doit contenir entre 5 et 50 caractères")
     @Pattern(regexp = "^[\\p{L}\\s]+$", message = "Le nom complet doit contenir uniquement des lettres et des espaces")
     private String fullName;
-    
+
     @Column(unique = true)
     @Pattern(regexp = "^\\d{7}$", message = "Le Matricule doit contenir 7 chiffres")
     private String matricule;
-    
+
     @Size(max = 100, message = "Le nom du département doit contenir au maximum 100 caractères")
     @Pattern(regexp = "^[\\p{L}\\s_]+$", message = "Le nom du département doit contenir uniquement des lettres et des espaces")
     private String departement;
-    
+
     @Size(min = 3, max = 100, message = "Le nom de l'entreprise doit contenir de 3 à 100 caractères")
     @Pattern(regexp = "^[A-Za-zÀ-ÿ\\s]+$", message = "Le nom de l'entreprise doit contenir uniquement des lettres et des espaces")
     private String companyName;
@@ -46,26 +46,26 @@ public class Utilisateur {
     @Embedded
     private Credentials credentials;
 
-    public String getEmail(){
+    public String getEmail() {
         return credentials.getEmail();
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return credentials.getPassword();
     }
 
-    public Role getRole(){
+    public Role getRole() {
         return credentials.getRole();
     }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         credentials.setPassword(password);
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities(){
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return credentials.getAuthorities();
     }
-    
+
     public Utilisateur(String fullName, String email, String password, String matricule, Role role, String departement, String companyName) {
         this.fullName = fullName;
         this.matricule = matricule;
@@ -73,7 +73,7 @@ public class Utilisateur {
         this.companyName = companyName;
         this.credentials = Credentials.builder().email(email).password(password).role(role).build();
     }
-    
+
     public static Utilisateur createUtilisateur(String type, String fullName, String email, String password, String matricule, String departement, String companyName) {
         return switch (type.toLowerCase()) {
             case "etudiant" -> new Etudiant(fullName, email, password, matricule, Role.ETUDIANT, departement, companyName);

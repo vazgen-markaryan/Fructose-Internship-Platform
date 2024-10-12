@@ -21,23 +21,26 @@ const CreerOffreStage = () => {
     });
 
     const {t} = useTranslation();
-
     const navigate = useNavigate();
-
     const [errors, setErrors] = useState({});
 
     const handleInputChange = (event) => {
-        const { name, value } = event.target;
+        const {name, value} = event.target;
 
         if (name === 'dateDebut' || name === 'dateFin' || name === 'dateLimiteCandidature') {
-            setOffreStage({ ...offreStage, [name]: new Date(value) });
+            setOffreStage({...offreStage, [name]: new Date(value)});
         } else {
-            setOffreStage({ ...offreStage, [name]: value });
+            setOffreStage({...offreStage, [name]: value});
         }
     }
 
     const validateFields = () => {
-        const { nom, poste, description, compagnie, programmeEtude, tauxHoraire, typeEmploi, adresse, modaliteTravail, dateDebut, dateFin, nombreHeuresSemaine, nombrePostes, dateLimiteCandidature } = offreStage;
+        const {
+            nom, poste, description,
+            compagnie, programmeEtude, tauxHoraire,
+            typeEmploi, adresse, modaliteTravail,
+            nombreHeuresSemaine, nombrePostes,
+        } = offreStage;
 
         const errors = {};
 
@@ -61,8 +64,7 @@ const CreerOffreStage = () => {
         }
         if (nombreHeuresSemaine < 1) {
             errors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_inferieur");
-        }
-        else if (nombreHeuresSemaine > 40) {
+        } else if (nombreHeuresSemaine > 40) {
             errors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_superieur");
         }
         if (nombrePostes < 1) {
@@ -83,7 +85,7 @@ const CreerOffreStage = () => {
 
     useEffect(() => {
         setErrors((prevErrors) => {
-            const updatedErrors = { ...prevErrors };
+            const updatedErrors = {...prevErrors};
 
             if (prevErrors.nom) {
                 updatedErrors.nom = t("creer_offre_stage_page.errors.nom");
@@ -145,7 +147,7 @@ const CreerOffreStage = () => {
                     }
                     return response;
                 }).then(() => {
-                // Rediriger l'utilisateur vers la page d'accueil
+                // TODO TEMPORAIREMENT rediriger l'utilisateur vers la page d'accueil
                 navigate('/');
             }).catch(error => {
                     setErrors('Erreur: ${error.message}');
@@ -160,44 +162,35 @@ const CreerOffreStage = () => {
             <h1>{t("creer_offre_stage_page.title")}</h1>
             <form onSubmit={handleSubmit}>
                 <label>{t("creer_offre_stage_page.nom")}</label>
-                <input className={`${errors.nom ? "field-invalid" : ""}`} value={offreStage.nom} type="text" name="nom"
-                       onChange={handleInputChange} required/>
+                <input className={`${errors.nom ? "field-invalid" : ""}`} value={offreStage.nom} type="text" name="nom" onChange={handleInputChange} required/>
                 <p className={"field-invalid-text"}>{errors.nom}</p>
 
                 <label>{t("creer_offre_stage_page.poste")}</label>
-                <input className={`${errors.poste ? "field-invalid" : ""}`} value={offreStage.poste} type="text"
-                       name="poste" onChange={handleInputChange} required/>
+                <input className={`${errors.poste ? "field-invalid" : ""}`} value={offreStage.poste} type="text" name="poste" onChange={handleInputChange} required/>
                 <p className={"field-invalid-text"}>{errors.poste}</p>
 
                 <label>{t("creer_offre_stage_page.description")}</label>
-                <input className={`${errors.description ? "field-invalid" : ""}`} value={offreStage.description}
-                       type="text" name="description" onChange={handleInputChange} required/>
+                <input className={`${errors.description ? "field-invalid" : ""}`} value={offreStage.description} type="text" name="description" onChange={handleInputChange} required/>
                 <p className={"field-invalid-text"}>{errors.description}</p>
 
                 <label>{t("creer_offre_stage_page.compagnie")}</label>
-                <input className={`${errors.compagnie ? "field-invalid" : ""}`} value={offreStage.compagnie} type="text"
-                       name="compagnie" onChange={handleInputChange} required/>
+                <input className={`${errors.compagnie ? "field-invalid" : ""}`} value={offreStage.compagnie} type="text" name="compagnie" onChange={handleInputChange} required/>
                 <p className={"field-invalid-text"}>{errors.compagnie}</p>
 
                 <label>{t("creer_offre_stage_page.address")}</label>
-                <input className={`${errors.adresse ? "field-invalid" : ""}`} value={offreStage.adresse} type="text"
-                       name="adresse" onChange={handleInputChange} required/>
+                <input className={`${errors.adresse ? "field-invalid" : ""}`} value={offreStage.adresse} type="text" name="adresse" onChange={handleInputChange} required/>
                 <p className={"field-invalid-text"}>{errors.adresse}</p>
 
                 <label>{t("creer_offre_stage_page.taux_horaire")}</label>
-                <input className={`${errors.tauxHoraire ? "field-invalid" : ""}`} value={offreStage.tauxHoraire}
-                       type="number" name="tauxHoraire" onChange={handleInputChange} required/>
+                <input className={`${errors.tauxHoraire ? "field-invalid" : ""}`} value={offreStage.tauxHoraire} type="number" name="tauxHoraire" onChange={handleInputChange} required/>
                 <p className={"field-invalid-text"}>{errors.tauxHoraire}</p>
 
                 <label>{t("creer_offre_stage_page.nombre_heures_semaine")}</label>
-                <input className={`${errors.nombreHeuresSemaine ? "field-invalid" : ""}`}
-                       value={offreStage.nombreHeuresSemaine} type="number" name="nombreHeuresSemaine"
-                       onChange={handleInputChange} required/>
+                <input className={`${errors.nombreHeuresSemaine ? "field-invalid" : ""}`} value={offreStage.nombreHeuresSemaine} type="number" name="nombreHeuresSemaine" onChange={handleInputChange} required/>
                 <p className={"field-invalid-text"}>{errors.nombreHeuresSemaine}</p>
 
                 <label>{t("creer_offre_stage_page.nombre_postes")}</label>
-                <input className={`${errors.nombrePostes ? "field-invalid" : ""}`} value={offreStage.nombrePostes}
-                       type="number" name="nombrePostes" onChange={handleInputChange} required/>
+                <input className={`${errors.nombrePostes ? "field-invalid" : ""}`} value={offreStage.nombrePostes} type="number" name="nombrePostes" onChange={handleInputChange} required/>
                 <p className={"field-invalid-text"}>{errors.nombrePostes}</p>
 
                 <label>{t("creer_offre_stage_page.type_emploi")}</label>
@@ -211,13 +204,30 @@ const CreerOffreStage = () => {
 
                 <label>{t("creer_offre_stage_page.programme_etudes")}</label>
                 <select name="programmeEtude" onChange={handleInputChange} value={offreStage.programmeEtude} required>
-                    <option value={"select"}>{t("creer_offre_stage_page.programmes_etudes.select")}</option>
-                    <option
-                        value="techniques_informatique">{t("creer_offre_stage_page.programmes_etudes.technique_informatiques")}</option>
-                    <option
-                        value="technologie_genie_electrique">{t("creer_offre_stage_page.programmes_etudes.genie_electrique")}</option>
-                    <option
-                        value="soins_infirmiers">{t("creer_offre_stage_page.programmes_etudes.soins_infirmiers")}</option>
+                    <option value="">{t("programme.select")}</option>
+                    <option value="cinema">{t("programme.cinema")}</option>
+                    <option value="gestion_commerce">{t("programme.gestion_commerce")}</option>
+                    <option value="gestion_operations_chaine_logistique">{t("programme.gestion_operations_chaine_logistique")}</option>
+                    <option value="journalisme_multimedia">{t("programme.journalisme_multimedia")}</option>
+                    <option value="langues_trilinguisme_cultures">{t("programme.langues_trilinguisme_cultures")}</option>
+                    <option value="photographie_design_graphique">{t("programme.photographie_design_graphique")}</option>
+                    <option value="sciences_nature">{t("programme.sciences_nature")}</option>
+                    <option value="sciences_humaines_administration_economie">{t("programme.sciences_humaines_administration_economie")}</option>
+                    <option value="sciences_humaines_individu_relations_humaines">{t("programme.sciences_humaines_individu_relations_humaines")}</option>
+                    <option value="sciences_humaines_monde_en_action">{t("programme.sciences_humaines_monde_en_action")}</option>
+                    <option value="soins_infirmiers">{t("programme.soins_infirmiers")}</option>
+                    <option value="soins_infirmiers_auxiliaires">{t("programme.soins_infirmiers_auxiliaires")}</option>
+                    <option value="techniques_education_enfance">{t("programme.techniques_education_enfance")}</option>
+                    <option value="techniques_bureautique">{t("programme.techniques_bureautique")}</option>
+                    <option value="techniques_comptabilite_gestion">{t("programme.techniques_comptabilite_gestion")}</option>
+                    <option value="techniques_informatique">{t("programme.techniques_informatique")}</option>
+                    <option value="techniques_travail_social">{t("programme.techniques_travail_social")}</option>
+                    <option value="technologie_architecture">{t("programme.technologie_architecture")}</option>
+                    <option value="technologie_estimation_evaluation_batiment">{t("programme.technologie_estimation_evaluation_batiment")}</option>
+                    <option value="technologie_genie_civil">{t("programme.technologie_genie_civil")}</option>
+                    <option value="technologie_genie_electrique">{t("programme.technologie_genie_electrique")}</option>
+                    <option value="technologie_genie_physique">{t("programme.technologie_genie_physique")}</option>
+                    <option value="tremplin_dec">{t("programme.tremplin_dec")}</option>
                 </select>
                 <p className={"field-invalid-text"}>{errors.programmeEtude}</p>
 

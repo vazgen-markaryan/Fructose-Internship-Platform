@@ -1,5 +1,39 @@
 {
-    "header_main_page" : {
+    "bd_role_traduction" : {
+        "ETUDIANT": "Student",
+        "PROFESSEUR": "Professor",
+        "EMPLOYEUR": "Employer",
+        "ADMIN": "Administrator"
+    },
+
+    "programme": {
+        "select": "Select a program",
+        "cinema": "Cinema",
+        "gestion_commerce": "Business Management",
+        "gestion_operations_chaine_logistique": "Operations and Supply Chain Management",
+        "journalisme_multimedia": "Multimedia Journalism",
+        "langues_trilinguisme_cultures": "Languages – Trilingualism and Cultures",
+        "photographie_design_graphique": "Photography and Graphic Design",
+        "sciences_nature": "Natural Sciences",
+        "sciences_humaines_administration_economie": "Human Sciences – Administration and Economics Profile",
+        "sciences_humaines_individu_relations_humaines": "Human Sciences – Individual and Human Relations Profile",
+        "sciences_humaines_monde_en_action": "Human Sciences – World in Action Profile",
+        "soins_infirmiers": "Nursing",
+        "soins_infirmiers_auxiliaires": "Nursing for Assistants",
+        "techniques_education_enfance": "Early Childhood Education Techniques",
+        "techniques_bureautique": "Office Automation Techniques",
+        "techniques_comptabilite_gestion": "Accounting and Management Techniques",
+        "techniques_informatique": "Computer Techniques",
+        "techniques_travail_social": "Social Work Techniques",
+        "technologie_architecture": "Architecture Technology",
+        "technologie_estimation_evaluation_batiment": "Building Estimation and Evaluation Technology",
+        "technologie_genie_civil": "Civil Engineering Technology",
+        "technologie_genie_electrique": "Electrical Engineering Technology: Automation and Control",
+        "technologie_genie_physique": "Physical Engineering Technology",
+        "tremplin_dec": "DEC Transition Program"
+    },
+
+    "header_main_page": {
         "signup": "Sign up",
         "disconnect": "Disconnect",
         "notifications": "Notifications"
@@ -59,7 +93,7 @@
             "last_name_short": "Your last name must contain at least 2 characters.",
             "last_name_letters_only": "Your last name must contain only letters and spaces.",
             "email": "Email address must be valid: example@gmail.com",
-            "email_taken" : "Email address is already taken"
+            "email_taken": "Email address is already taken"
         }
     },
 
@@ -69,39 +103,11 @@
         "matricule": "Student number",
         "program": "Program",
         "continue": "Continue",
-        "select_program": "Select a program",
-
-
-        "programme": {
-            "cinema": "Cinema",
-            "gestion_commerce": "Business Management",
-            "gestion_operations_chaine_logistique": "Operations and Supply Chain Management",
-            "journalisme_multimedia": "Multimedia Journalism",
-            "langues_trilinguisme_cultures": "Languages – Trilingualism and Cultures",
-            "photographie_design_graphique": "Photography and Graphic Design",
-            "sciences_nature": "Natural Sciences",
-            "sciences_humaines_administration_economie": "Human Sciences – Administration and Economics Profile",
-            "sciences_humaines_individu_relations_humaines": "Human Sciences – Individual and Human Relations Profile",
-            "sciences_humaines_monde_en_action": "Human Sciences – World in Action Profile",
-            "soins_infirmiers": "Nursing",
-            "soins_infirmiers_auxiliaires": "Nursing for Assistants",
-            "techniques_education_enfance": "Early Childhood Education Techniques",
-            "techniques_bureautique": "Office Automation Techniques",
-            "techniques_comptabilite_gestion": "Accounting and Management Techniques",
-            "techniques_informatique": "Computer Techniques",
-            "techniques_travail_social": "Social Work Techniques",
-            "technologie_architecture": "Architecture Technology",
-            "technologie_estimation_evaluation_batiment": "Building Estimation and Evaluation Technology",
-            "technologie_genie_civil": "Civil Engineering Technology",
-            "technologie_genie_electrique": "Electrical Engineering Technology: Automation and Control",
-            "technologie_genie_physique": "Physical Engineering Technology",
-            "tremplin_dec": "DEC Transition Program"
-        },
 
         "error": {
             "matricule": "Student number must have 7 digits",
             "department": "No Department is selected",
-            "matricule_taken" : "Student number is already taken"
+            "matricule_taken": "Student number is already taken"
         }
     },
 
@@ -127,7 +133,7 @@
 
         "error": {
             "company_name_invalid": "The company name must contain only letters and spaces",
-            "company_name_lenght" : "Company name must be between 3 and 100 characters"
+            "company_name_lenght": "Company name must be between 3 and 100 characters"
         }
     },
 
@@ -146,7 +152,7 @@
         }
     },
 
-    "creer_offre_stage_page" : {
+    "creer_offre_stage_page": {
         "title": "Create an internship offer",
         "nom": "Name",
         "poste": "Position",
@@ -157,32 +163,28 @@
         "nombre_heures_semaine": "Number of hours per week",
         "nombre_postes": "Number of positions",
         "type_emploi": "Type of employment",
-        "types_emploi" : {
-            "select" : "Select a type of employment",
-            "temps_partiel": "Part-time",
-            "temps_plein": "Full-time"
-        },
         "programme_etudes": "Study program",
-        "programmes_etudes" : {
-            "select": "Select a program",
-            "technique_informatiques": "Computer Techniques",
-            "soins_infirmiers": "Nursing",
-            "genie_electrique": "Electrical Engineering"
-        },
         "modalite_travail": "Work modality",
-        "modalites_travail" : {
-            "select": "Select a work modality",
-            "teletravail": "Remote work",
-            "presentiel": "On-site",
-            "hybride": "Hybrid"
-        },
         "date_limite_candidate": "Application deadline",
         "date_debut": "Start date",
         "date_fin": "End date",
         "creer_offre_stage": "Create the internship offer",
         "retour": "Return to home",
 
-        "errors" : {
+        "types_emploi": {
+            "select": "Select a type of employment",
+            "temps_partiel": "Part-time",
+            "temps_plein": "Full-time"
+        },
+
+        "modalites_travail": {
+            "select": "Select a work modality",
+            "teletravail": "Remote work",
+            "presentiel": "On-site",
+            "hybride": "Hybrid"
+        },
+
+        "errors": {
             "nom": "The name must be between 3 and 100 characters",
             "poste": "The position must be between 3 and 100 characters",
             "description": "The description must be between 10 and 500 characters",
@@ -196,5 +198,20 @@
             "modalite_travail_select": "The work modality must be selected",
             "type_emploi_select": "The type of employment must be selected"
         }
+    },
+
+    "dashboard_page": {
+        "title": "Home",
+        "offer": "Internship offers",
+        "no_offers": "No offers to display at the moment",
+        "my_offers": "My internship offers",
+        "add_offer": "Add an internship offer",
+        "hello": "Hello",
+        "user_info": "User information",
+        "parameters": "Settings",
+        "full_name": "Full name",
+        "email": "Email",
+        "matricule": "Student/Employee number",
+        "role": "Role"
     }
 }

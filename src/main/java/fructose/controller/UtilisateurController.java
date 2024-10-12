@@ -4,6 +4,8 @@ import fructose.service.UtilisateurService;
 import fructose.service.dto.UtilisateurDTO;
 import fructose.service.dto.auth.LoginDTO;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 
 @RestController
 public class UtilisateurController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UtilisateurController.class);
     private final UtilisateurService utilisateurService;
 
     public UtilisateurController(UtilisateurService utilisateurService) {
@@ -35,7 +39,6 @@ public class UtilisateurController {
                     .collect(Collectors.joining(", "));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
         }
-
         try {
             if (!utilisateurService.isValidRole(utilisateurDTO.getRole().toString())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rôle invalide.");
@@ -51,7 +54,7 @@ public class UtilisateurController {
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         } catch (RuntimeException e) {
-            e.printStackTrace();
+            logger.error("Une erreur inattendue s'est produite:", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
         }
     }
@@ -80,12 +83,11 @@ public class UtilisateurController {
                     .collect(Collectors.joining(", "));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
         }
-
         try {
             String token = utilisateurService.authenticateUser(loginDTO.getEmail(), loginDTO.getPassword());
-            return ResponseEntity.status(HttpStatus.OK).body("Token : "+ token);
+            return ResponseEntity.status(HttpStatus.OK).body("Token : " + token);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Une erreur s'est produite : " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Une erreur inattendue s'est produite : " + e.getMessage());
         }
     }
 
@@ -106,7 +108,8 @@ public class UtilisateurController {
             UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
             return ResponseEntity.status(HttpStatus.OK).body(utilisateurDTO);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossible de récupérer les infos utilisateur : " + e.getMessage());
+            logger.error("Impossible de récupérer les infos utilisateur:", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossible de récupérer les infos utilisateur: " + e.getMessage());
         }
     }
 }

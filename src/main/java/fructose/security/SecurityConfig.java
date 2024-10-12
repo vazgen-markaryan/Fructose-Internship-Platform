@@ -14,11 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import fructose.security.JwtTokenProvider;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
 
     private final JwtTokenProvider tokenProvider;
     private final UtilisateurRepository userRepository;
@@ -29,6 +28,7 @@ public class SecurityConfig {
         this.tokenProvider = tokenProvider;
         this.userRepository = userRepository;
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -39,10 +39,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/connexion", "/creer-utilisateur").permitAll()
                         .requestMatchers("/creer-utilisateur").permitAll()
-                        .requestMatchers("/connexion").permitAll()// Permettre l'accès à /creer-utilisateur sans authentification
-                        .requestMatchers("/creer-offre-stage").permitAll()
+                        .requestMatchers("/connexion").permitAll()
                         .requestMatchers(HttpMethod.GET, "/check-email").permitAll()
                         .requestMatchers(HttpMethod.GET, "/check-matricule").permitAll()
                         .anyRequest().authenticated()

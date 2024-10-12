@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Icon from "@mdi/react";
-import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
-import { useTranslation } from "react-i18next";
-import { isMatriculeTaken } from '../../../utilities/api/apiService';
+import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
+import {useTranslation} from "react-i18next";
+import {isMatriculeTaken} from '../../../utilities/api/apiService';
 
-const InformationsEtudiant = ({ utilisateur, handleChange, switchStep }) => {
+const InformationsEtudiant = ({utilisateur, handleChange, switchStep}) => {
 
     const {t} = useTranslation();
     const [errors, setErrors] = useState({});
@@ -27,9 +27,9 @@ const InformationsEtudiant = ({ utilisateur, handleChange, switchStep }) => {
     };
 
     const handleInputChange = (event) => {
-        const { name } = event.target;
+        const {name} = event.target;
         handleChange(event);
-        setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+        setErrors((prevErrors) => ({...prevErrors, [name]: ""}));
     };
 
     const validateFields = (user = {}) => {
@@ -49,7 +49,7 @@ const InformationsEtudiant = ({ utilisateur, handleChange, switchStep }) => {
     useEffect(() => {
         if (formSubmitted) {
             setErrors((prevErrors) => {
-                const updatedErrors = { ...prevErrors };
+                const updatedErrors = {...prevErrors};
 
                 if (utilisateur.matricule && !/^\d{7}$/.test(utilisateur.matricule)) {
                     updatedErrors.matricule = t("information_etudiant_page.error.matricule");
@@ -82,37 +82,37 @@ const InformationsEtudiant = ({ utilisateur, handleChange, switchStep }) => {
                 <div className={"input-container"}>
                     <p>{t("information_etudiant_page.program")}:</p>
                     <select name="departement" className={`${errors.departement ? "field-invalid" : ""}`} onChange={handleInputChange} value={utilisateur.departement || ""} required>
-                        <option value="">{t("information_etudiant_page.select_program")}</option>
-                        <option value="cinema">{t("information_etudiant_page.programme.cinema")}</option>
-                        <option value="gestion_commerce">{t("information_etudiant_page.programme.gestion_commerce")}</option>
-                        <option value="gestion_operations_chaine_logistique">{t("information_etudiant_page.programme.gestion_operations_chaine_logistique")}</option>
-                        <option value="journalisme_multimedia">{t("information_etudiant_page.programme.journalisme_multimedia")}</option>
-                        <option value="langues_trilinguisme_cultures">{t("information_etudiant_page.programme.langues_trilinguisme_cultures")}</option>
-                        <option value="photographie_design_graphique">{t("information_etudiant_page.programme.photographie_design_graphique")}</option>
-                        <option value="sciences_nature">{t("information_etudiant_page.programme.sciences_nature")}</option>
-                        <option value="sciences_humaines_administration_economie">{t("information_etudiant_page.programme.sciences_humaines_administration_economie")}</option>
-                        <option value="sciences_humaines_individu_relations_humaines">{t("information_etudiant_page.programme.sciences_humaines_individu_relations_humaines")}</option>
-                        <option value="sciences_humaines_monde_en_action">{t("information_etudiant_page.programme.sciences_humaines_monde_en_action")}</option>
-                        <option value="soins_infirmiers">{t("information_etudiant_page.programme.soins_infirmiers")}</option>
-                        <option value="soins_infirmiers_auxiliaires">{t("information_etudiant_page.programme.soins_infirmiers_auxiliaires")}</option>
-                        <option value="techniques_education_enfance">{t("information_etudiant_page.programme.techniques_education_enfance")}</option>
-                        <option value="techniques_bureautique">{t("information_etudiant_page.programme.techniques_bureautique")}</option>
-                        <option value="techniques_comptabilite_gestion">{t("information_etudiant_page.programme.techniques_comptabilite_gestion")}</option>
-                        <option value="techniques_informatique">{t("information_etudiant_page.programme.techniques_informatique")}</option>
-                        <option value="techniques_travail_social">{t("information_etudiant_page.programme.techniques_travail_social")}</option>
-                        <option value="technologie_architecture">{t("information_etudiant_page.programme.technologie_architecture")}</option>
-                        <option value="technologie_estimation_evaluation_batiment">{t("information_etudiant_page.programme.technologie_estimation_evaluation_batiment")}</option>
-                        <option value="technologie_genie_civil">{t("information_etudiant_page.programme.technologie_genie_civil")}</option>
-                        <option value="technologie_genie_electrique">{t("information_etudiant_page.programme.technologie_genie_electrique")}</option>
-                        <option value="technologie_genie_physique">{t("information_etudiant_page.programme.technologie_genie_physique")}</option>
-                        <option value="tremplin_dec">{t("information_etudiant_page.programme.tremplin_dec")}</option>
+                        <option value="">{t("programme.select")}</option>
+                        <option value="cinema">{t("programme.cinema")}</option>
+                        <option value="gestion_commerce">{t("programme.gestion_commerce")}</option>
+                        <option value="gestion_operations_chaine_logistique">{t("programme.gestion_operations_chaine_logistique")}</option>
+                        <option value="journalisme_multimedia">{t("programme.journalisme_multimedia")}</option>
+                        <option value="langues_trilinguisme_cultures">{t("programme.langues_trilinguisme_cultures")}</option>
+                        <option value="photographie_design_graphique">{t("programme.photographie_design_graphique")}</option>
+                        <option value="sciences_nature">{t("programme.sciences_nature")}</option>
+                        <option value="sciences_humaines_administration_economie">{t("programme.sciences_humaines_administration_economie")}</option>
+                        <option value="sciences_humaines_individu_relations_humaines">{t("programme.sciences_humaines_individu_relations_humaines")}</option>
+                        <option value="sciences_humaines_monde_en_action">{t("programme.sciences_humaines_monde_en_action")}</option>
+                        <option value="soins_infirmiers">{t("programme.soins_infirmiers")}</option>
+                        <option value="soins_infirmiers_auxiliaires">{t("programme.soins_infirmiers_auxiliaires")}</option>
+                        <option value="techniques_education_enfance">{t("programme.techniques_education_enfance")}</option>
+                        <option value="techniques_bureautique">{t("programme.techniques_bureautique")}</option>
+                        <option value="techniques_comptabilite_gestion">{t("programme.techniques_comptabilite_gestion")}</option>
+                        <option value="techniques_informatique">{t("programme.techniques_informatique")}</option>
+                        <option value="techniques_travail_social">{t("programme.techniques_travail_social")}</option>
+                        <option value="technologie_architecture">{t("programme.technologie_architecture")}</option>
+                        <option value="technologie_estimation_evaluation_batiment">{t("programme.technologie_estimation_evaluation_batiment")}</option>
+                        <option value="technologie_genie_civil">{t("programme.technologie_genie_civil")}</option>
+                        <option value="technologie_genie_electrique">{t("programme.technologie_genie_electrique")}</option>
+                        <option value="technologie_genie_physique">{t("programme.technologie_genie_physique")}</option>
+                        <option value="tremplin_dec">{t("programme.tremplin_dec")}</option>
                     </select>
                     <p className={"field-invalid-text"}>{errors.departement}</p>
                 </div>
                 <br/>
 
                 <div className="form-dock">
-                    <button type="button" onClick={() => { switchStep(false) }}><Icon path={mdiChevronLeft} size={1}/></button>
+                    <button onClick={() => {switchStep(false)}}><Icon path={mdiChevronLeft} size={1}/></button>
                     <div className={"toolbar-spacer"}></div>
                     <button type="submit" className={"btn-filled"}>{t("information_etudiant_page.continue")}<Icon path={mdiChevronRight} size={1}/></button>
                 </div>

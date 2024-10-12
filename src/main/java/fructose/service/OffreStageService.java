@@ -5,9 +5,7 @@ import fructose.repository.OffreStageRepository;
 import fructose.service.dto.OffreStageDTO;
 import jakarta.validation.*;
 import org.springframework.stereotype.Service;
-
 import org.springframework.validation.annotation.Validated;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -65,7 +63,6 @@ public class OffreStageService {
     }
 
     public List<OffreStageDTO> getOffresStage() {
-        // If null, throw IllegalArgumentException
         List<OffreStage> offresStage = offreStageRepository.findAll();
         return OffreStageDTO.toDTOs(offresStage);
     }

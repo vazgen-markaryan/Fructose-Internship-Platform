@@ -71,10 +71,9 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        for (String errorMessage : exception.getMessage().split(", ")) {
-            assertTrue(errorMessage.equals("nom: Le nom ne peut pas être vide") ||
-                    errorMessage.equals("nom: Le nom doit contenir au moins 3 caractères et au plus 100 caractères"));
-        }
+        String errorMessage = exception.getMessage();
+        assertTrue(errorMessage.contains("Le nom ne peut pas être vide") ||
+                errorMessage.contains("Le nom doit contenir entre 3 et 100 caractères"));
     }
 
     @Test
@@ -83,7 +82,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("nom: Le nom doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("nom: Le nom doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
@@ -92,7 +91,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("nom: Le nom doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("nom: Le nom doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
@@ -112,7 +111,7 @@ public class OffreStageServiceTest {
         });
         for (String errorMessage : exception.getMessage().split(", ")) {
             assertTrue(errorMessage.equals("poste: Le poste ne peut pas être vide") ||
-                    errorMessage.equals("poste: Le poste doit contenir au moins 3 caractères et au plus 100 caractères"));
+                    errorMessage.equals("poste: Le poste doit contenir entre 3 et 100 caractères"));
         }
     }
 
@@ -122,7 +121,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("poste: Le poste doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("poste: Le poste doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
@@ -135,7 +134,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("poste: Le poste doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("poste: Le poste doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
@@ -153,9 +152,9 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        for (String errorMessage : exception.getMessage().split(", ")) {
-            assertTrue(errorMessage.equals("description: La description ne peut pas être vide") || errorMessage.equals("description: La description doit contenir au moins 10 caractères et au plus 500 caractères"));
-        }
+        String errorMessage = exception.getMessage();
+        assertTrue(errorMessage.contains("description: La description ne peut pas être vide") ||
+                errorMessage.contains("description: La description doit contenir entre 10 et 500 caractères"));
     }
 
     @Test
@@ -164,7 +163,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("description: La description doit contenir au moins 10 caractères et au plus 500 caractères", exception.getMessage());
+        assertEquals("description: La description doit contenir entre 10 et 500 caractères", exception.getMessage());
     }
 
     @Test
@@ -177,7 +176,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("description: La description doit contenir au moins 10 caractères et au plus 500 caractères", exception.getMessage());
+        assertEquals("description: La description doit contenir entre 10 et 500 caractères", exception.getMessage());
     }
 
     @Test
@@ -186,7 +185,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("compagnie: La compagnie ne peut pas être vide", exception.getMessage());
+        assertEquals("compagnie: Le nom de la compagnie ne peut pas être vide", exception.getMessage());
     }
 
     @Test
@@ -196,8 +195,8 @@ public class OffreStageServiceTest {
             offreStageService.addOffreStage(offreStageDTO);
         });
         for (String errorMessage : exception.getMessage().split(", ")) {
-            assertTrue(errorMessage.equals("compagnie: La compagnie ne peut pas être vide") ||
-                    errorMessage.equals("compagnie: La compagnie doit contenir au moins 3 caractères et au plus 100 caractères"));
+            assertTrue(errorMessage.equals("compagnie: Le nom de la compagnie ne peut pas être vide") ||
+                    errorMessage.equals("compagnie: Le nom de la compagnie doit contenir entre 3 et 100 caractères"));
         }
     }
 
@@ -207,20 +206,20 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("compagnie: La compagnie doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("compagnie: Le nom de la compagnie doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
     void testAddOffreStageCompagnieTropLong() {
         String randomString = new Random().ints(101, 0, 62)
-                .mapToObj(i -> "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".charAt(i))
+                .mapToObj("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"::charAt)
                 .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                 .toString();
         offreStageDTO.setCompagnie(randomString);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("compagnie: La compagnie doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("compagnie: Le nom de la compagnie doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
@@ -229,7 +228,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("programmeEtude: Le programme d'étude ne peut pas être vide", exception.getMessage());
+        assertEquals("programmeEtude: Le programme d'études ne peut pas être vide", exception.getMessage());
     }
 
     @Test
@@ -238,7 +237,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("programmeEtude: Le programme d'étude doit être l'un des suivants : Technique de l'informatique, Génie physique, Soin infirmiers", exception.getMessage());
+        assertEquals("programmeEtude: La programme d'études doit contenir uniquement des lettres et des underscores", exception.getMessage());
     }
 
     @Test
@@ -294,7 +293,7 @@ public class OffreStageServiceTest {
         });
         for (String errorMessage : exception.getMessage().split(", ")) {
             assertTrue(errorMessage.equals("adresse: L'adresse ne peut pas être vide") ||
-                    errorMessage.equals("adresse: L'adresse doit contenir au moins 3 caractères et au plus 100 caractères"));
+                    errorMessage.equals("adresse: L'adresse doit contenir entre 3 et 100 caractères"));
         }
     }
 
@@ -304,7 +303,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("adresse: L'adresse doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("adresse: L'adresse doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
@@ -317,7 +316,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("adresse: L'adresse doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("adresse: L'adresse doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test

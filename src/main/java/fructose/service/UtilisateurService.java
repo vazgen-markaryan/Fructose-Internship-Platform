@@ -39,7 +39,6 @@ public class UtilisateurService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
-
     public boolean isValidRole(String role) {
         return Arrays.stream(Role.values()).anyMatch((t) -> t.name().equals(role));
     }
@@ -84,13 +83,13 @@ public class UtilisateurService {
     private void saveUtilisateur(Utilisateur utilisateur) {
         switch (utilisateur.getRole()) {
             case ETUDIANT:
-                    etudiantRepository.save((Etudiant) utilisateur);
+                etudiantRepository.save((Etudiant) utilisateur);
                 break;
             case PROFESSEUR:
-                    professeurRepository.save((Professeur) utilisateur);
+                professeurRepository.save((Professeur) utilisateur);
                 break;
             case EMPLOYEUR:
-                    employeurRepository.save((Employeur) utilisateur);
+                employeurRepository.save((Employeur) utilisateur);
                 break;
         }
     }
@@ -149,7 +148,7 @@ public class UtilisateurService {
             throw new IllegalArgumentException("Mot de passe incorrect");
         }
     }
-    
+
     public String authenticateUser(String email, String password) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password));
@@ -164,11 +163,12 @@ public class UtilisateurService {
             case ETUDIANT -> etudiantRepository.findById(user.getId()).map(EtudiantDTO::toDTO).orElse(null);
             case EMPLOYEUR -> employeurRepository.findById(user.getId()).map(EmployeurDTO::toDTO).orElse(null);
             case PROFESSEUR -> professeurRepository.findById(user.getId()).map(ProfesseurDTO::toDTO).orElse(null);
-            default -> throw new IllegalArgumentException("Type d'utilisateur : " + user.getRole().toString() + " n'est pas valide");
+            default ->
+                    throw new IllegalArgumentException("Type d'utilisateur : " + user.getRole().toString() + " n'est pas valide");
         };
     }
 
-    public boolean validationToken(String token){
+    public boolean validationToken(String token) {
         try {
             jwtTokenProvider.validateToken(token);
             return true;

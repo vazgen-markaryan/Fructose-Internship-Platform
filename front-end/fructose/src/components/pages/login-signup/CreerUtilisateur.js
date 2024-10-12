@@ -1,11 +1,11 @@
-import  React, {useState} from 'react';
+import React, {useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
-import InformationsBase from "./auth/signup/InformationsBase";
-import MotDePasse from "./auth/signup/MotDePasse";
-import SelectionRole from "./auth/signup/SelectionRole";
-import InformationsEtudiant from "./auth/signup/InformationsEtudiant";
-import InformationsEmployeur from "./auth/signup/InformationsEmployeur";
-import InformationsProfesseur from "./auth/signup/InformationsProfesseur";
+import InformationsBase from "../../auth/signup/InformationsBase";
+import MotDePasse from "../../auth/signup/MotDePasse";
+import SelectionRole from "../../auth/signup/SelectionRole";
+import InformationsEtudiant from "../../auth/signup/InformationsEtudiant";
+import InformationsEmployeur from "../../auth/signup/InformationsEmployeur";
+import InformationsProfesseur from "../../auth/signup/InformationsProfesseur";
 import {useTranslation} from "react-i18next";
 
 const CreerUtilisateur = () => {
@@ -18,14 +18,11 @@ const CreerUtilisateur = () => {
     });
 
     const {t} = useTranslation();
-
     const [error, setError] = useState('');
-
     const navigate = useNavigate();
 
     const handleChange = (event) => {
         const {name, value} = event.target;
-
         setUtilisateur({...utilisateur, [name]: value});
     };
 
@@ -109,10 +106,7 @@ const CreerUtilisateur = () => {
 
             <div className="auth-body">
                 <div className={"signup-frame"}>
-                    <div className={"signup-head " + (currentStep !== 0 ? "signup-head-instep" : "")} style={{
-                        "background": "linear-gradient(rgba(0,0,0,0.4), rgb(255, 0, 108,0.8)), url('/assets/auth/signup/s1.jpg') center/cover",
-                        "backdropFilter": "blur(10px)"
-                    }}>
+                    <div className={"signup-head " + (currentStep !== 0 ? "signup-head-instep" : "")} style={{"background": "linear-gradient(rgba(0,0,0,0.4), rgb(255, 0, 108,0.8)), url('/assets/auth/signup/s1.jpg') center/cover", "backdropFilter": "blur(10px)"}}>
                         <div className="toolbar-items">
                             <Link to="/">
                                 <img src="/assets/logo/logo.svg" alt="" className={"logo"}/>
@@ -125,28 +119,24 @@ const CreerUtilisateur = () => {
                             (currentStep !== 0) ?
                                 <div className="vertical-stepper">
                                     <div className="vertical-stepper-item">
-
                                         <div className="vertical-stepper-content">
                                             <h6 className="vertical-stepper-title">{t("creer_utilisateur_page.profile")}</h6>
                                             <p className="vertical-stepper-desc">{t("creer_utilisateur_page.profile_2")}</p>
                                         </div>
                                     </div>
                                     <div className="vertical-stepper-item">
-
                                         <div className="vertical-stepper-content">
                                             <h6 className="vertical-stepper-title">{t("creer_utilisateur_page.school")}</h6>
                                             <p className="vertical-stepper-desc">{t("creer_utilisateur_page.school_2")}</p>
                                         </div>
                                     </div>
                                     <div className="vertical-stepper-item">
-
                                         <div className="vertical-stepper-content">
                                             <h6 className="vertical-stepper-title">{t("creer_utilisateur_page.security")}</h6>
                                             <p className="vertical-stepper-desc">{t("creer_utilisateur_page.pasword")}</p>
                                         </div>
                                     </div>
                                     <div className="vertical-stepper-item">
-
                                         <div className="vertical-stepper-content">
                                             <h6 className="vertical-stepper-title">{t("creer_utilisateur_page.finalization")}</h6>
                                             <p className="vertical-stepper-desc">{t("creer_utilisateur_page.dashboard")}</p>

@@ -4,6 +4,8 @@ import fructose.service.dto.OffreStageDTO;
 import fructose.service.OffreStageService;
 import jakarta.validation.Valid;
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+
 import java.util.stream.Collectors;
 
 @RestController
 public class OffreStageController {
+
+    private static final Logger logger = LoggerFactory.getLogger(OffreStageController.class);
     private final OffreStageService offreStageService;
 
     public OffreStageController(OffreStageService offreStageService) {
@@ -44,6 +49,7 @@ public class OffreStageController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la création de l'offre de stage.");
             }
         } catch (Exception e) {
+            logger.error("Une erreur inattendue s'est produite", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
         }
     }

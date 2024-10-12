@@ -74,7 +74,7 @@ const InformationsEmployeur = ({utilisateur, handleChange, switchStep}) => {
                 </div>
 
                 <div className="form-dock">
-                    <button type="button" onClick={() => {switchStep(false)}}><Icon path={mdiChevronLeft} size={1}/></button>
+                    <button onClick={() => {switchStep(false)}}><Icon path={mdiChevronLeft} size={1}/></button>
                     <div className={"toolbar-spacer"}></div>
                     <button type="submit" className={"btn-filled"}>{t("information_employeur_page.continue")}<Icon path={mdiChevronRight} size={1}/></button>
                 </div>

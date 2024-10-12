@@ -8,3 +8,14 @@ export const isMatriculeTaken = async (matricule) => {
         return false;
     }
 };
+
+export const isEmailTaken = async (email) => {
+    try {
+        const response = await fetch(`/check-email?email=${encodeURIComponent(email)}`);
+        const data = await response.json();
+        return data.emailTaken;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+};

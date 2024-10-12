@@ -83,7 +83,8 @@ const HeaderMain = ({theme}) => {
     return (
         <header style={{"color": ((theme === "dark") ? "black" : "white")}}>
             <Link to="/"><img src={"/assets/logo/logo" + ((theme === "dark") ? "-blk" : "") + ".png"} alt="" className={"logo"}/></Link>
-            <div className={"toolbar-spacer"}></div>{GetHeaderOptions()}
+            <div className={"toolbar-spacer"}></div>
+            {GetHeaderOptions()}
         </header>
     )
 }

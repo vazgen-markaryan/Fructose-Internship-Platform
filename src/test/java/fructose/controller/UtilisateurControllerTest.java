@@ -170,7 +170,7 @@ class UtilisateurControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(loginDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Une erreur s'est produite : Authentication failed"));
+                .andExpect(content().string("Une erreur inattendue s'est produite : Authentication failed"));
     }
 
     @Test
@@ -252,7 +252,7 @@ class UtilisateurControllerTest {
         ResponseEntity<?> response = utilisateurController.getInfosUtilisateur(token);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Impossible de récupérer les infos utilisateur : Utilisateur non trouvé", response.getBody());
+        assertEquals("Impossible de récupérer les infos utilisateur: Utilisateur non trouvé", response.getBody());
     }
 
     @Test
