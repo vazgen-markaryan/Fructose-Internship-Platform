@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import {mdiArrowLeft, mdiBriefcasePlus, mdiBriefcasePlusOutline} from "@mdi/js";
+import Icon from "@mdi/react";
 
 const CreerOffreStage = () => {
     const [offreStage, setOffreStage] = useState({
@@ -156,126 +158,134 @@ const CreerOffreStage = () => {
     };
 
     return (
-        <div>
-            <h1>{t("creer_offre_stage_page.title")}</h1>
-            <form onSubmit={handleSubmit}>
-                <label>{t("creer_offre_stage_page.nom")}</label>
-                <input className={`${errors.nom ? "field-invalid" : ""}`} value={offreStage.nom} type="text" name="nom"
-                       onChange={handleInputChange} required/>
-                <p className={"field-invalid-text"}>{errors.nom}</p>
+        <>
+            <div className="dashboard-card-toolbar">
+                <Link to="/dashboard"><button className="btn-icon-dashboard"><Icon path={mdiArrowLeft} size={1.4} /></button></Link>
+                <h1>{t("creer_offre_stage_page.title")}</h1>
+            </div>
+            <div className="dashboard-card">
+                <section>
+                    <br/>
+                    <form onSubmit={handleSubmit}>
+                        <label>{t("creer_offre_stage_page.nom")}</label>
+                        <input className={`${errors.nom ? "field-invalid" : ""}`} value={offreStage.nom} type="text" name="nom"
+                               onChange={handleInputChange} required/>
+                        <p className={"field-invalid-text"}>{errors.nom}</p>
 
-                <label>{t("creer_offre_stage_page.poste")}</label>
-                <input className={`${errors.poste ? "field-invalid" : ""}`} value={offreStage.poste} type="text"
-                       name="poste" onChange={handleInputChange} required/>
-                <p className={"field-invalid-text"}>{errors.poste}</p>
+                        <label>{t("creer_offre_stage_page.poste")}</label>
+                        <input className={`${errors.poste ? "field-invalid" : ""}`} value={offreStage.poste} type="text"
+                               name="poste" onChange={handleInputChange} required/>
+                        <p className={"field-invalid-text"}>{errors.poste}</p>
 
-                <label>{t("creer_offre_stage_page.description")}</label>
-                <input className={`${errors.description ? "field-invalid" : ""}`} value={offreStage.description}
-                       type="text" name="description" onChange={handleInputChange} required/>
-                <p className={"field-invalid-text"}>{errors.description}</p>
+                        <label>{t("creer_offre_stage_page.description")}</label>
+                        <input className={`${errors.description ? "field-invalid" : ""}`} value={offreStage.description}
+                               type="text" name="description" onChange={handleInputChange} required/>
+                        <p className={"field-invalid-text"}>{errors.description}</p>
 
-                <label>{t("creer_offre_stage_page.compagnie")}</label>
-                <input className={`${errors.compagnie ? "field-invalid" : ""}`} value={offreStage.compagnie} type="text"
-                       name="compagnie" onChange={handleInputChange} required/>
-                <p className={"field-invalid-text"}>{errors.compagnie}</p>
+                        <label>{t("creer_offre_stage_page.compagnie")}</label>
+                        <input className={`${errors.compagnie ? "field-invalid" : ""}`} value={offreStage.compagnie} type="text"
+                               name="compagnie" onChange={handleInputChange} required/>
+                        <p className={"field-invalid-text"}>{errors.compagnie}</p>
 
-                <label>{t("creer_offre_stage_page.address")}</label>
-                <input className={`${errors.adresse ? "field-invalid" : ""}`} value={offreStage.adresse} type="text"
-                       name="adresse" onChange={handleInputChange} required/>
-                <p className={"field-invalid-text"}>{errors.adresse}</p>
+                        <label>{t("creer_offre_stage_page.address")}</label>
+                        <input className={`${errors.adresse ? "field-invalid" : ""}`} value={offreStage.adresse} type="text"
+                               name="adresse" onChange={handleInputChange} required/>
+                        <p className={"field-invalid-text"}>{errors.adresse}</p>
 
-                <label>{t("creer_offre_stage_page.taux_horaire")}</label>
-                <input className={`${errors.tauxHoraire ? "field-invalid" : ""}`} value={offreStage.tauxHoraire}
-                       type="number" name="tauxHoraire" onChange={handleInputChange} required/>
-                <p className={"field-invalid-text"}>{errors.tauxHoraire}</p>
+                        <label>{t("creer_offre_stage_page.taux_horaire")}</label>
+                        <input className={`${errors.tauxHoraire ? "field-invalid" : ""}`} value={offreStage.tauxHoraire}
+                               type="number" name="tauxHoraire" onChange={handleInputChange} required/>
+                        <p className={"field-invalid-text"}>{errors.tauxHoraire}</p>
 
-                <label>{t("creer_offre_stage_page.nombre_heures_semaine")}</label>
-                <input className={`${errors.nombreHeuresSemaine ? "field-invalid" : ""}`}
-                       value={offreStage.nombreHeuresSemaine} type="number" name="nombreHeuresSemaine"
-                       onChange={handleInputChange} required/>
-                <p className={"field-invalid-text"}>{errors.nombreHeuresSemaine}</p>
+                        <label>{t("creer_offre_stage_page.nombre_heures_semaine")}</label>
+                        <input className={`${errors.nombreHeuresSemaine ? "field-invalid" : ""}`}
+                               value={offreStage.nombreHeuresSemaine} type="number" name="nombreHeuresSemaine"
+                               onChange={handleInputChange} required/>
+                        <p className={"field-invalid-text"}>{errors.nombreHeuresSemaine}</p>
 
-                <label>{t("creer_offre_stage_page.nombre_postes")}</label>
-                <input className={`${errors.nombrePostes ? "field-invalid" : ""}`} value={offreStage.nombrePostes}
-                       type="number" name="nombrePostes" onChange={handleInputChange} required/>
-                <p className={"field-invalid-text"}>{errors.nombrePostes}</p>
+                        <label>{t("creer_offre_stage_page.nombre_postes")}</label>
+                        <input className={`${errors.nombrePostes ? "field-invalid" : ""}`} value={offreStage.nombrePostes}
+                               type="number" name="nombrePostes" onChange={handleInputChange} required/>
+                        <p className={"field-invalid-text"}>{errors.nombrePostes}</p>
 
-                <label>{t("creer_offre_stage_page.type_emploi")}</label>
-                <select name="typeEmploi" onChange={handleInputChange} value={offreStage.typeEmploi} required>
-                    <option value="select">{t("creer_offre_stage_page.modalites_travail.select")}</option>
-                    <option value="virtuel">{t("creer_offre_stage_page.modalites_travail.teletravail")}</option>
-                    <option value="presentiel">{t("creer_offre_stage_page.modalites_travail.presentiel")}</option>
-                    <option value="hybride">{t("creer_offre_stage_page.modalites_travail.hybride")}</option>
-                </select>
-                <p className={"field-invalid-text"}>{errors.typeEmploi}</p>
+                        <label>{t("creer_offre_stage_page.type_emploi")}</label>
+                        <select name="typeEmploi" onChange={handleInputChange} value={offreStage.typeEmploi} required>
+                            <option value="select">{t("creer_offre_stage_page.modalites_travail.select")}</option>
+                            <option value="virtuel">{t("creer_offre_stage_page.modalites_travail.teletravail")}</option>
+                            <option value="presentiel">{t("creer_offre_stage_page.modalites_travail.presentiel")}</option>
+                            <option value="hybride">{t("creer_offre_stage_page.modalites_travail.hybride")}</option>
+                        </select>
+                        <p className={"field-invalid-text"}>{errors.typeEmploi}</p>
 
-                <label>{t("creer_offre_stage_page.programme_etudes")}</label>
-                <select name="programmeEtude" onChange={handleInputChange} value={offreStage.programmeEtude} required>
-                    <option value={"select"}>{t("creer_offre_stage_page.programmes_etudes.select")}</option>
-                    <option
-                        value="techniques_informatique">{t("creer_offre_stage_page.programmes_etudes.technique_informatiques")}</option>
-                    <option
-                        value="technologie_genie_electrique">{t("creer_offre_stage_page.programmes_etudes.genie_electrique")}</option>
-                    <option
-                        value="soins_infirmiers">{t("creer_offre_stage_page.programmes_etudes.soins_infirmiers")}</option>
-                </select>
-                <p className={"field-invalid-text"}>{errors.programmeEtude}</p>
+                        <label>{t("creer_offre_stage_page.programme_etudes")}</label>
+                        <select name="programmeEtude" onChange={handleInputChange} value={offreStage.programmeEtude} required>
+                            <option value={"select"}>{t("creer_offre_stage_page.programmes_etudes.select")}</option>
+                            <option
+                                value="techniques_informatique">{t("creer_offre_stage_page.programmes_etudes.technique_informatiques")}</option>
+                            <option
+                                value="technologie_genie_electrique">{t("creer_offre_stage_page.programmes_etudes.genie_electrique")}</option>
+                            <option
+                                value="soins_infirmiers">{t("creer_offre_stage_page.programmes_etudes.soins_infirmiers")}</option>
+                        </select>
+                        <p className={"field-invalid-text"}>{errors.programmeEtude}</p>
 
-                <label>{t("creer_offre_stage_page.modalite_travail")}</label>
-                <select name="modaliteTravail" onChange={handleInputChange} value={offreStage.modaliteTravail} required>
-                    <option value={"select"}>{t("creer_offre_stage_page.types_emploi.select")}</option>
-                    <option value="temps_partiel">{t("creer_offre_stage_page.types_emploi.temps_partiel")}</option>
-                    <option value="temps_plein">{t("creer_offre_stage_page.types_emploi.temps_plein")}</option>
-                </select>
-                <p className={"field-invalid-text"}>{errors.modaliteTravail}</p>
+                        <label>{t("creer_offre_stage_page.modalite_travail")}</label>
+                        <select name="modaliteTravail" onChange={handleInputChange} value={offreStage.modaliteTravail} required>
+                            <option value={"select"}>{t("creer_offre_stage_page.types_emploi.select")}</option>
+                            <option value="temps_partiel">{t("creer_offre_stage_page.types_emploi.temps_partiel")}</option>
+                            <option value="temps_plein">{t("creer_offre_stage_page.types_emploi.temps_plein")}</option>
+                        </select>
+                        <p className={"field-invalid-text"}>{errors.modaliteTravail}</p>
 
-                <label>{t("creer_offre_stage_page.date_limite_candidate")}</label>
-                <input
-                    className={`${errors.dateLimiteCandidature ? "field-invalid" : ""}`}
-                    type="date"
-                    name="dateLimiteCandidature"
-                    onChange={handleInputChange}
-                    value={offreStage.dateLimiteCandidature.toISOString().split('T')[0]}
-                    required
-                    min={new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]}
-                />
-                <p className={"field-invalid-text"}>{errors.dateLimiteCandidature}</p>
+                        <label>{t("creer_offre_stage_page.date_limite_candidate")}</label>
+                        <input
+                            className={`${errors.dateLimiteCandidature ? "field-invalid" : ""}`}
+                            type="date"
+                            name="dateLimiteCandidature"
+                            onChange={handleInputChange}
+                            value={offreStage.dateLimiteCandidature.toISOString().split('T')[0]}
+                            required
+                            min={new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]}
+                        />
+                        <p className={"field-invalid-text"}>{errors.dateLimiteCandidature}</p>
 
-                <label>{t("creer_offre_stage_page.date_debut")}</label>
-                <input
-                    className={`${errors.dateDebut ? "field-invalid" : ""}`}
-                    type="date"
-                    name="dateDebut"
-                    onChange={handleInputChange}
-                    value={offreStage.dateDebut.toISOString().split('T')[0]}
-                    required
-                    min={new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1)).toISOString().split('T')[0]}
-                />
-                <p className={"field-invalid-text"}>{errors.dateDebut}</p>
+                        <label>{t("creer_offre_stage_page.date_debut")}</label>
+                        <input
+                            className={`${errors.dateDebut ? "field-invalid" : ""}`}
+                            type="date"
+                            name="dateDebut"
+                            onChange={handleInputChange}
+                            value={offreStage.dateDebut.toISOString().split('T')[0]}
+                            required
+                            min={new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1)).toISOString().split('T')[0]}
+                        />
+                        <p className={"field-invalid-text"}>{errors.dateDebut}</p>
 
-                <label>{t("creer_offre_stage_page.date_fin")}</label>
-                <input
-                    className={`${errors.dateFin ? "field-invalid" : ""}`}
-                    type="date"
-                    name="dateFin"
-                    onChange={handleInputChange}
-                    value={offreStage.dateFin.toISOString().split('T')[0]}
-                    required
-                    min={new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1)).toISOString().split('T')[0]}
-                />
-                <p className={"field-invalid-text"}>{errors.dateFin}</p>
+                        <label>{t("creer_offre_stage_page.date_fin")}</label>
+                        <input
+                            className={`${errors.dateFin ? "field-invalid" : ""}`}
+                            type="date"
+                            name="dateFin"
+                            onChange={handleInputChange}
+                            value={offreStage.dateFin.toISOString().split('T')[0]}
+                            required
+                            min={new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1)).toISOString().split('T')[0]}
+                        />
+                        <p className={"field-invalid-text"}>{errors.dateFin}</p>
 
-                <br/>
-                <br/>
-                <button type="submit">{t("creer_offre_stage_page.creer_offre_stage")}</button>
-            </form>
+                        <br/>
+                        <br/>
+                        <button type="submit">{t("creer_offre_stage_page.creer_offre_stage")}</button>
+                    </form>
 
-            <nav>
-                <ul>
-                    <li><Link to="/">{t("creer_offre_stage_page.retour")}</Link></li>
-                </ul>
-            </nav>
-        </div>
+                    <nav>
+                        <ul>
+                            <li><Link to="/">{t("creer_offre_stage_page.retour")}</Link></li>
+                        </ul>
+                    </nav>
+                </section>
+            </div>
+        </>
     );
 }
 export default CreerOffreStage;

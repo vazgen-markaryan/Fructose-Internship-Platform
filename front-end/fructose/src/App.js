@@ -22,8 +22,11 @@ function App() {
                         <Route path="/" element={<HomePage/>}/>
                         <Route path="/creer-utilisateur" element={<CreerUtilisateur/>}/>
                         <Route path="/connexion" element={<ConnexionUtilisateur/>}/>
-                        <Route path="/dashboard" element={<PrivateRoute element={<Dashboard/>}/>}/>
+
                         <Route path="/creer-offre-stage" element={<CreerOffreStage/>}/>
+
+
+                        <Route path="/dashboard/*" element={<PrivateRoute element={<Dashboard/>}/>}/>
                         {/*Ajouter SEULEMENT routes ici*/}
                     </Routes>
                     <TemporaireFooterLanguage/>

@@ -6,6 +6,7 @@ body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x:hidden;
 }
 
 :root {
@@ -107,12 +108,37 @@ button {
     padding: 0 12px;
     border-radius: var(--border-radius);
     font-family: "Roboto Condensed", sans-serif;
-
+    transition: 0.3s;
 }
 
 button.btn-filled {
     background-color: var(--color-primay);
     color: white;
+}
+
+button.btn-filled:hover {
+    background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1));
+    color: white;
+}
+
+button.btn-icon{
+    padding: 0 6px;
+    border-radius: 50%;
+    background-color: transparent;
+}
+
+button.btn-icon:hover{
+    background-color: rgba(128, 128, 128, 0.4);
+}
+
+button.btn-icon-dashboard{
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: var(--color-primay);
+    color: white;
+    line-height: 42px;
 }
 
 button>.mdi{
@@ -215,7 +241,10 @@ header{
     height: 70px;
     padding: 0 16px;
     box-sizing: border-box;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
 }
 
 .header-user-menu{
@@ -427,10 +456,74 @@ header{
 
 .dashboard-layout{
     width: 100%;
-    max-width: 1280px;
     margin: auto;
     box-sizing: border-box;
+    background-color: rgb(240, 246, 246);
+    min-height: 100vh;
 }
+
+.dashboard-layout > .dashboard-content{
+    margin: auto;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1280px;
+    margin-top: -280px;
+}
+
+.dashboard-head{
+    width: 100%;
+    height: 380px;
+    background: linear-gradient(to top, rgb(240, 246, 246) 10%, rgba(130, 130, 130, 0) 70%), linear-gradient(to top, rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/public/assets/dashboard/dash-head.jpg') center / cover, linear-gradient(#ffffff, transparent) ;
+}
+
+.dashboard-card{
+    background-color: white;
+    border-radius: var(--border-radius);
+}
+
+.dashboard-card, .dashboard-card-toolbar, .dashboard-card-titlebar{
+    animation-name: slide-in;
+    animation-duration: 0.5s;
+    animation-timing-function: cubic-bezier(.32,1.1,1,1);
+}
+
+@keyframes slide-in {
+    0%{
+        transform: translateX(50px);
+        opacity: 0;
+    }
+    100%{
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.dashboard-card-toolbar{
+    display: flex;
+    align-items: center;
+    padding: 32px 0px;
+    gap: 12px;
+}
+
+.dashboard-card-toolbar h1{
+    margin: 0;
+    font-weight: 300;
+    font-size: 36px;
+    color: white;
+}
+
+.dashboard-card-titlebar{
+    color: white;
+    padding: 32px 10px;
+}
+
+.dashboard-card-titlebar>*{
+    margin: 0 0 10px 0;
+}
+
+
+
+
 
 section{
     width: 100%;

@@ -1,6 +1,7 @@
 import React, {useContext} from "react";
 import HeaderMain from "../../fragments/header/HeaderMain";
 import {
+    mdiArrowLeft,
     mdiArrowRight,
     mdiBriefcasePlusOutline,
     mdiBriefcaseRemoveOutline,
@@ -10,71 +11,32 @@ import {
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../../providers/AuthProvider";
-import {Link} from "react-router-dom";
+import {Link, Route, Routes} from "react-router-dom";
+import ManageCVs from "./cv/ManageCVs";
+import CreerOffreStage from "../../offre_stage/CreerOffreStage";
+import DashboardHome from "./DashboardHome";
 
 const Dashboard = () => {
     const { currentUser } = useContext(AuthContext);
-    const GetOffreStageSection = () => {
-        if(currentUser != null){
-            if (currentUser.role === "ETUDIANT"){
-                return(
-                    <section>
-                        <div className={"toolbar-items"}>
-                            <h4 className={"m-0 toolbar-spacer"}>Offres de stage</h4>
-                            <button>Explorer <Icon path={mdiChevronRight} size={1} /></button>
-                        </div>
-                        <div style={{"padding": "10px 0"}}>
-                            <div style={{"width": "400px", "height": "320px", "display": "flex", "alignItems": "center", "justifyContent": "center", "backgroundColor": "#eee", "borderRadius": "5px"}}>
-                                <div style={{"textAlign": "center"}}>
-                                    <Icon path={mdiBriefcaseRemoveOutline} size={1} />
-                                    <p>Aucune offre à afficher pour le moment</p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                )
-            } else if (currentUser.role === "EMPLOYEUR"){
-                return (
-                    <section>
-                        <div className={"toolbar-items"}>
-                            <h4 className={"m-0 toolbar-spacer"}>Mes offres de stage</h4>
-                            <Link to="/creer-offre-stage"><button className={"btn-filled"}>Ajouter <Icon path={mdiBriefcasePlusOutline} size={1} /></button></Link>
-                        </div>
-                        <div style={{"padding": "10px 0"}}>
-                            <div style={{"width": "400px", "height": "320px", "display": "flex", "alignItems": "center", "justifyContent": "center", "backgroundColor": "#eee", "borderRadius": "5px"}}>
-                                <div style={{"textAlign": "center"}}>
-                                    <Icon path={mdiBriefcaseRemoveOutline} size={1} />
-                                    <p>Aucune offre à afficher pour le moment</p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                )
-            }
-        }
-    }
+
 
     return(
         <>
-            <HeaderMain theme={"dark"}></HeaderMain>
+            <HeaderMain theme={"light"}></HeaderMain>
             <div className={"dashboard-layout"}>
-                <section>
-                    <h1>Accueil</h1>
-                    <h5>Bonjour {(currentUser != null)?currentUser.fullName:<div className={"loading-placeholder"}></div>}</h5>
-                </section>
-                {GetOffreStageSection()}
-                <section>
-                    <div className={"toolbar-items"}>
-                        <h4 className={"m-0 toolbar-spacer"}>Infos utilisateur</h4>
-                        <button>Parametres <Icon path={mdiCogOutline} size={1} /></button>
-                    </div>
-                    <ul>
-                        <li><p>Nom Complet: {(currentUser != null)?currentUser.fullName:<span className={"loading-placeholder"}></span>}</p></li>
-                        <li><p>Courriel: {(currentUser != null)?currentUser.email:<span className={"loading-placeholder"}></span>}</p></li>
-                        <li><p>Matricule/Num employe: {(currentUser != null)?currentUser.matricule:<span className={"loading-placeholder"}></span>}</p></li>
-                        <li><p>Role: {(currentUser != null)?currentUser.role:<span className={"loading-placeholder"}></span>}</p></li>
-                    </ul>
-                </section>
+                <div className="dashboard-head">
+
+                </div>
+                <div className="dashboard-content">
+                    <Routes>
+                        <Route path="/manage-cvs" element={<ManageCVs />} />
+                        <Route path="/" element={<DashboardHome />} />
+                        <Route path="/creer-offre-stage" element={<CreerOffreStage />} />
+                    </Routes>
+
+
+
+                </div>
             </div>
 
 

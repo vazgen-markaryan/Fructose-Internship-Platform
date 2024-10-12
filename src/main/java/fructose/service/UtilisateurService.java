@@ -23,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +38,10 @@ public class UtilisateurService {
     private final EmployeurRepository employeurRepository;
     private final PasswordEncoder passwordEncoder;
     private final UtilisateurRepository utilisateurRepository;
+<<<<<<< Updated upstream
+=======
+    private final AuthenticationManager authenticationManager;
+>>>>>>> Stashed changes
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
@@ -44,6 +49,7 @@ public class UtilisateurService {
     public boolean isValidRole(String role) {
         return Arrays.stream(Role.values()).anyMatch((t) -> t.name().equals(role));
     }
+<<<<<<< Updated upstream
 
     public UtilisateurDTO getUtilisateurById(Long id, Role role) {
         switch (role) {
@@ -62,9 +68,31 @@ public class UtilisateurService {
             case EMPLOYEUR:
                 Employeur employeur = employeurRepository.findById(id).orElse(null);
                 if (employeur == null) {
+=======
+    
+    private static final List<String> VALID_ROLES = Arrays.asList("Etudiant", "Professeur", "Employeur", "Gestionnaire de Stage");
+    
+    public UtilisateurDTO getUtilisateurById(Long id, String userType) {
+        switch (userType) {
+            case "Etudiant":
+                EtudiantDTO etudiantDTO = getEtudiantDtoById(id);
+                if (etudiantDTO == null) {
+                    throw new IllegalArgumentException("Etudiant avec ID: " + id + " n'existe pas");
+                }
+                return etudiantDTO;
+            case "Professeur":
+                ProfesseurDTO professeurDTO = getProfesseurDtoById(id);
+                if (professeurDTO == null) {
+                    throw new IllegalArgumentException("Professeur avec ID: " + id + " n'existe pas");
+                }
+                return professeurDTO;
+            case "Employeur":
+                EmployeurDTO employeurDTO = getEmployeurDtoById(id);
+                if (employeurDTO == null) {
+>>>>>>> Stashed changes
                     throw new IllegalArgumentException("Employeur avec ID: " + id + " n'existe pas");
                 }
-                return EmployeurDTO.toDTO(employeur);
+                return employeurDTO;
             default:
                 throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
         }
@@ -151,9 +179,13 @@ public class UtilisateurService {
         }
     }
 
+<<<<<<< Updated upstream
     /*
         Authentication JWT
      */
+=======
+    // Authentication JWT
+>>>>>>> Stashed changes
     public String authenticateUser(String email, String password) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password));
@@ -164,6 +196,7 @@ public class UtilisateurService {
         token = token.startsWith("Bearer") ? token.substring(7) : token;
         String email = jwtTokenProvider.getEmailFromJWT(token);
         Utilisateur user = utilisateurRepository.findByEmail(email);//.orElseThrow(UserNotFoundException::new);
+<<<<<<< Updated upstream
         return switch (user.getRole()) {
             case ETUDIANT -> etudiantRepository.findById(user.getId()).map(EtudiantDTO::toDTO).orElse(null);
             case EMPLOYEUR -> employeurRepository.findById(user.getId()).map(EmployeurDTO::toDTO).orElse(null);
@@ -180,4 +213,34 @@ public class UtilisateurService {
             return false;
         }
     }
+=======
+        UtilisateurDTO utilisateurDTO = switch(user.getRole()){
+            case ETUDIANT -> getEtudiantDtoById(user.getId());
+            case EMPLOYEUR -> getEmployeurDtoById(user.getId());
+            case PROFESSEUR -> getProfesseurDtoById(user.getId());
+            case ADMIN -> null; // TODO: Ajout Admin
+        };
+        if(utilisateurDTO != null){
+            return utilisateurDTO;
+        } else {
+            throw new IllegalArgumentException("L'utilisateur avec le token JWT '" + token + "' n'existe pas");
+        }
+    }
+
+    private EtudiantDTO getEtudiantDtoById(Long id) {
+        final Optional<Etudiant> etudiantOptional = etudiantRepository.findById(id);
+        return etudiantOptional.map(EtudiantDTO::toDTO).orElse(null);
+    }
+
+    private EmployeurDTO getEmployeurDtoById(Long id) {
+        final Optional<Employeur> employeurOptional = employeurRepository.findById(id);
+        return employeurOptional.map(EmployeurDTO::toDTO).orElse(null);
+    }
+
+    private ProfesseurDTO getProfesseurDtoById(Long id) {
+        final Optional<Professeur> professeurOptional = professeurRepository.findById(id);
+        return professeurOptional.map(ProfesseurDTO::toDTO).orElse(null);
+    }
+
+>>>>>>> Stashed changes
 }
