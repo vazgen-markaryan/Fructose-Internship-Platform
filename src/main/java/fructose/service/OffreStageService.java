@@ -24,6 +24,22 @@ public class OffreStageService {
     }
 
     public void addOffreStage(OffreStageDTO offreStageDTO) {
+        validateOffreStage(offreStageDTO);
+        OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
+        offreStageRepository.save(offreStage);
+    }
+
+    public void updateOffreStage(Long id, OffreStageDTO offreStageDTO) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID ne peut pas être nul");
+        }
+        validateOffreStage(offreStageDTO);
+        offreStageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("L'offre stage avec l'ID: " + id + " n'existe pas, alors il ne peut pas être mis à jour"));
+        OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
+        offreStageRepository.save(offreStage);
+    }
+
+    private void validateOffreStage(OffreStageDTO offreStageDTO) {
         if (offreStageDTO == null) {
             throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
         }
@@ -40,8 +56,6 @@ public class OffreStageService {
         if (offreStageDTO.getDateFin().isBefore(offreStageDTO.getDateDebut().plusDays(1))) {
             throw new IllegalArgumentException("La date de fin doit être au moins 1 jour après la date de début");
         }
-        OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
-        offreStageRepository.save(offreStage);
     }
 
     public void deleteOffreStage(Long id) {
