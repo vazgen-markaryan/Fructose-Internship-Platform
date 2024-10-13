@@ -2,8 +2,10 @@ package fructose.service;
 
 import fructose.model.OffreStage;
 import fructose.repository.OffreStageRepository;
+import fructose.repository.UtilisateurRepository;
 import fructose.service.dto.OffreStageDTO;
 import jakarta.validation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import java.time.LocalDate;
@@ -14,21 +16,25 @@ import java.util.Set;
 @Service
 public class OffreStageService {
     private final OffreStageRepository offreStageRepository;
+    private final UtilisateurRepository utilisateurRepository;
     private final Validator validator;
 
 
-    public OffreStageService(OffreStageRepository offreStageRepository) {
+    public OffreStageService(OffreStageRepository offreStageRepository, UtilisateurRepository utilisateurRepository) {
         this.offreStageRepository = offreStageRepository;
+        this.utilisateurRepository = utilisateurRepository;
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEUR', 'ADMIN')")
     public void addOffreStage(OffreStageDTO offreStageDTO) {
         validateOffreStage(offreStageDTO);
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
         offreStageRepository.save(offreStage);
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEUR', 'ADMIN')")
     public void updateOffreStage(Long id, OffreStageDTO offreStageDTO) {
         if (id == null) {
             throw new IllegalArgumentException("ID ne peut pas être nul");
@@ -58,6 +64,7 @@ public class OffreStageService {
         }
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEUR', 'ADMIN')")
     public void deleteOffreStage(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID ne peut pas être nul");
@@ -68,7 +75,7 @@ public class OffreStageService {
         offreStageRepository.deleteById(id);
     }
 
-    public OffreStageDTO getOffreStage(Long id) {
+    private OffreStageDTO getOffreStage(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID ne peut pas être nul");
         }
@@ -76,8 +83,20 @@ public class OffreStageService {
         return OffreStageDTO.toDTO(offreStage);
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEUR', 'ADMIN')")
     public List<OffreStageDTO> getOffresStage() {
         List<OffreStage> offresStage = offreStageRepository.findAll();
         return OffreStageDTO.toDTOs(offresStage);
     }
+/*
+    @PreAuthorize("hasAnyRole('EMPLOYEUR', 'ADMIN')")
+    public List<OffreStageDTO> getOffresStageByCurrentUser() {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Utilisateur currentUser = utilisateurRepository.findByEmail(currentUserEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Utilisateur non trouvé avec l'email: " + currentUserEmail));
+
+        List<OffreStage> offresStage = offreStageRepository.findAllByEmployeurId(currentUser.getId());
+        return OffreStageDTO.toDTOs(offresStage);
+    }
+ */
 }
