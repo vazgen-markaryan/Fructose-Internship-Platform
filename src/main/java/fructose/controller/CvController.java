@@ -18,7 +18,7 @@ public class CvController {
         this.cvService = cvService;
     }
 
-    @GetMapping
+    @GetMapping("/deposer-cv")
     public ResponseEntity<?> enregistrerCV(@RequestBody MultipartFile file){
         try{
             cvService.addCv(file);

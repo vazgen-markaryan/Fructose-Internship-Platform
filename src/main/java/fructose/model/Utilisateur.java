@@ -47,8 +47,8 @@ public class Utilisateur {
     @Embedded
     private Credentials credentials;
 
-    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Cv> cvs;
+    @OneToOne(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cv cv;
 
 
     public String getEmail(){
