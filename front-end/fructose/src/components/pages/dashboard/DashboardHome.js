@@ -66,13 +66,13 @@ const DashboardHome = () => {
                         <section>
                             <div className={"toolbar-items"}>
                                 <h4 className={"m-0 toolbar-spacer"}>Mon Portfolio</h4>
-                                <button>Gerer <Icon path={mdiChevronRight} size={1} /></button>
-                                <Link to="/dashboard/portfolio/upload-cv"><button>Ajouter CV <Icon path={mdiPlus} size={1} /></button></Link>
+                                <Link to="/dashboard/manage-cvs"><button>Gerer <Icon path={mdiChevronRight} size={1} /></button></Link>
+                                <Link to="/dashboard/manage-cvs"><button>Ajouter CV <Icon path={mdiPlus} size={1} /></button></Link>
                             </div>
                             <div style={{"padding": "10px 0"}}>
                                 <div style={{"width": "400px", "display": "flex", "alignItems": "center", "backgroundColor": "#eee", "borderRadius": "5px", "gap": "5px", "padding": "10px"}}>
                                         <Icon path={mdiFileDocumentOutline} size={1} />
-                                        <p className="m-0">CV1</p>
+                                        <p className="m-0">Aucun CV</p>
                                 </div>
                             </div>
                         </section>
