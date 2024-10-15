@@ -72,6 +72,11 @@ public class OffreStage {
     @NotNull(message = "La date limite de candidature ne peut pas être null")
     private LocalDate dateLimiteCandidature;
 
+    @ManyToOne
+    @JoinColumn(name = "utilisateur_id")
+    @NotNull
+    private Utilisateur utilisateur;
+
     @ManyToMany
     @JoinTable(
             name = "offre_stage_etudiant",

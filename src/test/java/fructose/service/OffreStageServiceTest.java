@@ -1,7 +1,13 @@
 package fructose.service;
 
+import fructose.model.Employeur;
 import fructose.model.OffreStage;
+import fructose.model.Utilisateur;
+import fructose.model.auth.Credentials;
+import fructose.model.auth.Role;
+import fructose.repository.EmployeurRepository;
 import fructose.repository.OffreStageRepository;
+import fructose.service.dto.EmployeurDTO;
 import fructose.service.dto.OffreStageDTO;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -24,6 +32,9 @@ public class OffreStageServiceTest {
 
     @Mock
     private OffreStageRepository offreStageRepository;
+
+    @Mock
+    private EmployeurRepository employeurRepository;
 
     @Mock
     private OffreStageDTO offreStageDTO;
@@ -47,7 +58,25 @@ public class OffreStageServiceTest {
         offreStageDTO.setNombreHeuresSemaine(40);
         offreStageDTO.setNombrePostes(5);
         offreStageDTO.setDateLimiteCandidature(LocalDate.now().plusDays(14));
+        EmployeurDTO employeurDTO = new EmployeurDTO();
+        employeurDTO.setRole(Role.EMPLOYEUR);
+        employeurDTO.setEmail("Mike");
+        offreStageDTO.setUtilisateur(employeurDTO);
+
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("Mike");
+        Credentials credentials = mock(Credentials.class);
+        when(credentials.getRole()).thenReturn(Role.EMPLOYEUR);
+        when(credentials.getEmail()).thenReturn("Mike");
+        when(authentication.getCredentials()).thenReturn(credentials);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        when(employeurRepository.findByEmail("Mike")).thenReturn(new Employeur());
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.EMPLOYEUR).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
     }
+
 
     @Test
     void testAddOffreStageSuccess() {
@@ -471,38 +500,39 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void testGetOffreStageSuccess() {
+    void testGetOffreStageByIdSuccess() {
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
         when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(offreStage));
 
-        OffreStageDTO result = offreStageService.getOffreStage(offreStageDTO.getId());
+        OffreStageDTO result = offreStageService.getOffreStageById(offreStageDTO.getId());
         assertNotNull(result);
     }
 
     @Test
-    void testGetOffreStageNotFound() {
+    void testGetOffreStageByIdNotFound() {
         when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            offreStageService.getOffreStage(offreStageDTO.getId());
+            offreStageService.getOffreStageById(offreStageDTO.getId());
         });
 
         assertEquals("L'offre stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être récupéré", exception.getMessage());
     }
 
     @Test
-    void testGetOffreStageIdNull() {
+    void testGetOffreStageByIdIdNull() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            offreStageService.getOffreStage(null);
+            offreStageService.getOffreStageById(null);
         });
 
         assertEquals("ID ne peut pas être nul", exception.getMessage());
     }
 
     @Test
-    void updateOffreStageSuccess() {
+    void testUpdateOffreStageSuccess() {
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
         when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(offreStage));
+
 
         offreStageDTO.setNom("Microsoft");
         offreStageService.updateOffreStage(offreStageDTO.getId(), offreStageDTO);
@@ -512,7 +542,7 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void updateOffreStageIdNull() {
+    void testUpdateOffreStageIdNull() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             offreStageService.updateOffreStage(null, offreStageDTO);
         });
@@ -521,7 +551,7 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void updateOffreStageNotFound() {
+    void testUpdateOffreStageNotFound() {
         when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -532,12 +562,42 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void updateOffreStageNull() {
+    void testUpdateOffreStageNull() {
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(OffreStageDTO.toEntity(offreStageDTO)));
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             offreStageService.updateOffreStage(1L, null);
         });
 
         assertEquals("OffreStageDTO ne peut pas être nul", exception.getMessage());
+    }
+
+    @Test
+    void testUpdateOffreStageRoleInvalide() {
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(OffreStageDTO.toEntity(offreStageDTO)));
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.updateOffreStage(1L, offreStageDTO);
+        });
+
+        assertEquals("Seul l'employeur qui a créé l'offre de stage ou l'administrateur peuvent la mettre à jour", exception.getMessage());
+    }
+
+    @Test
+    void testUpdateOffreStageEmployeurInvalide() {
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(OffreStageDTO.toEntity(offreStageDTO)));
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.EMPLOYEUR).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+
+        offreStageDTO.getUtilisateur().setEmail("John");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.updateOffreStage(1L, offreStageDTO);
+        });
+
+        assertEquals("Seul l'employeur qui a créé l'offre de stage ou l'administrateur peuvent la mettre à jour", exception.getMessage());
     }
     
 }

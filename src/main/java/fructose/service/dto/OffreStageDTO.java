@@ -72,6 +72,9 @@ public class OffreStageDTO {
     @NotNull(message = "La date limite de candidature ne peut pas être null")
     private LocalDate dateLimiteCandidature;
 
+    @NotNull
+    private UtilisateurDTO utilisateur;
+
     public static OffreStageDTO toDTO(OffreStage offreStage) {
         OffreStageDTO offreStageDTO = new OffreStageDTO();
         offreStageDTO.setId(offreStage.getId());
