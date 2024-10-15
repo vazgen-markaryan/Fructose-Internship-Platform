@@ -1,8 +1,18 @@
 import React, {useCallback, useContext, useState} from "react";
 import {
-    mdiArrowLeft, mdiButtonCursor, mdiChevronRight, mdiClose,
-    mdiCloudUploadOutline, mdiFileOutline,
-    mdiFolderOpenOutline
+    mdiArrowLeft, mdiArrowRight,
+    mdiArrowRightCircle,
+    mdiButtonCursor,
+    mdiCheck,
+    mdiCheckCircle, mdiChevronDown,
+    mdiChevronRight,
+    mdiClose,
+    mdiCloseCircle,
+    mdiCloudUploadOutline,
+    mdiFileOutline,
+    mdiFolderOpenOutline,
+    mdiTimer,
+    mdiTimerSand
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../../../providers/AuthProvider";
@@ -16,84 +26,58 @@ const ManageCVs = () => {
     const [files, setFiles] = useState('')
     const [filename, setFilename] = useState('')
 
-    const onDrop = useCallback(acceptedFiles => {
-        setFiles(acceptedFiles.map(file => (
-            <PdfPreview file={URL.createObjectURL(file)} height={300}></PdfPreview>
-        )));
-        setFilename(acceptedFiles.map(file => (
-            file.name
-        )))
-    }, [])
-    const {getRootProps, getInputProps, isDragActive, open} = useDropzone({onDrop, accept:{
-        'application/pdf': ['.pdf'],
-        }, noClick: true})
-
-    const getStep = () => {
-        if(files === ""){
-            return(
-                <>
-                    <div className="file-upload-zone" {...getRootProps()} style={{"opacity": (isDragActive)?"0.5":"1", "border": (isDragActive)?"1px solid black":"none"}}>
-                        <input {...getInputProps()} />
-                        <div className="file-upload-content">
-                            <Icon path={mdiCloudUploadOutline} size={2} />
-                            <h5>Glisser votre CV ici</h5>
-                            {
-                                isDragActive ?
-                                    <>
-                                    </>
-                                    :
-                                    <>
-                                        <div className="file-upload-or">
-                                            <hr/>
-                                            <p>OU</p>
-                                            <hr/>
-                                        </div>
-                                        <button onClick={open} className="btn-outline"><Icon path={mdiFolderOpenOutline} size={0.8} /> Sélectionner</button>
-                                    </>
-                            }
-                        </div>
-                    </div>
-                    <br/>
-                    <p className="text-dark" style={{"textAlign": "center"}}>Format des fichiers acceptés: PDF</p>
-                </>
-            )
-        } else {
-            return (
-                <>
-                    {
-                        files
-                    }
-                    <br/>
-                    <div style={{"width": "100%", "backgroundColor": "rgba(0,0,0,0.03)", "display": "flex", "alignItems": "center", "padding": "0 10px", "height": "50px", "boxSizing": "border-box", "borderRadius":"5px", "gap":"5px"}}>
-                        <Icon path={mdiFileOutline} size={1} />
-                        <p className="m-0">{filename}</p>
-                        <div className="toolbar-spacer"></div>
-                        <button className="btn-icon" onClick={()=>{setFiles("")}}><Icon path={mdiClose} size={1} /></button>
-                    </div>
-                    <br/>
-                    <div className="toolbar-items">
-                        <div className="toolbar-spacer"></div>
-                        <button className="btn-filled">Téléverser <Icon path={mdiChevronRight} size={1}/></button>
-                    </div>
-                </>
-            )
-        }
-    }
-
     return(
         <>
             <div className="dashboard-card-toolbar">
                 <Link to="/dashboard"><button className="btn-icon-dashboard"><Icon path={mdiArrowLeft} size={1.4} /></button></Link>
-                <h1>Téléverser un CV</h1>
+                <h1>Mes CVs</h1>
             </div>
-            <div className="dashboard-card" style={{"maxWidth": "900px"}}>
-                <section>
-                    {
-                        getStep()
-                    }
-                </section>
-            </div>
+            <div style={{"display": "flex", "gap": "20px"}}>
 
+                <div className="dashboard-card" style={{"width": "65%"}}>
+                    <section>
+                        <div style={{"width": "100%", "backgroundColor": "rgba(0,0,0,0.05)", "display": "flex", "alignItems": "center", "padding": "0 10px", "height": "50px", "boxSizing": "border-box", "borderRadius":"5px", "gap":"5px"}}>
+                            <Icon path={mdiFileOutline} size={1} />
+                            <p className="m-0">CV1.pdf - <span className="text-grey">932.8 B</span></p>
+                            <div className="toolbar-spacer"></div>
+                            <Icon path={mdiCheck} size={1} className="text-green" />
+                        </div>
+                        <div style={{"width": "100%", "backgroundColor": "rgba(0,0,0,0.05)", "display": "flex", "alignItems": "center", "padding": "0 10px", "height": "50px", "boxSizing": "border-box", "borderRadius":"5px", "gap":"5px"}}>
+                            <Icon path={mdiFileOutline} size={1} />
+                            <p className="m-0">CV1.pdf - <span className="text-grey">932.8 B</span></p>
+                            <div className="toolbar-spacer"></div>
+                            <Icon path={mdiArrowRight} size={1} className="text-orange" />
+                        </div>
+                        <br/>
+                        <h5>Anciens CVs <Icon path={mdiChevronDown} size={1} /></h5>
+                        <div style={{"width": "100%", "borderRadius":"5px", "border": "1px solid  #8080805c", "boxSizing": "border-box"}}>
+                            <div style={{"display": "flex", "alignItems": "center", "padding": "0 10px", "height": "50px", "boxSizing": "border-box", "gap":"5px", "borderBottom": "1px solid  #8080805c"}}>
+                                <Icon path={mdiFileOutline} size={1} />
+                                <p className="m-0">CV1.pdf - <span className="text-grey">932.8 B</span></p>
+                                <div className="toolbar-spacer"></div>
+                                <Icon path={mdiCheck} size={1} className="text-green" />
+                            </div>
+                            <div style={{"display": "flex", "alignItems": "center", "padding": "0 10px", "height": "50px", "boxSizing": "border-box", "gap":"5px", "borderBottom": "1px solid  #8080805c"}}>
+                                <Icon path={mdiFileOutline} size={1} />
+                                <p className="m-0">CV1.pdf - <span className="text-grey">932.8 B</span></p>
+                                <div className="toolbar-spacer"></div>
+                                <Icon path={mdiCheck} size={1} className="text-green" />
+                            </div>
+                            <div style={{"display": "flex", "alignItems": "center", "padding": "0 10px", "height": "50px", "boxSizing": "border-box", "gap":"5px"}}>
+                                <Icon path={mdiFileOutline} size={1} />
+                                <p className="m-0">CV1.pdf - <span className="text-grey">932.8 B</span></p>
+                                <div className="toolbar-spacer"></div>
+                                <Icon path={mdiClose} size={1} className="text-red" />
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div className="dashboard-card" style={{"width": "35%"}}>
+                    <section>
+                        <PdfPreview height={300} file="https://manning-content.s3.amazonaws.com/download/5/54dea42-e46e-44c7-a930-d4c86a2c2ca3/CORS_ch03.pdf"></PdfPreview>
+                    </section>
+                </div>
+            </div>
 
         </>
     )

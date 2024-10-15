@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import {Page, Document} from "react-pdf";
 import { pdfjs } from 'react-pdf';
 import Icon from "@mdi/react";
-import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
+import {mdiChevronLeft, mdiChevronRight, mdiFileAlertOutline} from "@mdi/js";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -36,7 +36,8 @@ const PdfPreview = ({file, height = 500}) => {
                 <Document
                     file={file}
                     onLoadSuccess={onDocumentLoadSuccess}
-
+                    loading={<div className="loader-container"><div className="loader"></div></div>}
+                    error={<div className="loader-container text-dark"><div><Icon path={mdiFileAlertOutline} size={1.5} /><p>Une erreur est survenue</p></div></div>}
                 >
                     <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} height={height}/>
                 </Document>

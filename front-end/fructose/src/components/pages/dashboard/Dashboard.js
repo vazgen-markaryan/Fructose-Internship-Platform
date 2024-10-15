@@ -16,6 +16,7 @@ import ManageCVs from "./cv/ManageCVs";
 import CreerOffreStage from "../../offre_stage/CreerOffreStage";
 import DashboardHome from "./DashboardHome";
 import ViewCV from "./cv/View";
+import UploadCV from "./cv/Upload";
 
 const Dashboard = () => {
     const { currentUser } = useContext(AuthContext);
@@ -31,6 +32,7 @@ const Dashboard = () => {
                 <div className="dashboard-content">
                     <Routes>
                         <Route path="/manage-cvs" element={<ManageCVs />} />
+                        <Route path="/upload-cv" element={<UploadCV />} />
                         <Route path="/view-cv" element={<ViewCV />} />
                         <Route path="/" element={<DashboardHome />} />
                         <Route path="/creer-offre-stage" element={<CreerOffreStage />} />

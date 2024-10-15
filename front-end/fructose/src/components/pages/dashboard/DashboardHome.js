@@ -67,7 +67,7 @@ const DashboardHome = () => {
                             <div className={"toolbar-items"}>
                                 <h4 className={"m-0 toolbar-spacer"}>Mon Portfolio</h4>
                                 <Link to="/dashboard/manage-cvs"><button>Gerer <Icon path={mdiChevronRight} size={1} /></button></Link>
-                                <Link to="/dashboard/manage-cvs"><button>Ajouter CV <Icon path={mdiPlus} size={1} /></button></Link>
+                                <Link to="/dashboard/upload-cv"><button>Ajouter CV <Icon path={mdiPlus} size={1} /></button></Link>
                             </div>
                             <div style={{"padding": "10px 0"}}>
                                 <div style={{"width": "400px", "display": "flex", "alignItems": "center", "backgroundColor": "#eee", "borderRadius": "5px", "gap": "5px", "padding": "10px"}}>
