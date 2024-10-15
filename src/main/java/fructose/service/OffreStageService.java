@@ -117,7 +117,10 @@ public class OffreStageService {
     }
 
     public List<OffreStageDTO> getOffresStage() {
-        List<OffreStage> offresStage = offreStageRepository.findAll();
-        return OffreStageDTO.toDTOs(offresStage);
+        try {
+            return OffreStageDTO.toDTOs(offreStageRepository.findAll());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Aucune offre de stage n'a été trouvée");
+        }
     }
 }

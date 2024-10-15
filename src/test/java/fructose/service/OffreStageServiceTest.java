@@ -615,5 +615,21 @@ public class OffreStageServiceTest {
 
         assertEquals("Seul l'employeur qui a créé l'offre de stage ou l'administrateur peuvent la mettre à jour", exception.getMessage());
     }
+
+    @Test
+    void testGetOffresStageSuccess() {
+        offreStageService.getOffresStage();
+        verify(offreStageRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testGetOffresStageNull() {
+        when(offreStageRepository.findAll()).thenReturn(null);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getOffresStage();
+        });
+
+        assertEquals("Aucune offre de stage n'a été trouvée", exception.getMessage());
+    }
     
 }
