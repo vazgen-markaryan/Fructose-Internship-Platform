@@ -73,49 +73,51 @@ public class OffreStageService {
     }
 
 
-        public void deleteOffreStage (Long id){
-            if (id == null) {
-                throw new IllegalArgumentException("ID ne peut pas être nul");
-            }
-            if (!offreStageRepository.existsById(id)) {
-                throw new IllegalArgumentException("L'offre stage avec l'ID: " + id + " n'existe pas, alors il ne peut pas être supprimé");
-            }
-            if (getUtilisateurEnCours().getRole() != Role.ADMIN && getUtilisateurEnCours().getRole() != Role.EMPLOYEUR) {
-                throw new IllegalArgumentException("Seul l'administrateur peut spprimer une offre de stage pour un employeur");
-            }
-            offreStageRepository.deleteById(id);
+    public void deleteOffreStage(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID ne peut pas être nul");
         }
-
-        private void validateOffreStage (OffreStageDTO offreStageDTO){
-            if (offreStageDTO == null) {
-                throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
-            }
-            Set<ConstraintViolation<OffreStageDTO>> violations = validator.validate(offreStageDTO);
-            if (!violations.isEmpty()) {
-                throw new ConstraintViolationException(violations);
-            }
-            if (offreStageDTO.getDateLimiteCandidature().isBefore(LocalDate.now().plusDays(7))) {
-                throw new IllegalArgumentException("La date limite de candidature doit être au moins 7 jours après aujourd'hui");
-            }
-            if (offreStageDTO.getDateDebut().isBefore(offreStageDTO.getDateLimiteCandidature().plusDays(1))) {
-                throw new IllegalArgumentException("La date de début doit être au moins 1 jour après la date limite de candidature");
-            }
-            if (offreStageDTO.getDateFin().isBefore(offreStageDTO.getDateDebut().plusDays(1))) {
-                throw new IllegalArgumentException("La date de fin doit être au moins 1 jour après la date de début");
-            }
+        if (!offreStageRepository.existsById(id)) {
+            throw new IllegalArgumentException("L'offre stage avec l'ID: " + id + " n'existe pas, alors il ne peut pas être supprimé");
         }
-
-
-        public OffreStageDTO getOffreStageById (Long id){
-            if (id == null) {
-                throw new IllegalArgumentException("ID ne peut pas être nul");
-            }
-            OffreStage offreStage = offreStageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("L'offre stage avec l'ID: " + id + " n'existe pas, alors il ne peut pas être récupéré"));
-            return OffreStageDTO.toDTO(offreStage);
+        Utilisateur utilisateur = getUtilisateurEnCours();
+        OffreStageDTO offreStageDTO = getOffreStageById(id);
+        if (!Objects.equals(offreStageDTO.getUtilisateur().getEmail(), utilisateur.getEmail()) && utilisateur.getRole() != Role.ADMIN || utilisateur.getRole() != Role.EMPLOYEUR) {
+            throw new IllegalArgumentException("Seul l'employeur qui a créé l'offre de stage ou l'administrateur peuvent la supprimer");
         }
+        offreStageRepository.deleteById(id);
+    }
 
-        public List<OffreStageDTO> getOffresStage () {
-            List<OffreStage> offresStage = offreStageRepository.findAll();
-            return OffreStageDTO.toDTOs(offresStage);
+    private void validateOffreStage(OffreStageDTO offreStageDTO) {
+        if (offreStageDTO == null) {
+            throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
+        }
+        Set<ConstraintViolation<OffreStageDTO>> violations = validator.validate(offreStageDTO);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+        if (offreStageDTO.getDateLimiteCandidature().isBefore(LocalDate.now().plusDays(7))) {
+            throw new IllegalArgumentException("La date limite de candidature doit être au moins 7 jours après aujourd'hui");
+        }
+        if (offreStageDTO.getDateDebut().isBefore(offreStageDTO.getDateLimiteCandidature().plusDays(1))) {
+            throw new IllegalArgumentException("La date de début doit être au moins 1 jour après la date limite de candidature");
+        }
+        if (offreStageDTO.getDateFin().isBefore(offreStageDTO.getDateDebut().plusDays(1))) {
+            throw new IllegalArgumentException("La date de fin doit être au moins 1 jour après la date de début");
         }
     }
+
+
+    public OffreStageDTO getOffreStageById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID ne peut pas être nul");
+        }
+        OffreStage offreStage = offreStageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("L'offre stage avec l'ID: " + id + " n'existe pas, alors il ne peut pas être récupéré"));
+        return OffreStageDTO.toDTO(offreStage);
+    }
+
+    public List<OffreStageDTO> getOffresStage() {
+        List<OffreStage> offresStage = offreStageRepository.findAll();
+        return OffreStageDTO.toDTOs(offresStage);
+    }
+}

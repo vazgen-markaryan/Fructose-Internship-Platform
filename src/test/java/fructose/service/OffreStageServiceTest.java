@@ -472,7 +472,8 @@ public class OffreStageServiceTest {
     @Test
     void testDeleteOffreStageSuccess() {
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
-        when(offreStageRepository.existsById(offreStage.getId())).thenReturn(true);
+        when(offreStageRepository.existsById(offreStageDTO.getId())).thenReturn(true);
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(offreStage));
 
         offreStageService.deleteOffreStage(offreStageDTO.getId());
 
@@ -497,6 +498,21 @@ public class OffreStageServiceTest {
         });
 
         assertEquals("ID ne peut pas être nul", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteOffreStageRoleInvalide() {
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(OffreStageDTO.toEntity(offreStageDTO)));
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+        when(offreStageRepository.existsById(offreStageDTO.getId())).thenReturn(true);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.deleteOffreStage(offreStageDTO.getId());
+        });
+
+        assertEquals("Seul l'employeur qui a créé l'offre de stage ou l'administrateur peuvent la supprimer", exception.getMessage());
     }
 
     @Test

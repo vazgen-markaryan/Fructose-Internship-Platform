@@ -72,7 +72,7 @@ public class OffreStageDTO {
     @NotNull(message = "La date limite de candidature ne peut pas être null")
     private LocalDate dateLimiteCandidature;
 
-    @NotNull
+    @NotNull(message = "L'utilisateur ne peut pas être null")
     private UtilisateurDTO utilisateur;
 
     public static OffreStageDTO toDTO(OffreStage offreStage) {
@@ -92,6 +92,7 @@ public class OffreStageDTO {
         offreStageDTO.setNombreHeuresSemaine(offreStage.getNombreHeuresSemaine());
         offreStageDTO.setNombrePostes(offreStage.getNombrePostes());
         offreStageDTO.setDateLimiteCandidature(offreStage.getDateLimiteCandidature());
+        offreStageDTO.setUtilisateur(UtilisateurDTO.toDTO(offreStage.getUtilisateur()));
         return offreStageDTO;
     }
 
@@ -112,6 +113,7 @@ public class OffreStageDTO {
         offreStage.setNombreHeuresSemaine(offreStageDTO.getNombreHeuresSemaine());
         offreStage.setNombrePostes(offreStageDTO.getNombrePostes());
         offreStage.setDateLimiteCandidature(offreStageDTO.getDateLimiteCandidature());
+        offreStage.setUtilisateur(UtilisateurDTO.toEntity(offreStageDTO.getUtilisateur()));
         return offreStage;
     }
 
