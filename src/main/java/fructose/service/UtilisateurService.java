@@ -1,21 +1,11 @@
-
 package fructose.service;
 
-import fructose.model.Employeur;
-import fructose.model.Etudiant;
-import fructose.model.Professeur;
-import fructose.model.Utilisateur;
+import fructose.model.*;
 import fructose.model.auth.Role;
-import fructose.repository.EmployeurRepository;
-import fructose.repository.EtudiantRepository;
-import fructose.repository.ProfesseurRepository;
-import fructose.repository.UtilisateurRepository;
+import fructose.repository.*;
 import fructose.security.JwtTokenProvider;
 import fructose.security.exception.InvalidJwtTokenException;
-import fructose.service.dto.EmployeurDTO;
-import fructose.service.dto.EtudiantDTO;
-import fructose.service.dto.ProfesseurDTO;
-import fructose.service.dto.UtilisateurDTO;
+import fructose.service.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,6 +24,8 @@ public class UtilisateurService {
     private final EtudiantRepository etudiantRepository;
     private final ProfesseurRepository professeurRepository;
     private final EmployeurRepository employeurRepository;
+    private final AdminRepository adminRepository;
+
     private final PasswordEncoder passwordEncoder;
     private final UtilisateurRepository utilisateurRepository;
     private final JwtTokenProvider jwtTokenProvider;
@@ -63,6 +55,12 @@ public class UtilisateurService {
                     throw new IllegalArgumentException("Employeur avec ID: " + id + " n'existe pas");
                 }
                 return EmployeurDTO.toDTO(employeur);
+            case ADMIN:
+                Admin admin = adminRepository.findById(id).orElse(null);
+                if (admin == null) {
+                    throw new IllegalArgumentException("Admin avec ID: " + id + " n'existe pas");
+                }
+                return AdminDTO.toDTO(admin);
             default:
                 throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
         }
@@ -91,6 +89,9 @@ public class UtilisateurService {
             case EMPLOYEUR:
                 employeurRepository.save((Employeur) utilisateur);
                 break;
+            case ADMIN:
+                adminRepository.save((Admin) utilisateur);
+                break;
         }
     }
 
@@ -107,8 +108,11 @@ public class UtilisateurService {
             case EMPLOYEUR:
                 employeurRepository.deleteById(id);
                 break;
+            case ADMIN:
+                adminRepository.deleteById(id);
+                break;
         }
-        System.out.println(role + " avec id " + id + " a été supprimé avec succès.");
+        System.out.println(role + " " + getUtilisateurById(id, role).getFullName() + " a été supprimé avec succès.");
     }
 
     public List<UtilisateurDTO> getUtilisateurs(Role role) {
@@ -125,7 +129,10 @@ public class UtilisateurService {
                     .stream()
                     .map(EmployeurDTO::toDTO)
                     .collect(Collectors.toList());
-            case ADMIN -> null;
+            case ADMIN -> adminRepository.findAll()
+                    .stream()
+                    .map(AdminDTO::toDTO)
+                    .collect(Collectors.toList());
         };
     }
 
@@ -150,8 +157,7 @@ public class UtilisateurService {
     }
 
     public String authenticateUser(String email, String password) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         return jwtTokenProvider.generateToken(authentication);
     }
 
@@ -163,8 +169,7 @@ public class UtilisateurService {
             case ETUDIANT -> etudiantRepository.findById(user.getId()).map(EtudiantDTO::toDTO).orElse(null);
             case EMPLOYEUR -> employeurRepository.findById(user.getId()).map(EmployeurDTO::toDTO).orElse(null);
             case PROFESSEUR -> professeurRepository.findById(user.getId()).map(ProfesseurDTO::toDTO).orElse(null);
-            default ->
-                    throw new IllegalArgumentException("Type d'utilisateur : " + user.getRole().toString() + " n'est pas valide");
+            case ADMIN -> adminRepository.findById(user.getId()).map(AdminDTO::toDTO).orElse(null);
         };
     }
 

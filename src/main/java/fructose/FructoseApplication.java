@@ -14,6 +14,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -35,30 +36,36 @@ public class FructoseApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", "Informatique", null);
+        Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", "techniques_informatique", null);
         EtudiantDTO etudiantVazgen = EtudiantDTO.toDTO((Etudiant) vazgen);
 
-        Utilisateur francois = Utilisateur.createUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "2222222", "Informatique", null);
+        Utilisateur francois = Utilisateur.createUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "2222222", "techniques_informatique", null);
         ProfesseurDTO professeurFrancois = ProfesseurDTO.toDTO((Professeur) francois);
 
-        Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, "Informatique", "Ubisoft Incorporé");
+        Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, "techniques_informatique", "Ubisoft Incorporé");
         EmployeurDTO employeurUbisoft = EmployeurDTO.toDTO((Employeur) ubisoft);
 
         OffreStage offreStage = OffreStage.createOffreStage("Développeur de jeux video", "Développeur Unity", "Développer des jeux video en utilisant Unity", "Ubisoft", "techniques_informatique", 25.0, "virtuel", "Montréal", "temps_plein", LocalDate.now().plusMonths(3), LocalDate.now().plusMonths(6), 20, 1, LocalDate.now().plusMonths(2));
         OffreStageDTO offreStageDTO = OffreStageDTO.toDTO(offreStage);
-        try {
-            checkAndAddOffreStage(offreStageDTO);
-        } catch (Exception e) {
-			logger.error("Une erreur s'est produite lors de l'ajout de l'offre de stage", e);
-		}
 
-		try {
+        Utilisateur admin = Utilisateur.createUtilisateur("Admin", "Gabriel Laplante", "admin@gmail.com", "Admin123!", "0000000", "CÉGEP ANDRÉ LAURENDEAU", null);
+        AdminDTO superAdmin = AdminDTO.toDTO((Admin) admin);
+
+        addWithHandleException(() -> checkAndAddOffreStage(offreStageDTO), "Une erreur s'est produite lors de l'ajout de l'offre de stage");
+        addWithHandleException(() -> {
+            checkAndAddUtilisateur(superAdmin, Role.ADMIN);
             checkAndAddUtilisateur(etudiantVazgen, Role.ETUDIANT);
             checkAndAddUtilisateur(professeurFrancois, Role.PROFESSEUR);
             checkAndAddUtilisateur(employeurUbisoft, Role.EMPLOYEUR);
-		} catch (Exception e) {
-			logger.error("Une erreur s'est produite lors de l'ajout de l'utilisateur", e);
-		}
+        }, "Une erreur s'est produite lors de l'ajout de l'utilisateur");
+    }
+
+    private void addWithHandleException(Runnable action, String errorMessage) {
+        try {
+            action.run();
+        } catch (Exception e) {
+            logger.error(errorMessage, e);
+        }
     }
 
     private void checkAndAddOffreStage(OffreStageDTO offreStage) {

@@ -39,8 +39,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/creer-utilisateur").permitAll()
-                        .requestMatchers("/connexion").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/creer-utilisateur").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/connexion").permitAll()
                         .requestMatchers(HttpMethod.GET, "/check-email").permitAll()
                         .requestMatchers(HttpMethod.GET, "/check-matricule").permitAll()
                         .anyRequest().authenticated()

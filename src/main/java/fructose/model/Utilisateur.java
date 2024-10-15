@@ -79,6 +79,7 @@ public class Utilisateur {
             case "etudiant" -> new Etudiant(fullName, email, password, matricule, Role.ETUDIANT, departement, companyName);
             case "employeur" -> new Employeur(fullName, email, password, matricule, Role.EMPLOYEUR, departement, companyName);
             case "professeur" -> new Professeur(fullName, email, password, matricule, Role.PROFESSEUR, departement, companyName);
+            case "admin" -> new Admin(fullName, email, password, matricule, Role.ADMIN, departement, companyName);
             default -> throw new IllegalArgumentException("Type d'utilisateur: " + type + " n'est pas supporté");
         };
     }
