@@ -617,19 +617,18 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void testGetOffresStageSuccess() {
+    void testGetOffresStageSuccessForEmployeur() {
         offreStageService.getOffresStage();
-        verify(offreStageRepository, times(1)).findAll();
+        verify(offreStageRepository, times(1)).findByEmployeurEmail("Mike");
     }
 
     @Test
-    void testGetOffresStageNull() {
-        when(offreStageRepository.findAll()).thenReturn(null);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            offreStageService.getOffresStage();
-        });
+    void testGetOffresStageSuccessForAdmin() {
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ADMIN).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
 
-        assertEquals("Aucune offre de stage n'a été trouvée", exception.getMessage());
+        offreStageService.getOffresStage();
+        verify(offreStageRepository, times(1)).findAll();
     }
-    
 }

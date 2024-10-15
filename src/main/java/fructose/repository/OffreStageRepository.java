@@ -1,8 +1,18 @@
 package fructose.repository;
 
 import fructose.model.OffreStage;
+import fructose.model.Utilisateur;
+import fructose.service.dto.OffreStageDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface OffreStageRepository extends JpaRepository<OffreStage, Long> {}
+public interface OffreStageRepository extends JpaRepository<OffreStage, Long> {
+    @Query("SELECT o FROM OffreStage o WHERE o.utilisateur.credentials.email = ?1")
+    List<OffreStage> findByEmployeurEmail(String employeurEmail);
+    @Query("SELECT o FROM OffreStage o WHERE o.programmeEtude = ?1")
+    List<OffreStage> findByUserDepartement(String departement);
+}

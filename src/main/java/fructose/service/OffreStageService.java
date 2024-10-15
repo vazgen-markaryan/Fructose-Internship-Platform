@@ -38,7 +38,7 @@ public class OffreStageService {
         if (authentication != null && authentication.isAuthenticated()) {
             return employeurRepository.findByEmail(authentication.getName());
         }
-        return null;
+        throw new IllegalArgumentException("Aucun utilisateur n'est connecté");
     }
 
     public void addOffreStage(OffreStageDTO offreStageDTO) {
@@ -117,10 +117,13 @@ public class OffreStageService {
     }
 
     public List<OffreStageDTO> getOffresStage() {
-        try {
-            return OffreStageDTO.toDTOs(offreStageRepository.findAll());
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Aucune offre de stage n'a été trouvée");
-        }
+        Utilisateur utilisateur = getUtilisateurEnCours();
+        return switch (utilisateur.getRole()) {
+            case ADMIN -> OffreStageDTO.toDTOs(offreStageRepository.findAll());
+            case EMPLOYEUR -> OffreStageDTO.toDTOs(offreStageRepository.findByEmployeurEmail(utilisateur.getEmail()));
+            case ETUDIANT ->
+                    OffreStageDTO.toDTOs(offreStageRepository.findByUserDepartement(utilisateur.getDepartement()));
+            default -> throw new IllegalArgumentException("Aucune offre de stage n'a été trouvée");
+        };
     }
 }
