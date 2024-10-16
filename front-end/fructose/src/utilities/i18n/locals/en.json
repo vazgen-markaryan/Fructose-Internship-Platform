@@ -200,18 +200,21 @@
         }
     },
 
-    "dashboard_page": {
-        "title": "Home",
-        "offer": "Internship offers",
+    "dashboard_home_page": {
+        "offer": "Internship Offers",
+        "explore": "Explore",
         "no_offers": "No offers to display at the moment",
-        "my_offers": "My internship offers",
-        "add_offer": "Add an internship offer",
+        "my_offers": "My Internship Offers",
+        "add_offer": "Add",
         "hello": "Hello",
-        "user_info": "User information",
-        "parameters": "Settings",
-        "full_name": "Full name",
+        "portfolio": "My Portfolio",
+        "add_cv": "Add a CV",
+        "manage": "Manage",
+        "no_cv": "No CV",
+        "user_info": "User Information",
+        "full_name": "Full Name",
         "email": "Email",
-        "matricule": "Student/Employee number",
+        "matricule": "Student/Employee Number",
         "role": "Role"
     }
 }

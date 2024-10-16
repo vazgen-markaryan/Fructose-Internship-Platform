@@ -24,7 +24,7 @@ public class FructoseApplication implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(FructoseApplication.class);
     private final UtilisateurService utilisateurService;
     private final OffreStageService offreStageService;
-
+    
     public FructoseApplication(UtilisateurService utilisateurService, OffreStageService offreStageService) {
         this.utilisateurService = utilisateurService;
         this.offreStageService = offreStageService;
@@ -33,7 +33,7 @@ public class FructoseApplication implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication.run(FructoseApplication.class, args);
     }
-
+    
     @Override
     public void run(String... args) {
         Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", "techniques_informatique", null);
@@ -59,7 +59,7 @@ public class FructoseApplication implements CommandLineRunner {
             checkAndAddUtilisateur(employeurUbisoft, Role.EMPLOYEUR);
         }, "Une erreur s'est produite lors de l'ajout de l'utilisateur");
     }
-
+    
     private void addWithHandleException(Runnable action, String errorMessage) {
         try {
             action.run();

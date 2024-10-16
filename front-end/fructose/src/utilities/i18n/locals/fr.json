@@ -200,15 +200,18 @@
         }
     },
 
-    "dashboard_page" : {
-        "title": "Accueil",
+    "dashboard_home_page" : {
         "offer": "Offres de stage",
+        "explore": "Explorer",
         "no_offers": "Aucune offre à afficher pour le moment",
         "my_offers": "Mes offres de stage",
-        "add_offer": "Ajouter une offre de stage",
-        "hello": "Bonjour",
+        "add_offer": "Ajouter",
+        "hello:": "Bonjour",
+        "portfolio:": "Mon Portfolio",
+        "add_cv": "Ajouter un CV",
+        "manage": "Gérer",
+        "no_cv": "Aucun CV",
         "user_info": "Informations sur l'utilisateur",
-        "parameters": "Paramètres",
         "full_name": "Nom complet",
         "email": "Courriel",
         "matricule": "Numéro d'étudiant/employé",
