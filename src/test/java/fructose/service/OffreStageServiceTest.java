@@ -19,8 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -470,6 +472,19 @@ public class OffreStageServiceTest {
     }
 
     @Test
+    void testAddOffreStageRoleInvalide() {
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.addOffreStage(offreStageDTO);
+        });
+
+        assertEquals("Seul l'employeur ou l'administrateur peuvent créer une offre de stage", exception.getMessage());
+    }
+
+    @Test
     void testDeleteOffreStageSuccess() {
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
         when(offreStageRepository.existsById(offreStageDTO.getId())).thenReturn(true);
@@ -618,17 +633,120 @@ public class OffreStageServiceTest {
 
     @Test
     void testGetOffresStageSuccessForEmployeur() {
+        List<OffreStageDTO> offresStage = List.of(offreStageDTO);
+        List<OffreStage> offreStages = offresStage.stream()
+                .map(OffreStageDTO::toEntity)
+                .collect(Collectors.toList());
+        when(offreStageRepository.findByEmployeurEmail("Mike")).thenReturn(offreStages);
         offreStageService.getOffresStage();
         verify(offreStageRepository, times(1)).findByEmployeurEmail("Mike");
     }
 
     @Test
+    void testGetOffresStageNotFoundForEmployeur() {
+        when(offreStageRepository.findByEmployeurEmail("Mike")).thenReturn(List.of());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getOffresStage();
+        });
+
+        assertEquals("Aucune offre de stage trouvée pour l'employeur avec l'email: Mike", exception.getMessage());
+    }
+
+    @Test
     void testGetOffresStageSuccessForAdmin() {
+        List<OffreStageDTO> offresStage = List.of(offreStageDTO);
+        List<OffreStage> offreStages = offresStage.stream()
+                .map(OffreStageDTO::toEntity)
+                .toList();
         Utilisateur utilisateur = new Employeur();
         utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ADMIN).build());
         when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+        when(offreStageRepository.findAll()).thenReturn(offreStages);
 
         offreStageService.getOffresStage();
+
         verify(offreStageRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testGetOffresStageNotFoundForAdmin() {
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ADMIN).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+        when(offreStageRepository.findAll()).thenReturn(List.of());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getOffresStage();
+        });
+
+        assertEquals("Aucune offre stage a été créer pour l'instant", exception.getMessage());
+    }
+
+    @Test
+    void testGetOffresStageSuccesForEtudiant() {
+        List<OffreStageDTO> offresStage = List.of(offreStageDTO);
+        List<OffreStage> offreStages = offresStage.stream()
+                .map(OffreStageDTO::toEntity)
+                .toList();
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+        when(offreStageRepository.findByUserDepartement(utilisateur.getDepartement())).thenReturn(offreStages);
+
+        offreStageService.getOffresStage();
+
+        verify(offreStageRepository, times(1)).findByUserDepartement(utilisateur.getDepartement());
+    }
+
+    @Test
+    void testGetOffresStageNotFoundForEtudiant() {
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+        when(offreStageRepository.findByUserDepartement(utilisateur.getDepartement())).thenReturn(List.of());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getOffresStage();
+        });
+
+        assertEquals("Aucune offre de stage trouvée pour l'étudiant dans le département: " + utilisateur.getDepartement(), exception.getMessage());
+    }
+
+    @Test
+    void testGetOffresStageNotFoundDefault() {
+        Utilisateur utilisateur = new Employeur();
+        // Doit être changer lorsque le usecase sera implémenté
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.PROFESSEUR).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getOffresStage();
+        });
+
+        assertEquals("Aucune offre de stage n'a été trouvée pour le role inconnue", exception.getMessage());
+    }
+
+    @Test
+    void testGetUtilisateurEnCoursSuccess() {
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.EMPLOYEUR).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+
+        Utilisateur result = offreStageService.getUtilisateurEnCours();
+        assertNotNull(result);
+    }
+
+    @Test
+    void testGetUtilisateurEnCoursNotFound() {
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.isAuthenticated()).thenReturn(false);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getUtilisateurEnCours();
+        });
+
+        assertEquals("Aucun utilisateur n'est connecté", exception.getMessage());
     }
 }

@@ -44,7 +44,7 @@ public class OffreStageService {
     public void addOffreStage(OffreStageDTO offreStageDTO) {
         Utilisateur utilisateur = getUtilisateurEnCours();
         if (utilisateur.getRole() != Role.EMPLOYEUR && utilisateur.getRole() != Role.ADMIN) {
-            throw new IllegalArgumentException("Seuls les employeurs peuvent ajouter des offres de stage");
+            throw new IllegalArgumentException("Seul l'employeur ou l'administrateur peuvent créer une offre de stage");
         }
         UtilisateurDTO utilisateurDTO = UtilisateurDTO.toDTO(utilisateur);
         if (offreStageDTO == null) {
@@ -52,9 +52,6 @@ public class OffreStageService {
         }
         offreStageDTO.setUtilisateur(utilisateurDTO);
         validateOffreStage(offreStageDTO);
-        if (utilisateur.getRole() != Role.ADMIN && utilisateur.getRole() != Role.EMPLOYEUR) {
-            throw new IllegalArgumentException("Seul l'administrateur peut créer une offre de stage pour un employeur");
-        }
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
         offreStageRepository.save(offreStage);
     }
@@ -118,12 +115,28 @@ public class OffreStageService {
 
     public List<OffreStageDTO> getOffresStage() {
         Utilisateur utilisateur = getUtilisateurEnCours();
-        return switch (utilisateur.getRole()) {
-            case ADMIN -> OffreStageDTO.toDTOs(offreStageRepository.findAll());
-            case EMPLOYEUR -> OffreStageDTO.toDTOs(offreStageRepository.findByEmployeurEmail(utilisateur.getEmail()));
-            case ETUDIANT ->
-                    OffreStageDTO.toDTOs(offreStageRepository.findByUserDepartement(utilisateur.getDepartement()));
-            default -> throw new IllegalArgumentException("Aucune offre de stage n'a été trouvée");
-        };
+        List<OffreStageDTO> offresStage;
+        switch (utilisateur.getRole()) {
+            case ADMIN -> {
+                offresStage = OffreStageDTO.toDTOs(offreStageRepository.findAll());
+                if (offresStage.isEmpty()) {
+                    throw new IllegalArgumentException("Aucune offre stage a été créer pour l'instant");
+                }
+            }
+            case EMPLOYEUR -> {
+                offresStage = OffreStageDTO.toDTOs(offreStageRepository.findByEmployeurEmail(utilisateur.getEmail()));
+                if (offresStage.isEmpty()) {
+                    throw new IllegalArgumentException("Aucune offre de stage trouvée pour l'employeur avec l'email: " + utilisateur.getEmail());
+                }
+            }
+            case ETUDIANT -> {
+                offresStage = OffreStageDTO.toDTOs(offreStageRepository.findByUserDepartement(utilisateur.getDepartement()));
+                if (offresStage.isEmpty()) {
+                    throw new IllegalArgumentException("Aucune offre de stage trouvée pour l'étudiant dans le département: " + utilisateur.getDepartement());
+                }
+            }
+            default -> throw new IllegalArgumentException("Aucune offre de stage n'a été trouvée pour le role inconnue");
+        }
+        return offresStage;
     }
 }
