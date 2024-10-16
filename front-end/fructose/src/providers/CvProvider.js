@@ -8,13 +8,17 @@ const CvProvider = ({ children, user}) => {
 
     const currentToken = user;
 
-    const UploadCv = () => {
-        fetch('/cv/upload', {
+    const UploadCv = (file) => {
+        let formData = new FormData()
+        formData.append("file", file)
+        console.log(formData)
+
+        fetch('/deposer-cv', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': currentToken
-            }
+            },
+            body: formData
         })
             .then(response => response.json())
             .then(data => {

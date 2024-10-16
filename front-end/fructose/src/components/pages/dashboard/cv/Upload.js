@@ -15,23 +15,32 @@ const UploadCV = () => {
     const { currentUser } = useContext(AuthContext);
     const { UploadCv } = useContext(CvContext);
 
-    const [files, setFiles] = useState('');
+    const [file, setFile] = useState(null);
     const [filename, setFilename] = useState('');
 
-    const onDrop = useCallback(acceptedFiles => {
-        setFiles(acceptedFiles.map(file => (
-            <PdfPreview file={URL.createObjectURL(file)} height={300}></PdfPreview>
-        )));
-        setFilename(acceptedFiles.map(file => (
-            file.name
-        )))
+    const onDrop = useCallback(file => {
+        setFile(file[0])
+        setFilename(file[0].name)
     }, [])
     const {getRootProps, getInputProps, isDragActive, open} = useDropzone({onDrop, accept:{
             'application/pdf': ['.pdf'],
-        }, noClick: true})
+        }, noClick: true, multiple: false})
+
+    const getPdfPreview = (file) => {
+        return (
+            <PdfPreview file={URL.createObjectURL(file)} height={300}></PdfPreview>
+        )
+    }
+
+    const handleSubmit = () => {
+        if (file != null){
+            console.log("ALLO")
+            UploadCv(file)
+        }
+    }
 
     const getStep = () => {
-        if(files === ""){
+        if(file == null){
             return(
                 <>
                     <div className="file-upload-zone" {...getRootProps()} style={{"opacity": (isDragActive)?"0.5":"1", "border": (isDragActive)?"1px solid black":"none"}}>
@@ -63,17 +72,17 @@ const UploadCV = () => {
             return (
                 <>
                     {
-                        files
+                        getPdfPreview(file)
                     }
                     <br/>
                     <div style={{"width": "100%", "backgroundColor": "rgba(0,0,0,0.03)", "display": "flex", "alignItems": "center", "padding": "0 10px", "height": "50px", "boxSizing": "border-box", "borderRadius":"5px", "gap":"5px"}}>
                         <Icon path={mdiFileOutline} size={1} />
                         <p className="m-0">{filename}</p>
                         <div className="toolbar-spacer"></div>
-                        <button className="btn-icon" onClick={()=>{setFiles("")}}><Icon path={mdiClose} size={1} /></button>
+                        <button className="btn-icon" onClick={()=>{setFile(null)}}><Icon path={mdiClose} size={1} /></button>
                     </div>
                     <br/>
-                    <div className="toolbar-items" onClick={()=>{UploadCv()}}>
+                    <div className="toolbar-items" onClick={()=>{handleSubmit()}}>
                         <div className="toolbar-spacer"></div>
                         <button className="btn-filled">Téléverser <Icon path={mdiChevronRight} size={1}/></button>
                     </div>
