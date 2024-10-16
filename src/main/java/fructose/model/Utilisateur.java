@@ -7,6 +7,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -47,8 +48,8 @@ public class Utilisateur {
     @Embedded
     private Credentials credentials;
 
-    @OneToOne(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Cv cv;
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cv> cvs;
 
 
     public String getEmail(){

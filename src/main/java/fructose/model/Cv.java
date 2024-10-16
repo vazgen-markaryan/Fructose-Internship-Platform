@@ -30,7 +30,7 @@ public class Cv {
     @Column(name = "file_content", nullable = false)
     private byte[] fileContent;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;
 
