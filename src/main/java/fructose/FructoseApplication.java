@@ -44,7 +44,8 @@ public class FructoseApplication implements CommandLineRunner {
         Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, "Informatique", "Ubisoft Incorporé");
         EmployeurDTO employeurUbisoft = EmployeurDTO.toDTO((Employeur) ubisoft);
 
-        OffreStage offreStage = OffreStage.createOffreStage("Développeur de jeux video", "Développeur Unity", "Développer des jeux video en utilisant Unity", "Ubisoft", "techniques_informatique", 25.0, "virtuel", "Montréal", "temps_plein", LocalDate.now().plusMonths(3), LocalDate.now().plusMonths(6), 20, 1, LocalDate.now().plusMonths(2));
+        // Note that the following code is not working because the method addOffreStage has a verification that a user is connected and the user is not connected in this context
+        OffreStage offreStage = OffreStage.createOffreStage("Développeur de jeux video", "Développeur Unity", "Développer des jeux video en utilisant Unity", "Ubisoft", "techniques_informatique", 25.0, "virtuel", "Montréal", "temps_plein", LocalDate.now().plusMonths(3), LocalDate.now().plusMonths(6), 20, 1, LocalDate.now().plusMonths(2), ubisoft);
         OffreStageDTO offreStageDTO = OffreStageDTO.toDTO(offreStage);
         try {
             checkAndAddOffreStage(offreStageDTO);

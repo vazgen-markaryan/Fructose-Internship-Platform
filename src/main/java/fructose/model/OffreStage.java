@@ -2,6 +2,7 @@ package fructose.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import jdk.jshell.execution.Util;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -98,8 +99,8 @@ public class OffreStage {
                                               LocalDate dateFin,
                                               int nombreHeuresSemaine,
                                               int nombrePostes,
-                                              LocalDate dateLimiteCandidature
-    ) {
+                                              LocalDate dateLimiteCandidature,
+                                              Utilisateur utilisateur) {
         OffreStage offreStage = new OffreStage();
         offreStage.setNom(nom);
         offreStage.setPoste(poste);
@@ -115,6 +116,7 @@ public class OffreStage {
         offreStage.setNombreHeuresSemaine(nombreHeuresSemaine);
         offreStage.setNombrePostes(nombrePostes);
         offreStage.setDateLimiteCandidature(dateLimiteCandidature);
+        offreStage.setUtilisateur(utilisateur);
         return offreStage;
     }
 }
