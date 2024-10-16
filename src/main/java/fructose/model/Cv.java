@@ -1,6 +1,7 @@
 package fructose.model;
 
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class Cv {
     private Long id ;
 
     @Column(name = "filename", nullable = false, length = 255)
+    @Nullable
     private String filename;
 
     // Stocke données binaires volumineuses (PDF)
@@ -32,6 +34,4 @@ public class Cv {
     @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;
 
-    public Cv(byte[] bytes) {
-    }
 }
