@@ -6,10 +6,7 @@ import fructose.model.Professeur;
 import fructose.model.Utilisateur;
 import fructose.model.auth.Credentials;
 import fructose.model.auth.Role;
-import fructose.repository.EmployeurRepository;
-import fructose.repository.EtudiantRepository;
-import fructose.repository.UtilisateurRepository;
-import fructose.repository.ProfesseurRepository;
+import fructose.repository.*;
 import fructose.security.JwtTokenProvider;
 import fructose.security.exception.InvalidJwtTokenException;
 import fructose.service.dto.EmployeurDTO;
@@ -49,6 +46,9 @@ class UtilisateurServiceTest {
     private ProfesseurRepository professeurRepository;
 
     @Mock
+    private AdminRepository adminRepository;
+
+    @Mock
     private EmployeurRepository employeurRepository;
 
     @Mock
@@ -62,7 +62,7 @@ class UtilisateurServiceTest {
 
     @BeforeEach
     public void setUp() {
-        utilisateurService = new UtilisateurService(etudiantRepository, professeurRepository, employeurRepository, passwordEncoder, utilisateurRepository, jwtTokenProvider,authenticationManager);
+        utilisateurService = new UtilisateurService(etudiantRepository, professeurRepository, employeurRepository, adminRepository, passwordEncoder, utilisateurRepository, jwtTokenProvider,authenticationManager);
     }
 
     // ------------------- GET UTILISATEUR BY ID ------------------- //

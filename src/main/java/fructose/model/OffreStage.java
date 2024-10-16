@@ -2,7 +2,6 @@ package fructose.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import jdk.jshell.execution.Util;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,6 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "offre_stage")
+@SecondaryTable(name = "users")
 public class OffreStage {
 
     @Id
@@ -37,9 +37,9 @@ public class OffreStage {
     @Size(min = 3, max = 100, message = "Le nom de la compagnie doit contenir entre 3 et 100 caractères")
     private String compagnie;
 
-    @NotEmpty(message = "Le programme d'études ne peut pas être vide")
-    @Pattern(regexp = "^[A-Za-z_]+$", message = "La programme d'études doit contenir uniquement des lettres et des underscores")
-    private String programmeEtude;
+    @ManyToOne
+    @JoinColumn(name = "departement_id")
+    private Departement departement;
 
     @NotNull(message = "Le taux horaire ne peut pas être null")
     @DecimalMin(value = "0.0", message = "Le taux horaire ne peut pas être négatif")
@@ -74,9 +74,9 @@ public class OffreStage {
     private LocalDate dateLimiteCandidature;
 
     @ManyToOne
-    @JoinColumn(name = "utilisateur_id")
+    @JoinColumn(name = "owner_id", referencedColumnName = "id", table = "users")
     @NotNull
-    private Utilisateur utilisateur;
+    private Utilisateur owner;
 
     @ManyToMany
     @JoinTable(
@@ -90,7 +90,7 @@ public class OffreStage {
                                               String poste,
                                               String description,
                                               String compagnie,
-                                              String programmeEtude,
+                                              Departement departement,
                                               Double tauxHoraire,
                                               String typeEmploi,
                                               String adresse,
@@ -100,13 +100,13 @@ public class OffreStage {
                                               int nombreHeuresSemaine,
                                               int nombrePostes,
                                               LocalDate dateLimiteCandidature,
-                                              Utilisateur utilisateur) {
+                                              Utilisateur owner) {
         OffreStage offreStage = new OffreStage();
         offreStage.setNom(nom);
         offreStage.setPoste(poste);
         offreStage.setDescription(description);
         offreStage.setCompagnie(compagnie);
-        offreStage.setProgrammeEtude(programmeEtude);
+        offreStage.setDepartement(departement);
         offreStage.setTauxHoraire(tauxHoraire);
         offreStage.setTypeEmploi(typeEmploi);
         offreStage.setAdresse(adresse);
@@ -116,7 +116,7 @@ public class OffreStage {
         offreStage.setNombreHeuresSemaine(nombreHeuresSemaine);
         offreStage.setNombrePostes(nombrePostes);
         offreStage.setDateLimiteCandidature(dateLimiteCandidature);
-        offreStage.setUtilisateur(utilisateur);
+        offreStage.setOwner(owner);
         return offreStage;
     }
 }

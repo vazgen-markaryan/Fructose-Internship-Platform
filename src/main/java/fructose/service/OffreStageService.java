@@ -2,7 +2,6 @@ package fructose.service;
 
 import fructose.model.OffreStage;
 import fructose.model.Utilisateur;
-import fructose.model.auth.Role;
 import fructose.repository.EmployeurRepository;
 import fructose.repository.OffreStageRepository;
 import fructose.service.dto.OffreStageDTO;
@@ -15,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Validated
@@ -42,22 +40,22 @@ public class OffreStageService {
     }
 
     public void addOffreStage(OffreStageDTO offreStageDTO) {
-        Utilisateur utilisateur = getUtilisateurEnCours();
-        validateAddOffreStage(offreStageDTO, utilisateur);
+        UtilisateurDTO utilisateurDTO = UtilisateurDTO.toDTO(getUtilisateurEnCours());
+        validateAddOffreStage(offreStageDTO, utilisateurDTO);
     }
 
-    public void addOffreStageBE(OffreStageDTO offreStageDTO) {
-        validateAddOffreStage(offreStageDTO, UtilisateurDTO.toEntity(offreStageDTO.getUtilisateur()));
+    public void addOffreStage(OffreStageDTO offreStageDTO, UtilisateurDTO utilisateurDTO) {
+        validateAddOffreStage(offreStageDTO, utilisateurDTO);
     }
 
-    private void validateAddOffreStage(OffreStageDTO offreStageDTO, Utilisateur utilisateur) {
-        UtilisateurDTO utilisateurDTO = UtilisateurDTO.toDTO(utilisateur);
+    private void validateAddOffreStage(OffreStageDTO offreStageDTO, UtilisateurDTO utilisateurDTO) {
         if (offreStageDTO == null) {
             throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
         }
-        offreStageDTO.setUtilisateur(utilisateurDTO);
+        offreStageDTO.setOwnerDTO(utilisateurDTO);
         validateOffreStage(offreStageDTO);
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
+        System.out.println(offreStage.getDepartement().getNom());
         offreStageRepository.save(offreStage);
     }
 
@@ -88,6 +86,9 @@ public class OffreStageService {
         Set<ConstraintViolation<OffreStageDTO>> violations = validator.validate(offreStageDTO);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
+        }
+        if (offreStageDTO.getDepartement() == null) {
+            throw new IllegalArgumentException("Le département ne peut pas être nul");
         }
         if (offreStageDTO.getDateLimiteCandidature().isBefore(LocalDate.now().plusDays(7))) {
             throw new IllegalArgumentException("La date limite de candidature doit être au moins 7 jours après aujourd'hui");

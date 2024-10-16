@@ -1,9 +1,6 @@
 package fructose.service.dto;
 
-import fructose.model.Employeur;
-import fructose.model.Etudiant;
-import fructose.model.Professeur;
-import fructose.model.Utilisateur;
+import fructose.model.*;
 import fructose.model.auth.Credentials;
 import fructose.model.auth.Role;
 import lombok.*;
@@ -28,7 +25,7 @@ public class UtilisateurDTO {
             case ETUDIANT -> new Etudiant();
             case PROFESSEUR -> new Professeur();
             case EMPLOYEUR -> new Employeur();
-            default -> throw new IllegalArgumentException("Role d'utilisateur : " + utilisateur_dto.getRole() + " n'est pas valide");
+            case ADMIN -> new Admin();
         };
 
         utilisateur.setId(utilisateur_dto.getId());
@@ -46,7 +43,7 @@ public class UtilisateurDTO {
             case ETUDIANT -> new EtudiantDTO();
             case PROFESSEUR -> new ProfesseurDTO();
             case EMPLOYEUR -> new EmployeurDTO();
-            default -> throw new IllegalArgumentException("Role d'utilisateur : " + utilisateur.getRole() + " n'est pas valide");
+            case ADMIN -> new AdminDTO();
         };
 
         utilisateur_dto.setId(utilisateur.getId());

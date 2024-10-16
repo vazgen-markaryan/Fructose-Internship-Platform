@@ -1,5 +1,6 @@
 package fructose.service;
 
+import fructose.model.Departement;
 import fructose.model.Employeur;
 import fructose.model.OffreStage;
 import fructose.model.Utilisateur;
@@ -50,7 +51,9 @@ public class OffreStageServiceTest {
         offreStageDTO.setPoste("Developpeur Java");
         offreStageDTO.setDescription("Faire du developpement Java chez Google");
         offreStageDTO.setCompagnie("Google");
-        offreStageDTO.setProgrammeEtude("techniques_informatique");
+        Departement departement = new Departement();
+        departement.setNom("Informatique");
+        offreStageDTO.setDepartement(departement);
         offreStageDTO.setTauxHoraire(23.75);
         offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, Etats-Unis");
         offreStageDTO.setTypeEmploi("presentiel");
@@ -63,7 +66,7 @@ public class OffreStageServiceTest {
         EmployeurDTO employeurDTO = new EmployeurDTO();
         employeurDTO.setRole(Role.EMPLOYEUR);
         employeurDTO.setEmail("Mike");
-        offreStageDTO.setUtilisateur(employeurDTO);
+        offreStageDTO.setOwnerDTO(employeurDTO);
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
