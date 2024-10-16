@@ -44,7 +44,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/check-email").permitAll()
                         .requestMatchers(HttpMethod.GET, "/check-matricule").permitAll()
                         .anyRequest().authenticated()
-                ).addFilterBefore(new JwtAuthenticationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
+                ).addFilterBefore(new JwtAuthentificationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

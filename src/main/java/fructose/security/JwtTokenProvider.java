@@ -42,7 +42,7 @@ public class JwtTokenProvider {
                 .getBody()
                 .getSubject();
     }
-
+    
     public void validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token);
@@ -58,4 +58,5 @@ public class JwtTokenProvider {
             throw new InvalidJwtTokenException(HttpStatus.BAD_REQUEST, "JWT claims string is empty");
         }
     }
+
 }
