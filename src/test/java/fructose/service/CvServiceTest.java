@@ -1,24 +1,23 @@
 package fructose.service;
 
 import fructose.model.Cv;
-import fructose.model.OffreStage;
 import fructose.repository.CvRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class CvServiceTest {
@@ -31,10 +30,11 @@ class CvServiceTest {
 
     @BeforeEach
     void setUp() {
+
     }
 
     @Test
-    void testAddCv() throws IOException {
+    void testAddCv_Success() throws IOException {
         MockMultipartFile mockFile = new MockMultipartFile(
                 "cv",
                 "testCv.pdf",
@@ -46,9 +46,40 @@ class CvServiceTest {
         verify(cvRepository, times(1)).save(any(Cv.class));
     }
 
+    @Test
+    void testAddCv_Failure_FileEmpty() {
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "cv",
+                "testCv.pdf",
+                "application/pdf",
+                new byte[0] // Fichier vide
+        );
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            cvService.addCv(mockFile);
+        });
+
+        assertEquals("Le fichier est vide ou invalide.", exception.getMessage());
+    }
 
     @Test
-    void testAddCv_Failure() throws IOException {
+    void testAddCv_Failure_InvalidFileType() {
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "cv",
+                "testCv.txt",
+                "text/plain",
+                "Dummy Content".getBytes()
+        );
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            cvService.addCv(mockFile);
+        });
+
+        assertEquals("Le fichier n'est pas au format PDF.", exception.getMessage());
+    }
+
+    @Test
+    void testAddCv_Failure_DatabaseError() throws IOException {
         MockMultipartFile mockFile = new MockMultipartFile(
                 "cv",
                 "testCv.pdf",
@@ -56,17 +87,12 @@ class CvServiceTest {
                 "Dummy PDF Content".getBytes()
         );
 
-
         doThrow(new RuntimeException("Database error")).when(cvRepository).save(any(Cv.class));
-        try {
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             cvService.addCv(mockFile);
-        } catch (RuntimeException e) {
-            assertEquals("Database error", e.getMessage());
-            return;
-        }
+        });
 
-        fail("Expected a RuntimeException to be thrown");
+        assertEquals("Une erreur inattendue est survenue lors de l'enregistrement du fichier PDF.", exception.getMessage());
     }
-
-
 }

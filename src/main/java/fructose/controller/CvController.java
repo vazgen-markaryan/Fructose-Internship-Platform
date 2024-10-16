@@ -19,12 +19,25 @@ public class CvController {
     }
 
     @GetMapping("/deposer-cv")
-    public ResponseEntity<?> enregistrerCV(@RequestBody MultipartFile file){
-        try{
+    public ResponseEntity<?> enregistrerCV(@RequestBody MultipartFile file) {
+        // Vérifier si le fichier est vide
+        if (file.isEmpty()) {
+            return new ResponseEntity<>("Le fichier est vide. Veuillez télécharger un fichier PDF valide.", HttpStatus.BAD_REQUEST);
+        }
+
+        // Vérifier si le type de fichier est bien un PDF
+        if (!"application/pdf".equals(file.getContentType())) {
+            return new ResponseEntity<>("Le fichier n'est pas au format PDF. Veuillez télécharger un fichier PDF.", HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        }
+
+        try {
             cvService.addCv(file);
             return new ResponseEntity<>("Fichier PDF enregistré avec succès.", HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>("Erreur lors de la lecture du fichier.", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            // Gestion d'autres exceptions possibles
+            return new ResponseEntity<>("Une erreur inattendue s'est produite.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
