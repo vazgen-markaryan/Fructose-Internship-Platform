@@ -11,7 +11,7 @@ import {
 } from "@mdi/js";
 
 const DashboardHome = () => {
-    const { currentUser } = useContext(AuthContext);
+    const { currentUser, currentToken } = useContext(AuthContext);
 
     const GetOffreStageSection = () => {
         if(currentUser != null){

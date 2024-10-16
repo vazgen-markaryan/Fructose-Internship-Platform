@@ -1,23 +1,15 @@
 import React, {useCallback, useContext, useState} from "react";
 import {
-    mdiArrowLeft, mdiArrowRight,
-    mdiArrowRightCircle,
-    mdiButtonCursor,
+    mdiArrowLeft,
+    mdiArrowRight,
     mdiCheck,
-    mdiCheckCircle, mdiChevronDown,
-    mdiChevronRight,
+    mdiChevronDown,
     mdiClose,
-    mdiCloseCircle,
-    mdiCloudUploadOutline,
     mdiFileOutline,
-    mdiFolderOpenOutline,
-    mdiTimer,
-    mdiTimerSand
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../../../providers/AuthProvider";
 import {Link} from "react-router-dom";
-import {useDropzone} from "react-dropzone";
 import PdfPreview from "../../../content/PdfPreview";
 
 const ManageCVs = () => {
@@ -74,7 +66,7 @@ const ManageCVs = () => {
                 </div>
                 <div className="dashboard-card" style={{"width": "35%"}}>
                     <section>
-                        <PdfPreview height={300} file="https://manning-content.s3.amazonaws.com/download/5/54dea42-e46e-44c7-a930-d4c86a2c2ca3/CORS_ch03.pdf"></PdfPreview>
+                        <PdfPreview height={300} file="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.orimi.com/pdf-test.pdf&ved=2ahUKEwi729HM2pCJAxVZkIkEHdNIL3oQFnoECC4QAQ&usg=AOvVaw12KwoU3ESoNGt7JZhZvA7o"></PdfPreview>
                     </section>
                 </div>
             </div>

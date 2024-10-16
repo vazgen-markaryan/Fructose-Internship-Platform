@@ -9,12 +9,14 @@ import {AuthContext} from "../../../../providers/AuthProvider";
 import {Link} from "react-router-dom";
 import {useDropzone} from "react-dropzone";
 import PdfPreview from "../../../content/PdfPreview";
+import {CvContext} from "../../../../providers/CvProvider";
 
 const UploadCV = () => {
     const { currentUser } = useContext(AuthContext);
+    const { UploadCv } = useContext(CvContext);
 
-    const [files, setFiles] = useState('')
-    const [filename, setFilename] = useState('')
+    const [files, setFiles] = useState('');
+    const [filename, setFilename] = useState('');
 
     const onDrop = useCallback(acceptedFiles => {
         setFiles(acceptedFiles.map(file => (
@@ -71,7 +73,7 @@ const UploadCV = () => {
                         <button className="btn-icon" onClick={()=>{setFiles("")}}><Icon path={mdiClose} size={1} /></button>
                     </div>
                     <br/>
-                    <div className="toolbar-items">
+                    <div className="toolbar-items" onClick={()=>{UploadCv()}}>
                         <div className="toolbar-spacer"></div>
                         <button className="btn-filled">Téléverser <Icon path={mdiChevronRight} size={1}/></button>
                     </div>

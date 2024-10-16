@@ -7,6 +7,7 @@ const AuthContext = createContext(undefined);
 const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const navigate = useNavigate();
+    const [currentToken, setCurrentToken] = useState(null)
 
     useEffect(() => {
         const token = localStorage.getItem("FOSE_AUTH");
@@ -30,6 +31,7 @@ const AuthProvider = ({ children }) => {
             .then(response => response.json())
             .then(data => {
                 setCurrentUser(data)
+                setCurrentToken(token)
                 return data
             })
             .catch(() => {
@@ -68,7 +70,7 @@ const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ currentUser, SignInUser, SignOutUser, isSignedIn }}>
+        <AuthContext.Provider value={{ currentUser, currentToken, SignInUser, SignOutUser, isSignedIn }}>
             {children}
         </AuthContext.Provider>
     );
