@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {mdiArrowLeft, mdiBriefcasePlus, mdiBriefcasePlusOutline} from "@mdi/js";
+import {mdiArrowLeft} from "@mdi/js";
 import Icon from "@mdi/react";
 
 const CreerOffreStage = () => {
@@ -152,7 +152,7 @@ const CreerOffreStage = () => {
                 // TODO TEMPORAIREMENT rediriger l'utilisateur vers la page d'accueil
                 navigate('/');
             }).catch(error => {
-                    setErrors('Erreur: ${error.message}');
+                    setErrors('Erreur :' + error.message());
                     console.error('Erreur:', error);
                 }
             );

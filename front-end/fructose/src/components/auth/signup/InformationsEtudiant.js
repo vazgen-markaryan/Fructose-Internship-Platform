@@ -66,7 +66,7 @@ const InformationsEtudiant = ({utilisateur, handleChange, switchStep}) => {
                 return updatedErrors;
             });
         }
-    }, [utilisateur.matricule, utilisateur.departement, t]);
+    }, [utilisateur.matricule, utilisateur.departement, t, formSubmitted]);
 
     return (
         <div className={"form-signup-condensed"}>

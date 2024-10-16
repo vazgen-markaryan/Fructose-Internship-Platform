@@ -206,8 +206,8 @@
         "no_offers": "Aucune offre à afficher pour le moment",
         "my_offers": "Mes offres de stage",
         "add_offer": "Ajouter",
-        "hello:": "Bonjour",
-        "portfolio:": "Mon Portfolio",
+        "hello": "Bonjour",
+        "portfolio": "Mon Portfolio",
         "add_cv": "Ajouter un CV",
         "manage": "Gérer",
         "no_cv": "Aucun CV",
@@ -216,5 +216,27 @@
         "email": "Courriel",
         "matricule": "Numéro d'étudiant/employé",
         "role": "Rôle"
+    },
+
+    "pdf_view_page": {
+        "error": "Une erreur inconnue est survenue"
+    },
+
+    "view_page": {
+        "home": "Accueil",
+        "hello": "Bonjour"
+    },
+
+    "upload_page": {
+        "drag_drop": "Glissez et déposez votre CV ici",
+        "or": "OU",
+        "browse": "Parcourir",
+        "accepted_formats": "Formats acceptés : PDF",
+        "upload": "Téléverser",
+        "upload_cv": "Téléversez votre CV"
+    },
+
+    "manage_cv_page": {
+        "my_cvs": "Mes Curiculums Vitae"
     }
 }

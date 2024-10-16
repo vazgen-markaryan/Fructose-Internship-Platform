@@ -216,5 +216,27 @@
         "email": "Email",
         "matricule": "Student/Employee Number",
         "role": "Role"
+    },
+
+    "pdf_view_page": {
+        "error": "An unknown error occurred"
+    },
+
+    "view_page": {
+        "home": "Home",
+        "hello": "Hello"
+    },
+
+    "upload_page": {
+        "drag_drop": "Drag and drop your CV here",
+        "or": "OR",
+        "browse": "Browse",
+        "accepted_formats": "Accepted formats: PDF",
+        "upload": "Upload",
+        "upload_cv": "Upload your CV"
+    },
+
+    "manage_cv_page": {
+        "my_cvs": "My Curiculums Vitae"
     }
 }
