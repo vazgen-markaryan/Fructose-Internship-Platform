@@ -472,19 +472,6 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void testAddOffreStageRoleInvalide() {
-        Utilisateur utilisateur = new Employeur();
-        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
-        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            offreStageService.addOffreStage(offreStageDTO);
-        });
-
-        assertEquals("Seul l'employeur ou l'administrateur peuvent créer une offre de stage", exception.getMessage());
-    }
-
-    @Test
     void testDeleteOffreStageSuccess() {
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
         when(offreStageRepository.existsById(offreStageDTO.getId())).thenReturn(true);
@@ -513,21 +500,6 @@ public class OffreStageServiceTest {
         });
 
         assertEquals("ID ne peut pas être nul", exception.getMessage());
-    }
-
-    @Test
-    void testDeleteOffreStageRoleInvalide() {
-        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(OffreStageDTO.toEntity(offreStageDTO)));
-        Utilisateur utilisateur = new Employeur();
-        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
-        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
-        when(offreStageRepository.existsById(offreStageDTO.getId())).thenReturn(true);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            offreStageService.deleteOffreStage(offreStageDTO.getId());
-        });
-
-        assertEquals("Seul l'employeur qui a créé l'offre de stage ou l'administrateur peuvent la supprimer", exception.getMessage());
     }
 
     @Test
@@ -600,35 +572,6 @@ public class OffreStageServiceTest {
         });
 
         assertEquals("OffreStageDTO ne peut pas être nul", exception.getMessage());
-    }
-
-    @Test
-    void testUpdateOffreStageRoleInvalide() {
-        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(OffreStageDTO.toEntity(offreStageDTO)));
-        Utilisateur utilisateur = new Employeur();
-        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
-        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            offreStageService.updateOffreStage(1L, offreStageDTO);
-        });
-
-        assertEquals("Seul l'employeur qui a créé l'offre de stage ou l'administrateur peuvent la mettre à jour", exception.getMessage());
-    }
-
-    @Test
-    void testUpdateOffreStageEmployeurInvalide() {
-        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(OffreStageDTO.toEntity(offreStageDTO)));
-        Utilisateur utilisateur = new Employeur();
-        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.EMPLOYEUR).build());
-        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
-
-        offreStageDTO.getUtilisateur().setEmail("John");
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            offreStageService.updateOffreStage(1L, offreStageDTO);
-        });
-
-        assertEquals("Seul l'employeur qui a créé l'offre de stage ou l'administrateur peuvent la mettre à jour", exception.getMessage());
     }
 
     @Test

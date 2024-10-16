@@ -112,6 +112,7 @@ public class UtilisateurService {
     }
 
     public List<UtilisateurDTO> getUtilisateurs(Role role) {
+        System.out.println("Récupération de tous les utilisateurs de type : " + role);
         return switch (role) {
             case ETUDIANT -> etudiantRepository.findAll()
                     .stream()
@@ -147,6 +148,17 @@ public class UtilisateurService {
         token = token.startsWith("Bearer") ? token.substring(7) : token;
         String email = jwtTokenProvider.getEmailFromJWT(token);
         Utilisateur user = utilisateurRepository.findByEmail(email);//.orElseThrow(UserNotFoundException::new);
+        return switch (user.getRole()) {
+            case ETUDIANT -> etudiantRepository.findById(user.getId()).map(EtudiantDTO::toDTO).orElse(null);
+            case EMPLOYEUR -> employeurRepository.findById(user.getId()).map(EmployeurDTO::toDTO).orElse(null);
+            case PROFESSEUR -> professeurRepository.findById(user.getId()).map(ProfesseurDTO::toDTO).orElse(null);
+            default ->
+                    throw new IllegalArgumentException("Type d'utilisateur : " + user.getRole().toString() + " n'est pas valide");
+        };
+    }
+
+    public UtilisateurDTO getUtilisateurByEmail(String email) {
+        Utilisateur user = utilisateurRepository.findByEmail(email);
         return switch (user.getRole()) {
             case ETUDIANT -> etudiantRepository.findById(user.getId()).map(EtudiantDTO::toDTO).orElse(null);
             case EMPLOYEUR -> employeurRepository.findById(user.getId()).map(EmployeurDTO::toDTO).orElse(null);

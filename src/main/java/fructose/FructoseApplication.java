@@ -1,6 +1,7 @@
 package fructose;
 
 import fructose.model.*;
+import fructose.model.auth.Credentials;
 import fructose.service.OffreStageService;
 import fructose.model.Employeur;
 import fructose.model.Etudiant;
@@ -14,6 +15,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -43,36 +45,30 @@ public class FructoseApplication implements CommandLineRunner {
 
         Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, "Informatique", "Ubisoft Incorporé");
         EmployeurDTO employeurUbisoft = EmployeurDTO.toDTO((Employeur) ubisoft);
-
-        // Note that the following code is not working because the method addOffreStage has a verification that a user is connected and the user is not connected in this context
         OffreStage offreStage = OffreStage.createOffreStage("Développeur de jeux video", "Développeur Unity", "Développer des jeux video en utilisant Unity", "Ubisoft", "techniques_informatique", 25.0, "virtuel", "Montréal", "temps_plein", LocalDate.now().plusMonths(3), LocalDate.now().plusMonths(6), 20, 1, LocalDate.now().plusMonths(2), ubisoft);
         OffreStageDTO offreStageDTO = OffreStageDTO.toDTO(offreStage);
-        try {
-            checkAndAddOffreStage(offreStageDTO);
-        } catch (Exception e) {
-			logger.error("Une erreur s'est produite lors de l'ajout de l'offre de stage", e);
-		}
 
-		try {
+
+        try {
             checkAndAddUtilisateur(etudiantVazgen, Role.ETUDIANT);
             checkAndAddUtilisateur(professeurFrancois, Role.PROFESSEUR);
             checkAndAddUtilisateur(employeurUbisoft, Role.EMPLOYEUR);
-		} catch (Exception e) {
-			logger.error("Une erreur s'est produite lors de l'ajout de l'utilisateur", e);
-		}
+        } catch (Exception e) {
+            logger.error("Une erreur s'est produite lors de l'ajout de l'utilisateur", e);
+        }
+
+        try {
+            UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByEmail("ubisoft@gmail.com");
+            checkAndAddOffreStage(offreStageDTO, utilisateurDTO);
+        } catch (Exception e) {
+            logger.error("Une erreur s'est produite lors de l'ajout de l'offre de stage", e);
+        }
     }
 
-    private void checkAndAddOffreStage(OffreStageDTO offreStage) {
-        System.out.println(); //Ajouté juste pour la lisibilité
-        List<OffreStageDTO> offreStageList = offreStageService.getOffresStage();
-        boolean exists = offreStageList.stream().anyMatch(offre -> offre.getNom().equals(offreStage.getNom()));
-
-        if (exists) {
-            System.out.println("OFFRE STAGE avec le nom \"" + offreStage.getNom() + "\" existe déjà dans la base de données");
-        } else {
-            offreStageService.addOffreStage(offreStage);
-            System.out.println("OFFRE STAGE avec le nom \"" + offreStage.getNom() + "\" a été ajoutée avec succès");
-        }
+    private void checkAndAddOffreStage(OffreStageDTO offreStage, UtilisateurDTO utilisateur) {
+        offreStage.setUtilisateur(utilisateur);//Ajouté juste pour la lisibilité
+        offreStageService.addOffreStageBE(offreStage);
+        System.out.println("OFFRE STAGE avec le nom \"" + offreStage.getNom() + "\" a été ajoutée avec succès");
     }
 
     private void checkAndAddUtilisateur(UtilisateurDTO utilisateurDTO, Role role) {

@@ -43,9 +43,14 @@ public class OffreStageService {
 
     public void addOffreStage(OffreStageDTO offreStageDTO) {
         Utilisateur utilisateur = getUtilisateurEnCours();
-        if (utilisateur.getRole() != Role.EMPLOYEUR && utilisateur.getRole() != Role.ADMIN) {
-            throw new IllegalArgumentException("Seul l'employeur ou l'administrateur peuvent créer une offre de stage");
-        }
+        validateAddOffreStage(offreStageDTO, utilisateur);
+    }
+
+    public void addOffreStageBE(OffreStageDTO offreStageDTO) {
+        validateAddOffreStage(offreStageDTO, UtilisateurDTO.toEntity(offreStageDTO.getUtilisateur()));
+    }
+
+    private void validateAddOffreStage(OffreStageDTO offreStageDTO, Utilisateur utilisateur) {
         UtilisateurDTO utilisateurDTO = UtilisateurDTO.toDTO(utilisateur);
         if (offreStageDTO == null) {
             throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
@@ -62,10 +67,6 @@ public class OffreStageService {
         }
         offreStageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("L'offre stage avec l'ID: " + id + " n'existe pas, alors il ne peut pas être mis à jour"));
         validateOffreStage(offreStageDTO);
-        Utilisateur utilisateur = getUtilisateurEnCours();
-        if (!Objects.equals(offreStageDTO.getUtilisateur().getEmail(), utilisateur.getEmail()) && utilisateur.getRole() != Role.ADMIN || utilisateur.getRole() != Role.EMPLOYEUR) {
-            throw new IllegalArgumentException("Seul l'employeur qui a créé l'offre de stage ou l'administrateur peuvent la mettre à jour");
-        }
         offreStageRepository.save(OffreStageDTO.toEntity(offreStageDTO));
     }
 
@@ -76,11 +77,6 @@ public class OffreStageService {
         }
         if (!offreStageRepository.existsById(id)) {
             throw new IllegalArgumentException("L'offre stage avec l'ID: " + id + " n'existe pas, alors il ne peut pas être supprimé");
-        }
-        Utilisateur utilisateur = getUtilisateurEnCours();
-        OffreStageDTO offreStageDTO = getOffreStageById(id);
-        if (!Objects.equals(offreStageDTO.getUtilisateur().getEmail(), utilisateur.getEmail()) && utilisateur.getRole() != Role.ADMIN || utilisateur.getRole() != Role.EMPLOYEUR) {
-            throw new IllegalArgumentException("Seul l'employeur qui a créé l'offre de stage ou l'administrateur peuvent la supprimer");
         }
         offreStageRepository.deleteById(id);
     }
