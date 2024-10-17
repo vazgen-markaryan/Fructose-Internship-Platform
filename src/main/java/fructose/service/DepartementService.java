@@ -6,6 +6,8 @@ import fructose.service.dto.DepartementDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+
 @Validated
 @Service
 public class DepartementService {
@@ -27,4 +29,11 @@ public class DepartementService {
         departementRepository.deleteById(id);
     }
 
+    public DepartementDTO getDepartementByNom(String name) {
+        return DepartementDTO.toDTO(departementRepository.findByNom(name));
+    }
+
+    public List<Departement> getAllDepartements() {
+        return departementRepository.findAll();
+    }
 }

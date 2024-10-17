@@ -56,9 +56,33 @@ public class FructoseApplication implements CommandLineRunner {
             checkAndAddUtilisateur(professeurFrancois, Role.PROFESSEUR);
             checkAndAddUtilisateur(employeurUbisoft, Role.EMPLOYEUR);
         }, "Une erreur s'est produite lors de l'ajout de l'utilisateur");
+
+        OffreStageDTO offreStage = new OffreStageDTO();
+        offreStage.setNom("Développeur Java");
+        offreStage.setDescription("Développer des applications Java");
+        offreStage.setPoste("Développeur Java");
+        offreStage.setCompagnie("Ubisoft Incorporé");
+        DepartementDTO departementPersisted = departementService.getDepartementByNom("techniques_informatique");
+        offreStage.setDepartementDTO(departementPersisted);
+        offreStage.setTauxHoraire(20.0);
+        offreStage.setTypeEmploi("presentiel");
+        offreStage.setAdresse("5505, rue Saint-Laurent, Montréal, QC, H2T 1S6");
+        offreStage.setModaliteTravail("temps_plein");
+        offreStage.setDateDebut(LocalDate.of(2025, 6, 1));
+        offreStage.setDateFin(LocalDate.of(2025, 8, 31));
+        offreStage.setNombreHeuresSemaine(40);
+        offreStage.setNombrePostes(5);
+        offreStage.setDateLimiteCandidature(LocalDate.of(2025, 5, 1));
+        UtilisateurDTO ownerPersisted = utilisateurService.getUtilisateurByEmail("ubisoft@gmail.com");
+        addWithHandleException(() -> checkAndAddOffreStage(offreStage, ownerPersisted), "Une erreur s'est produite lors de l'ajout de l'offre de stage");
     }
 
     private void checkAndAddDepartement(){
+        List<Departement> departements = departementService.getAllDepartements();
+        if (!departements.isEmpty()) {
+            System.out.println("Les départements existent déjà dans la base de données");
+            return;
+        }
         Departement.getDepartementsParDefauts().forEach(departementName -> {
             DepartementDTO departementDTO = new DepartementDTO();
             departementDTO.setNom(departementName);
@@ -75,8 +99,8 @@ public class FructoseApplication implements CommandLineRunner {
         }
     }
 
-    private void checkAndAddOffreStage(OffreStageDTO offreStage) {
-        offreStageService.addOffreStage(offreStage, offreStage.getOwnerDTO());
+    private void checkAndAddOffreStage(OffreStageDTO offreStage, UtilisateurDTO ownerDTO) {
+        offreStageService.addOffreStage(offreStage, ownerDTO);
         System.out.println("OFFRE STAGE avec le nom \"" + offreStage.getNom() + "\" a été ajoutée avec succès");
     }
 

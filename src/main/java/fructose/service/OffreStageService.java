@@ -15,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Validated
 @Service
@@ -55,7 +57,6 @@ public class OffreStageService {
         offreStageDTO.setOwnerDTO(utilisateurDTO);
         validateOffreStage(offreStageDTO);
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
-        System.out.println(offreStage.getDepartement().getNom());
         offreStageRepository.save(offreStage);
     }
 
@@ -87,7 +88,7 @@ public class OffreStageService {
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
-        if (offreStageDTO.getDepartement() == null) {
+        if (offreStageDTO.getDepartementDTO() == null) {
             throw new IllegalArgumentException("Le département ne peut pas être nul");
         }
         if (offreStageDTO.getDateLimiteCandidature().isBefore(LocalDate.now().plusDays(7))) {

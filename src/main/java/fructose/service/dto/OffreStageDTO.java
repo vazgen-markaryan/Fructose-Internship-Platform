@@ -37,7 +37,7 @@ public class OffreStageDTO {
     @Size(min = 3, max = 100, message = "Le nom de la compagnie doit contenir entre 3 et 100 caractères")
     private String compagnie;
 
-    private Departement departement;
+    private DepartementDTO departementDTO;
 
     @NotNull(message = "Le taux horaire ne peut pas être null")
     @DecimalMin(value = "0.0", message = "Le taux horaire ne peut pas être négatif")
@@ -81,7 +81,7 @@ public class OffreStageDTO {
         offreStageDTO.setPoste(offreStage.getPoste());
         offreStageDTO.setDescription(offreStage.getDescription());
         offreStageDTO.setCompagnie(offreStage.getCompagnie());
-        offreStageDTO.setDepartement(offreStage.getDepartement());
+        offreStageDTO.setDepartementDTO(DepartementDTO.toDTO(offreStage.getDepartement()));
         offreStageDTO.setTauxHoraire(offreStage.getTauxHoraire());
         offreStageDTO.setTypeEmploi(offreStage.getTypeEmploi());
         offreStageDTO.setAdresse(offreStage.getAdresse());
@@ -102,7 +102,7 @@ public class OffreStageDTO {
         offreStage.setPoste(offreStageDTO.getPoste());
         offreStage.setDescription(offreStageDTO.getDescription());
         offreStage.setCompagnie(offreStageDTO.getCompagnie());
-        offreStage.setDepartement(offreStageDTO.getDepartement());
+        offreStage.setDepartement(DepartementDTO.toEntity(offreStageDTO.getDepartementDTO()));
         offreStage.setTauxHoraire(offreStageDTO.getTauxHoraire());
         offreStage.setTypeEmploi(offreStageDTO.getTypeEmploi());
         offreStage.setAdresse(offreStageDTO.getAdresse());

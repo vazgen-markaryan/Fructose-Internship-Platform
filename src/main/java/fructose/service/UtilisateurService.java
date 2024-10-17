@@ -6,6 +6,7 @@ import fructose.repository.*;
 import fructose.security.JwtTokenProvider;
 import fructose.security.exception.InvalidJwtTokenException;
 import fructose.service.dto.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -180,5 +181,13 @@ public class UtilisateurService {
 		} catch (InvalidJwtTokenException ex) {
 			return false;
 		}
+	}
+
+	public UtilisateurDTO getUtilisateurByEmail(String email) {
+		Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
+		if (utilisateur == null) {
+			throw new IllegalArgumentException("L'utilisateur avec mail " + email + " n'existe pas");
+		}
+		return UtilisateurDTO.toDTO(utilisateur);
 	}
 }
