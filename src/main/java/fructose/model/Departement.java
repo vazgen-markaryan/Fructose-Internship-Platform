@@ -29,6 +29,7 @@ public class Departement {
     // Ici, c'est les départements par défaut. À ne faire qu'une seule fois dans la base de donnée.
     static public List<String> getDepartementsParDefauts() {
         List<String> departementsDefauts = new ArrayList<>();
+        departementsDefauts.add("CÉGEP ANDRÉ LAURENDEAU");
         departementsDefauts.add("cinema");
         departementsDefauts.add("gestion_commerce");
         departementsDefauts.add("gestion_operations_chaine_logistique");

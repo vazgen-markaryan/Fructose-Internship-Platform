@@ -2,6 +2,7 @@ package fructose.model;
 
 import fructose.model.auth.Credentials;
 import fructose.model.auth.Role;
+import fructose.service.dto.DepartementDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -36,10 +37,10 @@ public class Utilisateur {
 	@Column(unique = true)
 	@Pattern(regexp = "^\\d{7}$", message = "Le Matricule doit contenir 7 chiffres")
 	private String matricule;
-	
-	@Size(max = 100, message = "Le nom du département doit contenir au maximum 100 caractères")
-	@Pattern(regexp = "^[\\p{L}\\s_]+$", message = "Le nom du département doit contenir uniquement des lettres et des espaces")
-	private String departement;
+
+	@ManyToOne
+	@JoinColumn(name = "departement_id")
+	private Departement departement;
 	
 	@Size(min = 3, max = 100, message = "Le nom de l'entreprise doit contenir de 3 à 100 caractères")
 	@Pattern(regexp = "^[A-Za-zÀ-ÿ\\s]+$", message = "Le nom de l'entreprise doit contenir uniquement des lettres et des espaces")
@@ -74,7 +75,7 @@ public class Utilisateur {
 		return credentials.getAuthorities();
 	}
 	
-	public Utilisateur(String fullName, String email, String password, String matricule, Role role, String departement, String companyName) {
+	public Utilisateur(String fullName, String email, String password, String matricule, Role role, Departement departement, String companyName) {
 		this.fullName = fullName;
 		this.matricule = matricule;
 		this.departement = departement;
@@ -82,7 +83,7 @@ public class Utilisateur {
 		this.credentials = Credentials.builder().email(email).password(password).role(role).build();
 	}
 	
-	public static Utilisateur createUtilisateur(String type, String fullName, String email, String password, String matricule, String departement, String companyName) {
+	public static Utilisateur createUtilisateur(String type, String fullName, String email, String password, String matricule, Departement departement, String companyName) {
 		return switch (type.toLowerCase()) {
 			case "etudiant" -> new Etudiant(fullName, email, password, matricule, Role.ETUDIANT, departement, companyName);
 			case "employeur" -> new Employeur(fullName, email, password, matricule, Role.EMPLOYEUR, departement, companyName);

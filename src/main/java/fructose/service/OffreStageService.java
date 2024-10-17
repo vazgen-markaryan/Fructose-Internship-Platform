@@ -128,7 +128,7 @@ public class OffreStageService {
                 }
             }
             case ETUDIANT -> {
-                offresStage = OffreStageDTO.toDTOs(offreStageRepository.findByUserDepartement(utilisateur.getDepartement()));
+                offresStage = OffreStageDTO.toDTOs(offreStageRepository.findByUserDepartement(utilisateur.getDepartement().getId()));
                 if (offresStage.isEmpty()) {
                     throw new IllegalArgumentException("Aucune offre de stage trouvée pour l'étudiant dans le département: " + utilisateur.getDepartement());
                 }

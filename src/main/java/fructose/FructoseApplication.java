@@ -39,17 +39,19 @@ public class FructoseApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", "techniques_informatique", null);
+        addWithHandleException(this::checkAndAddDepartement, "Une erreur s'est produite lors de l'ajout du département");
+        Departement departementInformatique = DepartementDTO.toEntity(departementService.getDepartementByNom("techniques_informatique"));
+        Departement departementCegep = DepartementDTO.toEntity(departementService.getDepartementByNom("CÉGEP ANDRÉ LAURENDEAU"));
+        Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", departementInformatique, null);
         EtudiantDTO etudiantVazgen = EtudiantDTO.toDTO((Etudiant) vazgen);
 
-        Utilisateur francois = Utilisateur.createUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "2222222", "techniques_informatique", null);
+        Utilisateur francois = Utilisateur.createUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "2222222", departementInformatique, null);
         ProfesseurDTO professeurFrancois = ProfesseurDTO.toDTO((Professeur) francois);
 
-        Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, "techniques_informatique", "Ubisoft Incorporé");
+        Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, departementInformatique, "Ubisoft Incorporé");
         EmployeurDTO employeurUbisoft = EmployeurDTO.toDTO((Employeur) ubisoft);
-        Utilisateur admin = Utilisateur.createUtilisateur("Admin", "Gabriel Laplante", "admin@gmail.com", "Admin123!", "0000000", "CÉGEP ANDRÉ LAURENDEAU", null);
+        Utilisateur admin = Utilisateur.createUtilisateur("Admin", "Gabriel Laplante", "admin@gmail.com", "Admin123!", "0000000", departementCegep, null);
         AdminDTO superAdmin = AdminDTO.toDTO((Admin) admin);
-        addWithHandleException(this::checkAndAddDepartement, "Une erreur s'est produite lors de l'ajout du département");
         addWithHandleException(() -> {
             checkAndAddUtilisateur(superAdmin, Role.ADMIN);
             checkAndAddUtilisateur(etudiantVazgen, Role.ETUDIANT);

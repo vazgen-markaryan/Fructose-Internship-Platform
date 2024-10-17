@@ -30,7 +30,12 @@ public class DepartementService {
     }
 
     public DepartementDTO getDepartementByNom(String name) {
-        return DepartementDTO.toDTO(departementRepository.findByNom(name));
+        System.out.println(name);
+        List<Departement> departements = departementRepository.findByNom(name);
+        if (departements.isEmpty()) {
+            throw new IllegalArgumentException("Departement avec nom: " + name + " n'existe pas");
+        }
+        return DepartementDTO.toDTO(departements.getFirst());
     }
 
     public List<Departement> getAllDepartements() {

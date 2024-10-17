@@ -17,7 +17,7 @@ public class ProfesseurDTO extends UtilisateurDTO {
         professeur_dto.setPassword(professeur.getPassword());
         professeur_dto.setMatricule(professeur.getMatricule());
         professeur_dto.setRole(Role.PROFESSEUR);
-        professeur_dto.setDepartement(professeur.getDepartement());
+        professeur_dto.setDepartementDTO(DepartementDTO.toDTO(professeur.getDepartement()));
         professeur_dto.setCompanyName(professeur.getCompanyName());
         return professeur_dto;
     }
