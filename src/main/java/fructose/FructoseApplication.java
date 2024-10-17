@@ -47,32 +47,9 @@ public class FructoseApplication implements CommandLineRunner {
 
         Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, "techniques_informatique", "Ubisoft Incorporé");
         EmployeurDTO employeurUbisoft = EmployeurDTO.toDTO((Employeur) ubisoft);
-        OffreStageDTO offreStageDTO = new OffreStageDTO();
-        offreStageDTO.setId(1L);
-        offreStageDTO.setNom("Google");
-        offreStageDTO.setPoste("Developpeur Java");
-        offreStageDTO.setDescription("Faire du developpement Java chez Google");
-        offreStageDTO.setCompagnie("Google");
-        Departement departement = new Departement();
-        departement.setNom("Informatique");
-        offreStageDTO.setDepartement(departement);
-        offreStageDTO.setTauxHoraire(23.75);
-        offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, Etats-Unis");
-        offreStageDTO.setTypeEmploi("presentiel");
-        offreStageDTO.setModaliteTravail("temps_plein");
-        offreStageDTO.setDateDebut(LocalDate.now().plusMonths(1));
-        offreStageDTO.setDateFin(LocalDate.now().plusMonths(6));
-        offreStageDTO.setNombreHeuresSemaine(40);
-        offreStageDTO.setNombrePostes(5);
-        offreStageDTO.setDateLimiteCandidature(LocalDate.now().plusDays(14));
-        EmployeurDTO employeurDTO = new EmployeurDTO();
-        employeurDTO.setRole(Role.EMPLOYEUR);
-        employeurDTO.setEmail("Mike");
-        offreStageDTO.setOwnerDTO(employeurDTO);
         Utilisateur admin = Utilisateur.createUtilisateur("Admin", "Gabriel Laplante", "admin@gmail.com", "Admin123!", "0000000", "CÉGEP ANDRÉ LAURENDEAU", null);
         AdminDTO superAdmin = AdminDTO.toDTO((Admin) admin);
         addWithHandleException(this::checkAndAddDepartement, "Une erreur s'est produite lors de l'ajout du département");
-        addWithHandleException(() -> checkAndAddOffreStage(offreStageDTO), "Une erreur s'est produite lors de l'ajout de l'offre de stage");
         addWithHandleException(() -> {
             checkAndAddUtilisateur(superAdmin, Role.ADMIN);
             checkAndAddUtilisateur(etudiantVazgen, Role.ETUDIANT);
@@ -82,12 +59,12 @@ public class FructoseApplication implements CommandLineRunner {
     }
 
     private void checkAndAddDepartement(){
-        DepartementDTO departement1 = new DepartementDTO();
-        departement1.setNom("techniques_informatique");
-        DepartementDTO departement2 = new DepartementDTO();
-        departement2.setNom("soins_infirmiers");
-        departementService.addDepartement(departement1);
-        departementService.addDepartement(departement2);
+        Departement.getDepartementsParDefauts().forEach(departementName -> {
+            DepartementDTO departementDTO = new DepartementDTO();
+            departementDTO.setNom(departementName);
+            departementService.addDepartement(departementDTO);
+            System.out.println("Département \"" + departementName + "\" a été ajouté avec succès");
+        });
     }
 
     private void addWithHandleException(Runnable action, String errorMessage) {

@@ -13,7 +13,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "offre_stage")
-@SecondaryTable(name = "users")
 public class OffreStage {
 
     @Id
@@ -73,9 +72,8 @@ public class OffreStage {
     @NotNull(message = "La date limite de candidature ne peut pas être null")
     private LocalDate dateLimiteCandidature;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id", referencedColumnName = "id", table = "users")
-    @NotNull
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id")
     private Utilisateur owner;
 
     @ManyToMany

@@ -8,6 +8,8 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -42,14 +44,16 @@ public class Utilisateur {
 	@Size(min = 3, max = 100, message = "Le nom de l'entreprise doit contenir de 3 à 100 caractères")
 	@Pattern(regexp = "^[A-Za-zÀ-ÿ\\s]+$", message = "Le nom de l'entreprise doit contenir uniquement des lettres et des espaces")
 	private String companyName;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = CascadeType.ALL)
+	private List<OffreStage> offreStages;
 	
 	@Embedded
 	private Credentials credentials;
 	
 	@OneToOne(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Cv cv;
-	
-	
+
 	public String getEmail() {
 		return credentials.getEmail();
 	}
