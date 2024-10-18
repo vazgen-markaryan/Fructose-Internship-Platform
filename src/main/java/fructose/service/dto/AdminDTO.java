@@ -19,6 +19,7 @@ public class AdminDTO extends UtilisateurDTO {
         admin_dto.setRole(Role.ADMIN);
         admin_dto.setDepartementDTO(DepartementDTO.toDTO(admin.getDepartement()));
         admin_dto.setCompanyName(admin.getCompanyName());
+        admin_dto.setIsApproved(admin.getIsApproved());
         return admin_dto;
     }
 }

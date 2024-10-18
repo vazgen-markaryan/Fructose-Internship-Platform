@@ -19,6 +19,7 @@ public class ProfesseurDTO extends UtilisateurDTO {
         professeur_dto.setRole(Role.PROFESSEUR);
         professeur_dto.setDepartementDTO(DepartementDTO.toDTO(professeur.getDepartement()));
         professeur_dto.setCompanyName(professeur.getCompanyName());
+        professeur_dto.setIsApproved(professeur.getIsApproved());
         return professeur_dto;
     }
 }

@@ -145,20 +145,13 @@ public class UtilisateurService {
 		return utilisateurRepository.findByMatricule(matricule) != null;
 	}
 
-	public UtilisateurDTO login(String email, String password) {
-		Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
-		if (utilisateur == null) {
-			throw new IllegalArgumentException("L'utilisateur avec mail " + email + " n'existe pas");
-		}
-		if (passwordEncoder.matches(password, utilisateur.getPassword())) {
-			return UtilisateurDTO.toDTO(utilisateur);
-		} else {
-			throw new IllegalArgumentException("Mot de passe incorrect");
-		}
-	}
-
 	public String authenticateUser(String email, String password) {
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+		Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
+
+		if (!utilisateur.getIsApproved()) {
+			throw new IllegalArgumentException("L'utilisateur n'est pas approuvé");
+		}
 		return jwtTokenProvider.generateToken(authentication);
 	}
 

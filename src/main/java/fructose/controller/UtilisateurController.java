@@ -87,7 +87,8 @@ public class UtilisateurController {
             String token = utilisateurService.authenticateUser(loginDTO.getEmail(), loginDTO.getPassword());
             return ResponseEntity.status(HttpStatus.OK).body("Token : " + token);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Une erreur inattendue s'est produite : " + e.getMessage());
+            //TODO: Cette erreur va au front end. Elle ne sera pas traduite. FIX THIS SHIT
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

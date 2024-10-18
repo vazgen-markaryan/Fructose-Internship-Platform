@@ -44,15 +44,16 @@ public class FructoseApplication implements CommandLineRunner {
         Departement departementInformatique = DepartementDTO.toEntity(departementService.getDepartementByNom("techniques_informatique"));
         Departement departementCegep = DepartementDTO.toEntity(departementService.getDepartementByNom("CÉGEP ANDRÉ LAURENDEAU"));
 
-        Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", departementInformatique, null);
+        Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", departementInformatique, null, false);
         EtudiantDTO etudiantVazgen = EtudiantDTO.toDTO((Etudiant) vazgen);
 
-        Utilisateur francois = Utilisateur.createUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "2222222", departementInformatique, null);
+        Utilisateur francois = Utilisateur.createUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "2222222", departementInformatique, null, false);
         ProfesseurDTO professeurFrancois = ProfesseurDTO.toDTO((Professeur) francois);
 
-        Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, departementInformatique, "Ubisoft Incorporé");
+        Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, departementInformatique, "Ubisoft Incorporé", false);
         EmployeurDTO employeurUbisoft = EmployeurDTO.toDTO((Employeur) ubisoft);
-        Utilisateur admin = Utilisateur.createUtilisateur("Admin", "Gabriel Laplante", "admin@gmail.com", "Admin123!", "0000000", departementCegep, null);
+
+        Utilisateur admin = Utilisateur.createUtilisateur("Admin", "Gabriel Laplante", "admin@gmail.com", "Admin123!", "0000000", departementCegep, null, false);
         AdminDTO superAdmin = AdminDTO.toDTO((Admin) admin);
 
         addWithHandleException(() -> {
@@ -68,6 +69,14 @@ public class FructoseApplication implements CommandLineRunner {
         UtilisateurDTO ownerPersisted = utilisateurService.getUtilisateurByEmail("ubisoft@gmail.com");
 
         addWithHandleException(() -> checkAndAddOffreStage(offreStageDTO, ownerPersisted), "Une erreur s'est produite lors de l'ajout de l'offre de stage");
+    }
+
+    private void addWithHandleException(Runnable action, String errorMessage) {
+        try {
+            action.run();
+        } catch (Exception e) {
+            logger.error(errorMessage, e);
+        }
     }
 
     private void checkAndAddDepartement() {
@@ -98,14 +107,6 @@ public class FructoseApplication implements CommandLineRunner {
         }
 
         System.out.println("\n" + resultMessage.toString().trim() + "\n");
-    }
-
-    private void addWithHandleException(Runnable action, String errorMessage) {
-        try {
-            action.run();
-        } catch (Exception e) {
-            logger.error(errorMessage, e);
-        }
     }
 
     private void checkAndAddOffreStage(OffreStageDTO offreStage, UtilisateurDTO ownerDTO) {
