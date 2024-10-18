@@ -41,7 +41,7 @@ class AuthProviderTest {
 		
 		String email = "valid@example.com";
 		String password = "validPassword";
-		Utilisateur user = new Utilisateur("Valid User", email, password, "1234567", Role.ETUDIANT, "Department", "Company");
+		Utilisateur user = new Utilisateur("Valid User", email, password, "1234567", Role.ETUDIANT, new Departement(), "Company");
 		
 		when(userAppRepository.findByEmail(email)).thenReturn(user);
 		when(passwordEncoder.matches(password, user.getPassword())).thenReturn(true);

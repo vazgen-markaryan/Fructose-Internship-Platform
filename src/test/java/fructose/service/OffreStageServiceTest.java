@@ -85,8 +85,8 @@ public class OffreStageServiceTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         Utilisateur utilisateur = new Employeur();
         utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.EMPLOYEUR).build());
+        utilisateur.setDepartement(DepartementDTO.toEntity(departement));
         when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
-        when(departementRepository.findById(1L)).thenReturn(Optional.of(DepartementDTO.toEntity(departement)));
     }
 
 
@@ -266,10 +266,10 @@ public class OffreStageServiceTest {
     @Test
     void testAddOffreStageProgrammeEtudeNull() {
         offreStageDTO.setDepartementDTO(null);
-        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("programmeEtude: Le programme d'études ne peut pas être vide", exception.getMessage());
+        assertEquals("Le département ne peut pas être nul", exception.getMessage());
     }
 
     @Test
@@ -634,6 +634,7 @@ public class OffreStageServiceTest {
                 .map(OffreStageDTO::toEntity)
                 .toList();
         Utilisateur utilisateur = new Employeur();
+        utilisateur.setDepartement(new Departement());
         utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
         when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
         when(offreStageRepository.findByUserDepartement(utilisateur.getDepartement().getId())).thenReturn(offreStages);
@@ -646,6 +647,7 @@ public class OffreStageServiceTest {
     @Test
     void testGetOffresStageNotFoundForEtudiant() {
         Utilisateur utilisateur = new Employeur();
+        utilisateur.setDepartement(new Departement());
         utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
         when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
         when(offreStageRepository.findByUserDepartement(utilisateur.getDepartement().getId())).thenReturn(List.of());
