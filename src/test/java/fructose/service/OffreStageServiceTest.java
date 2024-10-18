@@ -6,8 +6,10 @@ import fructose.model.OffreStage;
 import fructose.model.Utilisateur;
 import fructose.model.auth.Credentials;
 import fructose.model.auth.Role;
+import fructose.repository.DepartementRepository;
 import fructose.repository.EmployeurRepository;
 import fructose.repository.OffreStageRepository;
+import fructose.service.dto.DepartementDTO;
 import fructose.service.dto.EmployeurDTO;
 import fructose.service.dto.OffreStageDTO;
 import jakarta.validation.ConstraintViolationException;
@@ -42,6 +44,9 @@ public class OffreStageServiceTest {
     @Mock
     private OffreStageDTO offreStageDTO;
 
+    @Mock
+    private DepartementRepository departementRepository;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -51,9 +56,10 @@ public class OffreStageServiceTest {
         offreStageDTO.setPoste("Developpeur Java");
         offreStageDTO.setDescription("Faire du developpement Java chez Google");
         offreStageDTO.setCompagnie("Google");
-        Departement departement = new Departement();
-        departement.setNom("Informatique");
-        offreStageDTO.setDepartement(departement);
+        DepartementDTO departement = new DepartementDTO();
+        departement.setNom("gestion_commerce");
+        departement.setId(1L);
+        offreStageDTO.setDepartementDTO(departement);
         offreStageDTO.setTauxHoraire(23.75);
         offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, Etats-Unis");
         offreStageDTO.setTypeEmploi("presentiel");
@@ -66,6 +72,7 @@ public class OffreStageServiceTest {
         EmployeurDTO employeurDTO = new EmployeurDTO();
         employeurDTO.setRole(Role.EMPLOYEUR);
         employeurDTO.setEmail("Mike");
+        employeurDTO.setDepartementDTO(departement);
         offreStageDTO.setOwnerDTO(employeurDTO);
 
         Authentication authentication = mock(Authentication.class);
@@ -76,10 +83,10 @@ public class OffreStageServiceTest {
         when(credentials.getEmail()).thenReturn("Mike");
         when(authentication.getCredentials()).thenReturn(credentials);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        when(employeurRepository.findByEmail("Mike")).thenReturn(new Employeur());
         Utilisateur utilisateur = new Employeur();
         utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.EMPLOYEUR).build());
         when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+        when(departementRepository.findById(1L)).thenReturn(Optional.of(DepartementDTO.toEntity(departement)));
     }
 
 
@@ -258,20 +265,11 @@ public class OffreStageServiceTest {
 
     @Test
     void testAddOffreStageProgrammeEtudeNull() {
-        offreStageDTO.setProgrammeEtude(null);
+        offreStageDTO.setDepartementDTO(null);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
         assertEquals("programmeEtude: Le programme d'études ne peut pas être vide", exception.getMessage());
-    }
-
-    @Test
-    void testAddOffreStageProgrammeEtudeInvalide() {
-        offreStageDTO.setProgrammeEtude("Pina Colada");
-        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
-            offreStageService.addOffreStage(offreStageDTO);
-        });
-        assertEquals("programmeEtude: La programme d'études doit contenir uniquement des lettres et des underscores", exception.getMessage());
     }
 
     @Test
@@ -638,11 +636,11 @@ public class OffreStageServiceTest {
         Utilisateur utilisateur = new Employeur();
         utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
         when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
-        when(offreStageRepository.findByUserDepartement(utilisateur.getDepartement())).thenReturn(offreStages);
+        when(offreStageRepository.findByUserDepartement(utilisateur.getDepartement().getId())).thenReturn(offreStages);
 
         offreStageService.getOffresStage();
 
-        verify(offreStageRepository, times(1)).findByUserDepartement(utilisateur.getDepartement());
+        verify(offreStageRepository, times(1)).findByUserDepartement(utilisateur.getDepartement().getId());
     }
 
     @Test
@@ -650,7 +648,7 @@ public class OffreStageServiceTest {
         Utilisateur utilisateur = new Employeur();
         utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
         when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
-        when(offreStageRepository.findByUserDepartement(utilisateur.getDepartement())).thenReturn(List.of());
+        when(offreStageRepository.findByUserDepartement(utilisateur.getDepartement().getId())).thenReturn(List.of());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             offreStageService.getOffresStage();

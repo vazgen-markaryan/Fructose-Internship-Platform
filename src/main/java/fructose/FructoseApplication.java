@@ -59,24 +59,12 @@ public class FructoseApplication implements CommandLineRunner {
             checkAndAddUtilisateur(employeurUbisoft, Role.EMPLOYEUR);
         }, "Une erreur s'est produite lors de l'ajout de l'utilisateur");
 
-        OffreStageDTO offreStage = new OffreStageDTO();
-        offreStage.setNom("Développeur Java");
-        offreStage.setDescription("Développer des applications Java");
-        offreStage.setPoste("Développeur Java");
-        offreStage.setCompagnie("Ubisoft Incorporé");
-        DepartementDTO departementPersisted = departementService.getDepartementByNom("techniques_informatique");
-        offreStage.setDepartementDTO(departementPersisted);
-        offreStage.setTauxHoraire(20.0);
-        offreStage.setTypeEmploi("presentiel");
-        offreStage.setAdresse("5505, rue Saint-Laurent, Montréal, QC, H2T 1S6");
-        offreStage.setModaliteTravail("temps_plein");
-        offreStage.setDateDebut(LocalDate.of(2025, 6, 1));
-        offreStage.setDateFin(LocalDate.of(2025, 8, 31));
-        offreStage.setNombreHeuresSemaine(40);
-        offreStage.setNombrePostes(5);
-        offreStage.setDateLimiteCandidature(LocalDate.of(2025, 5, 1));
+
+        OffreStage offreStage = OffreStage.createOffreStage("Développeur Java", "Développer des applications Java", "Développeur Java", "Ubisoft Incorporé", departementInformatique, 20.0, "presentiel", "5505, rue Saint-Laurent, Montréal, QC, H2T 1S6", "temps_plein", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 40, 5, LocalDate.of(2025, 5, 1), (Employeur) ubisoft);
+        OffreStageDTO offreStageDTO = OffreStageDTO.toDTO(offreStage);
         UtilisateurDTO ownerPersisted = utilisateurService.getUtilisateurByEmail("ubisoft@gmail.com");
-        addWithHandleException(() -> checkAndAddOffreStage(offreStage, ownerPersisted), "Une erreur s'est produite lors de l'ajout de l'offre de stage");
+
+        addWithHandleException(() -> checkAndAddOffreStage(offreStageDTO, ownerPersisted), "Une erreur s'est produite lors de l'ajout de l'offre de stage");
     }
 
     private void checkAndAddDepartement(){
