@@ -1,36 +1,25 @@
-import React, {useCallback, useContext, useState} from "react";
+import React from "react";
 import {
     mdiArrowLeft, mdiArrowRight,
-    mdiArrowRightCircle,
-    mdiButtonCursor,
     mdiCheck,
-    mdiCheckCircle, mdiChevronDown,
-    mdiChevronRight,
+    mdiChevronDown,
     mdiClose,
-    mdiCloseCircle,
-    mdiCloudUploadOutline,
     mdiFileOutline,
-    mdiFolderOpenOutline,
-    mdiTimer,
-    mdiTimerSand
 } from "@mdi/js";
 import Icon from "@mdi/react";
-import {AuthContext} from "../../../../providers/AuthProvider";
 import {Link} from "react-router-dom";
-import {useDropzone} from "react-dropzone";
 import PdfPreview from "../../../content/PdfPreview";
+import {useTranslation} from "react-i18next";
 
 const ManageCVs = () => {
-    const { currentUser } = useContext(AuthContext);
 
-    const [files, setFiles] = useState('')
-    const [filename, setFilename] = useState('')
+    const {t} = useTranslation();
 
     return(
         <>
             <div className="dashboard-card-toolbar">
                 <Link to="/dashboard"><button className="btn-icon-dashboard"><Icon path={mdiArrowLeft} size={1.4} /></button></Link>
-                <h1>Mes CVs</h1>
+                <h1>{t("manage_cv_page.my_cvs")}</h1>
             </div>
             <div style={{"display": "flex", "gap": "20px"}}>
 

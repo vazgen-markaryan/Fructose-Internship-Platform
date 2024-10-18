@@ -1,21 +1,20 @@
 import React, {useContext} from "react";
-import Icon from "@mdi/react";
 import {AuthContext} from "../../../../providers/AuthProvider";
-import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const ViewCV = () => {
-    const { currentUser } = useContext(AuthContext);
 
-    return(
+    const {t} = useTranslation();
+    const {currentUser} = useContext(AuthContext);
+
+    return (
         <>
             <div className={"dashboard-layout"}>
                 <section>
-                    <h1>Accueil</h1>
-                    <h5>Bonjour {(currentUser != null)?currentUser.fullName:<div className={"loading-placeholder"}></div>}</h5>
+                    <h1>{t("view_page.home")}</h1>
+                    <h5>{t("pdf_view_page.hello")} {(currentUser != null) ? currentUser.fullName : <div className={"loading-placeholder"}></div>}</h5>
                 </section>
             </div>
-
-
         </>
     )
 }

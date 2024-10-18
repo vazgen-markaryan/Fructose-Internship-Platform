@@ -14,11 +14,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthentificationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
     private final UtilisateurRepository userRepository;
 
-    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider, UtilisateurRepository userRepository) {
+    public JwtAuthentificationFilter(JwtTokenProvider tokenProvider, UtilisateurRepository userRepository) {
         this.tokenProvider = tokenProvider;
         this.userRepository = userRepository;
     }

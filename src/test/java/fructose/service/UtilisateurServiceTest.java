@@ -7,6 +7,7 @@ import fructose.repository.*;
 import fructose.security.JwtTokenProvider;
 import fructose.security.exception.InvalidJwtTokenException;
 import fructose.service.dto.*;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -83,6 +84,36 @@ class UtilisateurServiceTest {
     }
 
     @Test
+    void testGetUtilisateurById_Admin_Success() {
+        Long id = 1L;
+        Admin admin = new Admin();
+        admin.setId(id);
+        admin.setCredentials(Credentials.builder()
+                .email("test@example.com")
+                .password("Password123!")
+                .role(Role.ADMIN)
+                .build());
+
+        when(adminRepository.findById(id)).thenReturn(Optional.of(admin));
+
+        UtilisateurDTO result = utilisateurService.getUtilisateurById(id, Role.ADMIN);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testGetUtilisateurById_Admin_NotFound() {
+        Long adminId = 1L;
+        when(adminRepository.findById(adminId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.getUtilisateurById(adminId, Role.ADMIN);
+        });
+
+        assertEquals("Admin avec ID: " + adminId + " n'existe pas", exception.getMessage());
+        verify(adminRepository).findById(adminId);
+    }
+
+    @Test
     void testGetUtilisateurById_Professeur_Success() {
         Long id = 1L;
         Professeur professeur = new Professeur();
@@ -145,22 +176,6 @@ class UtilisateurServiceTest {
 
         assertThrows(IllegalArgumentException.class, () -> {
             utilisateurService.getUtilisateurById(id, Role.EMPLOYEUR);
-        });
-    }
-
-    @Test
-    void getUtilisateurById_Invalid_Role() {
-        Long id = 1L;
-        assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.getUtilisateurById(id, Role.ADMIN);
-        });
-    }
-
-    @Test
-    void deleteUtilisateur_Role_Admin() {
-        Long id = 1L;
-        assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.deleteUtilisateur(id, Role.ADMIN);
         });
     }
 
@@ -335,7 +350,32 @@ class UtilisateurServiceTest {
         verify(etudiantRepository, never()).deleteById(id);
     }
 
+    @Test
+    void testDeleteUtilisateur_Admin_Success() {
+        Long id = 1L;
+        Admin admin = new Admin();
+        admin.setId(id);
+        admin.setCredentials(new Credentials("admin@example.com", "password123", Role.ADMIN));
 
+        when(adminRepository.findById(id)).thenReturn(Optional.of(admin));
+
+        utilisateurService.deleteUtilisateur(id, Role.ADMIN);
+
+        verify(adminRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void testDeleteUtilisateur_Admin_NotFound() {
+        Long adminId = 1L;
+        when(adminRepository.findById(adminId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.deleteUtilisateur(adminId, Role.ADMIN);
+        });
+
+        assertEquals("Admin avec ID: " + adminId + " n'existe pas", exception.getMessage());
+        verify(adminRepository).findById(adminId);
+    }
 
     // ------------------- GET ALL UTILISATEURS ------------------- //
 
@@ -369,6 +409,21 @@ class UtilisateurServiceTest {
         when(professeurRepository.findAll()).thenReturn(professeurs);
 
         List<UtilisateurDTO> utilisateurs = utilisateurService.getUtilisateurs(Role.PROFESSEUR);
+
+        assertEquals(2, utilisateurs.size());
+    }
+
+    @Test
+    void testGetUtilisateurs_Admin() {
+        Admin admin1 = new Admin();
+        admin1.setCredentials(new Credentials("admin1@example.com", "password123", Role.ADMIN));
+        Admin admin2 = new Admin();
+        admin2.setCredentials(new Credentials("admin2@example.com", "password123", Role.ADMIN));
+
+        List<Admin> admins = List.of(admin1, admin2);
+        when(adminRepository.findAll()).thenReturn(admins);
+
+        List<UtilisateurDTO> utilisateurs = utilisateurService.getUtilisateurs(Role.ADMIN);
 
         assertEquals(2, utilisateurs.size());
     }
@@ -460,14 +515,13 @@ class UtilisateurServiceTest {
     void testGetUtilisateurByToken_InvalidRole() {
         String token = "Bearer validToken";
         String email = "admin@example.com";
-        Utilisateur admin = new Utilisateur();
-        admin.setId(1L);
-        admin.setCredentials(new Credentials(email, "password123", Role.ADMIN));
-        admin.setDepartement(new Departement());
+        Utilisateur invalidUser = mock(Utilisateur.class);
+        invalidUser.setDepartement(new Departement());
         when(jwtTokenProvider.getEmailFromJWT("validToken")).thenReturn(email);
-        when(utilisateurRepository.findByEmail(email)).thenReturn(admin);
+        when(utilisateurRepository.findByEmail(email)).thenReturn(invalidUser);
+        when(invalidUser.getRole()).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(NullPointerException.class, () -> {
             utilisateurService.getUtilisateurByToken(token);
         });
     }
@@ -486,5 +540,19 @@ class UtilisateurServiceTest {
         doThrow(new InvalidJwtTokenException(HttpStatus.BAD_REQUEST, "Invalid token")).when(jwtTokenProvider).validateToken(token);
         boolean result = utilisateurService.validationToken(token);
         assertFalse(result);
+    }
+
+    @Test
+    void testFindById_Admin_Success() {
+        Long adminId = 1L;
+        Admin admin = new Admin();
+        admin.setId(adminId);
+        when(adminRepository.findById(adminId)).thenReturn(Optional.of(admin));
+
+        Admin result = adminRepository.findById(adminId).orElse(null);
+
+        assertNotNull(result);
+        assertEquals(adminId, result.getId());
+        verify(adminRepository).findById(adminId);
     }
 }
