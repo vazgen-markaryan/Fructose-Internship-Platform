@@ -7,7 +7,6 @@ import fructose.repository.*;
 import fructose.security.JwtTokenProvider;
 import fructose.security.exception.InvalidJwtTokenException;
 import fructose.service.dto.*;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -60,7 +58,7 @@ class UtilisateurServiceTest {
 
     @BeforeEach
     public void setUp() {
-        utilisateurService = new UtilisateurService(etudiantRepository, professeurRepository, employeurRepository, adminRepository, passwordEncoder, utilisateurRepository, jwtTokenProvider,authenticationManager);
+        utilisateurService = new UtilisateurService(etudiantRepository, professeurRepository, employeurRepository, adminRepository, passwordEncoder, utilisateurRepository, jwtTokenProvider, authenticationManager);
     }
 
     // ------------------- GET UTILISATEUR BY ID ------------------- //
@@ -93,7 +91,7 @@ class UtilisateurServiceTest {
                 .password("Password123!")
                 .role(Role.ADMIN)
                 .build());
-
+        admin.setDepartement(new Departement());
         when(adminRepository.findById(id)).thenReturn(Optional.of(admin));
 
         UtilisateurDTO result = utilisateurService.getUtilisateurById(id, Role.ADMIN);
@@ -356,7 +354,7 @@ class UtilisateurServiceTest {
         Admin admin = new Admin();
         admin.setId(id);
         admin.setCredentials(new Credentials("admin@example.com", "password123", Role.ADMIN));
-
+        admin.setDepartement(new Departement());
         when(adminRepository.findById(id)).thenReturn(Optional.of(admin));
 
         utilisateurService.deleteUtilisateur(id, Role.ADMIN);
@@ -388,7 +386,7 @@ class UtilisateurServiceTest {
         Etudiant etudiant2 = new Etudiant();
         etudiant2.setCredentials(new Credentials("etudiant2@example.com", "password123", Role.ETUDIANT));
         etudiant2.setDepartement(new Departement());
-        List<Etudiant> etudiants = List.of(etudiant1,etudiant2);
+        List<Etudiant> etudiants = List.of(etudiant1, etudiant2);
         when(etudiantRepository.findAll()).thenReturn(etudiants);
 
         List<UtilisateurDTO> utilisateurs = utilisateurService.getUtilisateurs(Role.ETUDIANT);
@@ -417,8 +415,11 @@ class UtilisateurServiceTest {
     void testGetUtilisateurs_Admin() {
         Admin admin1 = new Admin();
         admin1.setCredentials(new Credentials("admin1@example.com", "password123", Role.ADMIN));
+        admin1.setDepartement(new Departement());
+
         Admin admin2 = new Admin();
         admin2.setCredentials(new Credentials("admin2@example.com", "password123", Role.ADMIN));
+        admin2.setDepartement(new Departement());
 
         List<Admin> admins = List.of(admin1, admin2);
         when(adminRepository.findAll()).thenReturn(admins);
@@ -439,7 +440,7 @@ class UtilisateurServiceTest {
         employeur2.setCredentials(new Credentials("employeur2@example.com", "password123", Role.EMPLOYEUR));
         employeur2.setDepartement(new Departement());
 
-        List<Employeur> employeurs = List.of(employeur1,employeur2);
+        List<Employeur> employeurs = List.of(employeur1, employeur2);
         when(employeurRepository.findAll()).thenReturn(employeurs);
 
         List<UtilisateurDTO> utilisateurs = utilisateurService.getUtilisateurs(Role.EMPLOYEUR);
@@ -454,7 +455,7 @@ class UtilisateurServiceTest {
         assertTrue(utilisateurService.isValidRole("ETUDIANT"));
         assertFalse(utilisateurService.isValidRole("InvalidRole"));
     }
-    
+
     @Test
     void testGetUtilisateurByToken_Etudiant() {
         String token = "Bearer validToken";
@@ -467,13 +468,13 @@ class UtilisateurServiceTest {
         when(jwtTokenProvider.getEmailFromJWT("validToken")).thenReturn(email);
         when(utilisateurRepository.findByEmail(email)).thenReturn(etudiant);
         when(etudiantRepository.findById(1L)).thenReturn(Optional.of(etudiant));
-        
+
         UtilisateurDTO result = utilisateurService.getUtilisateurByToken(token);
-        
+
         assertNotNull(result);
         assertEquals(email, result.getEmail());
     }
-    
+
     @Test
     void testGetUtilisateurByToken_Employeur() {
         String token = "Bearer validToken";
@@ -485,13 +486,13 @@ class UtilisateurServiceTest {
         when(jwtTokenProvider.getEmailFromJWT("validToken")).thenReturn(email);
         when(utilisateurRepository.findByEmail(email)).thenReturn(employeur);
         when(employeurRepository.findById(1L)).thenReturn(Optional.of(employeur));
-        
+
         UtilisateurDTO result = utilisateurService.getUtilisateurByToken(token);
-        
+
         assertNotNull(result);
         assertEquals(email, result.getEmail());
     }
-    
+
     @Test
     void testGetUtilisateurByToken_Professeur() {
         String token = "Bearer validToken";
@@ -503,9 +504,9 @@ class UtilisateurServiceTest {
         when(jwtTokenProvider.getEmailFromJWT("validToken")).thenReturn(email);
         when(utilisateurRepository.findByEmail(email)).thenReturn(professeur);
         when(professeurRepository.findById(1L)).thenReturn(Optional.of(professeur));
-        
+
         UtilisateurDTO result = utilisateurService.getUtilisateurByToken(token);
-        
+
         assertNotNull(result);
         assertEquals(email, result.getEmail());
     }
@@ -525,7 +526,7 @@ class UtilisateurServiceTest {
             utilisateurService.getUtilisateurByToken(token);
         });
     }
-    
+
     @Test
     void testValidationToken_ValidToken() {
         String token = "validToken";
@@ -533,7 +534,7 @@ class UtilisateurServiceTest {
         boolean result = utilisateurService.validationToken(token);
         assertTrue(result);
     }
-    
+
     @Test
     void testValidationToken_InvalidToken() {
         String token = "invalidToken";
