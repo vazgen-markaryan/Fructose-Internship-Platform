@@ -15,6 +15,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -39,8 +40,10 @@ public class FructoseApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         addWithHandleException(this::checkAndAddDepartement, "Une erreur s'est produite lors de l'ajout du département");
+
         Departement departementInformatique = DepartementDTO.toEntity(departementService.getDepartementByNom("techniques_informatique"));
         Departement departementCegep = DepartementDTO.toEntity(departementService.getDepartementByNom("CÉGEP ANDRÉ LAURENDEAU"));
+
         Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", departementInformatique, null);
         EtudiantDTO etudiantVazgen = EtudiantDTO.toDTO((Etudiant) vazgen);
 
@@ -51,33 +54,50 @@ public class FructoseApplication implements CommandLineRunner {
         EmployeurDTO employeurUbisoft = EmployeurDTO.toDTO((Employeur) ubisoft);
         Utilisateur admin = Utilisateur.createUtilisateur("Admin", "Gabriel Laplante", "admin@gmail.com", "Admin123!", "0000000", departementCegep, null);
         AdminDTO superAdmin = AdminDTO.toDTO((Admin) admin);
+
         addWithHandleException(() -> {
             checkAndAddUtilisateur(superAdmin, Role.ADMIN);
             checkAndAddUtilisateur(etudiantVazgen, Role.ETUDIANT);
             checkAndAddUtilisateur(professeurFrancois, Role.PROFESSEUR);
             checkAndAddUtilisateur(employeurUbisoft, Role.EMPLOYEUR);
+            System.out.println(); // Ajouter une ligne vide pour la lisibilité
         }, "Une erreur s'est produite lors de l'ajout de l'utilisateur");
 
-
-        OffreStage offreStage = OffreStage.createOffreStage("Développeur Java", "Développer des applications Java", "Développeur Java", "Ubisoft Incorporé", departementInformatique, 20.0, "presentiel", "5505, rue Saint-Laurent, Montréal, QC, H2T 1S6", "temps_plein", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 40, 5, LocalDate.of(2025, 5, 1), (Employeur) ubisoft);
+        OffreStage offreStage = OffreStage.createOffreStage("Développeur Java", "Développer des applications Java", "Développeur Java", "Ubisoft Incorporé", departementInformatique, 20.0, "presentiel", "5505, rue Saint-Laurent, Montréal, QC, H2T 1S6", "temps_plein", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 40, 5, LocalDate.of(2025, 5, 1), ubisoft);
         OffreStageDTO offreStageDTO = OffreStageDTO.toDTO(offreStage);
         UtilisateurDTO ownerPersisted = utilisateurService.getUtilisateurByEmail("ubisoft@gmail.com");
 
         addWithHandleException(() -> checkAndAddOffreStage(offreStageDTO, ownerPersisted), "Une erreur s'est produite lors de l'ajout de l'offre de stage");
     }
 
-    private void checkAndAddDepartement(){
+    private void checkAndAddDepartement() {
         List<Departement> departements = departementService.getAllDepartements();
         if (!departements.isEmpty()) {
             System.out.println("Les départements existent déjà dans la base de données");
             return;
         }
-        Departement.getDepartementsParDefauts().forEach(departementName -> {
-            DepartementDTO departementDTO = new DepartementDTO();
-            departementDTO.setNom(departementName);
-            departementService.addDepartement(departementDTO);
-            System.out.println("Département \"" + departementName + "\" a été ajouté avec succès");
-        });
+
+        StringBuilder resultMessage = new StringBuilder();
+        boolean allSuccess = true;
+
+        for (String departementName : Departement.getDepartementsParDefauts()) {
+            try {
+                DepartementDTO departementDTO = new DepartementDTO();
+                departementDTO.setNom(departementName);
+                departementService.addDepartement(departementDTO);
+            } catch (Exception e) {
+                resultMessage.append("Échec de l'ajout du département \"").append(departementName).append("\"\n");
+                allSuccess = false;
+            }
+        }
+
+        if (allSuccess) {
+            resultMessage.append("Tous les départements ont été créés avec succès.");
+        } else {
+            resultMessage.append("Certains départements n'ont pas pu être créés.");
+        }
+
+        System.out.println("\n" + resultMessage.toString().trim() + "\n");
     }
 
     private void addWithHandleException(Runnable action, String errorMessage) {
