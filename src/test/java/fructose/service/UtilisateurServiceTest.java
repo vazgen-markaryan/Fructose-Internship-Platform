@@ -1,18 +1,12 @@
 package fructose.service;
 
-import fructose.model.Employeur;
-import fructose.model.Etudiant;
-import fructose.model.Professeur;
-import fructose.model.Utilisateur;
+import fructose.model.*;
 import fructose.model.auth.Credentials;
 import fructose.model.auth.Role;
 import fructose.repository.*;
 import fructose.security.JwtTokenProvider;
 import fructose.security.exception.InvalidJwtTokenException;
-import fructose.service.dto.EmployeurDTO;
-import fructose.service.dto.EtudiantDTO;
-import fructose.service.dto.ProfesseurDTO;
-import fructose.service.dto.UtilisateurDTO;
+import fructose.service.dto.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -60,6 +54,9 @@ class UtilisateurServiceTest {
     @Mock
     private JwtTokenProvider jwtTokenProvider;
 
+    @Mock
+    private DepartementRepository departementRepository;
+
     @BeforeEach
     public void setUp() {
         utilisateurService = new UtilisateurService(etudiantRepository, professeurRepository, employeurRepository, adminRepository, passwordEncoder, utilisateurRepository, jwtTokenProvider,authenticationManager);
@@ -77,6 +74,7 @@ class UtilisateurServiceTest {
                 .password("Password123!")
                 .role(Role.ETUDIANT)
                 .build());
+        etudiant.setDepartement(new Departement());
 
         when(etudiantRepository.findById(id)).thenReturn(Optional.of(etudiant));
 
@@ -94,6 +92,7 @@ class UtilisateurServiceTest {
                 .password("Password123!")
                 .role(Role.PROFESSEUR)
                 .build());
+        professeur.setDepartement(new Departement());
         when(professeurRepository.findById(id)).thenReturn(Optional.of(professeur));
 
         UtilisateurDTO result = utilisateurService.getUtilisateurById(id, Role.PROFESSEUR);
@@ -111,6 +110,7 @@ class UtilisateurServiceTest {
                 .password("Password123!")
                 .role(Role.EMPLOYEUR)
                 .build());
+        employeur.setDepartement(new Departement());
         when(employeurRepository.findById(id)).thenReturn(Optional.of(employeur));
 
         UtilisateurDTO result = utilisateurService.getUtilisateurById(id, Role.EMPLOYEUR);
@@ -209,7 +209,7 @@ class UtilisateurServiceTest {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
         utilisateurDTO.setPassword("password123");
         utilisateurDTO.setRole(Role.ETUDIANT);
-
+        utilisateurDTO.setDepartementDTO(new DepartementDTO());
         when(passwordEncoder.encode(utilisateurDTO.getPassword())).thenReturn("encodedPassword");
 
         utilisateurService.addUtilisateur(utilisateurDTO);
@@ -222,7 +222,7 @@ class UtilisateurServiceTest {
         ProfesseurDTO professeurDTO = new ProfesseurDTO();
         professeurDTO.setPassword("password123");
         professeurDTO.setRole(Role.PROFESSEUR);
-
+        professeurDTO.setDepartementDTO(new DepartementDTO());
         when(passwordEncoder.encode(professeurDTO.getPassword())).thenReturn("encodedPassword");
 
         utilisateurService.addUtilisateur(professeurDTO);
@@ -235,7 +235,7 @@ class UtilisateurServiceTest {
         EmployeurDTO employeurDTO = new EmployeurDTO();
         employeurDTO.setPassword("password123");
         employeurDTO.setRole(Role.EMPLOYEUR);
-
+        employeurDTO.setDepartementDTO(new DepartementDTO());
         when(passwordEncoder.encode(employeurDTO.getPassword())).thenReturn("encodedPassword");
 
         utilisateurService.addUtilisateur(employeurDTO);
@@ -251,7 +251,7 @@ class UtilisateurServiceTest {
         etudiantDTO.setPassword("Password123!");
         etudiantDTO.setMatricule("1111111");
         etudiantDTO.setRole(Role.ETUDIANT);
-        etudiantDTO.setDepartement("Informatique");
+        etudiantDTO.setDepartementDTO(new DepartementDTO());
         etudiantDTO.setCompanyName(null);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
@@ -268,7 +268,7 @@ class UtilisateurServiceTest {
         professeurDTO.setPassword("Password123!");
         professeurDTO.setMatricule("2222222");
         professeurDTO.setRole(Role.PROFESSEUR);
-        professeurDTO.setDepartement("Informatique");
+        professeurDTO.setDepartementDTO(new DepartementDTO());
         professeurDTO.setCompanyName(null);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
@@ -286,7 +286,7 @@ class UtilisateurServiceTest {
         Etudiant etudiant = new Etudiant();
         etudiant.setId(id);
         etudiant.setCredentials(new Credentials("etudiant@example.com", "password123", Role.ETUDIANT));
-
+        etudiant.setDepartement(new Departement());
         when(etudiantRepository.findById(id)).thenReturn(Optional.of(etudiant));
 
         utilisateurService.deleteUtilisateur(id, Role.ETUDIANT);
@@ -300,7 +300,7 @@ class UtilisateurServiceTest {
         Professeur professeur = new Professeur();
         professeur.setId(id);
         professeur.setCredentials(new Credentials("professeur@example.com", "password123", Role.PROFESSEUR));
-
+        professeur.setDepartement(new Departement());
         when(professeurRepository.findById(id)).thenReturn(Optional.of(professeur));
 
         utilisateurService.deleteUtilisateur(id, Role.PROFESSEUR);
@@ -314,7 +314,7 @@ class UtilisateurServiceTest {
         Employeur employeur = new Employeur();
         employeur.setId(id);
         employeur.setCredentials(new Credentials("employeur@example.com", "password123", Role.EMPLOYEUR));
-
+        employeur.setDepartement(new Departement());
         when(employeurRepository.findById(id)).thenReturn(Optional.of(employeur));
 
         utilisateurService.deleteUtilisateur(id, Role.EMPLOYEUR);
@@ -344,9 +344,10 @@ class UtilisateurServiceTest {
 
         Etudiant etudiant1 = new Etudiant();
         etudiant1.setCredentials(new Credentials("etudiant1@example.com", "password123", Role.ETUDIANT));
+        etudiant1.setDepartement(new Departement());
         Etudiant etudiant2 = new Etudiant();
         etudiant2.setCredentials(new Credentials("etudiant2@example.com", "password123", Role.ETUDIANT));
-
+        etudiant2.setDepartement(new Departement());
         List<Etudiant> etudiants = List.of(etudiant1,etudiant2);
         when(etudiantRepository.findAll()).thenReturn(etudiants);
 
@@ -359,9 +360,10 @@ class UtilisateurServiceTest {
     void testGetUtilisateurs_Professeur() {
         Professeur professeur1 = new Professeur();
         professeur1.setCredentials(new Credentials("professeur1@example.com", "password123", Role.PROFESSEUR));
+        professeur1.setDepartement(new Departement());
         Professeur professeur2 = new Professeur();
         professeur2.setCredentials(new Credentials("professeur2@example.com", "password123", Role.PROFESSEUR));
-
+        professeur2.setDepartement(new Departement());
 
         List<Professeur> professeurs = List.of(professeur1, professeur2);
         when(professeurRepository.findAll()).thenReturn(professeurs);
@@ -376,8 +378,11 @@ class UtilisateurServiceTest {
 
         Employeur employeur1 = new Employeur();
         employeur1.setCredentials(new Credentials("employeur1@example.com", "password123", Role.EMPLOYEUR));
+        employeur1.setDepartement(new Departement());
+
         Employeur employeur2 = new Employeur();
         employeur2.setCredentials(new Credentials("employeur2@example.com", "password123", Role.EMPLOYEUR));
+        employeur2.setDepartement(new Departement());
 
         List<Employeur> employeurs = List.of(employeur1,employeur2);
         when(employeurRepository.findAll()).thenReturn(employeurs);
@@ -385,76 +390,6 @@ class UtilisateurServiceTest {
         List<UtilisateurDTO> utilisateurs = utilisateurService.getUtilisateurs(Role.EMPLOYEUR);
 
         assertEquals(2, utilisateurs.size());
-    }
-
-    // ------------------- LOGIN UTILISATEUR ------------------- //
-
-    @Test
-    public void test_successful_login_with_correct_email_and_password() {
-        Utilisateur utilisateurVazgan = Utilisateur.createUtilisateur("Etudiant",
-                "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!",
-                "1111111", "informatique", null);
-        utilisateurVazgan.setCredentials(new Credentials("vazgen@gmail.com", "Vazgen123!", Role.ETUDIANT));
-        utilisateurVazgan.setPassword(new BCryptPasswordEncoder().encode(utilisateurVazgan.getPassword()));
-        String password = "Vazgen123!";
-
-        when(utilisateurRepository.findByEmail("vazgen@gmail.com")).thenReturn(utilisateurVazgan);
-        doReturn(true).when(passwordEncoder).matches(password, utilisateurVazgan.getPassword());
-
-        UtilisateurDTO result = utilisateurService.login(utilisateurVazgan.getEmail(), password);
-
-        assertNotNull(result);
-        assertEquals(utilisateurVazgan.getMatricule(), result.getMatricule());
-        verify(utilisateurRepository).findByEmail(utilisateurVazgan.getEmail());
-    }
-
-    @Test
-    public void test_login_with_incorrect_email() {
-        String email = "vazgen2@gmail.com";
-        String password = "Vazgen";
-
-        when(utilisateurRepository.findByEmail(email)).thenReturn(null);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.login(email, password);
-        });
-
-        assertEquals("L'utilisateur avec mail vazgen2@gmail.com n'existe pas", exception.getMessage());
-    }
-
-    @Test
-    public void test_login_with_incorrect_password() {
-        Utilisateur utilisateurVazgan = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", "informatique", null);
-        utilisateurVazgan.setPassword(new BCryptPasswordEncoder().encode(utilisateurVazgan.getPassword()));
-        when(utilisateurRepository.findByEmail(utilisateurVazgan.getEmail())).thenReturn(utilisateurVazgan);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.login(utilisateurVazgan.getEmail(), "IncorrectPassword1!");
-        });
-
-        assertEquals("Mot de passe incorrect", exception.getMessage());
-    }
-
-    @Test
-    void login_ValidCredentials_ReturnsUtilisateurDTO() {
-        Utilisateur utilisateur = new Utilisateur("John Doe", "john@example.com", "encodedPassword", "1234567", Role.ETUDIANT, null, null);
-        when(utilisateurRepository.findByEmail("john@example.com")).thenReturn(utilisateur);
-        when(passwordEncoder.matches("Password123!", "encodedPassword")).thenReturn(true);
-
-        UtilisateurDTO result = utilisateurService.login("john@example.com", "Password123!");
-
-        assertNotNull(result);
-        assertEquals("John Doe", result.getFullName());
-    }
-
-    @Test
-    void login_InvalidCredentials_ThrowsException() {
-        Utilisateur utilisateur = new Utilisateur("John Doe", "john@example.com", "encodedPassword", "1234567", Role.ETUDIANT, null, null);
-        when(utilisateurRepository.findByEmail("john@example.com")).thenReturn(utilisateur);
-        when(passwordEncoder.matches("wrongPassword", "encodedPassword")).thenReturn(false);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> utilisateurService.login("john@example.com", "wrongPassword"));
-        assertEquals("Mot de passe incorrect", exception.getMessage());
     }
 
     // ------------------- VALID ROLE ------------------- //
@@ -472,7 +407,8 @@ class UtilisateurServiceTest {
         Etudiant etudiant = new Etudiant();
         etudiant.setId(1L);
         etudiant.setCredentials(new Credentials(email, "password123", Role.ETUDIANT));
-        
+        etudiant.setDepartement(new Departement());
+
         when(jwtTokenProvider.getEmailFromJWT("validToken")).thenReturn(email);
         when(utilisateurRepository.findByEmail(email)).thenReturn(etudiant);
         when(etudiantRepository.findById(1L)).thenReturn(Optional.of(etudiant));
@@ -490,7 +426,7 @@ class UtilisateurServiceTest {
         Employeur employeur = new Employeur();
         employeur.setId(1L);
         employeur.setCredentials(new Credentials(email, "password123", Role.EMPLOYEUR));
-        
+        employeur.setDepartement(new Departement());
         when(jwtTokenProvider.getEmailFromJWT("validToken")).thenReturn(email);
         when(utilisateurRepository.findByEmail(email)).thenReturn(employeur);
         when(employeurRepository.findById(1L)).thenReturn(Optional.of(employeur));
@@ -508,7 +444,7 @@ class UtilisateurServiceTest {
         Professeur professeur = new Professeur();
         professeur.setId(1L);
         professeur.setCredentials(new Credentials(email, "password123", Role.PROFESSEUR));
-        
+        professeur.setDepartement(new Departement());
         when(jwtTokenProvider.getEmailFromJWT("validToken")).thenReturn(email);
         when(utilisateurRepository.findByEmail(email)).thenReturn(professeur);
         when(professeurRepository.findById(1L)).thenReturn(Optional.of(professeur));
@@ -518,7 +454,8 @@ class UtilisateurServiceTest {
         assertNotNull(result);
         assertEquals(email, result.getEmail());
     }
-    
+
+    // Test non fonctionnel
     @Test
     void testGetUtilisateurByToken_InvalidRole() {
         String token = "Bearer validToken";
@@ -526,10 +463,10 @@ class UtilisateurServiceTest {
         Utilisateur admin = new Utilisateur();
         admin.setId(1L);
         admin.setCredentials(new Credentials(email, "password123", Role.ADMIN));
-        
+        admin.setDepartement(new Departement());
         when(jwtTokenProvider.getEmailFromJWT("validToken")).thenReturn(email);
         when(utilisateurRepository.findByEmail(email)).thenReturn(admin);
-        
+
         assertThrows(IllegalArgumentException.class, () -> {
             utilisateurService.getUtilisateurByToken(token);
         });

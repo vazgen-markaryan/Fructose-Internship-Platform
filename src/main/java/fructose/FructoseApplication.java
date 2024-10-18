@@ -1,6 +1,7 @@
 package fructose;
 
 import fructose.model.*;
+import fructose.service.DepartementService;
 import fructose.service.OffreStageService;
 import fructose.model.Employeur;
 import fructose.model.Etudiant;
@@ -14,7 +15,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,42 +24,62 @@ public class FructoseApplication implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(FructoseApplication.class);
     private final UtilisateurService utilisateurService;
     private final OffreStageService offreStageService;
-    
-    public FructoseApplication(UtilisateurService utilisateurService, OffreStageService offreStageService) {
+    private final DepartementService departementService;
+
+    public FructoseApplication(UtilisateurService utilisateurService, OffreStageService offreStageService, DepartementService departementService) {
         this.utilisateurService = utilisateurService;
         this.offreStageService = offreStageService;
+        this.departementService = departementService;
     }
 
     public static void main(String[] args) {
         SpringApplication.run(FructoseApplication.class, args);
     }
-    
+
     @Override
     public void run(String... args) {
-        Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", "techniques_informatique", null);
+        addWithHandleException(this::checkAndAddDepartement, "Une erreur s'est produite lors de l'ajout du département");
+        Departement departementInformatique = DepartementDTO.toEntity(departementService.getDepartementByNom("techniques_informatique"));
+        Departement departementCegep = DepartementDTO.toEntity(departementService.getDepartementByNom("CÉGEP ANDRÉ LAURENDEAU"));
+        Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", departementInformatique, null);
         EtudiantDTO etudiantVazgen = EtudiantDTO.toDTO((Etudiant) vazgen);
 
-        Utilisateur francois = Utilisateur.createUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "2222222", "techniques_informatique", null);
+        Utilisateur francois = Utilisateur.createUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "2222222", departementInformatique, null);
         ProfesseurDTO professeurFrancois = ProfesseurDTO.toDTO((Professeur) francois);
 
-        Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, "techniques_informatique", "Ubisoft Incorporé");
+        Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, departementInformatique, "Ubisoft Incorporé");
         EmployeurDTO employeurUbisoft = EmployeurDTO.toDTO((Employeur) ubisoft);
-
-        OffreStage offreStage = OffreStage.createOffreStage("Développeur de jeux video", "Développeur Unity", "Développer des jeux video en utilisant Unity", "Ubisoft", "techniques_informatique", 25.0, "virtuel", "Montréal", "temps_plein", LocalDate.now().plusMonths(3), LocalDate.now().plusMonths(6), 20, 1, LocalDate.now().plusMonths(2));
-        OffreStageDTO offreStageDTO = OffreStageDTO.toDTO(offreStage);
-
-        Utilisateur admin = Utilisateur.createUtilisateur("Admin", "Gabriel Laplante", "admin@gmail.com", "Admin123!", "0000000", "CÉGEP ANDRÉ LAURENDEAU", null);
+        Utilisateur admin = Utilisateur.createUtilisateur("Admin", "Gabriel Laplante", "admin@gmail.com", "Admin123!", "0000000", departementCegep, null);
         AdminDTO superAdmin = AdminDTO.toDTO((Admin) admin);
-
-        addWithHandleException(() -> checkAndAddOffreStage(offreStageDTO), "Une erreur s'est produite lors de l'ajout de l'offre de stage");
         addWithHandleException(() -> {
             checkAndAddUtilisateur(superAdmin, Role.ADMIN);
             checkAndAddUtilisateur(etudiantVazgen, Role.ETUDIANT);
             checkAndAddUtilisateur(professeurFrancois, Role.PROFESSEUR);
             checkAndAddUtilisateur(employeurUbisoft, Role.EMPLOYEUR);
         }, "Une erreur s'est produite lors de l'ajout de l'utilisateur");
+
+
+        OffreStage offreStage = OffreStage.createOffreStage("Développeur Java", "Développer des applications Java", "Développeur Java", "Ubisoft Incorporé", departementInformatique, 20.0, "presentiel", "5505, rue Saint-Laurent, Montréal, QC, H2T 1S6", "temps_plein", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 40, 5, LocalDate.of(2025, 5, 1), (Employeur) ubisoft);
+        OffreStageDTO offreStageDTO = OffreStageDTO.toDTO(offreStage);
+        UtilisateurDTO ownerPersisted = utilisateurService.getUtilisateurByEmail("ubisoft@gmail.com");
+
+        addWithHandleException(() -> checkAndAddOffreStage(offreStageDTO, ownerPersisted), "Une erreur s'est produite lors de l'ajout de l'offre de stage");
     }
-    
+
+    private void checkAndAddDepartement(){
+        List<Departement> departements = departementService.getAllDepartements();
+        if (!departements.isEmpty()) {
+            System.out.println("Les départements existent déjà dans la base de données");
+            return;
+        }
+        Departement.getDepartementsParDefauts().forEach(departementName -> {
+            DepartementDTO departementDTO = new DepartementDTO();
+            departementDTO.setNom(departementName);
+            departementService.addDepartement(departementDTO);
+            System.out.println("Département \"" + departementName + "\" a été ajouté avec succès");
+        });
+    }
+
     private void addWithHandleException(Runnable action, String errorMessage) {
         try {
             action.run();
@@ -68,17 +88,9 @@ public class FructoseApplication implements CommandLineRunner {
         }
     }
 
-    private void checkAndAddOffreStage(OffreStageDTO offreStage) {
-        System.out.println(); //Ajouté juste pour la lisibilité
-        List<OffreStageDTO> offreStageList = offreStageService.getOffresStage();
-        boolean exists = offreStageList.stream().anyMatch(offre -> offre.getNom().equals(offreStage.getNom()));
-
-        if (exists) {
-            System.out.println("OFFRE STAGE avec le nom \"" + offreStage.getNom() + "\" existe déjà dans la base de données");
-        } else {
-            offreStageService.addOffreStage(offreStage);
-            System.out.println("OFFRE STAGE avec le nom \"" + offreStage.getNom() + "\" a été ajoutée avec succès");
-        }
+    private void checkAndAddOffreStage(OffreStageDTO offreStage, UtilisateurDTO ownerDTO) {
+        offreStageService.addOffreStage(offreStage, ownerDTO);
+        System.out.println("OFFRE STAGE avec le nom \"" + offreStage.getNom() + "\" a été ajoutée avec succès");
     }
 
     private void checkAndAddUtilisateur(UtilisateurDTO utilisateurDTO, Role role) {

@@ -36,9 +36,9 @@ public class OffreStage {
     @Size(min = 3, max = 100, message = "Le nom de la compagnie doit contenir entre 3 et 100 caractères")
     private String compagnie;
 
-    @NotEmpty(message = "Le programme d'études ne peut pas être vide")
-    @Pattern(regexp = "^[A-Za-z_]+$", message = "La programme d'études doit contenir uniquement des lettres et des underscores")
-    private String programmeEtude;
+    @ManyToOne
+    @JoinColumn(name = "departement_id")
+    private Departement departement;
 
     @NotNull(message = "Le taux horaire ne peut pas être null")
     @DecimalMin(value = "0.0", message = "Le taux horaire ne peut pas être négatif")
@@ -72,6 +72,10 @@ public class OffreStage {
     @NotNull(message = "La date limite de candidature ne peut pas être null")
     private LocalDate dateLimiteCandidature;
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "owner_id")
+    private Utilisateur owner;
+
     @ManyToMany
     @JoinTable(
             name = "offre_stage_etudiant",
@@ -84,7 +88,7 @@ public class OffreStage {
                                               String poste,
                                               String description,
                                               String compagnie,
-                                              String programmeEtude,
+                                              Departement departement,
                                               Double tauxHoraire,
                                               String typeEmploi,
                                               String adresse,
@@ -93,14 +97,14 @@ public class OffreStage {
                                               LocalDate dateFin,
                                               int nombreHeuresSemaine,
                                               int nombrePostes,
-                                              LocalDate dateLimiteCandidature
-    ) {
+                                              LocalDate dateLimiteCandidature,
+                                              Utilisateur owner) {
         OffreStage offreStage = new OffreStage();
         offreStage.setNom(nom);
         offreStage.setPoste(poste);
         offreStage.setDescription(description);
         offreStage.setCompagnie(compagnie);
-        offreStage.setProgrammeEtude(programmeEtude);
+        offreStage.setDepartement(departement);
         offreStage.setTauxHoraire(tauxHoraire);
         offreStage.setTypeEmploi(typeEmploi);
         offreStage.setAdresse(adresse);
@@ -110,6 +114,7 @@ public class OffreStage {
         offreStage.setNombreHeuresSemaine(nombreHeuresSemaine);
         offreStage.setNombrePostes(nombrePostes);
         offreStage.setDateLimiteCandidature(dateLimiteCandidature);
+        offreStage.setOwner(owner);
         return offreStage;
     }
 }

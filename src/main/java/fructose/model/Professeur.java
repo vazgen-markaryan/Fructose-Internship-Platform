@@ -17,7 +17,7 @@ public class Professeur extends Utilisateur {
         super();
     }
 
-    public Professeur(String fullName, String email, String password, String matricule, Role role, String departement, String companyName) {
+    public Professeur(String fullName, String email, String password, String matricule, Role role, Departement departement, String companyName) {
         super(fullName, email, password, matricule, role, departement, companyName);
     }
 }

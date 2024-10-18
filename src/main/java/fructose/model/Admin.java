@@ -17,7 +17,7 @@ public class Admin extends Utilisateur {
         super();
     }
 
-    public Admin(String fullName, String email, String password, String matricule, Role role, String departement, String companyName) {
+    public Admin(String fullName, String email, String password, String matricule, Role role, Departement departement, String companyName) {
         super(fullName, email, password, matricule, role, departement, companyName);
     }
 }

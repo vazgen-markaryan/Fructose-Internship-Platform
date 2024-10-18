@@ -1,5 +1,6 @@
 package fructose.security;
 
+import fructose.model.Departement;
 import fructose.model.Utilisateur;
 import fructose.repository.UtilisateurRepository;
 import fructose.security.exception.AuthenticationException;
@@ -35,7 +36,7 @@ class AuthProviderTest {
 	void testAuthenticate_Failure() {
 		String email = "vazgen@gmail.com";
 		String password = "Vazgen123!";
-		Utilisateur user = new Utilisateur("Vazgen Markaryan", email, password, "1234567", null, "Department", "Company");
+		Utilisateur user = new Utilisateur("Vazgen Markaryan", email, password, "1234567", null,new Departement(), "Company");
 		
 		when(utilisateurRepository.findByEmail(email)).thenReturn(user);
 		when(passwordEncoder.matches(password, user.getPassword())).thenReturn(false);

@@ -1,5 +1,6 @@
 package fructose.service.dto;
 
+import fructose.model.Departement;
 import fructose.model.OffreStage;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -36,9 +37,7 @@ public class OffreStageDTO {
     @Size(min = 3, max = 100, message = "Le nom de la compagnie doit contenir entre 3 et 100 caractères")
     private String compagnie;
 
-    @NotEmpty(message = "Le programme d'études ne peut pas être vide")
-    @Pattern(regexp = "^[A-Za-z_]+$", message = "La programme d'études doit contenir uniquement des lettres et des underscores")
-    private String programmeEtude;
+    private DepartementDTO departementDTO;
 
     @NotNull(message = "Le taux horaire ne peut pas être null")
     @DecimalMin(value = "0.0", message = "Le taux horaire ne peut pas être négatif")
@@ -72,6 +71,9 @@ public class OffreStageDTO {
     @NotNull(message = "La date limite de candidature ne peut pas être null")
     private LocalDate dateLimiteCandidature;
 
+    @NotNull(message = "L'utilisateur ne peut pas être null")
+    private UtilisateurDTO ownerDTO;
+
     public static OffreStageDTO toDTO(OffreStage offreStage) {
         OffreStageDTO offreStageDTO = new OffreStageDTO();
         offreStageDTO.setId(offreStage.getId());
@@ -79,7 +81,7 @@ public class OffreStageDTO {
         offreStageDTO.setPoste(offreStage.getPoste());
         offreStageDTO.setDescription(offreStage.getDescription());
         offreStageDTO.setCompagnie(offreStage.getCompagnie());
-        offreStageDTO.setProgrammeEtude(offreStage.getProgrammeEtude());
+        offreStageDTO.setDepartementDTO(DepartementDTO.toDTO(offreStage.getDepartement()));
         offreStageDTO.setTauxHoraire(offreStage.getTauxHoraire());
         offreStageDTO.setTypeEmploi(offreStage.getTypeEmploi());
         offreStageDTO.setAdresse(offreStage.getAdresse());
@@ -89,6 +91,7 @@ public class OffreStageDTO {
         offreStageDTO.setNombreHeuresSemaine(offreStage.getNombreHeuresSemaine());
         offreStageDTO.setNombrePostes(offreStage.getNombrePostes());
         offreStageDTO.setDateLimiteCandidature(offreStage.getDateLimiteCandidature());
+        offreStageDTO.setOwnerDTO(UtilisateurDTO.toDTO(offreStage.getOwner()));
         return offreStageDTO;
     }
 
@@ -99,7 +102,7 @@ public class OffreStageDTO {
         offreStage.setPoste(offreStageDTO.getPoste());
         offreStage.setDescription(offreStageDTO.getDescription());
         offreStage.setCompagnie(offreStageDTO.getCompagnie());
-        offreStage.setProgrammeEtude(offreStageDTO.getProgrammeEtude());
+        offreStage.setDepartement(DepartementDTO.toEntity(offreStageDTO.getDepartementDTO()));
         offreStage.setTauxHoraire(offreStageDTO.getTauxHoraire());
         offreStage.setTypeEmploi(offreStageDTO.getTypeEmploi());
         offreStage.setAdresse(offreStageDTO.getAdresse());
@@ -109,6 +112,7 @@ public class OffreStageDTO {
         offreStage.setNombreHeuresSemaine(offreStageDTO.getNombreHeuresSemaine());
         offreStage.setNombrePostes(offreStageDTO.getNombrePostes());
         offreStage.setDateLimiteCandidature(offreStageDTO.getDateLimiteCandidature());
+        offreStage.setOwner(UtilisateurDTO.toEntity(offreStageDTO.getOwnerDTO()));
         return offreStage;
     }
 

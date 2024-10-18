@@ -17,7 +17,7 @@ public class AdminDTO extends UtilisateurDTO {
         admin_dto.setPassword(admin.getPassword());
         admin_dto.setMatricule(admin.getMatricule());
         admin_dto.setRole(Role.ADMIN);
-        admin_dto.setDepartement(admin.getDepartement());
+        admin_dto.setDepartementDTO(DepartementDTO.toDTO(admin.getDepartement()));
         admin_dto.setCompanyName(admin.getCompanyName());
         return admin_dto;
     }

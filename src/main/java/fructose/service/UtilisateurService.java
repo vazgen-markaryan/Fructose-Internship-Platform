@@ -6,6 +6,7 @@ import fructose.repository.*;
 import fructose.security.JwtTokenProvider;
 import fructose.security.exception.InvalidJwtTokenException;
 import fructose.service.dto.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,21 +21,21 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UtilisateurService {
-	
+
 	private final EtudiantRepository etudiantRepository;
 	private final ProfesseurRepository professeurRepository;
 	private final EmployeurRepository employeurRepository;
 	private final AdminRepository adminRepository;
-	
+
 	private final PasswordEncoder passwordEncoder;
 	private final UtilisateurRepository utilisateurRepository;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final AuthenticationManager authenticationManager;
-	
+
 	public boolean isValidRole(String role) {
 		return Arrays.stream(Role.values()).anyMatch((t) -> t.name().equals(role));
 	}
-	
+
 	public UtilisateurDTO getUtilisateurById(Long id, Role role) {
 		switch (role) {
 			case ETUDIANT:
@@ -65,19 +66,19 @@ public class UtilisateurService {
 				throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
 		}
 	}
-	
+
 	public void addUtilisateur(UtilisateurDTO utilisateurDTO) {
 		Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
 		utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
 		saveUtilisateur(utilisateur);
 	}
-	
+
 	public void updateUtilisateur(UtilisateurDTO utilisateurDTO, Role role) {
 		Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
 		utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
 		saveUtilisateur(utilisateur);
 	}
-	
+
 	private void saveUtilisateur(Utilisateur utilisateur) {
 		switch (utilisateur.getRole()) {
 			case ETUDIANT:
@@ -94,10 +95,10 @@ public class UtilisateurService {
 				break;
 		}
 	}
-	
+
 	public void deleteUtilisateur(Long id, Role role) {
 		getUtilisateurById(id, role);
-		
+
 		switch (role) {
 			case ETUDIANT:
 				etudiantRepository.deleteById(id);
@@ -114,7 +115,7 @@ public class UtilisateurService {
 		}
 		System.out.println(role + " " + getUtilisateurById(id, role).getFullName() + " a été supprimé avec succès.");
 	}
-	
+
 	public List<UtilisateurDTO> getUtilisateurs(Role role) {
 		return switch (role) {
 			case ETUDIANT -> etudiantRepository.findAll()
@@ -135,15 +136,15 @@ public class UtilisateurService {
 					.collect(Collectors.toList());
 		};
 	}
-	
+
 	public boolean isEmailTaken(String email) {
 		return utilisateurRepository.findByEmail(email) != null;
 	}
-	
+
 	public boolean isMatriculeTaken(String matricule) {
 		return utilisateurRepository.findByMatricule(matricule) != null;
 	}
-	
+
 	public UtilisateurDTO login(String email, String password) {
 		Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
 		if (utilisateur == null) {
@@ -155,12 +156,12 @@ public class UtilisateurService {
 			throw new IllegalArgumentException("Mot de passe incorrect");
 		}
 	}
-	
+
 	public String authenticateUser(String email, String password) {
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 		return jwtTokenProvider.generateToken(authentication);
 	}
-	
+
 	public UtilisateurDTO getUtilisateurByToken(String token) {
 		token = token.startsWith("Bearer") ? token.substring(7) : token;
 		String email = jwtTokenProvider.getEmailFromJWT(token);
@@ -172,7 +173,7 @@ public class UtilisateurService {
 			case ADMIN -> adminRepository.findById(user.getId()).map(AdminDTO::toDTO).orElse(null);
 		};
 	}
-	
+
 	public boolean validationToken(String token) {
 		try {
 			jwtTokenProvider.validateToken(token);
@@ -180,5 +181,13 @@ public class UtilisateurService {
 		} catch (InvalidJwtTokenException ex) {
 			return false;
 		}
+	}
+
+	public UtilisateurDTO getUtilisateurByEmail(String email) {
+		Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
+		if (utilisateur == null) {
+			throw new IllegalArgumentException("L'utilisateur avec mail " + email + " n'existe pas");
+		}
+		return UtilisateurDTO.toDTO(utilisateur);
 	}
 }

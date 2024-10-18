@@ -17,7 +17,7 @@ public class Employeur extends Utilisateur {
         super();
     }
 
-    public Employeur(String fullName, String email, String password, String matricule, Role role, String departement, String companyName) {
+    public Employeur(String fullName, String email, String password, String matricule, Role role, Departement departement, String companyName) {
         super(fullName, email, password, matricule, role, departement, companyName);
     }
 }
