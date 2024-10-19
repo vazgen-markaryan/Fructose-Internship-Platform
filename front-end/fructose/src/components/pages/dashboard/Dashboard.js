@@ -1,17 +1,7 @@
 import React, {useContext} from "react";
 import HeaderMain from "../../fragments/header/HeaderMain";
-import {
-    mdiArrowLeft,
-    mdiArrowRight,
-    mdiBriefcasePlusOutline,
-    mdiBriefcaseRemoveOutline,
-    mdiChevronRight,
-    mdiCog,
-    mdiCogOutline
-} from "@mdi/js";
-import Icon from "@mdi/react";
 import {AuthContext} from "../../../providers/AuthProvider";
-import {Link, Route, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import ManageCVs from "./cv/ManageCVs";
 import CreerOffreStage from "../../offre_stage/CreerOffreStage";
 import DashboardHome from "./DashboardHome";
