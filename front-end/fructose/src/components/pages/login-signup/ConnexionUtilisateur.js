@@ -4,13 +4,13 @@ import Icon from "@mdi/react";
 import {AuthContext} from "../../../providers/AuthProvider";
 import {mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
+import Swal from 'sweetalert2';
 
 const ConnexionUtilisateur = () => {
 
     const {SignInUser} = useContext(AuthContext);
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const [backendError, setBackendError] = useState('');
 
     const [utilisateur, setUtilisateur] = useState({
         email: '',
@@ -32,7 +32,6 @@ const ConnexionUtilisateur = () => {
         e.preventDefault()
 
         let validationErrors = {};
-        setBackendError("")
 
         if (!utilisateur.email) {
             validationErrors.email = t("connexion_page.error.email");
@@ -53,7 +52,13 @@ const ConnexionUtilisateur = () => {
                 navigate("/dashboard")
             }
         } catch (error) {
-            setBackendError(error.toString());
+            const errorMessage = error.message === "L'utilisateur n'est pas approuvé" ? t("connexion_page.error.not_approved") : error.toString();
+
+            await Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: errorMessage,
+            });
         }
     };
 
@@ -96,8 +101,6 @@ const ConnexionUtilisateur = () => {
                                 <input className={`${errors.password ? "field-invalid" : ""}`} type="password" name="password" onChange={handleChange} value={utilisateur.password} required/>
                                 {errors.password && <p className={"field-invalid-text"}>{errors.password}</p>}
                             </div>
-
-                            {backendError && <p style={{color: 'red', textAlign: 'center'}}>{backendError}</p>}
 
                             <div style={{display: 'flex', alignItems: 'center', marginTop: '20px'}}>
                                 <div style={{flexGrow: 1}}></div>

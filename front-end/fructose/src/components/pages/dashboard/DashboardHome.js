@@ -78,7 +78,7 @@ const DashboardHome = () => {
     return (
         <>
             <div className="dashboard-card-titlebar">
-                <h1>Accueil</h1>
+                <h1>{t("dashboard_home_page.home")}</h1>
                 <h5>{t("dashboard_home_page.hello")} {(currentUser != null) ? currentUser.fullName : <div className={"loading-placeholder"}></div>}</h5>
             </div>
             <div style={{"display": "flex", "gap": "20px"}}>

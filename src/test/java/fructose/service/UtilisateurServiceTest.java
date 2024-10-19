@@ -179,7 +179,12 @@ class UtilisateurServiceTest {
 
     @Test
     void authenticate_ValidCredentials_ReturnsToken() {
+        Utilisateur mockUtilisateur = new Utilisateur();
+        mockUtilisateur.setIsApproved(true);
+
+        when(utilisateurRepository.findByEmail("joe@doe.com")).thenReturn(mockUtilisateur);
         utilisateurService.authenticateUser("joe@doe.com", "1234");
+
         verify(authenticationManager).authenticate(any());
     }
 
@@ -294,7 +299,7 @@ class UtilisateurServiceTest {
     // ------------------- DELETE UTILISATEUR ------------------- //
 
     @Test
-    void testDeleteUtilisateur_Success() {
+    void testDeleteUtilisateur_ByID_Success() {
         Long id = 1L;
         Etudiant etudiant = new Etudiant();
         etudiant.setId(id);
@@ -302,13 +307,13 @@ class UtilisateurServiceTest {
         etudiant.setDepartement(new Departement());
         when(etudiantRepository.findById(id)).thenReturn(Optional.of(etudiant));
 
-        utilisateurService.deleteUtilisateur(id, Role.ETUDIANT);
+        utilisateurService.deleteUtilisateurByID(id, Role.ETUDIANT);
 
         verify(etudiantRepository, times(1)).deleteById(id);
     }
 
     @Test
-    void testDeleteUtilisateur_Professeur_Success() {
+    void testDeleteUtilisateur_ByID_Professeur_Success() {
         Long id = 1L;
         Professeur professeur = new Professeur();
         professeur.setId(id);
@@ -316,13 +321,13 @@ class UtilisateurServiceTest {
         professeur.setDepartement(new Departement());
         when(professeurRepository.findById(id)).thenReturn(Optional.of(professeur));
 
-        utilisateurService.deleteUtilisateur(id, Role.PROFESSEUR);
+        utilisateurService.deleteUtilisateurByID(id, Role.PROFESSEUR);
 
         verify(professeurRepository, times(1)).deleteById(id);
     }
 
     @Test
-    void testDeleteUtilisateur_Employeur_Success() {
+    void testDeleteUtilisateur_ByID_Employeur_Success() {
         Long id = 1L;
         Employeur employeur = new Employeur();
         employeur.setId(id);
@@ -330,18 +335,18 @@ class UtilisateurServiceTest {
         employeur.setDepartement(new Departement());
         when(employeurRepository.findById(id)).thenReturn(Optional.of(employeur));
 
-        utilisateurService.deleteUtilisateur(id, Role.EMPLOYEUR);
+        utilisateurService.deleteUtilisateurByID(id, Role.EMPLOYEUR);
 
         verify(employeurRepository, times(1)).deleteById(id);
     }
 
     @Test
-    void testDeleteUtilisateur_NotFound() {
+    void testDeleteUtilisateur_ByID_NotFound() {
         Long id = 1L;
         when(etudiantRepository.findById(id)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.deleteUtilisateur(id, Role.ETUDIANT);
+            utilisateurService.deleteUtilisateurByID(id, Role.ETUDIANT);
         });
 
         assertEquals("Etudiant avec ID: " + id + " n'existe pas", exception.getMessage());
@@ -349,7 +354,7 @@ class UtilisateurServiceTest {
     }
 
     @Test
-    void testDeleteUtilisateur_Admin_Success() {
+    void testDeleteUtilisateur_ByID_Admin_Success() {
         Long id = 1L;
         Admin admin = new Admin();
         admin.setId(id);
@@ -357,18 +362,18 @@ class UtilisateurServiceTest {
         admin.setDepartement(new Departement());
         when(adminRepository.findById(id)).thenReturn(Optional.of(admin));
 
-        utilisateurService.deleteUtilisateur(id, Role.ADMIN);
+        utilisateurService.deleteUtilisateurByID(id, Role.ADMIN);
 
         verify(adminRepository, times(1)).deleteById(id);
     }
 
     @Test
-    void testDeleteUtilisateur_Admin_NotFound() {
+    void testDeleteUtilisateur_ByID_Admin_NotFound() {
         Long adminId = 1L;
         when(adminRepository.findById(adminId)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.deleteUtilisateur(adminId, Role.ADMIN);
+            utilisateurService.deleteUtilisateurByID(adminId, Role.ADMIN);
         });
 
         assertEquals("Admin avec ID: " + adminId + " n'existe pas", exception.getMessage());

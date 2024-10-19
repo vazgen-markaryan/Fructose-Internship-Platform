@@ -53,7 +53,8 @@
 
         "error": {
             "email": "Email is required",
-            "password": "Password is required"
+            "password": "Password is required",
+            "not_approved": "Your account is not approved by Admin yet. Please wait for approval."
         }
     },
 
@@ -201,6 +202,7 @@
     },
 
     "dashboard_home_page": {
+        "home": "Home",
         "offer": "Internship Offers",
         "explore": "Explore",
         "no_offers": "No offers to display at the moment",

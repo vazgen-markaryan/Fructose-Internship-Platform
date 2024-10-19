@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -111,6 +112,32 @@ public class UtilisateurController {
         } catch (Exception e) {
             logger.error("Impossible de récupérer les infos utilisateur:", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossible de récupérer les infos utilisateur: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/non-approved-users")
+    public ResponseEntity<List<UtilisateurDTO>> getNonApprovedUsers() {
+        List<UtilisateurDTO> nonApprovedUsers = utilisateurService.getNonApprovedUsers();
+        return ResponseEntity.ok(nonApprovedUsers);
+    }
+
+    @PutMapping("/approve-user/{id}")
+    public ResponseEntity<?> approveUser(@PathVariable Long id) {
+        try {
+            utilisateurService.approveUser(id);
+            return ResponseEntity.ok("User approved successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error approving user: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/reject-user/{id}")
+    public ResponseEntity<?> deleteUtilisateurByID(@PathVariable Long id) {
+        try {
+            utilisateurService.deleteUtilisateurByID(id, utilisateurService.getRoleById(id));
+            return ResponseEntity.ok("User rejected and deleted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error rejecting user: " + e.getMessage());
         }
     }
 }

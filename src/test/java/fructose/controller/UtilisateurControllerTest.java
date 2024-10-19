@@ -170,7 +170,7 @@ class UtilisateurControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(loginDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Une erreur inattendue s'est produite : Authentication failed"));
+                .andExpect(content().string("Authentication failed"));
     }
 
     @Test

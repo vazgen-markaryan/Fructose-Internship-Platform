@@ -44,16 +44,16 @@ public class FructoseApplication implements CommandLineRunner {
         Departement departementInformatique = DepartementDTO.toEntity(departementService.getDepartementByNom("techniques_informatique"));
         Departement departementCegep = DepartementDTO.toEntity(departementService.getDepartementByNom("CÉGEP ANDRÉ LAURENDEAU"));
 
-        Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", departementInformatique, null, false);
+        Utilisateur vazgen = Utilisateur.createUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", departementInformatique, null, true);
         EtudiantDTO etudiantVazgen = EtudiantDTO.toDTO((Etudiant) vazgen);
 
-        Utilisateur francois = Utilisateur.createUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "2222222", departementInformatique, null, false);
+        Utilisateur francois = Utilisateur.createUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "2222222", departementInformatique, null, true);
         ProfesseurDTO professeurFrancois = ProfesseurDTO.toDTO((Professeur) francois);
 
-        Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, departementInformatique, "Ubisoft Incorporé", false);
+        Utilisateur ubisoft = Utilisateur.createUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, departementInformatique, "Ubisoft Incorporé", true);
         EmployeurDTO employeurUbisoft = EmployeurDTO.toDTO((Employeur) ubisoft);
 
-        Utilisateur admin = Utilisateur.createUtilisateur("Admin", "Gabriel Laplante", "admin@gmail.com", "Admin123!", "0000000", departementCegep, null, false);
+        Utilisateur admin = Utilisateur.createUtilisateur("Admin", "Didier Tremblay", "admin@gmail.com", "Admin123!", "0000000", departementCegep, null, true);
         AdminDTO superAdmin = AdminDTO.toDTO((Admin) admin);
 
         addWithHandleException(() -> {
@@ -69,6 +69,38 @@ public class FructoseApplication implements CommandLineRunner {
         UtilisateurDTO ownerPersisted = utilisateurService.getUtilisateurByEmail("ubisoft@gmail.com");
 
         addWithHandleException(() -> checkAndAddOffreStage(offreStageDTO, ownerPersisted), "Une erreur s'est produite lors de l'ajout de l'offre de stage");
+
+        // TODO Les lignes suivantes commentées sont des exemples de l'utilisation des méthodes de service
+        // TODO Ils sont commentés pour faciliter la vie de testeurs (nous)
+
+        // Test nonAprrouvedUsers
+        // TODO Commenté pour ne pas afficher les utilisateurs non approuvés car ils sont approuvés par défaut
+//        List<UtilisateurDTO> nonApprovedUsers = utilisateurService.getNonApprovedUsers();
+//        if (nonApprovedUsers.isEmpty()) {
+//            System.out.println("Il n'y a pas d'utilisateurs non approuvés");
+//        } else {
+//            System.out.println("\nUtilisateurs non approuvés:");
+//            nonApprovedUsers.forEach(utilisateur -> System.out.println(utilisateur.getFullName()));
+//            System.out.println();
+//        }
+
+        // Test approveUser
+        // TODO Commenté pour ne pas approuver compte car il est approuvé par défaut
+//        AdminDTO approvedAdmin = (AdminDTO) utilisateurService.getUtilisateurByEmail("admin@gmail.com");
+//
+//        addWithHandleException(() -> {
+//            utilisateurService.approveUser(approvedAdmin.getId());
+//            System.out.println(approvedAdmin.getRole() + " \"" + approvedAdmin.getFullName() + "\" est approuvé avec succès. Il peut desormais se connecter.");
+//        }, "Une erreur s'est produite lors de l'approbation de l'utilisateur");
+
+        // Test rejectUser
+        // TODO Commenté pour ne pas supprimer compte
+//        EtudiantDTO rejectedEtudiant = (EtudiantDTO) utilisateurService.getUtilisateurByEmail("vazgen@gmail.com");
+//
+//        addWithHandleException(() -> {
+//            utilisateurService.deleteUtilisateurByID(rejectedEtudiant.getId(), Role.ETUDIANT);
+//            System.out.println(rejectedEtudiant.getRole() + " \"" + rejectedEtudiant.getFullName() + "\" est rejeté avec succès. Son compte a été donc supprimé.");
+//        }, "Une erreur s'est produite lors de la suppression de l'utilisateur");
     }
 
     private void addWithHandleException(Runnable action, String errorMessage) {

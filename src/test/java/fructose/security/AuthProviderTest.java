@@ -41,7 +41,10 @@ class AuthProviderTest {
 		
 		String email = "valid@example.com";
 		String password = "validPassword";
-		Utilisateur user = new Utilisateur("Valid User", email, password, "1234567", Role.ETUDIANT, new Departement(), "Company");
+		Utilisateur user = new Utilisateur("Valid User", email, password, "1234567", Role.ETUDIANT, new Departement(), "Company", false);
+
+		when(userAppRepository.findByEmail(email)).thenReturn(user);
+		when(passwordEncoder.matches(password, user.getPassword())).thenReturn(true);
 		
 		when(userAppRepository.findByEmail(email)).thenReturn(user);
 		when(passwordEncoder.matches(password, user.getPassword())).thenReturn(true);
@@ -57,7 +60,7 @@ class AuthProviderTest {
 	void testAuthenticate_Failure() {
 		String email = "vazgen@gmail.com";
 		String password = "Vazgen123!";
-		Utilisateur user = new Utilisateur("Vazgen Markaryan", email, password, "1234567", null,new Departement(), "Company");
+		Utilisateur user = new Utilisateur("Vazgen Markaryan", email, password, "1234567", null,new Departement(), "Company", false);
 		
 		when(utilisateurRepository.findByEmail(email)).thenReturn(user);
 		when(passwordEncoder.matches(password, user.getPassword())).thenReturn(false);

@@ -53,7 +53,8 @@
 
         "error": {
             "email": "Email est requis",
-            "password": "Mot de passe est requis"
+            "password": "Mot de passe est requis",
+            "not_approved": "Votre compte n'est pas encore approuvé par l'administrateur. Veuillez attendre l'approbation."
         }
     },
 
@@ -201,6 +202,7 @@
     },
 
     "dashboard_home_page" : {
+        "home": "Accueil",
         "offer": "Offres de stage",
         "explore": "Explorer",
         "no_offers": "Aucune offre à afficher pour le moment",
