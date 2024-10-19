@@ -24,10 +24,6 @@ public class DepartementService {
         Departement departement = DepartementDTO.toEntity(departementDTO);
         departementRepository.save(departement);
     }
-    
-    public void deleteDepartement(Long id) {
-        departementRepository.deleteById(id);
-    }
 
     public DepartementDTO getDepartementByNom(String name) {
         List<Departement> departements = departementRepository.findByNom(name);

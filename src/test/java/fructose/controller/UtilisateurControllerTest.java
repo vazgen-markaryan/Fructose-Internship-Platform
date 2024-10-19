@@ -268,4 +268,58 @@ class UtilisateurControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(utilisateurDTO, response.getBody());
     }
+
+    @Test
+    void testGetNonApprovedUsers_Success() throws Exception {
+        List<UtilisateurDTO> mockUsers = List.of(new UtilisateurDTO(), new UtilisateurDTO());
+        when(utilisateurService.getNonApprovedUsers()).thenReturn(mockUsers);
+
+        ResponseEntity<List<UtilisateurDTO>> response = utilisateurController.getNonApprovedUsers();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockUsers, response.getBody());
+    }
+
+    @Test
+    void testApproveUser_Success() throws Exception {
+        Long userId = 1L;
+
+        ResponseEntity<?> response = utilisateurController.approveUser(userId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("User approved successfully.", response.getBody());
+    }
+
+    @Test
+    void testApproveUser_Exception() throws Exception {
+        Long userId = 1L;
+        doThrow(new RuntimeException("Approval failed")).when(utilisateurService).approveUser(userId);
+
+        ResponseEntity<?> response = utilisateurController.approveUser(userId);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Error approving user: Approval failed", response.getBody());
+    }
+
+    @Test
+    void testDeleteUtilisateurByID_Success() throws Exception {
+        Long userId = 1L;
+
+        ResponseEntity<?> response = utilisateurController.deleteUtilisateurByID(userId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("User rejected and deleted successfully.", response.getBody());
+    }
+
+    @Test
+    void testDeleteUtilisateurByID_Exception() throws Exception {
+        Long userId = 1L;
+        doThrow(new RuntimeException("Deletion failed")).when(utilisateurService).deleteUtilisateurByID(userId, utilisateurService.getRoleById(userId));
+
+        ResponseEntity<?> response = utilisateurController.deleteUtilisateurByID(userId);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Error rejecting user: Deletion failed", response.getBody());
+    }
+
 }

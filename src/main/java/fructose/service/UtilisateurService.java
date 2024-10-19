@@ -62,7 +62,7 @@ public class UtilisateurService {
                 }
                 return AdminDTO.toDTO(admin);
             default:
-                throw new IllegalArgumentException("Type d'utilisateur : " + role.toString() + " n'est pas valide");
+                throw new IllegalArgumentException("Type d'utilisateur : " + role + " n'est pas valide");
         }
     }
 

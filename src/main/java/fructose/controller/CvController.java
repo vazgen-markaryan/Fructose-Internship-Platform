@@ -3,9 +3,7 @@ package fructose.controller;
 import fructose.service.CvService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -18,8 +16,8 @@ public class CvController {
         this.cvService = cvService;
     }
 
-    @GetMapping("/deposer-cv")
-    public ResponseEntity<?> enregistrerCV(@RequestBody MultipartFile file) {
+    @PostMapping("/deposer-cv")
+    public ResponseEntity<String> enregistrerCV(@RequestParam("text") MultipartFile file) {
         // Vérifier si le fichier est vide
         if (file.isEmpty()) {
             return new ResponseEntity<>("Le fichier est vide. Veuillez télécharger un fichier PDF valide.", HttpStatus.BAD_REQUEST);

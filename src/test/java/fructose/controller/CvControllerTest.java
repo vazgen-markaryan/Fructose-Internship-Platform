@@ -40,7 +40,7 @@ public class CvControllerTest {
 
         doNothing().when(cvService).addCv(file);
 
-        ResponseEntity<String> response = (ResponseEntity<String>) cvController.enregistrerCV(file);
+        ResponseEntity<String> response = cvController.enregistrerCV(file);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Fichier PDF enregistré avec succès.", response.getBody());
@@ -52,9 +52,43 @@ public class CvControllerTest {
 
         doThrow(new IOException("Error")).when(cvService).addCv(file);
 
-        ResponseEntity<String> response = (ResponseEntity<String>) cvController.enregistrerCV(file);
+        ResponseEntity<String> response = cvController.enregistrerCV(file);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertEquals("Erreur lors de la lecture du fichier.", response.getBody());
     }
+
+    @Test
+    public void testEnregistrerCV_FichierVide() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "", MediaType.APPLICATION_PDF_VALUE, new byte[0]);
+
+        ResponseEntity<String> response = cvController.enregistrerCV(file);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Le fichier est vide. Veuillez télécharger un fichier PDF valide.", response.getBody());
+    }
+
+    @Test
+    public void testEnregistrerCV_MauvaisTypeFichier() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE, "test content".getBytes());
+
+        ResponseEntity<String> response = cvController.enregistrerCV(file);
+
+        assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, response.getStatusCode());
+        assertEquals("Le fichier n'est pas au format PDF. Veuillez télécharger un fichier PDF.", response.getBody());
+    }
+
+    @Test
+    public void testEnregistrerCV_ExceptionInService() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "test.pdf", MediaType.APPLICATION_PDF_VALUE, "test content".getBytes());
+
+        // Simuler une exception inattendue dans le service
+        doThrow(new RuntimeException("Unexpected error")).when(cvService).addCv(file);
+
+        ResponseEntity<String> response = cvController.enregistrerCV(file);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Une erreur inattendue s'est produite.", response.getBody());
+    }
+
 }
