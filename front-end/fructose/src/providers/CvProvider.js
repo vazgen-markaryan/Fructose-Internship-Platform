@@ -40,11 +40,24 @@ const CvProvider = ({ children }) => {
         });
     };
 
+    const DeleteCv = async (id) => {
+        return fetch(`/cvs/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': currentToken,
+            },
+        });
+    };
+
+
     return (
-        <CvContext.Provider value={{ UploadCv, GetCvs, getCvById }}>
+        <CvContext.Provider value={{ UploadCv, GetCvs, getCvById, DeleteCv}}>
             {children}
         </CvContext.Provider>
     );
+
+
+
 
 };
 

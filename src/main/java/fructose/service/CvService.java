@@ -64,5 +64,18 @@ public class CvService {
         return null;
     }
 
+    public boolean deleteCvById(Long id, UtilisateurDTO utilisateurDTO) {
+        try {
+            Cv cv = cvRepository.findById(id).orElse(null);
+            if (cv != null && cv.getUtilisateur().getId().equals(utilisateurDTO.getId())) {
+                cvRepository.delete(cv);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            throw new RuntimeException("Une erreur est survenue lors de la suppression du CV.", e);
+        }
+    }
+
 
 }

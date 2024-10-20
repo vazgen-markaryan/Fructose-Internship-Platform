@@ -99,5 +99,25 @@ public class CvController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/cvs/{id}")
+    public ResponseEntity<String> deleteCv(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        if (!utilisateurService.validationToken(token)) {
+            return new ResponseEntity<>("Le Token est invalide", HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
+            boolean isDeleted = cvService.deleteCvById(id, utilisateurDTO);
+            if (isDeleted) {
+                return new ResponseEntity<>("Le CV a été supprimé avec succès.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Le CV n'a pas été trouvé ou l'utilisateur n'est pas autorisé à le supprimer.", HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Une erreur inattendue s'est produite lors de la suppression du CV.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
 

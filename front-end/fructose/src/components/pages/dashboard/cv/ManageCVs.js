@@ -24,7 +24,7 @@ import PdfPreview from "../../../content/PdfPreview";
 import { CvContext } from "../../../../providers/CvProvider";
 
 const ManageCVs = () => {
-    const { GetCvs, getCvById } = useContext(CvContext);
+    const { GetCvs, getCvById, DeleteCv } = useContext(CvContext);
     const { isUserInit } = useContext(AuthContext);
 
     const [cvs, setCvs] = useState([]);
@@ -59,6 +59,25 @@ const ManageCVs = () => {
     const handleCvSelection = (cv) => {
         setCurrentCv(cv);
         fetchCvById(cv.id);
+    };
+
+    const handleDeleteCv = async (cvId) => {
+        try {
+            const response = await DeleteCv(cvId);
+            if (response.ok) {
+                // Mise à jour de la liste des CVs localement après suppression
+                setCvs((prevCvs) => prevCvs.filter((cv) => cv.id !== cvId));
+
+                // Si le CV supprimé est celui actuellement sélectionné, mettre à jour currentCv à null
+                if (currentCv && currentCv.id === cvId) {
+                    setCurrentCv(null);
+                }
+            } else {
+                console.error("Erreur lors de la suppression du CV:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Erreur lors de la suppression du CV:", error);
+        }
     };
 
     const getStatutElement = () => {
@@ -177,8 +196,8 @@ const ManageCVs = () => {
                             <Icon path={mdiDownloadOutline} size={1} />
                             Télécharger
                         </button>
-                        <button className="btn-option">
-                            <Icon path={mdiDeleteOutline} size={1} />
+                        <button className="btn-option" onClick={() => handleDeleteCv(currentCv.id)}>
+                            <Icon path={mdiDeleteOutline} size={1}/>
                             Supprimer
                         </button>
                     </section>
