@@ -21,13 +21,28 @@ public class CvService {
     }
 
     public void addCv(MultipartFile cv, UtilisateurDTO utilisateurDTO) throws IOException {
-        Cv saveCv = new Cv();
-        saveCv.setFilename(cv.getOriginalFilename());
-        saveCv.setFileContent(cv.getBytes());
-        saveCv.setIsRefused(false);
-        saveCv.setIsApproved(false);
-        saveCv.setUtilisateur(UtilisateurDTO.toEntity(utilisateurDTO));
-        cvRepository.save(saveCv);
+        try {
+            Cv saveCv = new Cv();
+            saveCv.setFilename(cv.getOriginalFilename());
+            saveCv.setFileContent(cv.getBytes());
+            saveCv.setIsRefused(false);
+            saveCv.setIsApproved(false);
+            saveCv.setUtilisateur(UtilisateurDTO.toEntity(utilisateurDTO));
+            cvRepository.save(saveCv);
+        }catch (Exception e) {
+            throw new RuntimeException("Une erreur inattendue est survenue lors de l'enregistrement du fichier PDF.", e);
+        }
+    }
+
+    public List<Cv> getAllCvs() {
+        List<Cv> list;
+        try {
+            list = cvRepository.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Une erreur est survenue lors de la récupération des CVs.", e);
+        }
+
+        return list;
     }
 
     public List<CvDTO> getCvsByUser(UtilisateurDTO utilisateurDTO){
