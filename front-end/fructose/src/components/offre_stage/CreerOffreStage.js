@@ -19,9 +19,11 @@ const CreerOffreStage = () => {
         dateFin: new Date(),
         nombreHeuresSemaine: 0,
         nombrePostes: 0,
-        dateLimiteCandidature: new Date()
+        dateLimiteCandidature: new Date(),
+        owner: {}
     });
 
+    const [currentUser, setCurrentUser] = useState(null);
     const {t} = useTranslation();
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
@@ -85,6 +87,26 @@ const CreerOffreStage = () => {
         return errors;
     }
 
+    const GetUserByToken = (token) => {
+        fetch('/infos-utilisateur', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                setCurrentUser(data)
+                return data
+            })
+            .catch(() => {
+                localStorage.removeItem("FOSE_AUTH");
+                return null
+            });
+        return null
+    };
+
     useEffect(() => {
         setErrors((prevErrors) => {
             const updatedErrors = {...prevErrors};
@@ -136,10 +158,14 @@ const CreerOffreStage = () => {
             offreStage.dateDebut = offreStage.dateDebut.toISOString().split('T')[0];
             offreStage.dateFin = offreStage.dateFin.toISOString().split('T')[0];
             offreStage.dateLimiteCandidature = offreStage.dateLimiteCandidature.toISOString().split('T')[0];
+            const token = localStorage.getItem('token');
+            console.log(token);
+            setCurrentUser(GetUserByToken(token));
+            offreStage.owner = currentUser;
             fetch('/creer-offre-stage', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(offreStage)
             })
@@ -149,8 +175,7 @@ const CreerOffreStage = () => {
                     }
                     return response;
                 }).then(() => {
-                // TODO TEMPORAIREMENT rediriger l'utilisateur vers la page d'accueil
-                navigate('/');
+                navigate('/dashboard');
             }).catch(error => {
                     setErrors('Erreur :' + error.message());
                     console.error('Erreur:', error);

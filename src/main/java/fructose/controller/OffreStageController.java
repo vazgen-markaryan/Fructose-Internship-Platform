@@ -1,7 +1,9 @@
 package fructose.controller;
 
+import fructose.service.UtilisateurService;
 import fructose.service.dto.OffreStageDTO;
 import fructose.service.OffreStageService;
+import fructose.service.dto.UtilisateurDTO;
 import jakarta.validation.Valid;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 
@@ -29,8 +32,6 @@ public class OffreStageController {
 
     @PostMapping("/creer-offre-stage")
     public ResponseEntity<?> creerOffreStage(@RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
-        System.out.println(offreStageDTO.toString());
-        System.out.println(result.toString());
         if (result.hasErrors()) {
             String errorMessages = result.getFieldErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)

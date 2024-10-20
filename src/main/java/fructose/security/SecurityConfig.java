@@ -44,6 +44,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/check-email").permitAll()
                         .requestMatchers(HttpMethod.GET, "/check-matricule").permitAll()
                         .requestMatchers(HttpMethod.GET, "/check-departement").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/creer-offre-stage").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/infos-utilisateur").permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(new JwtAuthentificationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
         return http.build();
