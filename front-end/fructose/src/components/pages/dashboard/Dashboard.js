@@ -10,9 +10,6 @@ import UploadCV from "./cv/Upload";
 import {CvProvider} from "../../../providers/CvProvider";
 
 const Dashboard = () => {
-    const { currentToken } = useContext(AuthContext);
-
-
     return(
         <>
             <HeaderMain theme={"light"}></HeaderMain>
@@ -22,7 +19,7 @@ const Dashboard = () => {
                 </div>
                 <div className="dashboard-content">
 
-                    <CvProvider user={currentToken}>
+                    <CvProvider>
                         <Routes>
                             <Route path="/manage-cvs" element={<ManageCVs />} />
                             <Route path="/upload-cv" element={<UploadCV />} />

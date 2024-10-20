@@ -8,11 +8,13 @@ const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const navigate = useNavigate();
     const [currentToken, setCurrentToken] = useState(null)
+    const [isUserInit, setIsUserInit] = useState(false)
 
     useEffect(() => {
         const token = localStorage.getItem("FOSE_AUTH");
         if (token) {
-            setCurrentUser(GetUserByToken(token));
+            setCurrentToken(token)
+            SetUserByToken(token);
         }
     }, []);
 
@@ -20,7 +22,7 @@ const AuthProvider = ({ children }) => {
         return localStorage.getItem("FOSE_AUTH") != null;
     }
 
-    const GetUserByToken = (token) => {
+    const SetUserByToken = (token) => {
         fetch('/infos-utilisateur', {
             method: 'POST',
             headers: {
@@ -31,14 +33,13 @@ const AuthProvider = ({ children }) => {
             .then(response => response.json())
             .then(data => {
                 setCurrentUser(data)
-                setCurrentToken(token)
-                return data
+                setIsUserInit(true)
             })
             .catch(() => {
                 localStorage.removeItem("FOSE_AUTH");
-                return null
+                setIsUserInit(false)
+                setCurrentToken(null)
             });
-        return null
     };
 
     const SignInUser = async (email, password) => {
@@ -58,7 +59,8 @@ const AuthProvider = ({ children }) => {
             .then(response => response.text())
             .then(response => {
                 localStorage.setItem("FOSE_AUTH", response.substring(7));
-                setCurrentUser(GetUserByToken(response.substring(7)));
+                SetUserByToken(response.substring(7));
+                navigate("/dashboard")
             })
     };
 
@@ -70,7 +72,7 @@ const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ currentUser, currentToken, SignInUser, SignOutUser, isSignedIn }}>
+        <AuthContext.Provider value={{ isUserInit, currentUser, currentToken, SignInUser, SignOutUser, isSignedIn }}>
             {children}
         </AuthContext.Provider>
     );

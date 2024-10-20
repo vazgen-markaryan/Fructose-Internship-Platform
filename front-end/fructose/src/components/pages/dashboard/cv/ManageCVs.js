@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useState} from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import {
     mdiArrowLeft,
     mdiArrowRight, mdiBriefcasePlusOutline, mdiBriefcaseRemoveOutline,
@@ -11,47 +11,42 @@ import Icon from "@mdi/react";
 import {AuthContext} from "../../../../providers/AuthProvider";
 import {Link} from "react-router-dom";
 import PdfPreview from "../../../content/PdfPreview";
+import {CvContext} from "../../../../providers/CvProvider";
 
 const ManageCVs = () => {
-    const { currentUser } = useContext(AuthContext);
+    const { GetCvs } = useContext(CvContext)
+    const { isUserInit } = useContext(AuthContext)
 
-    const [files, setFiles] = useState([
-        {
-            id: 10,
-            filename: "cv1.pdf",
-            is_approved: false,
-            is_rejected: false,
-        },
-        {
-            id: 11,
-            filename: "cvtudose.pdf",
-            is_approved: true,
-            is_rejected: false,
-        },
-        {
-            id: 12,
-            filename: "cvtudose.pdf",
-            is_approved: true,
-            is_rejected: false,
+    const [cvs, setCvs] = useState(null)
+    const [currentCv, setCurrentCv] = useState(null)
+
+    const [cvListExpanded, setCvListExpanded] = useState(false)
+
+    useEffect(() => {
+
+        if (isUserInit){
+            (async function() {
+                await GetCvs()
+                    .then(response => response.text())
+                    .then(response => {
+                        setCvs(JSON.parse(response))
+                    })
+                    .catch((response) => {
+                        throw new Error(response);
+                    });
+            })();
         }
-    ])
-    const [filename, setFilename] = useState('')
-
-    const [currentFile, setCurrentFile] = useState({
-        id: 10,
-        is_approved: false,
-        is_rejected: false,
-    })
+    }, [isUserInit]);
 
     const getStatutElement = () => {
-        if(currentFile.is_approved === false && currentFile.is_rejected === false){
+        if(currentCv.is_approved === false && currentCv.is_rejected === false){
             return(
                 <>
                     <p className="m-0 text-orange">En approbation</p>
                     <Icon path={mdiClockOutline} size={0.8} className="text-orange" />
                 </>
             )
-        } else if (currentFile.is_approved === true){
+        } else if (currentCv.is_approved === true){
             return(
                 <>
                     <p className="m-0 text-green">Approuvé</p>
@@ -68,61 +63,54 @@ const ManageCVs = () => {
         }
     }
 
-    const getFirstCV = () => {
-        if(files.length < 0){
+    const getCvList = () => {
+        if(cvs.length > 0){
             return(
                 <>
                     <div className={"toolbar-items"}>
                         <h4 className={"m-0 toolbar-spacer"}></h4>
                         <Link to="../upload-cv"><button className={"btn-filled"}>Ajouter <Icon path={mdiFileUploadOutline} size={1} /></button></Link>
                     </div>
+                    <br/>
                     <div style={{"width": "100%", "display": "flex", "padding": "0", "height": "170px", "boxSizing": "border-box", "borderRadius":"5px", "gap":"5px", "border": "1px solid  #8080805c"}}>
                         <div style={{"backgroundColor":"rgb(206,206,206)", "padding": "10px 40px", "height": "100%", "boxSizing": "border-box", "borderRadius": "var(--border-radius) 0 0 var(--border-radius)"}}>
                             <img src="/assets/dashboard/preview.png" alt="" style={{"height": "100%"}}/>
                         </div>
 
                         <div style={{"padding": "16px"}}>
-                            <h4 className="m-0">CV1.pdf</h4>
-                            <p className="text-dark">932 B</p>
+                            <h4 className="m-0">{cvs[0].filename}</h4>
                         </div>
                     </div>
+                    <br/>
                     {
-                        (false)?
+                        (cvs.length > 1)?
                             <>
-                                <div style={{"width": "100%", "borderRadius":"5px", "border": "1px solid  #8080805c", "boxSizing": "border-box"}}>
-                                    <div style={{"display": "flex", "alignItems": "center", "padding": "0 10px", "height": "58px", "boxSizing": "border-box", "gap":"8px", "borderBottom": "1px solid  #8080805c"}}>
-                                        <Icon path={mdiFileOutline} size={1} />
-                                        <div>
-                                            <p className="m-0">CV1dsahjjhkj.pdf</p>
-                                            <p className="text-dark m-0">932 B</p>
-                                        </div>
-                                        <div className="toolbar-spacer"></div>
-                                        <Icon path={mdiCheck} size={1} className="text-green" />
-                                    </div>
-                                    <div style={{"display": "flex", "alignItems": "center", "padding": "0 10px", "height": "58px", "boxSizing": "border-box", "gap":"8px", "borderBottom": "1px solid  #8080805c"}}>
-                                        <Icon path={mdiFileOutline} size={1} />
-                                        <div>
-                                            <p className="m-0">CV1dsahjjhkj.pdf</p>
-                                            <p className="text-dark m-0">932 B</p>
-                                        </div>
-                                        <div className="toolbar-spacer"></div>
-                                        <Icon path={mdiCheck} size={1} className="text-green" />
-                                    </div>
-                                    <div style={{"display": "flex", "alignItems": "center", "padding": "0 10px", "height": "50px", "boxSizing": "border-box", "gap":"5px"}}>
-                                        <Icon path={mdiFileOutline} size={1} />
-                                        <p className="m-0">CV1.pdf - <span className="text-grey">932.8 B</span></p>
-                                        <div className="toolbar-spacer"></div>
-                                        <Icon path={mdiClose} size={1} className="text-red" />
-                                    </div>
-                                </div>
+                                {
+                                (cvListExpanded)?
+                                <>
+                                    {cvs.map((item, index) => (
+                                        index > 0 && (
+                                            <div key={index} style={{"width": "100%", "borderRadius":"5px", "border": "1px solid  #8080805c", "boxSizing": "border-box"}}>
+                                                <div style={{"display": "flex", "alignItems": "center", "padding": "0 10px", "height": "58px", "boxSizing": "border-box", "gap":"8px", "borderBottom": "1px solid  #8080805c"}}>
+                                                    <Icon path={mdiFileOutline} size={1} />
+                                                    <div>
+                                                        <p className="m-0">{item.filename}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    ))}
+                                </>
+                                :
+                                <>
+                                    <button className="btn-option" onClick={()=>{setCvListExpanded(true)}}>
+                                        <h5 className="m-0">Autres CVs</h5>
+                                        <Icon path={mdiChevronDown} size={1} />
+                                    </button>
+                                </>
+                                }
                             </>
-                            :
-                            <>
-                                <button className="btn-option">
-                                    <h5 className="m-0">Autres CVs</h5>
-                                    <Icon path={mdiChevronDown} size={1} />
-                                </button>
-                            </>
+                            :null
                     }
                 </>
             )
@@ -139,6 +127,32 @@ const ManageCVs = () => {
         }
     }
 
+    const getCvListSection = () => {
+        if(cvs == null){
+            return (
+                <div className="dashboard-card" style={{"width": "65%"}}>
+                    <section style={{"height": "400px"}}>
+                        <div className="loader-container">
+                            <div className="loader">
+
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            )
+        } else {
+            return (
+                <div className="dashboard-card" style={{"width": "65%"}}>
+                    <section>
+                        {
+                            getCvList()
+                        }
+                    </section>
+                </div>
+            )
+        }
+    }
+
     return(
         <>
             <div className="dashboard-card-toolbar">
@@ -147,24 +161,22 @@ const ManageCVs = () => {
             </div>
             <div style={{"display": "flex", "gap": "20px", "alignItems": "start"}}>
 
-                <div className="dashboard-card" style={{"width": "65%"}}>
-                    <section>
-                        {
-                            getFirstCV()
-                        }
-                        <br/>
+                {
+                    getCvListSection()
+                }
 
-
-                    </section>
-                </div>
                 <div className="dashboard-card" style={{"width": "35%"}}>
                     <div className={"toolbar-items"} style={{"padding": "10px 10px 10px 16px"}}>
                         <h6 className="m-0">Appercu</h6>
                         <span className={"toolbar-spacer"}></span>
                         <button className={"btn-icon"}><Icon path={mdiClose} size={1} /></button>
                     </div>
-                        <PdfPreview height={300} file="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.orimi.com/pdf-test.pdf&ved=2ahUKEwi729HM2pCJAxVZkIkEHdNIL3oQFnoECC4QAQ&usg=AOvVaw12KwoU3ESoNGt7JZhZvA7o"></PdfPreview>
-                    <section>
+                    {
+
+
+                     //   <PdfPreview height={300} file="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.orimi.com/pdf-test.pdf&ved=2ahUKEwi729HM2pCJAxVZkIkEHdNIL3oQFnoECC4QAQ&usg=AOvVaw12KwoU3ESoNGt7JZhZvA7o"></PdfPreview>
+                    }
+                        <section>
                         <div className="toolbar-items" style={{"padding": "0 10px"}}>
                             <div>
                                 <h4 className="m-0">Cv1.pdf</h4>
@@ -173,7 +185,7 @@ const ManageCVs = () => {
                             <div className="toolbar-spacer"></div>
 
                             {
-                                getStatutElement()
+                                //getStatutElement()
                             }
                         </div>
                         <br/>

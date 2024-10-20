@@ -1,12 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import {AuthContext} from "./AuthProvider";
 
 const CvContext = createContext(undefined);
 
-const CvProvider = ({ children, user}) => {
-    useEffect(() => {
-    }, []);
+const CvProvider = ({ children }) => {
 
-    const currentToken = user;
+    const { currentToken } = useContext(AuthContext)
 
     const UploadCv = (file) => {
         let formData = new FormData()
@@ -22,7 +21,7 @@ const CvProvider = ({ children, user}) => {
         })
             .then(response => response.json())
             .then(data => {
-                alert(currentToken)
+
             })
             .catch(() => {
             });
@@ -30,20 +29,13 @@ const CvProvider = ({ children, user}) => {
     };
 
     const GetCvs = async () => {
-        return await fetch('/cv/get-my-cvs', {
+        return fetch('/cvs', {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': currentToken
             },
         })
-            .then(async response => {
-                if (response.ok !== true) {
-                    throw new Error(await response.text());
-                }
-                return response
-            })
-            .then(response => response.text())
-            .then(response => {})
     };
 
 
