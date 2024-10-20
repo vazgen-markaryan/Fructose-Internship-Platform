@@ -72,13 +72,15 @@ const ManageCVs = () => {
                         <Link to="../upload-cv"><button className={"btn-filled"}>Ajouter <Icon path={mdiFileUploadOutline} size={1} /></button></Link>
                     </div>
                     <br/>
-                    <div style={{"width": "100%", "display": "flex", "padding": "0", "height": "170px", "boxSizing": "border-box", "borderRadius":"5px", "gap":"5px", "border": "1px solid  #8080805c"}}>
-                        <div style={{"backgroundColor":"rgb(206,206,206)", "padding": "10px 40px", "height": "100%", "boxSizing": "border-box", "borderRadius": "var(--border-radius) 0 0 var(--border-radius)"}}>
-                            <img src="/assets/dashboard/preview.png" alt="" style={{"height": "100%"}}/>
-                        </div>
+                    <div className="menu-list">
+                        <div onClick={()=>{setCurrentCv(cvs[0])}} className={`menu-list-item ${(currentCv != null && cvs[0].id === currentCv.id)? "menu-list-item-selected":""}`}  style={{"width": "100%", "display": "flex", "padding": "0", "height": "170px", "boxSizing": "border-box"}}>
+                            <div style={{"backgroundColor":"rgb(206,206,206)", "padding": "10px 40px", "height": "100%", "boxSizing": "border-box", "borderRadius": "var(--border-radius) 0 0 var(--border-radius)"}}>
+                                <img src="/assets/dashboard/preview.png" alt="" style={{"height": "100%"}}/>
+                            </div>
 
-                        <div style={{"padding": "16px"}}>
-                            <h4 className="m-0">{cvs[0].filename}</h4>
+                            <div style={{"padding": "16px"}}>
+                                <h4 className="m-0">{cvs[0].filename}</h4>
+                            </div>
                         </div>
                     </div>
                     <br/>
@@ -88,18 +90,20 @@ const ManageCVs = () => {
                                 {
                                 (cvListExpanded)?
                                 <>
-                                    {cvs.map((item, index) => (
-                                        index > 0 && (
-                                            <div key={index} style={{"width": "100%", "borderRadius":"5px", "border": "1px solid  #8080805c", "boxSizing": "border-box"}}>
-                                                <div style={{"display": "flex", "alignItems": "center", "padding": "0 10px", "height": "58px", "boxSizing": "border-box", "gap":"8px", "borderBottom": "1px solid  #8080805c"}}>
+                                    <div className="menu-list">
+
+
+                                        {cvs.map((item, index) => (
+                                            index > 0 && (
+                                                <div key={index} onClick={()=>{setCurrentCv(item)}} className={`menu-list-item ${(currentCv != null && item.id === currentCv.id)? "menu-list-item-selected":""}`}>
                                                     <Icon path={mdiFileOutline} size={1} />
                                                     <div>
                                                         <p className="m-0">{item.filename}</p>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        )
-                                    ))}
+                                            )
+                                        ))}
+                                    </div>
                                 </>
                                 :
                                 <>
@@ -122,6 +126,53 @@ const ManageCVs = () => {
                         <h6 style={{margin:"8px 0 14px 0"}}>Aucun CV dans votre dossier</h6>
                         <button className="btn-filled"><Icon path={mdiFileUploadOutline} size={1} /> Ajouter</button>
                     </div>
+                </div>
+            )
+        }
+    }
+
+    const getAppercu = () => {
+        if(currentCv !== null) {
+            return (
+                <div className="dashboard-card" style={{"width": "35%"}}>
+                    <div className={"toolbar-items"} style={{"padding": "10px 10px 10px 16px"}}>
+                        <h6 className="m-0">Appercu</h6>
+                        <span className={"toolbar-spacer"}></span>
+                        <button className={"btn-icon"} onClick={()=>{setCurrentCv(null)}}><Icon path={mdiClose} size={1} /></button>
+                    </div>
+                    {
+                        <PdfPreview height={300} file="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.orimi.com/pdf-test.pdf&ved=2ahUKEwi729HM2pCJAxVZkIkEHdNIL3oQFnoECC4QAQ&usg=AOvVaw12KwoU3ESoNGt7JZhZvA7o"></PdfPreview>
+                    }
+                    <section>
+                        <div className="toolbar-items" style={{"padding": "0 10px"}}>
+                            <div>
+                                <h4 className="m-0">{currentCv.filename}</h4>
+                                <p className="text-dark m-0">932 B</p>
+                            </div>
+                            <div className="toolbar-spacer"></div>
+
+                            {
+                                //getStatutElement()
+                            }
+                        </div>
+                        <br/>
+                        <button className="btn-option">
+                            <Icon path={mdiCheck} size={1}/>
+                            Accepter
+                        </button>
+                        <button className="btn-option">
+                            <Icon path={mdiClose} size={1}/>
+                            Refuser
+                        </button>
+                        <button className="btn-option">
+                            <Icon path={mdiDownloadOutline} size={1} />
+                            Telecharger
+                        </button>
+                        <button className="btn-option">
+                            <Icon path={mdiDeleteOutline} size={1}/>
+                            Supprimer
+                        </button>
+                    </section>
                 </div>
             )
         }
@@ -165,48 +216,9 @@ const ManageCVs = () => {
                     getCvListSection()
                 }
 
-                <div className="dashboard-card" style={{"width": "35%"}}>
-                    <div className={"toolbar-items"} style={{"padding": "10px 10px 10px 16px"}}>
-                        <h6 className="m-0">Appercu</h6>
-                        <span className={"toolbar-spacer"}></span>
-                        <button className={"btn-icon"}><Icon path={mdiClose} size={1} /></button>
-                    </div>
-                    {
-
-
-                     //   <PdfPreview height={300} file="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.orimi.com/pdf-test.pdf&ved=2ahUKEwi729HM2pCJAxVZkIkEHdNIL3oQFnoECC4QAQ&usg=AOvVaw12KwoU3ESoNGt7JZhZvA7o"></PdfPreview>
-                    }
-                        <section>
-                        <div className="toolbar-items" style={{"padding": "0 10px"}}>
-                            <div>
-                                <h4 className="m-0">Cv1.pdf</h4>
-                                <p className="text-dark m-0">932 B</p>
-                            </div>
-                            <div className="toolbar-spacer"></div>
-
-                            {
-                                //getStatutElement()
-                            }
-                        </div>
-                        <br/>
-                        <button className="btn-option">
-                            <Icon path={mdiCheck} size={1}/>
-                            Accepter
-                        </button>
-                        <button className="btn-option">
-                            <Icon path={mdiClose} size={1}/>
-                            Refuser
-                        </button>
-                        <button className="btn-option">
-                            <Icon path={mdiDownloadOutline} size={1} />
-                            Telecharger
-                        </button>
-                        <button className="btn-option">
-                            <Icon path={mdiDeleteOutline} size={1}/>
-                            Supprimer
-                        </button>
-                    </section>
-                </div>
+                {
+                    getAppercu()
+                }
             </div>
 
         </>

@@ -7,25 +7,17 @@ const CvProvider = ({ children }) => {
 
     const { currentToken } = useContext(AuthContext)
 
-    const UploadCv = (file) => {
+    const UploadCv = async (file) => {
         let formData = new FormData()
         formData.append("file", file)
-        console.log(formData)
 
-        fetch('/deposer-cv', {
+        return fetch('/deposer-cv', {
             method: 'POST',
             headers: {
                 'Authorization': currentToken
             },
             body: formData
         })
-            .then(response => response.json())
-            .then(data => {
-
-            })
-            .catch(() => {
-            });
-        return null
     };
 
     const GetCvs = async () => {

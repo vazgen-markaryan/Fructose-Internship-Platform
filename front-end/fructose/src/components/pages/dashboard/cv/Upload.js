@@ -6,7 +6,7 @@ import {
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../../../providers/AuthProvider";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useDropzone} from "react-dropzone";
 import PdfPreview from "../../../content/PdfPreview";
 import {CvContext} from "../../../../providers/CvProvider";
@@ -15,8 +15,12 @@ const UploadCV = () => {
     const { currentUser } = useContext(AuthContext);
     const { UploadCv } = useContext(CvContext);
 
+
+    const [error, setError] = useState(null);
     const [file, setFile] = useState(null);
     const [filename, setFilename] = useState('');
+
+    const navigate = useNavigate();
 
     const onDrop = useCallback(file => {
         setFile(file[0])
@@ -33,9 +37,26 @@ const UploadCV = () => {
     }
 
     const handleSubmit = () => {
+        setError("")
         if (file != null){
-            console.log("ALLO")
             UploadCv(file)
+                .then(response => {
+                    if (response.ok) {
+                        navigate("/dashboard/manage-cvs");
+                    } else {
+                        console.log(response)
+                        response.text().then(text => {
+                            if (text !== ""){
+                                setError(text);
+                            } else {
+                                setError("Une erreur est survenue");
+                            }
+                        });
+                    }
+                })
+                .catch((error) => {
+                    setError(error.toString());
+                });
         }
     }
 
@@ -102,6 +123,7 @@ const UploadCV = () => {
                     {
                         getStep()
                     }
+                    <p className="text-red">{error}</p>
                 </section>
             </div>
 
