@@ -94,7 +94,7 @@ const UploadCV = () => {
     return(
         <>
             <div className="dashboard-card-toolbar">
-                <Link to="/dashboard"><button className="btn-icon-dashboard"><Icon path={mdiArrowLeft} size={1.4} /></button></Link>
+                <Link to="../manage-cvs"><button className="btn-icon-dashboard"><Icon path={mdiArrowLeft} size={1.4} /></button></Link>
                 <h1>Téléverser un CV</h1>
             </div>
             <div className="dashboard-card" style={{"maxWidth": "900px"}}>
