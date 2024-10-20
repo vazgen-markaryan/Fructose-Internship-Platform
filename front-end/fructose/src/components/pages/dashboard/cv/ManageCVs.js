@@ -111,7 +111,6 @@ const ManageCVs = () => {
     const getCvList = () => {
         if (cvs.length > 0) {
             const lastCv = cvs[cvs.length - 1];
-
             return (
                 <>
                     <div className="toolbar-items">
@@ -156,7 +155,7 @@ const ManageCVs = () => {
                     <div style={{ textAlign: "center" }}>
                         <Icon path={mdiFileQuestionOutline} size={2} />
                         <h6 style={{ margin: "8px 0 14px 0" }}>Aucun CV dans votre dossier</h6>
-                        <button className="btn-filled"><Icon path={mdiFileUploadOutline} size={1} /> Ajouter</button>
+                        <button className="btn-filled"><Icon path={mdiFileUploadOutline} size={1} />Ajouter</button>
                     </div>
                 </div>
             );
@@ -192,10 +191,11 @@ const ManageCVs = () => {
                             <Icon path={mdiClose} size={1} />
                             Refuser
                         </button>
-                        <button className="btn-option">
-                            <Icon path={mdiDownloadOutline} size={1} />
+                        <a href={currentCv.fileUrl} download={currentCv.filename} className="btn-option">
+                            <Icon path={mdiDownloadOutline} size={1}/>
                             Télécharger
-                        </button>
+                        </a>
+
                         <button className="btn-option" onClick={() => handleDeleteCv(currentCv.id)}>
                             <Icon path={mdiDeleteOutline} size={1}/>
                             Supprimer
