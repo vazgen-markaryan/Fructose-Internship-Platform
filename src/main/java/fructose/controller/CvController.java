@@ -67,26 +67,23 @@ public class CvController {
         //}
     }
 
-    @GetMapping("/cvFile/{id}")
-    public ResponseEntity<?> getCVFile(@RequestHeader("Authorization") String token, @PathVariable String id) {
-        // TODO: Get le fichier PDF SEULEMENT
-
-        /*
+    @GetMapping(value = "/cvs/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> getCVFile(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         if (!utilisateurService.validationToken(token)) {
-            System.out.println("Token reçu : " + token);
-            return new ResponseEntity<>("Le Token est invalid", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
-
         try {
-            List<Cv> cvList = cvService.getCvsByUser(utilisateurDTO);
-            return new ResponseEntity<>(cvList, HttpStatus.OK);
+            byte[] fileContent = cvService.getCvFileContentById(id);
+            if (fileContent == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(fileContent, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Une erreur inattendue s'est produite.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }*/
-        return null;
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
 
     @GetMapping("/cv-history")
     public ResponseEntity<List<Cv>> getAllCvs(@RequestHeader("Authorization") String token) {

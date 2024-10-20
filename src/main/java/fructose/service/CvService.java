@@ -56,5 +56,13 @@ public class CvService {
 
         return cvDTOList;
     }
+    public byte[] getCvFileContentById(Long id) {
+        Cv cv = cvRepository.findById(id).orElse(null);
+        if (cv != null) {
+            return cv.getFileContent();
+        }
+        return null;
+    }
+
 
 }

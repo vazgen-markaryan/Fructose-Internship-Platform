@@ -30,12 +30,22 @@ const CvProvider = ({ children }) => {
         })
     };
 
+    const getCvById = async (id) => {
+        return fetch(`/cvs/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': currentToken
+            },
+        });
+    };
 
     return (
-        <CvContext.Provider value={{ UploadCv, GetCvs }}>
+        <CvContext.Provider value={{ UploadCv, GetCvs, getCvById }}>
             {children}
         </CvContext.Provider>
     );
+
 };
 
 export { CvProvider, CvContext };
