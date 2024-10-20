@@ -34,6 +34,7 @@ const AuthProvider = ({ children }) => {
             .then(data => {
                 setCurrentUser(data)
                 setIsUserInit(true)
+                setCurrentToken(token)
             })
             .catch(() => {
                 localStorage.removeItem("FOSE_AUTH");
@@ -66,6 +67,7 @@ const AuthProvider = ({ children }) => {
 
     const SignOutUser = () => {
         setCurrentUser(null)
+        setCurrentToken(null)
         localStorage.removeItem("FOSE_AUTH")
         navigate("/")
     };
