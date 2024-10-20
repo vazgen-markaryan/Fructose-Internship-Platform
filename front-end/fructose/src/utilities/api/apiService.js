@@ -19,3 +19,14 @@ export const isEmailTaken = async (email) => {
         return false;
     }
 };
+
+export const getDepartement = async (departementName) => {
+    try{
+        const response = await fetch(`/check-departement?departementName=${encodeURIComponent(departementName)}`);
+        const data = await response.json();
+        return data.departement;
+    }catch (error){
+        console.error(error);
+        return null
+    }
+}

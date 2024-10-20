@@ -1,6 +1,8 @@
 package fructose.controller;
 
+import fructose.service.DepartementService;
 import fructose.service.UtilisateurService;
+import fructose.service.dto.DepartementDTO;
 import fructose.service.dto.UtilisateurDTO;
 import fructose.service.dto.auth.LoginDTO;
 import jakarta.validation.Valid;
@@ -26,13 +28,16 @@ public class UtilisateurController {
 
     private static final Logger logger = LoggerFactory.getLogger(UtilisateurController.class);
     private final UtilisateurService utilisateurService;
+    private final DepartementService departementService;
 
-    public UtilisateurController(UtilisateurService utilisateurService) {
+    public UtilisateurController(UtilisateurService utilisateurService, DepartementService departementService) {
         this.utilisateurService = utilisateurService;
+        this.departementService = departementService;
     }
 
     @PostMapping("/creer-utilisateur")
     public ResponseEntity<?> creerUtilisateur(@RequestBody @Valid UtilisateurDTO utilisateurDTO, BindingResult result) {
+        System.out.println(utilisateurDTO);
         if (result.hasErrors()) {
             String errorMessages = result.getFieldErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -72,6 +77,18 @@ public class UtilisateurController {
         boolean matriculeTaken = utilisateurService.isMatriculeTaken(matricule);
         Map<String, Boolean> response = new HashMap<>();
         response.put("matriculeTaken", matriculeTaken);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/check-departement")
+    public ResponseEntity<Map<String, DepartementDTO>> checkDepartement(@RequestParam String departementName) {
+        // get the departement from the database and return the result
+        DepartementDTO departementDTO = departementService.getDepartementByNom(departementName);
+        if (departementDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        Map<String, DepartementDTO> response = new HashMap<>();
+        response.put("departement", departementDTO);
         return ResponseEntity.ok(response);
     }
 

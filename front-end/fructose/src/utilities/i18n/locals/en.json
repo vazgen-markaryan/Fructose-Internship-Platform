@@ -107,7 +107,8 @@
         "error": {
             "matricule": "Student number must have 7 digits",
             "department": "No Department is selected",
-            "matricule_taken": "Student number is already taken"
+            "matricule_taken": "Student number is already taken",
+            "department_invalid": "The department must be selected"
         }
     },
 

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import Icon from "@mdi/react";
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
-import {isMatriculeTaken} from '../../../utilities/api/apiService';
+import {getDepartement, isMatriculeTaken} from '../../../utilities/api/apiService';
 
 const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
 
@@ -21,6 +21,10 @@ const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
         if (Object.keys(errorMessage).length > 0) {
             setErrors(errorMessage);
         } else {
+            const departement = await getDepartement(utilisateur.departement);
+            if (departement) {
+                utilisateur.departementDTO = departement;
+            }
             switchStep(true);
         }
     };
