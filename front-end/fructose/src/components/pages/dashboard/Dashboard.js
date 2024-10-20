@@ -6,6 +6,9 @@ import CreerOffreStage from "../../offre_stage/CreerOffreStage";
 import DashboardHome from "./DashboardHome";
 import ViewCV from "./cv/View";
 import UploadCV from "./cv/Upload";
+import {AdminProvider} from "../../../providers/AdminProvider";
+import {RoleRoute} from "../../routing/RoleRoute";
+import ManageUsers from "./admin/ManageUsers";
 
 const Dashboard = () => {
     return (
@@ -22,6 +25,12 @@ const Dashboard = () => {
                         <Route path="/" element={<DashboardHome/>}/>
                         <Route path="/creer-offre-stage" element={<CreerOffreStage/>}/>
                     </Routes>
+
+                    <AdminProvider>
+                        <Routes>
+                            <Route path="/admin/manage-users" element={<RoleRoute element={<ManageUsers/>} roles={['ADMIN']}/>}/>
+                        </Routes>
+                    </AdminProvider>
                 </div>
             </div>
         </>

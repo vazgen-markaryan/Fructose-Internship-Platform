@@ -75,6 +75,23 @@ const DashboardHome = () => {
         }
     }
 
+    const GetUserManagementSection = () => {
+        if (currentUser != null) {
+            if (currentUser.role === "ADMIN") {
+                return (
+                    <section>
+                        <div className={"toolbar-items"}>
+                            <h4 className={"m-0 toolbar-spacer"}>Gestion des utilisateurs</h4>
+                            <Link to="./admin/manage-users">
+                                <button>Utilisateurs non approuvés <Icon path={mdiChevronRight} size={1}/></button>
+                            </Link>
+                        </div>
+                    </section>
+                )
+            }
+        }
+    }
+
     return (
         <>
             <div className="dashboard-card-titlebar">
@@ -110,6 +127,7 @@ const DashboardHome = () => {
                                 </div>
                             </div>
                         </section>
+                        {GetUserManagementSection()}
                         <div style={{"height": "520px"}}>
 
                         </div>
