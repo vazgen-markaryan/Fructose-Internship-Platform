@@ -6,6 +6,7 @@ import CreerOffreStage from "../../offre_stage/CreerOffreStage";
 import DashboardHome from "./DashboardHome";
 import ViewCV from "./cv/View";
 import UploadCV from "./cv/Upload";
+import {OffreStageProvider} from "../../../providers/OffreStageProvider";
 
 const Dashboard = () => {
     return (
@@ -20,8 +21,13 @@ const Dashboard = () => {
                         <Route path="/upload-cv" element={<UploadCV/>}/>
                         <Route path="/view-cv" element={<ViewCV/>}/>
                         <Route path="/" element={<DashboardHome/>}/>
-                        <Route path="/creer-offre-stage" element={<CreerOffreStage/>}/>
+
                     </Routes>
+                    <OffreStageProvider>
+                        <Routes>
+                            <Route path="/creer-offre-stage" element={<CreerOffreStage/>}/>
+                        </Routes>
+                    </OffreStageProvider>
                 </div>
             </div>
         </>

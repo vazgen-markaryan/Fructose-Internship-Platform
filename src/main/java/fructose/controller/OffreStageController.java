@@ -25,13 +25,18 @@ public class OffreStageController {
 
     private static final Logger logger = LoggerFactory.getLogger(OffreStageController.class);
     private final OffreStageService offreStageService;
+    private final UtilisateurService utilisateurService;
 
-    public OffreStageController(OffreStageService offreStageService) {
+    public OffreStageController(OffreStageService offreStageService, UtilisateurService utilisateurService) {
         this.offreStageService = offreStageService;
+        this.utilisateurService = utilisateurService;
     }
 
     @PostMapping("/creer-offre-stage")
-    public ResponseEntity<?> creerOffreStage(@RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
+    public ResponseEntity<?> creerOffreStage(@RequestHeader("Authorization") String token, @RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
+        UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
+        offreStageDTO.setOwnerDTO(utilisateurDTO);
+        System.out.println(offreStageDTO);
         if (result.hasErrors()) {
             String errorMessages = result.getFieldErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)

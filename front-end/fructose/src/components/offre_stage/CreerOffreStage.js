@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {mdiArrowLeft} from "@mdi/js";
 import Icon from "@mdi/react";
+import {AuthContext} from "../../providers/AuthProvider";
 
 const CreerOffreStage = () => {
     const [offreStage, setOffreStage] = useState({
@@ -20,10 +21,9 @@ const CreerOffreStage = () => {
         nombreHeuresSemaine: 0,
         nombrePostes: 0,
         dateLimiteCandidature: new Date(),
-        owner: {}
     });
 
-    const [currentUser, setCurrentUser] = useState(null);
+    const {currentToken} = useContext(AuthContext);
     const {t} = useTranslation();
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
@@ -87,26 +87,6 @@ const CreerOffreStage = () => {
         return errors;
     }
 
-    const GetUserByToken = (token) => {
-        fetch('/infos-utilisateur', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                setCurrentUser(data)
-                return data
-            })
-            .catch(() => {
-                localStorage.removeItem("FOSE_AUTH");
-                return null
-            });
-        return null
-    };
-
     useEffect(() => {
         setErrors((prevErrors) => {
             const updatedErrors = {...prevErrors};
@@ -158,14 +138,11 @@ const CreerOffreStage = () => {
             offreStage.dateDebut = offreStage.dateDebut.toISOString().split('T')[0];
             offreStage.dateFin = offreStage.dateFin.toISOString().split('T')[0];
             offreStage.dateLimiteCandidature = offreStage.dateLimiteCandidature.toISOString().split('T')[0];
-            const token = localStorage.getItem('token');
-            console.log(token);
-            setCurrentUser(GetUserByToken(token));
-            offreStage.owner = currentUser;
             fetch('/creer-offre-stage', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': currentToken
                 },
                 body: JSON.stringify(offreStage)
             })
