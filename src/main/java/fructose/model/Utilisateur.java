@@ -1,5 +1,6 @@
 package fructose.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import fructose.model.auth.Credentials;
 import fructose.model.auth.Role;
 import jakarta.persistence.*;
@@ -48,7 +49,9 @@ public class Utilisateur {
     @Embedded
     private Credentials credentials;
 
+
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<Cv> cvs;
 
 
