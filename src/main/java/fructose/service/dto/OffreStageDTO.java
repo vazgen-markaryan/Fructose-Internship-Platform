@@ -1,12 +1,16 @@
 package fructose.service.dto;
 
+import fructose.model.Departement;
 import fructose.model.OffreStage;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
-
 
 @Getter
 @Setter
@@ -18,24 +22,22 @@ public class OffreStageDTO {
     private Long id;
 
     @NotEmpty(message = "Le nom ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "Le nom doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Size(min = 3, max = 100, message = "Le nom doit contenir entre 3 et 100 caractères")
     private String nom;
 
     @NotEmpty(message = "Le poste ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "Le poste doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Size(min = 3, max = 100, message = "Le poste doit contenir entre 3 et 100 caractères")
     private String poste;
 
     @NotEmpty(message = "La description ne peut pas être vide")
-    @Size(min = 10, max = 500, message = "La description doit contenir au moins 10 caractères et au plus 500 caractères")
+    @Size(min = 10, max = 500, message = "La description doit contenir entre 10 et 500 caractères")
     private String description;
 
-    @NotEmpty(message = "La compagnie ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "La compagnie doit contenir au moins 3 caractères et au plus 100 caractères")
+    @NotEmpty(message = "Le nom de la compagnie ne peut pas être vide")
+    @Size(min = 3, max = 100, message = "Le nom de la compagnie doit contenir entre 3 et 100 caractères")
     private String compagnie;
 
-    @NotEmpty(message = "Le programme d'étude ne peut pas être vide")
-    @Pattern(regexp = "^(soins_infirmiers|techniques_informatique|technologie_genie_electrique)$", message = "Le programme d'étude doit être l'un des suivants : Technique de l'informatique, Génie physique, Soin infirmiers")
-    private String programmeEtude;
+    private DepartementDTO departementDTO;
 
     @NotNull(message = "Le taux horaire ne peut pas être null")
     @DecimalMin(value = "0.0", message = "Le taux horaire ne peut pas être négatif")
@@ -46,7 +48,7 @@ public class OffreStageDTO {
     private String typeEmploi;
 
     @NotEmpty(message = "L'adresse ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "L'adresse doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Size(min = 3, max = 100, message = "L'adresse doit contenir entre 3 et 100 caractères")
     private String adresse;
 
     @NotEmpty(message = "La modalité de travail ne peut pas être vide")
@@ -69,6 +71,9 @@ public class OffreStageDTO {
     @NotNull(message = "La date limite de candidature ne peut pas être null")
     private LocalDate dateLimiteCandidature;
 
+    @NotNull(message = "L'utilisateur ne peut pas être null")
+    private UtilisateurDTO ownerDTO;
+
     public static OffreStageDTO toDTO(OffreStage offreStage) {
         OffreStageDTO offreStageDTO = new OffreStageDTO();
         offreStageDTO.setId(offreStage.getId());
@@ -76,7 +81,7 @@ public class OffreStageDTO {
         offreStageDTO.setPoste(offreStage.getPoste());
         offreStageDTO.setDescription(offreStage.getDescription());
         offreStageDTO.setCompagnie(offreStage.getCompagnie());
-        offreStageDTO.setProgrammeEtude(offreStage.getProgrammeEtude());
+        offreStageDTO.setDepartementDTO(DepartementDTO.toDTO(offreStage.getDepartement()));
         offreStageDTO.setTauxHoraire(offreStage.getTauxHoraire());
         offreStageDTO.setTypeEmploi(offreStage.getTypeEmploi());
         offreStageDTO.setAdresse(offreStage.getAdresse());
@@ -86,6 +91,7 @@ public class OffreStageDTO {
         offreStageDTO.setNombreHeuresSemaine(offreStage.getNombreHeuresSemaine());
         offreStageDTO.setNombrePostes(offreStage.getNombrePostes());
         offreStageDTO.setDateLimiteCandidature(offreStage.getDateLimiteCandidature());
+        offreStageDTO.setOwnerDTO(UtilisateurDTO.toDTO(offreStage.getOwner()));
         return offreStageDTO;
     }
 
@@ -96,7 +102,7 @@ public class OffreStageDTO {
         offreStage.setPoste(offreStageDTO.getPoste());
         offreStage.setDescription(offreStageDTO.getDescription());
         offreStage.setCompagnie(offreStageDTO.getCompagnie());
-        offreStage.setProgrammeEtude(offreStageDTO.getProgrammeEtude());
+        offreStage.setDepartement(DepartementDTO.toEntity(offreStageDTO.getDepartementDTO()));
         offreStage.setTauxHoraire(offreStageDTO.getTauxHoraire());
         offreStage.setTypeEmploi(offreStageDTO.getTypeEmploi());
         offreStage.setAdresse(offreStageDTO.getAdresse());
@@ -106,6 +112,7 @@ public class OffreStageDTO {
         offreStage.setNombreHeuresSemaine(offreStageDTO.getNombreHeuresSemaine());
         offreStage.setNombrePostes(offreStageDTO.getNombrePostes());
         offreStage.setDateLimiteCandidature(offreStageDTO.getDateLimiteCandidature());
+        offreStage.setOwner(UtilisateurDTO.toEntity(offreStageDTO.getOwnerDTO()));
         return offreStage;
     }
 

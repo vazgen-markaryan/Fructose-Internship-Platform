@@ -1,21 +1,18 @@
 import React, {useCallback, useContext, useEffect, useState} from "react";
 import {
-    mdiArrowLeft,
-    mdiArrowRight,
-    mdiBriefcasePlusOutline,
-    mdiBriefcaseRemoveOutline,
+    mdiArrowLeft, mdiArrowRight,
+    mdiArrowRightCircle,
+    mdiButtonCursor,
     mdiCheck,
-    mdiChevronDown,
-    mdiChevronDownCircleOutline,
-    mdiClockOutline,
+    mdiCheckCircle, mdiChevronDown,
+    mdiChevronRight,
     mdiClose,
-    mdiDeleteOutline,
-    mdiDownloadOutline,
+    mdiCloseCircle,
+    mdiCloudUploadOutline,
     mdiFileOutline,
-    mdiFilePlus,
-    mdiFileQuestionOutline,
-    mdiFileUploadOutline,
     mdiFolderOpenOutline,
+    mdiTimer,
+    mdiTimerSand
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../../../providers/AuthProvider";

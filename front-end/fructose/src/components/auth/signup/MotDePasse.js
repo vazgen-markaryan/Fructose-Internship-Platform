@@ -1,19 +1,21 @@
 import React, {useEffect, useState} from "react";
 import Icon from "@mdi/react";
-import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
+import {mdiChevronLeft, mdiChevronRight, mdiEye, mdiEyeOff} from "@mdi/js";
 import {useTranslation} from "react-i18next";
+import "../../../styles/MotDePasse.css";
 
 const MotDePasse = ({utilisateur, handleChange, switchStep}) => {
 
     const {t} = useTranslation();
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleInputChange = (event) => {
-        const { name } = event.target;
+        const {name} = event.target;
         handleChange(event);
-        // Efface les erreurs pour le champ modifié
-        setErrors({ ...errors, [name]: '' });
+        setErrors({...errors, [name]: ''});
     };
 
     const handleSubmit = (event) => {
@@ -50,12 +52,18 @@ const MotDePasse = ({utilisateur, handleChange, switchStep}) => {
             <form onSubmit={handleSubmit}>
                 <div className={"input-container"}>
                     <p>{t("mot_de_passe_page.password")}:</p>
-                    <input type="password" name="password" className={`${errors.password ? "field-invalid" : ""}`} onChange={handleInputChange} value={utilisateur.password} required/>
+                    <div className="password-input-container">
+                        <input type={showPassword ? "text" : "password"} name="password" className={`${errors.password ? "field-invalid" : ""}`} onChange={handleInputChange} value={utilisateur.password} required/>
+                        <Icon path={showPassword ? mdiEyeOff : mdiEye} size={1} onClick={() => setShowPassword(!showPassword)} className="password-toggle-icon"/>
+                    </div>
                     {errors.password && <p className={"field-invalid-text"}>{errors.password}</p>}
                 </div>
                 <div className={"input-container"}>
                     <p>{t("mot_de_passe_page.confirm_password")}:</p>
-                    <input type="password" name="confirmPassword" className={`${errors.passwordConf ? "field-invalid" : ""}`} onChange={(e) => { setConfirmPassword(e.target.value); setErrors({...errors, passwordConf: ''}); }} required/>
+                    <div className="password-input-container">
+                        <input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" className={`${errors.passwordConf ? "field-invalid" : ""}`} onChange={(e) => {setConfirmPassword(e.target.value);setErrors({...errors, passwordConf: ''});}} required/>
+                        <Icon path={showConfirmPassword ? mdiEyeOff : mdiEye} size={1} onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="password-toggle-icon"/>
+                    </div>
                     {errors.passwordConf && <p className={"field-invalid-text"}>{errors.passwordConf}</p>}
                 </div>
                 <br/>

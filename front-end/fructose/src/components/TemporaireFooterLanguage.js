@@ -1,10 +1,10 @@
 import React from "react";
-import { mdiTranslate } from "@mdi/js";
+import {mdiTranslate} from "@mdi/js";
 import Icon from "@mdi/react";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 
 const TemporaireFooterLanguage = () => {
-    const { i18n } = useTranslation();
+    const {i18n} = useTranslation();
 
     const handleChangeLanguage = (language) => {
         i18n.changeLanguage(language);
@@ -14,10 +14,10 @@ const TemporaireFooterLanguage = () => {
     return (
         <div style={styles.footer}>
             <button onClick={() => handleChangeLanguage('fr')} style={styles.button}>
-                <Icon path={mdiTranslate} size={1} /> FR
+                <Icon path={mdiTranslate} size={1}/> FR
             </button>
             <button onClick={() => handleChangeLanguage('en')} style={styles.button}>
-                <Icon path={mdiTranslate} size={1} /> EN
+                <Icon path={mdiTranslate} size={1}/> EN
             </button>
         </div>
     );

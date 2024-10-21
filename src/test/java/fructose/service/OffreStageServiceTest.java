@@ -1,7 +1,16 @@
 package fructose.service;
 
+import fructose.model.Departement;
+import fructose.model.Employeur;
 import fructose.model.OffreStage;
+import fructose.model.Utilisateur;
+import fructose.model.auth.Credentials;
+import fructose.model.auth.Role;
+import fructose.repository.DepartementRepository;
+import fructose.repository.EmployeurRepository;
 import fructose.repository.OffreStageRepository;
+import fructose.service.dto.DepartementDTO;
+import fructose.service.dto.EmployeurDTO;
 import fructose.service.dto.OffreStageDTO;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,10 +18,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -26,7 +39,13 @@ public class OffreStageServiceTest {
     private OffreStageRepository offreStageRepository;
 
     @Mock
+    private EmployeurRepository employeurRepository;
+
+    @Mock
     private OffreStageDTO offreStageDTO;
+
+    @Mock
+    private DepartementRepository departementRepository;
 
     @BeforeEach
     void setUp() {
@@ -37,7 +56,10 @@ public class OffreStageServiceTest {
         offreStageDTO.setPoste("Developpeur Java");
         offreStageDTO.setDescription("Faire du developpement Java chez Google");
         offreStageDTO.setCompagnie("Google");
-        offreStageDTO.setProgrammeEtude("techniques_informatique");
+        DepartementDTO departement = new DepartementDTO();
+        departement.setNom("gestion_commerce");
+        departement.setId(1L);
+        offreStageDTO.setDepartementDTO(departement);
         offreStageDTO.setTauxHoraire(23.75);
         offreStageDTO.setAdresse("1600 Amphitheatre Parkway, Mountain View, CA 94043, Etats-Unis");
         offreStageDTO.setTypeEmploi("presentiel");
@@ -47,7 +69,26 @@ public class OffreStageServiceTest {
         offreStageDTO.setNombreHeuresSemaine(40);
         offreStageDTO.setNombrePostes(5);
         offreStageDTO.setDateLimiteCandidature(LocalDate.now().plusDays(14));
+        EmployeurDTO employeurDTO = new EmployeurDTO();
+        employeurDTO.setRole(Role.EMPLOYEUR);
+        employeurDTO.setEmail("Mike");
+        employeurDTO.setDepartementDTO(departement);
+        offreStageDTO.setOwnerDTO(employeurDTO);
+
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("Mike");
+        Credentials credentials = mock(Credentials.class);
+        when(credentials.getRole()).thenReturn(Role.EMPLOYEUR);
+        when(credentials.getEmail()).thenReturn("Mike");
+        when(authentication.getCredentials()).thenReturn(credentials);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.EMPLOYEUR).build());
+        utilisateur.setDepartement(DepartementDTO.toEntity(departement));
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
     }
+
 
     @Test
     void testAddOffreStageSuccess() {
@@ -71,10 +112,9 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        for (String errorMessage : exception.getMessage().split(", ")) {
-            assertTrue(errorMessage.equals("nom: Le nom ne peut pas être vide") ||
-                    errorMessage.equals("nom: Le nom doit contenir au moins 3 caractères et au plus 100 caractères"));
-        }
+        String errorMessage = exception.getMessage();
+        assertTrue(errorMessage.contains("Le nom ne peut pas être vide") ||
+                errorMessage.contains("Le nom doit contenir entre 3 et 100 caractères"));
     }
 
     @Test
@@ -83,7 +123,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("nom: Le nom doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("nom: Le nom doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
@@ -92,7 +132,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("nom: Le nom doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("nom: Le nom doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
@@ -112,7 +152,7 @@ public class OffreStageServiceTest {
         });
         for (String errorMessage : exception.getMessage().split(", ")) {
             assertTrue(errorMessage.equals("poste: Le poste ne peut pas être vide") ||
-                    errorMessage.equals("poste: Le poste doit contenir au moins 3 caractères et au plus 100 caractères"));
+                    errorMessage.equals("poste: Le poste doit contenir entre 3 et 100 caractères"));
         }
     }
 
@@ -122,7 +162,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("poste: Le poste doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("poste: Le poste doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
@@ -135,7 +175,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("poste: Le poste doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("poste: Le poste doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
@@ -153,9 +193,9 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        for (String errorMessage : exception.getMessage().split(", ")) {
-            assertTrue(errorMessage.equals("description: La description ne peut pas être vide") || errorMessage.equals("description: La description doit contenir au moins 10 caractères et au plus 500 caractères"));
-        }
+        String errorMessage = exception.getMessage();
+        assertTrue(errorMessage.contains("description: La description ne peut pas être vide") ||
+                errorMessage.contains("description: La description doit contenir entre 10 et 500 caractères"));
     }
 
     @Test
@@ -164,7 +204,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("description: La description doit contenir au moins 10 caractères et au plus 500 caractères", exception.getMessage());
+        assertEquals("description: La description doit contenir entre 10 et 500 caractères", exception.getMessage());
     }
 
     @Test
@@ -177,7 +217,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("description: La description doit contenir au moins 10 caractères et au plus 500 caractères", exception.getMessage());
+        assertEquals("description: La description doit contenir entre 10 et 500 caractères", exception.getMessage());
     }
 
     @Test
@@ -186,7 +226,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("compagnie: La compagnie ne peut pas être vide", exception.getMessage());
+        assertEquals("compagnie: Le nom de la compagnie ne peut pas être vide", exception.getMessage());
     }
 
     @Test
@@ -196,8 +236,8 @@ public class OffreStageServiceTest {
             offreStageService.addOffreStage(offreStageDTO);
         });
         for (String errorMessage : exception.getMessage().split(", ")) {
-            assertTrue(errorMessage.equals("compagnie: La compagnie ne peut pas être vide") ||
-                    errorMessage.equals("compagnie: La compagnie doit contenir au moins 3 caractères et au plus 100 caractères"));
+            assertTrue(errorMessage.equals("compagnie: Le nom de la compagnie ne peut pas être vide") ||
+                    errorMessage.equals("compagnie: Le nom de la compagnie doit contenir entre 3 et 100 caractères"));
         }
     }
 
@@ -207,38 +247,29 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("compagnie: La compagnie doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("compagnie: Le nom de la compagnie doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
     void testAddOffreStageCompagnieTropLong() {
         String randomString = new Random().ints(101, 0, 62)
-                .mapToObj(i -> "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".charAt(i))
+                .mapToObj("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"::charAt)
                 .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                 .toString();
         offreStageDTO.setCompagnie(randomString);
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("compagnie: La compagnie doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("compagnie: Le nom de la compagnie doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
     void testAddOffreStageProgrammeEtudeNull() {
-        offreStageDTO.setProgrammeEtude(null);
-        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+        offreStageDTO.setDepartementDTO(null);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("programmeEtude: Le programme d'étude ne peut pas être vide", exception.getMessage());
-    }
-
-    @Test
-    void testAddOffreStageProgrammeEtudeInvalide() {
-        offreStageDTO.setProgrammeEtude("Pina Colada");
-        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
-            offreStageService.addOffreStage(offreStageDTO);
-        });
-        assertEquals("programmeEtude: Le programme d'étude doit être l'un des suivants : Technique de l'informatique, Génie physique, Soin infirmiers", exception.getMessage());
+        assertEquals("Le département ne peut pas être nul", exception.getMessage());
     }
 
     @Test
@@ -294,7 +325,7 @@ public class OffreStageServiceTest {
         });
         for (String errorMessage : exception.getMessage().split(", ")) {
             assertTrue(errorMessage.equals("adresse: L'adresse ne peut pas être vide") ||
-                    errorMessage.equals("adresse: L'adresse doit contenir au moins 3 caractères et au plus 100 caractères"));
+                    errorMessage.equals("adresse: L'adresse doit contenir entre 3 et 100 caractères"));
         }
     }
 
@@ -304,7 +335,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("adresse: L'adresse doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("adresse: L'adresse doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
@@ -317,7 +348,7 @@ public class OffreStageServiceTest {
         Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("adresse: L'adresse doit contenir au moins 3 caractères et au plus 100 caractères", exception.getMessage());
+        assertEquals("adresse: L'adresse doit contenir entre 3 et 100 caractères", exception.getMessage());
     }
 
     @Test
@@ -444,7 +475,8 @@ public class OffreStageServiceTest {
     @Test
     void testDeleteOffreStageSuccess() {
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
-        when(offreStageRepository.existsById(offreStage.getId())).thenReturn(true);
+        when(offreStageRepository.existsById(offreStageDTO.getId())).thenReturn(true);
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(offreStage));
 
         offreStageService.deleteOffreStage(offreStageDTO.getId());
 
@@ -472,31 +504,195 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void testGetOffreStageSuccess() {
+    void testGetOffreStageByIdSuccess() {
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
         when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(offreStage));
 
-        OffreStageDTO result = offreStageService.getOffreStage(offreStageDTO.getId());
+        OffreStageDTO result = offreStageService.getOffreStageById(offreStageDTO.getId());
         assertNotNull(result);
     }
 
     @Test
-    void testGetOffreStageNotFound() {
+    void testGetOffreStageByIdNotFound() {
         when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            offreStageService.getOffreStage(offreStageDTO.getId());
+            offreStageService.getOffreStageById(offreStageDTO.getId());
         });
 
         assertEquals("L'offre stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être récupéré", exception.getMessage());
     }
 
     @Test
-    void testGetOffreStageIdNull() {
+    void testGetOffreStageByIdIdNull() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            offreStageService.getOffreStage(null);
+            offreStageService.getOffreStageById(null);
         });
 
         assertEquals("ID ne peut pas être nul", exception.getMessage());
+    }
+
+    @Test
+    void testUpdateOffreStageSuccess() {
+        OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(offreStage));
+
+
+        offreStageDTO.setNom("Microsoft");
+        offreStageService.updateOffreStage(offreStageDTO.getId(), offreStageDTO);
+
+        verify(offreStageRepository, times(1)).save(argThat(savedOffreStage ->
+                savedOffreStage.getNom().equals("Microsoft")));
+    }
+
+    @Test
+    void testUpdateOffreStageIdNull() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.updateOffreStage(null, offreStageDTO);
+        });
+
+        assertEquals("ID ne peut pas être nul", exception.getMessage());
+    }
+
+    @Test
+    void testUpdateOffreStageNotFound() {
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.updateOffreStage(offreStageDTO.getId(), offreStageDTO);
+        });
+
+        assertEquals("L'offre stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être mis à jour", exception.getMessage());
+    }
+
+    @Test
+    void testUpdateOffreStageNull() {
+        when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(OffreStageDTO.toEntity(offreStageDTO)));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.updateOffreStage(1L, null);
+        });
+
+        assertEquals("OffreStageDTO ne peut pas être nul", exception.getMessage());
+    }
+
+    @Test
+    void testGetOffresStageSuccessForEmployeur() {
+        List<OffreStageDTO> offresStage = List.of(offreStageDTO);
+        List<OffreStage> offreStages = offresStage.stream()
+                .map(OffreStageDTO::toEntity)
+                .collect(Collectors.toList());
+        when(offreStageRepository.findByEmployeurEmail("Mike")).thenReturn(offreStages);
+        offreStageService.getOffresStage();
+        verify(offreStageRepository, times(1)).findByEmployeurEmail("Mike");
+    }
+
+    @Test
+    void testGetOffresStageNotFoundForEmployeur() {
+        when(offreStageRepository.findByEmployeurEmail("Mike")).thenReturn(List.of());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getOffresStage();
+        });
+
+        assertEquals("Aucune offre de stage trouvée pour l'employeur avec l'email: Mike", exception.getMessage());
+    }
+
+    @Test
+    void testGetOffresStageSuccessForAdmin() {
+        List<OffreStageDTO> offresStage = List.of(offreStageDTO);
+        List<OffreStage> offreStages = offresStage.stream()
+                .map(OffreStageDTO::toEntity)
+                .toList();
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ADMIN).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+        when(offreStageRepository.findAll()).thenReturn(offreStages);
+
+        offreStageService.getOffresStage();
+
+        verify(offreStageRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testGetOffresStageNotFoundForAdmin() {
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ADMIN).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+        when(offreStageRepository.findAll()).thenReturn(List.of());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getOffresStage();
+        });
+
+        assertEquals("Aucune offre stage a été créer pour l'instant", exception.getMessage());
+    }
+
+    @Test
+    void testGetOffresStageSuccesForEtudiant() {
+        List<OffreStageDTO> offresStage = List.of(offreStageDTO);
+        List<OffreStage> offreStages = offresStage.stream()
+                .map(OffreStageDTO::toEntity)
+                .toList();
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setDepartement(new Departement());
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+        when(offreStageRepository.findByUserDepartement(utilisateur.getDepartement().getId())).thenReturn(offreStages);
+
+        offreStageService.getOffresStage();
+
+        verify(offreStageRepository, times(1)).findByUserDepartement(utilisateur.getDepartement().getId());
+    }
+
+    @Test
+    void testGetOffresStageNotFoundForEtudiant() {
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setDepartement(new Departement());
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+        when(offreStageRepository.findByUserDepartement(utilisateur.getDepartement().getId())).thenReturn(List.of());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getOffresStage();
+        });
+
+        assertEquals("Aucune offre de stage trouvée pour l'étudiant dans le département: " + utilisateur.getDepartement(), exception.getMessage());
+    }
+
+    @Test
+    void testGetOffresStageNotFoundDefault() {
+        Utilisateur utilisateur = new Employeur();
+        // Doit être changer lorsque le usecase sera implémenté
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.PROFESSEUR).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getOffresStage();
+        });
+
+        assertEquals("Aucune offre de stage n'a été trouvée pour le role inconnue", exception.getMessage());
+    }
+
+    @Test
+    void testGetUtilisateurEnCoursSuccess() {
+        Utilisateur utilisateur = new Employeur();
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.EMPLOYEUR).build());
+        when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+
+        Utilisateur result = offreStageService.getUtilisateurEnCours();
+        assertNotNull(result);
+    }
+
+    @Test
+    void testGetUtilisateurEnCoursNotFound() {
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.isAuthenticated()).thenReturn(false);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.getUtilisateurEnCours();
+        });
+
+        assertEquals("Aucun utilisateur n'est connecté", exception.getMessage());
     }
 }

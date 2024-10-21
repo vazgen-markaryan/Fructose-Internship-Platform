@@ -1,10 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import EventEmitter from 'eventemitter3';
+import React, {createContext, useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 
 const AuthContext = createContext(undefined);
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({children}) => {
     const [currentUser, setCurrentUser] = useState(null);
     const navigate = useNavigate();
     const [currentToken, setCurrentToken] = useState(null)
@@ -41,6 +40,7 @@ const AuthProvider = ({ children }) => {
                 setIsUserInit(false)
                 setCurrentToken(null)
             });
+        return null
     };
 
     const SignInUser = async (email, password) => {
@@ -49,7 +49,7 @@ const AuthProvider = ({ children }) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({email, password})
         })
             .then(async response => {
                 if (response.ok !== true) {
@@ -72,7 +72,6 @@ const AuthProvider = ({ children }) => {
         navigate("/")
     };
 
-
     return (
         <AuthContext.Provider value={{ isUserInit, currentUser, currentToken, SignInUser, SignOutUser, isSignedIn }}>
             {children}
@@ -80,4 +79,4 @@ const AuthProvider = ({ children }) => {
     );
 };
 
-export { AuthProvider, AuthContext };
+export {AuthProvider, AuthContext};

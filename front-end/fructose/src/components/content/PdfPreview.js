@@ -1,8 +1,9 @@
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import {Page, Document} from "react-pdf";
 import { pdfjs } from 'react-pdf';
 import Icon from "@mdi/react";
 import {mdiChevronLeft, mdiChevronRight, mdiFileAlertOutline} from "@mdi/js";
+import {useTranslation} from "react-i18next";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -10,6 +11,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const PdfPreview = ({file, height = 500}) => {
+
+    const {t} = useTranslation();
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
 
@@ -37,7 +40,7 @@ const PdfPreview = ({file, height = 500}) => {
                     file={file}
                     onLoadSuccess={onDocumentLoadSuccess}
                     loading={<div className="loader-container"><div className="loader"></div></div>}
-                    error={<div className="loader-container text-dark"><div><Icon path={mdiFileAlertOutline} size={1.5} /><p>Une erreur est survenue</p></div></div>}
+                    error={<div className="loader-container text-dark"><div><Icon path={mdiFileAlertOutline} size={1.5} /><p>{t("pdf_view_page.error")}</p></div></div>}
                 >
                     <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} height={height}/>
                 </Document>

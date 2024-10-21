@@ -2,7 +2,6 @@ package fructose.security;
 
 import fructose.model.Utilisateur;
 import fructose.repository.UtilisateurRepository;
-import fructose.security.exception.UserNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,11 +14,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthentificationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
     private final UtilisateurRepository userRepository;
 
-    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider, UtilisateurRepository userRepository) {
+    public JwtAuthentificationFilter(JwtTokenProvider tokenProvider, UtilisateurRepository userRepository) {
         this.tokenProvider = tokenProvider;
         this.userRepository = userRepository;
     }
@@ -32,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         String token = getJWTFromRequest(request);
         if (StringUtils.hasText(token)) {
-        	token = token.startsWith("Bearer") ? token.substring(7) : token;
+            token = token.startsWith("Bearer") ? token.substring(7) : token;
             try {
                 tokenProvider.validateToken(token);
                 String email = tokenProvider.getEmailFromJWT(token);
@@ -52,5 +51,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String getJWTFromRequest(HttpServletRequest request) {
         return request.getHeader("Authorization");
     }
-
 }

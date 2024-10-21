@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import Icon from "@mdi/react";
 import {useTranslation} from "react-i18next";
+import {isEmailTaken} from "../../../utilities/api/apiService";
 
 const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
 
@@ -23,17 +24,6 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
             switchStep(true);
         }
     };
-
-    const isEmailTaken = async (email) => {
-        try {
-            const response = await fetch(`/check-email?email=${encodeURIComponent(email)}`);
-            const data = await response.json();
-            return data.emailTaken;
-        } catch (error) {
-            console.error(error);
-            return false;
-        }
-    }
 
     const handleInputChange = (event) => {
         const {name} = event.target;

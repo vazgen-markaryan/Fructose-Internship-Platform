@@ -1,6 +1,5 @@
 package fructose.model;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -22,24 +21,24 @@ public class OffreStage {
     private Long id;
 
     @NotEmpty(message = "Le nom ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "Le nom doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Size(min = 3, max = 100, message = "Le nom doit contenir entre 3 et 100 caractères")
     private String nom;
 
     @NotEmpty(message = "Le poste ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "Le poste doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Size(min = 3, max = 100, message = "Le poste doit contenir entre 3 et 100 caractères")
     private String poste;
 
     @NotEmpty(message = "La description ne peut pas être vide")
-    @Size(min = 10, max = 500, message = "La description doit contenir au moins 10 caractères et au plus 500 caractères")
+    @Size(min = 10, max = 500, message = "La description doit contenir entre 10 et 500 caractères")
     private String description;
 
-    @NotEmpty(message = "La compagnie ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "La compagnie doit contenir au moins 3 caractères et au plus 100 caractères")
+    @NotEmpty(message = "Le nom de la compagnie ne peut pas être vide")
+    @Size(min = 3, max = 100, message = "Le nom de la compagnie doit contenir entre 3 et 100 caractères")
     private String compagnie;
 
-    @NotEmpty(message = "Le programme d'étude ne peut pas être vide")
-    @Pattern(regexp = "^(soins_infirmiers|techniques_informatique|technologie_genie_electrique)$", message = "Le programme d'étude doit être l'un des suivants : Technique de l'informatique, Génie physique, Soin infirmiers")
-    private String programmeEtude;
+    @ManyToOne
+    @JoinColumn(name = "departement_id")
+    private Departement departement;
 
     @NotNull(message = "Le taux horaire ne peut pas être null")
     @DecimalMin(value = "0.0", message = "Le taux horaire ne peut pas être négatif")
@@ -50,7 +49,7 @@ public class OffreStage {
     private String typeEmploi;
 
     @NotEmpty(message = "L'adresse ne peut pas être vide")
-    @Size(min = 3, max = 100, message = "L'adresse doit contenir au moins 3 caractères et au plus 100 caractères")
+    @Size(min = 3, max = 100, message = "L'adresse doit contenir entre 3 et 100 caractères")
     private String adresse;
 
     @NotEmpty(message = "La modalité de travail ne peut pas être vide")
@@ -73,6 +72,10 @@ public class OffreStage {
     @NotNull(message = "La date limite de candidature ne peut pas être null")
     private LocalDate dateLimiteCandidature;
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "owner_id")
+    private Utilisateur owner;
+
     @ManyToMany
     @JoinTable(
             name = "offre_stage_etudiant",
@@ -85,7 +88,7 @@ public class OffreStage {
                                               String poste,
                                               String description,
                                               String compagnie,
-                                              String programmeEtude,
+                                              Departement departement,
                                               Double tauxHoraire,
                                               String typeEmploi,
                                               String adresse,
@@ -94,14 +97,14 @@ public class OffreStage {
                                               LocalDate dateFin,
                                               int nombreHeuresSemaine,
                                               int nombrePostes,
-                                              LocalDate dateLimiteCandidature
-    ) {
+                                              LocalDate dateLimiteCandidature,
+                                              Utilisateur owner) {
         OffreStage offreStage = new OffreStage();
         offreStage.setNom(nom);
         offreStage.setPoste(poste);
         offreStage.setDescription(description);
         offreStage.setCompagnie(compagnie);
-        offreStage.setProgrammeEtude(programmeEtude);
+        offreStage.setDepartement(departement);
         offreStage.setTauxHoraire(tauxHoraire);
         offreStage.setTypeEmploi(typeEmploi);
         offreStage.setAdresse(adresse);
@@ -111,19 +114,7 @@ public class OffreStage {
         offreStage.setNombreHeuresSemaine(nombreHeuresSemaine);
         offreStage.setNombrePostes(nombrePostes);
         offreStage.setDateLimiteCandidature(dateLimiteCandidature);
+        offreStage.setOwner(owner);
         return offreStage;
     }
-
-    public void addEtudiant(Etudiant etudiant) {
-        this.etudiants.add(etudiant);
-    }
-
-    public void removeEtudiant(Etudiant etudiant) {
-        this.etudiants.remove(etudiant);
-    }
-
-    public void removeAllEtudiants() {
-        this.etudiants.clear();
-    }
-
 }

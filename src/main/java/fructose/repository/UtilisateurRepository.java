@@ -12,5 +12,5 @@ public interface UtilisateurRepository<T extends Utilisateur, ID> extends JpaRep
     Utilisateur findByEmail(@Param("email") String email);
 
     @Query("SELECT u FROM Utilisateur u WHERE u.matricule = ?1")
-    Utilisateur findByMatricule(@Param("matricule")String matricule);
+    Utilisateur findByMatricule(@Param("matricule") String matricule);
 }

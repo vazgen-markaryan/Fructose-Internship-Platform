@@ -1,4 +1,38 @@
 {
+    "bd_role_traduction" : {
+        "ETUDIANT": "Étudiant",
+        "PROFESSEUR": "Professeur",
+        "EMPLOYEUR": "Employeur",
+        "ADMIN": "Administrateur"
+    },
+
+    "programme": {
+        "select": "Sélectionner un programme",
+        "cinema": "Cinéma",
+        "gestion_commerce": "Gestion de commerces",
+        "gestion_operations_chaine_logistique": "Gestion des opérations et de la chaîne logistique",
+        "journalisme_multimedia": "Journalisme multimédia",
+        "langues_trilinguisme_cultures": "Langues – profil Trilinguisme et cultures",
+        "photographie_design_graphique": "Photographie et design graphique",
+        "sciences_nature": "Sciences de la nature",
+        "sciences_humaines_administration_economie": "Sciences humaines – profil Administration et économie",
+        "sciences_humaines_individu_relations_humaines": "Sciences humaines – profil Individu et relations humaines",
+        "sciences_humaines_monde_en_action": "Sciences humaines – profil Monde en action",
+        "soins_infirmiers": "Soins infirmiers",
+        "soins_infirmiers_auxiliaires": "Soins infirmiers pour auxiliaires",
+        "techniques_education_enfance": "Techniques d’éducation à l’enfance",
+        "techniques_bureautique": "Techniques de bureautique",
+        "techniques_comptabilite_gestion": "Techniques de comptabilité et de gestion",
+        "techniques_informatique": "Techniques de l’informatique",
+        "techniques_travail_social": "Techniques de travail social",
+        "technologie_architecture": "Technologie de l’architecture",
+        "technologie_estimation_evaluation_batiment": "Technologie de l’estimation et de l’évaluation en bâtiment",
+        "technologie_genie_civil": "Technologie du génie civil",
+        "technologie_genie_electrique": "Technologie du génie électrique : automatisation et contrôle",
+        "technologie_genie_physique": "Technologie du génie physique",
+        "tremplin_dec": "Tremplin DEC"
+    },
+
     "header_main_page" : {
         "signup": "S'inscrire",
         "disconnect": "Déconnexion",
@@ -69,33 +103,6 @@
         "matricule": "Numéro d'étudiant",
         "program": "Programme",
         "continue": "Continuer",
-        "select_program": "Sélectionner un programme",
-
-        "programme": {
-            "cinema": "Cinéma",
-            "gestion_commerce": "Gestion de commerces",
-            "gestion_operations_chaine_logistique": "Gestion des opérations et de la chaîne logistique",
-            "journalisme_multimedia": "Journalisme multimédia",
-            "langues_trilinguisme_cultures": "Langues – profil Trilinguisme et cultures",
-            "photographie_design_graphique": "Photographie et design graphique",
-            "sciences_nature": "Sciences de la nature",
-            "sciences_humaines_administration_economie": "Sciences humaines – profil Administration et économie",
-            "sciences_humaines_individu_relations_humaines": "Sciences humaines – profil Individu et relations humaines",
-            "sciences_humaines_monde_en_action": "Sciences humaines – profil Monde en action",
-            "soins_infirmiers": "Soins infirmiers",
-            "soins_infirmiers_auxiliaires": "Soins infirmiers pour auxiliaires",
-            "techniques_education_enfance": "Techniques d’éducation à l’enfance",
-            "techniques_bureautique": "Techniques de bureautique",
-            "techniques_comptabilite_gestion": "Techniques de comptabilité et de gestion",
-            "techniques_informatique": "Techniques de l’informatique",
-            "techniques_travail_social": "Techniques de travail social",
-            "technologie_architecture": "Technologie de l’architecture",
-            "technologie_estimation_evaluation_batiment": "Technologie de l’estimation et de l’évaluation en bâtiment",
-            "technologie_genie_civil": "Technologie du génie civil",
-            "technologie_genie_electrique": "Technologie du génie électrique : automatisation et contrôle",
-            "technologie_genie_physique": "Technologie du génie physique",
-            "tremplin_dec": "Tremplin DEC"
-        },
 
         "error": {
             "matricule": "Le numéro d'étudiant doit comporter 7 chiffres",
@@ -156,30 +163,26 @@
         "nombre_heures_semaine": "Nombre d'heures par semaine",
         "nombre_postes": "Nombre de postes",
         "type_emploi": "Type d'emploi",
+        "programme_etudes": "Programme d'études",
+        "modalite_travail": "Modalité de travail",
+        "date_limite_candidate": "Date limite de candidature",
+        "date_debut": "Date de début",
+        "date_fin": "Date de fin",
+        "creer_offre_stage": "Créer l'offre de stage",
+        "retour": "Retour a l'accueil",
+
         "types_emploi" : {
             "select" : "Sélectionner un type d'emploi",
             "temps_partiel": "Temps partiel",
             "temps_plein": "Temps plein"
         },
-        "programme_etudes": "Programme d'études",
-        "programmes_etudes" : {
-            "select": "Sélectionner un programme",
-            "technique_informatiques": "Techniques informatiques",
-            "soins_infirmiers": "Soins infirmiers",
-            "genie_electrique": "Génie électrique"
-        },
-        "modalite_travail": "Modalité de travail",
+
         "modalites_travail" : {
             "select": "Sélectionner une modalité de travail",
             "teletravail": "Télétravail",
             "presentiel": "Présentiel",
             "hybride": "Hybride"
         },
-        "date_limite_candidate": "Date limite de candidature",
-        "date_debut": "Date de début",
-        "date_fin": "Date de fin",
-        "creer_offre_stage": "Créer l'offre de stage",
-        "retour": "Retour a l'accueil",
 
         "errors" : {
             "nom": "Le nom doit contenir entre 3 et 100 caractères",
@@ -195,6 +198,46 @@
             "modalite_travail_select": "La modalité de travail doit être sélectionnée",
             "type_emploi_select": "Le type d'emploi doit être sélectionné"
         }
+    },
+
+    "dashboard_home_page" : {
+        "offer": "Offres de stage",
+        "explore": "Explorer",
+        "no_offers": "Aucune offre à afficher pour le moment",
+        "my_offers": "Mes offres de stage",
+        "add_offer": "Ajouter",
+        "hello": "Bonjour",
+        "portfolio": "Mon Portfolio",
+        "add_cv": "Ajouter un CV",
+        "manage": "Gérer",
+        "no_cv": "Aucun CV",
+        "user_info": "Informations sur l'utilisateur",
+        "full_name": "Nom complet",
+        "email": "Courriel",
+        "matricule": "Numéro d'étudiant/employé",
+        "role": "Rôle"
+    },
+
+    "pdf_view_page": {
+        "error": "Une erreur inconnue est survenue"
+    },
+
+    "view_page": {
+        "home": "Accueil",
+        "hello": "Bonjour"
+    },
+
+    "upload_page": {
+        "drag_drop": "Glissez et déposez votre CV ici",
+        "or": "OU",
+        "browse": "Parcourir",
+        "accepted_formats": "Formats acceptés : PDF",
+        "upload": "Téléverser",
+        "upload_cv": "Téléversez votre CV"
+    },
+
+    "manage_cv_page": {
+        "my_cvs": "Mes Curiculums Vitae"
     },
 
     "manage_cv": {
