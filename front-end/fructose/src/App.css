@@ -543,6 +543,13 @@ header{
     animation-timing-function: cubic-bezier(.32,1.1,1,1);
 }
 
+.dashboard-card.disappearing{
+    animation-name: slide-out;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(.32,1.1,1,1);
+}
+
 @keyframes slide-in {
     0%{
         transform: translateX(50px);
@@ -551,6 +558,17 @@ header{
     100%{
         transform: translateX(0);
         opacity: 1;
+    }
+}
+
+@keyframes slide-out {
+    0%{
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100%{
+        transform: translateX(50px);
+        opacity: 0;
     }
 }
 

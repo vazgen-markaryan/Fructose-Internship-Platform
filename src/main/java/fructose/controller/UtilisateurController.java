@@ -132,7 +132,7 @@ public class UtilisateurController {
         if(!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
         }
-        
+
         try {
             utilisateurService.approveUser(id);
             return ResponseEntity.ok("User approved successfully.");

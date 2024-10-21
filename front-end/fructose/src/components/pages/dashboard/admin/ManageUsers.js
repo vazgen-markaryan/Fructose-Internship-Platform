@@ -1,9 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
-    mdiAccountCancelOutline,
-    mdiAccountCheckOutline,
     mdiAccountOutline,
-    mdiAccountQuestion, mdiAccountQuestionOutline,
+    mdiAccountQuestion,
     mdiAccountSchoolOutline,
     mdiAccountTieOutline,
     mdiArrowLeft,
@@ -11,12 +9,7 @@ import {
     mdiCheck,
     mdiClockOutline,
     mdiClose,
-    mdiDeleteOutline,
-    mdiDownloadOutline,
     mdiFileClockOutline,
-    mdiFileOutline,
-    mdiFileQuestionOutline,
-    mdiFileUploadOutline,
     mdiFolderAccountOutline,
     mdiHumanMaleBoard,
 } from "@mdi/js";
@@ -34,6 +27,8 @@ const ManageUsers = () => {
 
     const [users, setUsers] = useState(null);
     const [currentUserIndex, setCurrentUserIndex] = useState(null);
+
+    const [isSwitching, setIsSwitching] = useState(false);
 
     useEffect(() => {
         if (isUserInit) {
@@ -73,17 +68,28 @@ const ManageUsers = () => {
 
     const DeleteCurrentUserFromMemory = () => {
         if (users[currentUserIndex + 1] != null){
-
+            SwitchUser(currentUserIndex, true)
         } else if (users[currentUserIndex - 1] != null) {
-            setCurrentUserIndex(currentUserIndex - 1)
+            SwitchUser(currentUserIndex - 1, false)
         } else {
-            setCurrentUserIndex(null)
+            SwitchUser(null, false)
         }
+        setTimeout(()=>{
+            setUsers([
+                ...users.slice(0, currentUserIndex),
+                ...users.slice(currentUserIndex + 1)
+            ]);
+        },401)
+    }
 
-        setUsers([
-            ...users.slice(0, currentUserIndex),
-            ...users.slice(currentUserIndex + 1)
-        ]);
+    const SwitchUser = (index, bypassSkip) => {
+        if (currentUserIndex !== index || bypassSkip){
+            setIsSwitching(true);
+            setTimeout(()=>{
+                setIsSwitching(false)
+                setCurrentUserIndex(index)
+            },400)
+        }
     }
 
     const getStatutElement = () => {
@@ -113,7 +119,7 @@ const ManageUsers = () => {
                 <>
                     <div className="menu-list">
                         {users.map((item, index) => (
-                            <div key={index} onClick={() => {setCurrentUserIndex(index)}} className={`menu-list-item ${users[currentUserIndex] && index === currentUserIndex ? "menu-list-item-selected" : ""}`}>
+                            <div key={index} onClick={() => {SwitchUser(index, false)}} className={`menu-list-item ${users[currentUserIndex] && index === currentUserIndex ? "menu-list-item-selected" : ""}`}>
                                 {
                                     (item.role === "ETUDIANT")?
                                         <Icon path={mdiAccountSchoolOutline} size={1} />
@@ -152,11 +158,11 @@ const ManageUsers = () => {
     const getUserDetailsSection = () => {
         if (currentUserIndex != null) {
             return (
-                <div className="dashboard-card" style={{ width: "35%" }}>
+                <div className={`dashboard-card ${(isSwitching)? "disappearing": ""}`} style={{ width: "35%" }}>
                     <div className="toolbar-items" style={{ padding: "10px 10px 10px 16px" }}>
                         <h6 className="m-0">Détails de l'utilisateur</h6>
                         <span className="toolbar-spacer"></span>
-                        <button className="btn-icon" onClick={() => setCurrentUserIndex(null)}><Icon path={mdiClose} size={1} /></button>
+                        <button className="btn-icon" onClick={() => SwitchUser(null, false)}><Icon path={mdiClose} size={1} /></button>
                     </div>
                         <div className="user-profile-section">
                             <div className="user-profile-section-banner">
