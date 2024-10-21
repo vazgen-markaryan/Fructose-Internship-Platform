@@ -22,7 +22,7 @@ const UploadCV = () => {
     const [filename, setFilename] = useState('');
 
     const navigate = useNavigate();
-    
+
     const MAX_FILE_SIZE = 1048576;
 
     const onDrop = useCallback((acceptedFiles) => {

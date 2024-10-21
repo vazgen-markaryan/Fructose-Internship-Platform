@@ -24,11 +24,11 @@ const Dashboard = () => {
                             <Route path="/manage-cvs" element={<ManageCVs />} />
                             <Route path="/upload-cv" element={<UploadCV />} />
                             <Route path="/view-cv" element={<ViewCV />} />
+                            <Route path="/" element={<DashboardHome />} />
                         </Routes>
                     </CvProvider>
 
                     <Routes>
-                        <Route path="/" element={<DashboardHome />} />
                         <Route path="/creer-offre-stage" element={<CreerOffreStage />} />
                     </Routes>
                 </div>
