@@ -231,6 +231,6 @@
         "upload_button": "Téléverser",
         "error_file_required": "Veuillez sélectionner un fichier avant de soumettre.",
         "upload_error": "Une erreur est survenue lors du téléversement.",
-        "error_file_size_exceeded": "La taille du fichier dépasse la limite autorisée de {{maxSize}} Mb."
+        "error_file_size_exceeded": "La taille du fichier dépasse la limite autorisée de {{maxSize}} KB."
     }
 }
