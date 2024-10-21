@@ -123,12 +123,9 @@ public class UtilisateurController {
 
     @PutMapping("/approve-user/{id}")
     public ResponseEntity<?> approveUser(@PathVariable Long id) {
-        try {
+
             utilisateurService.approveUser(id);
             return ResponseEntity.ok("User approved successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error approving user: " + e.getMessage());
-        }
     }
 
     @DeleteMapping("/reject-user/{id}")

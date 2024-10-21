@@ -808,7 +808,7 @@ table{
     border: none;
 }
 
-table > tr > td{
+table > tbody > tr > td{
     font-family: "Roboto Condensed";
     font-weight: 400;
     font-size: 14px;

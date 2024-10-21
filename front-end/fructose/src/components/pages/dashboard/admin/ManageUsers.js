@@ -29,11 +29,11 @@ import {useTranslation} from "react-i18next";
 const ManageUsers = () => {
     const {t} = useTranslation();
 
-    const { GetUnapprovedUsers } = useContext(AdminContext);
     const { isUserInit } = useContext(AuthContext);
+    const { GetUnapprovedUsers, ApproveUser, RejectUser } = useContext(AdminContext);
 
-    const [users, setUsers] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null);
+    const [users, setUsers] = useState(null);
+    const [currentUserIndex, setCurrentUserIndex] = useState(null);
 
     useEffect(() => {
         if (isUserInit) {
@@ -49,16 +49,53 @@ const ManageUsers = () => {
         }
     }, [isUserInit]);
 
+    const ApproveUserById = async (id) => {
+        await ApproveUser(id).then(response => {
+            if (response.ok) {
+                DeleteCurrentUserFromMemory()
+            }
+        })
+            .catch((error) => {
+                console.log(error)
+            });
+    }
+
+    const RejectUserById = async (id) => {
+        await RejectUser(id).then(response => {
+            if (response.ok) {
+                DeleteCurrentUserFromMemory()
+            }
+        })
+            .catch((error) => {
+                console.log(error)
+            });
+    }
+
+    const DeleteCurrentUserFromMemory = () => {
+        if (users[currentUserIndex + 1] != null){
+
+        } else if (users[currentUserIndex - 1] != null) {
+            setCurrentUserIndex(currentUserIndex - 1)
+        } else {
+            setCurrentUserIndex(null)
+        }
+
+        setUsers([
+            ...users.slice(0, currentUserIndex),
+            ...users.slice(currentUserIndex + 1)
+        ]);
+    }
+
     const getStatutElement = () => {
-        if (currentUser) {
-            if (!currentUser.is_approved) {
+        if (currentUserIndex !== null) {
+            if (!users[currentUserIndex].is_approved) {
                 return (
                     <>
                         <p className="m-0 text-orange">En approbation</p>
                         <Icon path={mdiClockOutline} size={0.8} className="text-orange" />
                     </>
                 );
-            } else if (currentUser.is_approved) {
+            } else if (users[currentUserIndex].is_approved) {
                 return (
                     <>
                         <p className="m-0 text-green">Approuvé</p>
@@ -76,7 +113,7 @@ const ManageUsers = () => {
                 <>
                     <div className="menu-list">
                         {users.map((item, index) => (
-                            <div key={index} onClick={() => {setCurrentUser(users[index])}} className={`menu-list-item ${currentUser && item.id === currentUser.id ? "menu-list-item-selected" : ""}`}>
+                            <div key={index} onClick={() => {setCurrentUserIndex(index)}} className={`menu-list-item ${users[currentUserIndex] && index === currentUserIndex ? "menu-list-item-selected" : ""}`}>
                                 {
                                     (item.role === "ETUDIANT")?
                                         <Icon path={mdiAccountSchoolOutline} size={1} />
@@ -113,13 +150,13 @@ const ManageUsers = () => {
 
 
     const getUserDetailsSection = () => {
-        if (currentUser) {
+        if (currentUserIndex != null) {
             return (
                 <div className="dashboard-card" style={{ width: "35%" }}>
                     <div className="toolbar-items" style={{ padding: "10px 10px 10px 16px" }}>
                         <h6 className="m-0">Détails de l'utilisateur</h6>
                         <span className="toolbar-spacer"></span>
-                        <button className="btn-icon" onClick={() => setCurrentUser(null)}><Icon path={mdiClose} size={1} /></button>
+                        <button className="btn-icon" onClick={() => setCurrentUserIndex(null)}><Icon path={mdiClose} size={1} /></button>
                     </div>
                         <div className="user-profile-section">
                             <div className="user-profile-section-banner">
@@ -132,8 +169,8 @@ const ManageUsers = () => {
                     <section>
                         <div className="toolbar-items">
                             <div>
-                                <h4 className="m-0">{currentUser.fullName}</h4>
-                                <p className="text-dark m-0">{currentUser.email}</p>
+                                <h4 className="m-0">{users[currentUserIndex].fullName}</h4>
+                                <p className="text-dark m-0">{users[currentUserIndex].email}</p>
                             </div>
                             <div className="toolbar-spacer"></div>
                             {getStatutElement()}
@@ -141,37 +178,43 @@ const ManageUsers = () => {
                         <br />
                         <p>Details</p>
                         <table style={{width: "100%"}}>
-                            <tr>
-                                <td>Role</td>
-                                <td style={{textAlign: "right"}}>{currentUser.role}</td>
-                            </tr>
-                            <tr>
-                                <td>Département</td>
-                                <td style={{textAlign: "right"}}>{t("programme." + currentUser.departementDTO.nom)}</td>
-                            </tr>
-                            <tr>
-                                <td>Matricule</td>
-                                <td style={{textAlign: "right"}}>{currentUser.matricule}</td>
-                            </tr>
-                            <tr>
-                                <td>Compagnie</td>
-                                <td style={{textAlign: "right"}}>{currentUser.companyName}</td>
-                            </tr>
+                            <tbody>
+                                <tr>
+                                    <td>Role</td>
+                                    <td style={{textAlign: "right"}}>{users[currentUserIndex].role}</td>
+                                </tr>
+                                <tr>
+                                    <td>Département</td>
+                                    <td style={{textAlign: "right"}}>{t("programme." + users[currentUserIndex].departementDTO.nom)}</td>
+                                </tr>
+                                <tr>
+                                    <td>Matricule</td>
+                                    <td style={{textAlign: "right"}}>{users[currentUserIndex].matricule}</td>
+                                </tr>
+                                <tr>
+                                    <td>Compagnie</td>
+                                    <td style={{textAlign: "right"}}>{users[currentUserIndex].companyName}</td>
+                                </tr>
+                            </tbody>
                         </table>
                         <br/>
                         <p>Actions</p>
-                        <button className="btn-option">
+                        <button className="btn-option" onClick={()=>{ApproveUserById(users[currentUserIndex].id)}}>
                             <Icon path={mdiCheck} size={1} />
                             Accepter
                         </button>
-                        <button className="btn-option">
+                        <button className="btn-option" onClick={()=>{RejectUserById(users[currentUserIndex].id)}}>
                             <Icon path={mdiClose} size={1} />
                             Refuser
                         </button>
-                        <button className="btn-option">
+                        {
+                         /*
+                         <button className="btn-option">
                             <Icon path={mdiAccountCancelOutline} size={1} />
                             Expulser
-                        </button>
+                         </button>
+                         */
+                        }
                         <button className="btn-option">
                             <Icon path={mdiFolderAccountOutline} size={1} />
                             Vue Globale
@@ -184,35 +227,30 @@ const ManageUsers = () => {
     };
 
     const getUserListSection = () => {
-        if (users.length === 0) {
-            return (
-                <div className="dashboard-card" style={{ width: "65%" }}>
-                    <section style={{ height: "450px" }}>
-                        <div className="loader-container">
-                            <div className="loader"></div>
-                        </div>
+        return (
+            <div style={{ width: "65%"}}>
+                <div className="dashboard-card" style={{ height: "450px", overflowY: "auto" }}>
+                    <section>
+                        {
+                            (users === null)?
+                                <div className="loader-container">
+                                    <div className="loader"></div>
+                                </div>
+                                :
+                                getUserListItems()
+                        }
                     </section>
                 </div>
-            );
-        } else {
-            return (
-                <div style={{ width: "65%"}}>
-                    <div className="dashboard-card" style={{ height: "450px", overflowY: "auto" }}>
-                        <section>
-                            {getUserListItems()}
-                        </section>
-                    </div>
-                    <br/>
-                    <div className="dashboard-card">
-                        <section>
-                            <h5>Options connexes</h5>
-                            <p><Icon path={mdiFileClockOutline} size={0.7} /> <Link>CVs Non approuvés</Link></p>
-                            <p><Icon path={mdiBriefcaseClockOutline} size={0.7} /> <Link>Offres de stage Non approuvés</Link></p>
-                        </section>
-                    </div>
+                <br/>
+                <div className="dashboard-card">
+                    <section>
+                        <h5>Options connexes</h5>
+                        <p><Icon path={mdiFileClockOutline} size={0.7} /> <Link>CVs Non approuvés</Link></p>
+                        <p><Icon path={mdiBriefcaseClockOutline} size={0.7} /> <Link>Offres de stage Non approuvés</Link></p>
+                    </section>
                 </div>
-            );
-        }
+            </div>
+        );
     };
 
     return (
