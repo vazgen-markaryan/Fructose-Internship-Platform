@@ -49,8 +49,9 @@ const DashboardHome = () => {
                         <div className={"toolbar-items"}>
                             <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
                             <Link to="./creer-offre-stage">
-                                <button className={"btn-filled"}>{t("dashboard_home_page.add_offer")} <Icon
-                                    path={mdiBriefcasePlusOutline} size={1}/></button>
+                                <button className={"btn-filled"}>{t("dashboard_home_page.add_offer")}
+                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                                </button>
                             </Link>
                         </div>
                         <div style={{"padding": "10px 0"}}>
@@ -81,9 +82,11 @@ const DashboardHome = () => {
                 return (
                     <section>
                         <div className={"toolbar-items"}>
-                            <h4 className={"m-0 toolbar-spacer"}>Gestion des utilisateurs</h4>
+                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.user_management")}</h4>
                             <Link to="./admin/manage-users">
-                                <button>Utilisateurs non approuvés <Icon path={mdiChevronRight} size={1}/></button>
+                                <button>{t("dashboard_home_page.not_approved_users")}
+                                    <Icon path={mdiChevronRight} size={1}/>
+                                </button>
                             </Link>
                         </div>
                     </section>
@@ -100,10 +103,14 @@ const DashboardHome = () => {
                         <div className={"toolbar-items"}>
                             <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.portfolio")}</h4>
                             <Link to="/dashboard/manage-cvs">
-                                <button>{t("dashboard_home_page.manage")} <Icon path={mdiChevronRight} size={1}/></button>
+                                <button>{t("dashboard_home_page.manage")}
+                                    <Icon path={mdiChevronRight} size={1}/>
+                                </button>
                             </Link>
                             <Link to="/dashboard/upload-cv">
-                                <button>{t("dashboard_home_page.add_cv")} <Icon path={mdiPlus} size={1}/></button>
+                                <button>{t("dashboard_home_page.add_cv")}
+                                    <Icon path={mdiPlus} size={1}/>
+                                </button>
                             </Link>
                         </div>
                         <div style={{"padding": "10px 0"}}>
@@ -130,7 +137,9 @@ const DashboardHome = () => {
         <>
             <div className="dashboard-card-titlebar">
                 <h1>{t("dashboard_home_page.home")}</h1>
-                <h5>{t("dashboard_home_page.hello")} {(currentUser != null) ? currentUser.fullName : <div className={"loading-placeholder"}></div>}</h5>
+                <h5>{t("dashboard_home_page.hello")} {(currentUser != null) ? currentUser.fullName :
+                    <div className={"loading-placeholder"}></div>}
+                </h5>
             </div>
             <div style={{"display": "flex", "gap": "20px"}}>
                 <div style={{"width": "70%"}}>
@@ -139,7 +148,6 @@ const DashboardHome = () => {
                         {GetPortfolioSection()}
                         {GetUserManagementSection()}
                         <div style={{"height": "520px"}}>
-
                         </div>
                     </div>
                 </div>
@@ -148,12 +156,24 @@ const DashboardHome = () => {
                         <section>
                             <h4>{t("dashboard_home_page.user_info")}</h4>
                             <ul>
-                                <li><p>{t("dashboard_home_page.full_name")}: {(currentUser != null) ? currentUser.fullName : <span className={"loading-placeholder"}></span>}</p></li>
-                                <li><p>{t("dashboard_home_page.email")}: {(currentUser != null) ? currentUser.email : <span className={"loading-placeholder"}></span>}</p></li>
+                                <li>
+                                    <p>{t("dashboard_home_page.full_name")}: {(currentUser != null) ? currentUser.fullName :
+                                        <span className={"loading-placeholder"}></span>}
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>{t("dashboard_home_page.email")}: {(currentUser != null) ? currentUser.email :
+                                        <span className={"loading-placeholder"}></span>}
+                                    </p>
+                                </li>
                                 {currentUser && currentUser.role !== "ADMIN" && currentUser.role !== "EMPLOYEUR" && (
                                     <li><p>{t("dashboard_home_page.matricule")}: {currentUser.matricule}</p></li>
                                 )}
-                                <li><p>{t("dashboard_home_page.role")}: {(currentUser != null) ? currentUser.role : <span className={"loading-placeholder"}></span>}</p></li>
+                                <li>
+                                    <p>{t("dashboard_home_page.role")}: {(currentUser != null) ? currentUser.role :
+                                        <span className={"loading-placeholder"}></span>}
+                                    </p>
+                                </li>
                             </ul>
                         </section>
                     </div>

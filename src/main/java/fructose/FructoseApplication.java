@@ -53,7 +53,7 @@ public class FructoseApplication implements CommandLineRunner {
 		createAndPersistUtilisateur("Etudiant", "Joan Favrichon", "joan@gmail.com", "Joan123!", "5555555", departementInformatique, null, true);
 		
 		// ÉTUDIANTS NON APPROUVÉS
-		createAndPersistUtilisateur("Etudiant", "Roberto Berios Larios", "roberto@gmail.com", "Roberto123!", "1234567", departementInformatique, null, false);
+		createAndPersistUtilisateur("Etudiant", "Roberto Berrios Larios", "roberto@gmail.com", "Roberto123!", "1234567", departementInformatique, null, false);
 		createAndPersistUtilisateur("Etudiant", "Samuel Léveillé", "samuel@gmail.com", "Samuel123!", "2345678", departementInformatique, null, false);
 		createAndPersistUtilisateur("Etudiant", "Jason Jody Aubé", "jason@gmail.com", "Jason123!", "3456789", departementInformatique, null, false);
 		System.out.println();
@@ -74,10 +74,10 @@ public class FructoseApplication implements CommandLineRunner {
 		
 		// EMPLOYEUR NON APPROUVÉS
 		createAndPersistUtilisateur("Employeur", "Andrew Wilson", "electronicarts@gmail.com", "Electronicarts123!", null, departementInformatique, "Electronic Arts Inc", false);
-		createAndPersistUtilisateur("Employeur", "Satya Nadella", "microsoft@gmail", "Microsoft123!", null, departementInformatique, "Microsoft Corporation", false);
+		createAndPersistUtilisateur("Employeur", "Satya Nadella", "microsoft@gmail.com", "Microsoft123!", null, departementInformatique, "Microsoft Corporation", false);
 		System.out.println();
 		
-		// ADMIN
+		// ADMINS
 		createAndPersistUtilisateur("Admin", "Didier Tremblay", "didieradmin@gmail.com", "Didieradmin123!", "1212121", departementCegep, null, true);
 		createAndPersistUtilisateur("Admin", "Karim Mihoubi", "karimadmin@gmail.com", "Karimadmin123!", "2121212", departementCegep, null, true);
 		System.out.println();

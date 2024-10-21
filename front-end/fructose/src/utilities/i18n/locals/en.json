@@ -220,7 +220,9 @@
         "full_name": "Full Name",
         "email": "Email",
         "matricule": "Student/Employee Number",
-        "role": "Role"
+        "role": "Role",
+        "user_management": "User Management",
+        "not_approved_users": "Not approved users"
     },
 
     "pdf_view_page": {
@@ -243,5 +245,17 @@
 
     "manage_cv_page": {
         "my_cvs": "My Curiculums Vitae"
+    },
+
+    "manage_users_page": {
+        "not_approved_users": "Not approved users",
+        "not_approved_cvs": "Not approved CVs",
+        "not_approved_stage": "Not approved Stage Offers",
+        "related_options": "Related options",
+        "no_users_to_approve": "No users to approve",
+        "when_created": "When a user is created, they will appear here",
+        "approve": "Approve",
+        "approved": "Approved",
+        "delete": "Delete"
     }
 }

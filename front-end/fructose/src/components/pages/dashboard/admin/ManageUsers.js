@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
     mdiAccountOutline,
     mdiAccountQuestion,
@@ -14,20 +14,18 @@ import {
     mdiHumanMaleBoard,
 } from "@mdi/js";
 import Icon from "@mdi/react";
-import { AuthContext } from "../../../../providers/AuthProvider";
-import { Link } from "react-router-dom";
+import {AuthContext} from "../../../../providers/AuthProvider";
+import {Link} from "react-router-dom";
 import {AdminContext} from "../../../../providers/AdminProvider";
 import {useTranslation} from "react-i18next";
 
 const ManageUsers = () => {
+
     const {t} = useTranslation();
-
-    const { isUserInit } = useContext(AuthContext);
-    const { GetUnapprovedUsers, ApproveUser, RejectUser } = useContext(AdminContext);
-
+    const {isUserInit} = useContext(AuthContext);
+    const {GetUnapprovedUsers, ApproveUser, RejectUser} = useContext(AdminContext);
     const [users, setUsers] = useState(null);
     const [currentUserIndex, setCurrentUserIndex] = useState(null);
-
     const [isSwitching, setIsSwitching] = useState(false);
 
     useEffect(() => {
@@ -67,28 +65,28 @@ const ManageUsers = () => {
     }
 
     const DeleteCurrentUserFromMemory = () => {
-        if (users[currentUserIndex + 1] != null){
+        if (users[currentUserIndex + 1] != null) {
             SwitchUser(currentUserIndex, true)
         } else if (users[currentUserIndex - 1] != null) {
             SwitchUser(currentUserIndex - 1, false)
         } else {
             SwitchUser(null, false)
         }
-        setTimeout(()=>{
+        setTimeout(() => {
             setUsers([
                 ...users.slice(0, currentUserIndex),
                 ...users.slice(currentUserIndex + 1)
             ]);
-        },401)
+        }, 401)
     }
 
     const SwitchUser = (index, bypassSkip) => {
-        if (currentUserIndex !== index || bypassSkip){
+        if (currentUserIndex !== index || bypassSkip) {
             setIsSwitching(true);
-            setTimeout(()=>{
+            setTimeout(() => {
                 setIsSwitching(false)
                 setCurrentUserIndex(index)
-            },400)
+            }, 400)
         }
     }
 
@@ -98,14 +96,14 @@ const ManageUsers = () => {
                 return (
                     <>
                         <p className="m-0 text-orange">En approbation</p>
-                        <Icon path={mdiClockOutline} size={0.8} className="text-orange" />
+                        <Icon path={mdiClockOutline} size={0.8} className="text-orange"/>
                     </>
                 );
             } else if (users[currentUserIndex].is_approved) {
                 return (
                     <>
                         <p className="m-0 text-green">Approuvé</p>
-                        <Icon path={mdiCheck} size={0.8} className="text-green" />
+                        <Icon path={mdiCheck} size={0.8} className="text-green"/>
                     </>
                 );
             }
@@ -119,18 +117,21 @@ const ManageUsers = () => {
                 <>
                     <div className="menu-list">
                         {users.map((item, index) => (
-                            <div key={index} onClick={() => {SwitchUser(index, false)}} className={`menu-list-item ${users[currentUserIndex] && index === currentUserIndex ? "menu-list-item-selected" : ""}`}>
+                            <div key={index} onClick={() => {
+                                SwitchUser(index, false)
+                            }}
+                                 className={`menu-list-item ${users[currentUserIndex] && index === currentUserIndex ? "menu-list-item-selected" : ""}`}>
                                 {
-                                    (item.role === "ETUDIANT")?
-                                        <Icon path={mdiAccountSchoolOutline} size={1} />
+                                    (item.role === "ETUDIANT") ?
+                                        <Icon path={mdiAccountSchoolOutline} size={1}/>
                                         :
-                                        (item.role === "EMPLOYEUR")?
-                                            <Icon path={mdiAccountTieOutline} size={1} />
+                                        (item.role === "EMPLOYEUR") ?
+                                            <Icon path={mdiAccountTieOutline} size={1}/>
                                             :
-                                            (item.role === "PROFESSEUR")?
-                                                <Icon path={mdiHumanMaleBoard} size={1} />
+                                            (item.role === "PROFESSEUR") ?
+                                                <Icon path={mdiHumanMaleBoard} size={1}/>
                                                 :
-                                        <Icon path={mdiAccountOutline} size={1} />
+                                                <Icon path={mdiAccountOutline} size={1}/>
                                 }
                                 <div>
                                     <p className="m-0">{item.fullName}</p>
@@ -143,11 +144,11 @@ const ManageUsers = () => {
             );
         } else {
             return (
-                <div className="dashboard-placeholder-card" style={{ backgroundColor: "transparent" }}>
-                    <div style={{ textAlign: "center" }}>
-                        <Icon path={mdiAccountQuestion} size={2} />
-                        <h6 style={{ margin: "8px 0 14px 0" }}>Aucun Utilisateur à approuver</h6>
-                        <p className="text-dark">Lorsqu'un utilisateur sera créé, il apparaitra ici.</p>
+                <div className="dashboard-placeholder-card" style={{backgroundColor: "transparent"}}>
+                    <div style={{textAlign: "center"}}>
+                        <Icon path={mdiAccountQuestion} size={2}/>
+                        <h6 style={{margin: "8px 0 14px 0"}}>{t("manage_users_page.no_users_to_approve")}</h6>
+                        <p className="text-dark">{t("manage_users_page.when_created")}</p>
                     </div>
                 </div>
             );
@@ -158,20 +159,22 @@ const ManageUsers = () => {
     const getUserDetailsSection = () => {
         if (currentUserIndex != null) {
             return (
-                <div className={`dashboard-card ${(isSwitching)? "disappearing": ""}`} style={{ width: "35%" }}>
-                    <div className="toolbar-items" style={{ padding: "10px 10px 10px 16px" }}>
+                <div className={`dashboard-card ${(isSwitching) ? "disappearing" : ""}`} style={{width: "35%"}}>
+                    <div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
                         <h6 className="m-0">Détails de l'utilisateur</h6>
                         <span className="toolbar-spacer"></span>
-                        <button className="btn-icon" onClick={() => SwitchUser(null, false)}><Icon path={mdiClose} size={1} /></button>
+                        <button className="btn-icon" onClick={() => SwitchUser(null, false)}><Icon path={mdiClose}
+                                                                                                   size={1}/></button>
                     </div>
-                        <div className="user-profile-section">
-                            <div className="user-profile-section-banner">
+                    <div className="user-profile-section">
+                        <div className="user-profile-section-banner">
 
-                            </div>
-                            <div className="user-profile-section-profile-picture" style={{"backgroundImage": "url('/assets/auth/default-profile.jpg')"}}>
-
-                            </div>
                         </div>
+                        <div className="user-profile-section-profile-picture"
+                             style={{"backgroundImage": "url('/assets/auth/default-profile.jpg')"}}>
+
+                        </div>
+                    </div>
                     <section>
                         <div className="toolbar-items">
                             <div>
@@ -181,7 +184,7 @@ const ManageUsers = () => {
                             <div className="toolbar-spacer"></div>
                             {getStatutElement()}
                         </div>
-                        <br />
+                        <br/>
                         <p>Details</p>
                         <table style={{width: "100%"}}>
                             <tbody>
@@ -205,24 +208,28 @@ const ManageUsers = () => {
                         </table>
                         <br/>
                         <p>Actions</p>
-                        <button className="btn-option" onClick={()=>{ApproveUserById(users[currentUserIndex].id)}}>
-                            <Icon path={mdiCheck} size={1} />
+                        <button className="btn-option" onClick={() => {
+                            ApproveUserById(users[currentUserIndex].id)
+                        }}>
+                            <Icon path={mdiCheck} size={1}/>
                             Accepter
                         </button>
-                        <button className="btn-option" onClick={()=>{RejectUserById(users[currentUserIndex].id)}}>
-                            <Icon path={mdiClose} size={1} />
+                        <button className="btn-option" onClick={() => {
+                            RejectUserById(users[currentUserIndex].id)
+                        }}>
+                            <Icon path={mdiClose} size={1}/>
                             Refuser
                         </button>
                         {
-                         /*
-                         <button className="btn-option">
-                            <Icon path={mdiAccountCancelOutline} size={1} />
-                            Expulser
-                         </button>
-                         */
+                            /*
+                            <button className="btn-option">
+                               <Icon path={mdiAccountCancelOutline} size={1} />
+                               Expulser
+                            </button>
+                            */
                         }
                         <button className="btn-option">
-                            <Icon path={mdiFolderAccountOutline} size={1} />
+                            <Icon path={mdiFolderAccountOutline} size={1}/>
                             Vue Globale
                         </button>
                     </section>
@@ -234,11 +241,11 @@ const ManageUsers = () => {
 
     const getUserListSection = () => {
         return (
-            <div style={{ width: "65%"}}>
-                <div className="dashboard-card" style={{ height: "450px", overflowY: "auto" }}>
+            <div style={{width: "65%"}}>
+                <div className="dashboard-card" style={{height: "450px", overflowY: "auto"}}>
                     <section>
                         {
-                            (users === null)?
+                            (users === null) ?
                                 <div className="loader-container">
                                     <div className="loader"></div>
                                 </div>
@@ -250,9 +257,10 @@ const ManageUsers = () => {
                 <br/>
                 <div className="dashboard-card">
                     <section>
-                        <h5>Options connexes</h5>
-                        <p><Icon path={mdiFileClockOutline} size={0.7} /> <Link>CVs Non approuvés</Link></p>
-                        <p><Icon path={mdiBriefcaseClockOutline} size={0.7} /> <Link>Offres de stage Non approuvés</Link></p>
+                        <h5>{t("manage_users_page.related_options")}</h5>
+                        <p><Icon path={mdiFileClockOutline} size={0.7}/> <Link>{t("manage_users_page.not_approved_cvs")}</Link></p>
+                        <p><Icon path={mdiBriefcaseClockOutline} size={0.7}/> <Link>{t("manage_users_page.not_approved_stage")}</Link>
+                        </p>
                     </section>
                 </div>
             </div>
@@ -264,12 +272,12 @@ const ManageUsers = () => {
             <div className="dashboard-card-toolbar">
                 <Link to="/dashboard">
                     <button className="btn-icon-dashboard">
-                        <Icon path={mdiArrowLeft} size={1.4} />
+                        <Icon path={mdiArrowLeft} size={1.4}/>
                     </button>
                 </Link>
-                <h1>Utilisateurs non approuvés</h1>
+                <h1>{t("manage_users_page.not_approved_users")}</h1>
             </div>
-            <div style={{ display: "flex", gap: "20px", alignItems: "start" }}>
+            <div style={{display: "flex", gap: "20px", alignItems: "start"}}>
                 {getUserListSection()}
                 {getUserDetailsSection()}
             </div>
