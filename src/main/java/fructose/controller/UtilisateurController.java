@@ -118,9 +118,9 @@ public class UtilisateurController {
     }
 
     @GetMapping("/non-approved-users")
-    public ResponseEntity<?> getNonApprovedUsers(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<UtilisateurDTO>> getNonApprovedUsers(@RequestHeader("Authorization") String token) {
         if(!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         List<UtilisateurDTO> nonApprovedUsers = utilisateurService.getNonApprovedUsers();

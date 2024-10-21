@@ -270,56 +270,70 @@ class UtilisateurControllerTest {
     }
 
     @Test
-    void testGetNonApprovedUsers_Success() throws Exception {
+    void testGetNonApprovedUsers_Success() {
+        String token = "Bearer validToken";
         List<UtilisateurDTO> mockUsers = List.of(new UtilisateurDTO(), new UtilisateurDTO());
+
+        when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(true);
         when(utilisateurService.getNonApprovedUsers()).thenReturn(mockUsers);
 
-        ResponseEntity<List<UtilisateurDTO>> response = utilisateurController.getNonApprovedUsers();
+        ResponseEntity<List<UtilisateurDTO>> response = utilisateurController.getNonApprovedUsers(token);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockUsers, response.getBody());
     }
 
     @Test
-    void testApproveUser_Success() throws Exception {
+    void testApproveUser_Success() {
         Long userId = 1L;
+        String token = "Bearer validToken";
 
-        ResponseEntity<?> response = utilisateurController.approveUser(userId);
+        when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(true);
+
+        ResponseEntity<?> response = utilisateurController.approveUser(token, userId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("User approved successfully.", response.getBody());
     }
 
     @Test
-    void testApproveUser_Exception() throws Exception {
+    void testApproveUser_Exception() {
         Long userId = 1L;
+        String token = "Bearer validToken";
+
+        when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(true);
         doThrow(new RuntimeException("Approval failed")).when(utilisateurService).approveUser(userId);
 
-        ResponseEntity<?> response = utilisateurController.approveUser(userId);
+        ResponseEntity<?> response = utilisateurController.approveUser(token, userId);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertEquals("Error approving user: Approval failed", response.getBody());
     }
 
     @Test
-    void testDeleteUtilisateurByID_Success() throws Exception {
+    void testDeleteUtilisateurByID_Success() {
         Long userId = 1L;
+        String token = "Bearer validToken";
 
-        ResponseEntity<?> response = utilisateurController.deleteUtilisateurByID(userId);
+        when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(true);
+
+        ResponseEntity<?> response = utilisateurController.deleteUtilisateurByID(token, userId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("User rejected and deleted successfully.", response.getBody());
     }
 
     @Test
-    void testDeleteUtilisateurByID_Exception() throws Exception {
+    void testDeleteUtilisateurByID_Exception() {
         Long userId = 1L;
+        String token = "Bearer validToken";
+
+        when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(true);
         doThrow(new RuntimeException("Deletion failed")).when(utilisateurService).deleteUtilisateurByID(userId, utilisateurService.getRoleById(userId));
 
-        ResponseEntity<?> response = utilisateurController.deleteUtilisateurByID(userId);
+        ResponseEntity<?> response = utilisateurController.deleteUtilisateurByID(token, userId);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertEquals("Error rejecting user: Deletion failed", response.getBody());
     }
-
 }
