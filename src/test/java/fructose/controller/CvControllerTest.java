@@ -3,6 +3,7 @@ package fructose.controller;
 import fructose.model.Cv;
 import fructose.service.CvService;
 import fructose.service.UtilisateurService;
+import fructose.service.dto.CvDTO;
 import fructose.service.dto.UtilisateurDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,14 +18,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class CvControllerTest {
+    private static final int MAX_FILE_SIZE_B = 1048576;
     private MockMvc mockMvc;
 
     @Mock
@@ -130,9 +134,9 @@ public class CvControllerTest {
     public void testGetAllCvs_Success() {
         // Simuler la validation du token et la récupération de CVs
         when(utilisateurService.validationToken("validToken")).thenReturn(true);
-        when(cvService.getAllCvs()).thenReturn(Collections.singletonList(new Cv())); // Ajouter un CV fictif
+        when(cvService.getAllCvs()).thenReturn(Collections.singletonList(new CvDTO())); // Ajouter un CV fictif
 
-        ResponseEntity<List<Cv>> response = cvController.getAllCvs("validToken");
+        ResponseEntity<List<CvDTO>> response = cvController.getAllCvs("validToken");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size()); // Vérifiez que la liste contient un élément
@@ -144,18 +148,178 @@ public class CvControllerTest {
         when(utilisateurService.validationToken("validToken")).thenReturn(true);
         when(cvService.getAllCvs()).thenThrow(new RuntimeException("Database error"));
 
-        ResponseEntity<List<Cv>> response = cvController.getAllCvs("validToken");
+        ResponseEntity<List<CvDTO>> response = cvController.getAllCvs("validToken");
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
+
     @Test
     public void testGetAllCvs_Unauthorized() {
         String token = "invalidToken";
 
         when(utilisateurService.validationToken(token)).thenReturn(false);
 
-        ResponseEntity<List<Cv>> response = cvController.getAllCvs(token);
+        ResponseEntity<List<CvDTO>> response = cvController.getAllCvs(token);
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
+
+    @Test
+    public void testGetCVs_Success() {
+        String token = "validToken";
+        when(utilisateurService.validationToken(token)).thenReturn(true);
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        when(utilisateurService.getUtilisateurByToken(token)).thenReturn(utilisateurDTO);
+
+        List<CvDTO> cvDTOList = Arrays.asList(new CvDTO(), new CvDTO());
+        when(cvService.getCvsByUser(utilisateurDTO)).thenReturn(cvDTOList);
+
+        ResponseEntity<?> response = cvController.getCVs(token);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(cvDTOList, response.getBody());
+    }
+
+    @Test
+    public void testGetCVs_InvalidToken() {
+        String token = "invalidToken";
+        when(utilisateurService.validationToken(token)).thenReturn(false);
+
+        ResponseEntity<?> response = cvController.getCVs(token);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Le Token est invalid", response.getBody());
+    }
+
+    // Tests pour la méthode getCVFile
+    @Test
+    public void testGetCVFile_Success() {
+        String token = "validToken";
+        Long cvId = 1L;
+
+        when(utilisateurService.validationToken(token)).thenReturn(true);
+        byte[] fileContent = new byte[]{1, 2, 3};
+        when(cvService.getCvFileContentById(cvId)).thenReturn(fileContent);
+
+        ResponseEntity<byte[]> response = cvController.getCVFile(token, cvId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(fileContent, response.getBody());
+    }
+
+    @Test
+    public void testGetCVFile_FileNotFound() {
+        String token = "validToken";
+        Long cvId = 999L;
+
+        when(utilisateurService.validationToken(token)).thenReturn(true);
+        when(cvService.getCvFileContentById(cvId)).thenReturn(null);
+
+        ResponseEntity<byte[]> response = cvController.getCVFile(token, cvId);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    public void testGetCVFile_InvalidToken() {
+        String token = "invalidToken";
+        Long cvId = 1L;
+
+        when(utilisateurService.validationToken(token)).thenReturn(false);
+
+        ResponseEntity<byte[]> response = cvController.getCVFile(token, cvId);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+    }
+
+    // Tests pour la méthode deleteCv
+    @Test
+    public void testDeleteCv_Success() {
+        String token = "validToken";
+        Long cvId = 1L;
+
+        when(utilisateurService.validationToken(token)).thenReturn(true);
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        when(utilisateurService.getUtilisateurByToken(token)).thenReturn(utilisateurDTO);
+        when(cvService.deleteCvById(cvId, utilisateurDTO)).thenReturn(true);
+
+        ResponseEntity<String> response = cvController.deleteCv(token, cvId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Le CV a été supprimé avec succès.", response.getBody());
+    }
+
+    @Test
+    public void testDeleteCv_NotFound() {
+        String token = "validToken";
+        Long cvId = 999L;
+
+        when(utilisateurService.validationToken(token)).thenReturn(true);
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        when(utilisateurService.getUtilisateurByToken(token)).thenReturn(utilisateurDTO);
+        when(cvService.deleteCvById(cvId, utilisateurDTO)).thenReturn(false);
+
+        ResponseEntity<String> response = cvController.deleteCv(token, cvId);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Le CV n'a pas été trouvé ou l'utilisateur n'est pas autorisé à le supprimer.", response.getBody());
+    }
+
+    @Test
+    public void testDeleteCv_Unauthorized() {
+        String token = "invalidToken";
+        Long cvId = 1L;
+
+        when(utilisateurService.validationToken(token)).thenReturn(false);
+
+        ResponseEntity<String> response = cvController.deleteCv(token, cvId);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertEquals("Le Token est invalide", response.getBody());
+    }
+
+    @Test
+    public void testDeleteCv_Exception() {
+        String token = "validToken";
+        Long cvId = 1L;
+
+        when(utilisateurService.validationToken(token)).thenReturn(true);
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        when(utilisateurService.getUtilisateurByToken(token)).thenReturn(utilisateurDTO);
+        doThrow(new RuntimeException("Unexpected error")).when(cvService).deleteCvById(cvId, utilisateurDTO);
+
+        ResponseEntity<String> response = cvController.deleteCv(token, cvId);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Une erreur inattendue s'est produite lors de la suppression du CV.", response.getBody());
+    }
+
+    @Test
+    public void testGetCVFile_InternalServerError() {
+        String token = "validToken";
+        Long cvId = 1L;
+
+        when(utilisateurService.validationToken(token)).thenReturn(true);
+        when(cvService.getCvFileContentById(cvId)).thenThrow(new RuntimeException("Unexpected error"));
+
+        ResponseEntity<byte[]> response = cvController.getCVFile(token, cvId);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    public void testEnregistrerCV_Failure_FileTooLarge() throws Exception {
+        byte[] largeFileContent = new byte[(int) (MAX_FILE_SIZE_B + 1)]; // 1 octet de plus que la limite
+        MockMultipartFile file = new MockMultipartFile("file", "largeFile.pdf", MediaType.APPLICATION_PDF_VALUE, largeFileContent);
+        String token = "validToken";
+
+        when(utilisateurService.validationToken(token)).thenReturn(true);
+
+        ResponseEntity<String> response = cvController.enregistrerCV(token, file);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Le fichier doit faire moins de 1024 Kb.", response.getBody());
+    }
+
 }

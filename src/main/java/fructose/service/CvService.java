@@ -34,7 +34,7 @@ public class CvService {
         }
     }
 
-    public List<Cv> getAllCvs() {
+    public List<CvDTO> getAllCvs() {
         List<Cv> list;
         try {
             list = cvRepository.findAll();
@@ -42,8 +42,15 @@ public class CvService {
             throw new RuntimeException("Une erreur est survenue lors de la récupération des CVs.", e);
         }
 
-        return list;
+        // Convertir la liste de Cv en CvDTO
+        List<CvDTO> cvDTOList = new ArrayList<>();
+        for (Cv cv : list) {
+            cvDTOList.add(CvDTO.toDTO(cv));
+        }
+
+        return cvDTOList;
     }
+
 
     public List<CvDTO> getCvsByUser(UtilisateurDTO utilisateurDTO){
         List<CvDTO> cvDTOList = new ArrayList<>();

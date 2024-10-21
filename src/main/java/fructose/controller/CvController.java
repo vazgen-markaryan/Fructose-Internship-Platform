@@ -19,6 +19,7 @@ public class CvController {
     private final CvService cvService;
     private final UtilisateurService utilisateurService;
 
+    private static final long MAX_FILE_SIZE_B = 1048576;
     public CvController(CvService cvService, UtilisateurService utilisateurService) {
         this.cvService = cvService;
         this.utilisateurService = utilisateurService;
@@ -26,6 +27,10 @@ public class CvController {
 
     @PostMapping("/deposer-cv")
     public ResponseEntity<String> enregistrerCV(@RequestHeader("Authorization") String token, @RequestParam("file") MultipartFile file) {
+        if (file.getSize() > MAX_FILE_SIZE_B) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Le fichier doit faire moins de 1024 Kb.");
+        }
         if (file.isEmpty()) {
             return new ResponseEntity<>("Le fichier est vide. Veuillez télécharger un fichier PDF valide.", HttpStatus.BAD_REQUEST);
         }
@@ -86,20 +91,19 @@ public class CvController {
 
 
     @GetMapping("/cv-history")
-    public ResponseEntity<List<Cv>> getAllCvs(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<CvDTO>> getAllCvs(@RequestHeader("Authorization") String token) {
         try {
             if (!utilisateurService.validationToken(token)) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
-            List<Cv> cvs = cvService.getAllCvs();
+            List<CvDTO> cvs = cvService.getAllCvs();
             System.out.println(cvs);
             return new ResponseEntity<>(cvs, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @DeleteMapping("/cvs/{id}")
     public ResponseEntity<String> deleteCv(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         if (!utilisateurService.validationToken(token)) {
@@ -118,6 +122,5 @@ public class CvController {
             return new ResponseEntity<>("Une erreur inattendue s'est produite lors de la suppression du CV.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }
 

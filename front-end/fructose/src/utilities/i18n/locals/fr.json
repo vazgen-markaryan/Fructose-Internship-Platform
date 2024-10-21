@@ -195,5 +195,42 @@
             "modalite_travail_select": "La modalité de travail doit être sélectionnée",
             "type_emploi_select": "Le type d'emploi doit être sélectionné"
         }
+    },
+
+    "manage_cv": {
+        "upload_error": "Erreur lors du téléchargement du CV",
+        "status": {
+            "pending": "En approbation",
+            "approved": "Approuvé",
+            "rejected": "Refusé"
+        },
+        "buttons": {
+            "accept": "Accepter",
+            "reject": "Refuser",
+            "download": "Télécharger",
+            "delete": "Supprimer",
+            "add": "Ajouter"
+        },
+        "messages": {
+            "no_cvs": "Aucun CV dans votre dossier"
+        },
+        "titles": {
+            "cvs": "Mes CVs",
+            "preview": "Aperçu"
+        }
+
+    },
+
+
+    "upload_cv": {
+        "title": "Téléverser un CV",
+        "drag_drop": "Glissez votre CV ici",
+        "or": "OU",
+        "select_button": "Sélectionner",
+        "accepted_formats": "Format des fichiers acceptés : PDF",
+        "upload_button": "Téléverser",
+        "error_file_required": "Veuillez sélectionner un fichier avant de soumettre.",
+        "upload_error": "Une erreur est survenue lors du téléversement.",
+        "error_file_size_exceeded": "La taille du fichier dépasse la limite autorisée de {{maxSize}} Mb."
     }
 }
