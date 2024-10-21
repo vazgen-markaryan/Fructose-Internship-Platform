@@ -52,7 +52,11 @@ const ConnexionUtilisateur = () => {
                 navigate("/dashboard")
             }
         } catch (error) {
-            const errorMessage = error.message === "L'utilisateur n'est pas approuvé" ? t("connexion_page.error.not_approved") : error.toString();
+            const errorMessage =
+                error.message === "L'utilisateur n'est pas approuvé" ? t("connexion_page.error.not_approved") :
+                    error.message === "Courriel invalide" ? t("connexion_page.error.invalid_email") :
+                        error.message === "Mot de passe invalide" ? t("connexion_page.error.invalid_password") :
+                            t("connexion_page.error.unknown_error");
 
             await Swal.fire({
                 icon: 'error',
@@ -60,7 +64,7 @@ const ConnexionUtilisateur = () => {
                 text: errorMessage,
             });
         }
-    };
+    }
 
     useEffect(() => {
         // Si utilisateur change la langue pendant qu'erreur est affichée, traduire les messages d'erreur
@@ -93,12 +97,14 @@ const ConnexionUtilisateur = () => {
                         <form onSubmit={handleSubmit}>
                             <div className="input-container">
                                 <p>{t("connexion_page.email")}:</p>
-                                <input className={`${errors.email ? "field-invalid" : ""}`} type="email" name="email" required value={utilisateur.email} onChange={handleChange}/>
+                                <input className={`${errors.email ? "field-invalid" : ""}`} type="email" name="email"
+                                       required value={utilisateur.email} onChange={handleChange}/>
                                 {errors.email && <p className={"field-invalid-text"}>{errors.email}</p>}
                             </div>
                             <div className="input-container">
                                 <p>{t("connexion_page.password")}:</p>
-                                <input className={`${errors.password ? "field-invalid" : ""}`} type="password" name="password" onChange={handleChange} value={utilisateur.password} required/>
+                                <input className={`${errors.password ? "field-invalid" : ""}`} type="password"
+                                       name="password" onChange={handleChange} value={utilisateur.password} required/>
                                 {errors.password && <p className={"field-invalid-text"}>{errors.password}</p>}
                             </div>
 

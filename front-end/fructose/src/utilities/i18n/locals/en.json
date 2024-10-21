@@ -54,7 +54,10 @@
         "error": {
             "email": "Email is required",
             "password": "Password is required",
-            "not_approved": "Your account is not approved by Admin yet. Please wait for approval."
+            "not_approved": "Your account is not approved by Admin yet. Please wait for approval.",
+            "invalid_email": "Invalid email",
+            "invalid_password": "Invalid password",
+            "unknown_error": "Unknown error occurred. Please try again"
         }
     },
 

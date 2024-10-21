@@ -54,7 +54,10 @@
         "error": {
             "email": "Email est requis",
             "password": "Mot de passe est requis",
-            "not_approved": "Votre compte n'est pas encore approuvé par l'administrateur. Veuillez attendre l'approbation."
+            "not_approved": "Votre compte n'est pas encore approuvé par l'administrateur. Veuillez attendre l'approbation.",
+            "invalid_email": "Email invalide",
+            "invalid_password": "Mot de passe invalide",
+            "unknown_error": "Erreur inconnue. Veuillez réessayer"
         }
     },
 
