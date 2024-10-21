@@ -212,4 +212,14 @@ public class UtilisateurService {
             }
         }
     }
+
+    public boolean verifyRoleEligibilityByToken(String token, Role[] roles){
+        UtilisateurDTO utilisateur = getUtilisateurByToken(token);
+        return Arrays.stream(Role.values()).anyMatch((t) -> t.name().equals(utilisateur.getRole()));
+    }
+
+    public boolean verifyRoleEligibilityByToken(String token, Role role){
+        UtilisateurDTO utilisateur = getUtilisateurByToken(token);
+        return utilisateur.getRole().equals(role);
+    }
 }

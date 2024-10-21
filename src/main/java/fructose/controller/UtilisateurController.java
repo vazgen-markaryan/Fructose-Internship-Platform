@@ -1,5 +1,7 @@
 package fructose.controller;
 
+import fructose.model.Utilisateur;
+import fructose.model.auth.Role;
 import fructose.service.UtilisateurService;
 import fructose.service.dto.UtilisateurDTO;
 import fructose.service.dto.auth.LoginDTO;
@@ -116,20 +118,31 @@ public class UtilisateurController {
     }
 
     @GetMapping("/non-approved-users")
-    public ResponseEntity<List<UtilisateurDTO>> getNonApprovedUsers() {
+    public ResponseEntity<?> getNonApprovedUsers(@RequestHeader("Authorization") String token) {
+        if(!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
+        }
+
         List<UtilisateurDTO> nonApprovedUsers = utilisateurService.getNonApprovedUsers();
         return ResponseEntity.ok(nonApprovedUsers);
     }
 
     @PutMapping("/approve-user/{id}")
-    public ResponseEntity<?> approveUser(@PathVariable Long id) {
+    public ResponseEntity<?> approveUser(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        if(!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
+        }
 
-            utilisateurService.approveUser(id);
-            return ResponseEntity.ok("User approved successfully.");
+        utilisateurService.approveUser(id);
+        return ResponseEntity.ok("User approved successfully.");
     }
 
     @DeleteMapping("/reject-user/{id}")
-    public ResponseEntity<?> deleteUtilisateurByID(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUtilisateurByID(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        if(!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
+        }
+
         try {
             utilisateurService.deleteUtilisateurByID(id, utilisateurService.getRoleById(id));
             return ResponseEntity.ok("User rejected and deleted successfully.");
