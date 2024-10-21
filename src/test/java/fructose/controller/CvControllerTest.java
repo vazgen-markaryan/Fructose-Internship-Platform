@@ -1,6 +1,5 @@
 package fructose.controller;
 
-import fructose.model.Cv;
 import fructose.service.CvService;
 import fructose.service.UtilisateurService;
 import fructose.service.dto.CvDTO;

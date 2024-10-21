@@ -1,6 +1,5 @@
 import React from "react";
 import HeaderMain from "../../fragments/header/HeaderMain";
-import {AuthContext} from "../../../providers/AuthProvider";
 import {Route, Routes} from "react-router-dom";
 import ManageCVs from "./cv/ManageCVs";
 import CreerOffreStage from "../../offre_stage/CreerOffreStage";

@@ -5,6 +5,7 @@ import fructose.model.Utilisateur;
 import fructose.model.auth.Role;
 import fructose.repository.CvRepository;
 import fructose.service.dto.CvDTO;
+import fructose.service.dto.DepartementDTO;
 import fructose.service.dto.UtilisateurDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ class CvServiceTest {
         utilisateurDTO.setPassword("password123");
         utilisateurDTO.setMatricule("1234567");
         utilisateurDTO.setRole(Role.ETUDIANT);
-        utilisateurDTO.setDepartement("Informatique");
+        utilisateurDTO.setDepartementDTO(new DepartementDTO());
         utilisateurDTO.setCompanyName("TechCorp");
     }
 
