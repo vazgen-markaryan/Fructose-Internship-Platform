@@ -53,8 +53,7 @@ const UploadCV = () => {
                                             <p>{t("upload_page.or")}</p>
                                             <hr/>
                                         </div>
-                                        <button onClick={open} className="btn-outline"><Icon path={mdiFolderOpenOutline}
-                                                                                             size={0.8}/>{t("upload_page.browse")}
+                                        <button onClick={open} className="btn-outline"><Icon path={mdiFolderOpenOutline} size={0.8}/>{t("upload_page.browse")}
                                         </button>
                                     </>
                             }
@@ -83,12 +82,16 @@ const UploadCV = () => {
                         <Icon path={mdiFileOutline} size={1}/>
                         <p className="m-0">{filename}</p>
                         <div className="toolbar-spacer"></div>
-                        <button className="btn-icon" onClick={() => {setFiles("")}}><Icon path={mdiClose} size={1}/></button>
+                        <button className="btn-icon" onClick={() => {setFiles("")}}>
+                            <Icon path={mdiClose} size={1}/>
+                        </button>
                     </div>
                     <br/>
                     <div className="toolbar-items">
                         <div className="toolbar-spacer"></div>
-                        <button className="btn-filled">{t("upload_page.upload")} <Icon path={mdiChevronRight} size={1}/></button>
+                        <button className="btn-filled">{t("upload_page.upload")}
+                            <Icon path={mdiChevronRight} size={1}/>
+                        </button>
                     </div>
                 </>
             )

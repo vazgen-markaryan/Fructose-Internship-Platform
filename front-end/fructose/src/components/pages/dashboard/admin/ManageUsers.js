@@ -95,14 +95,14 @@ const ManageUsers = () => {
             if (!users[currentUserIndex].is_approved) {
                 return (
                     <>
-                        <p className="m-0 text-orange">En approbation</p>
+                        <p className="m-0 text-orange">{t("manage_users_page.in_probation")}</p>
                         <Icon path={mdiClockOutline} size={0.8} className="text-orange"/>
                     </>
                 );
             } else if (users[currentUserIndex].is_approved) {
                 return (
                     <>
-                        <p className="m-0 text-green">Approuvé</p>
+                        <p className="m-0 text-green">{t("manage_users_page.approved")}</p>
                         <Icon path={mdiCheck} size={0.8} className="text-green"/>
                     </>
                 );
@@ -161,7 +161,7 @@ const ManageUsers = () => {
             return (
                 <div className={`dashboard-card ${(isSwitching) ? "disappearing" : ""}`} style={{width: "35%"}}>
                     <div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
-                        <h6 className="m-0">Détails de l'utilisateur</h6>
+                        <h6 className="m-0">{t("manage_users_page.user_details")}</h6>
                         <span className="toolbar-spacer"></span>
                         <button className="btn-icon" onClick={() => SwitchUser(null, false)}><Icon path={mdiClose}
                                                                                                    size={1}/></button>
@@ -185,52 +185,52 @@ const ManageUsers = () => {
                             {getStatutElement()}
                         </div>
                         <br/>
-                        <p>Details</p>
+                        <p>{t("manage_users_page.details")}</p>
                         <table style={{width: "100%"}}>
                             <tbody>
                                 <tr>
-                                    <td>Role</td>
-                                    <td style={{textAlign: "right"}}>{users[currentUserIndex].role}</td>
+                                    <td>{t("manage_users_page.role")}</td>
+                                    <td style={{textAlign: "right"}}>{t(`bd_role_traduction.${users[currentUserIndex].role}`)}</td>
                                 </tr>
                                 <tr>
-                                    <td>Département</td>
+                                    <td>{t("manage_users_page.department")}</td>
                                     <td style={{textAlign: "right"}}>{t("programme." + users[currentUserIndex].departementDTO.nom)}</td>
                                 </tr>
                                 <tr>
-                                    <td>Matricule</td>
+                                    <td>{t("manage_users_page.matricule")}</td>
                                     <td style={{textAlign: "right"}}>{users[currentUserIndex].matricule}</td>
                                 </tr>
                                 <tr>
-                                    <td>Compagnie</td>
+                                    <td>{t("manage_users_page.company")}</td>
                                     <td style={{textAlign: "right"}}>{users[currentUserIndex].companyName}</td>
                                 </tr>
                             </tbody>
                         </table>
                         <br/>
-                        <p>Actions</p>
+                        <p>{t("manage_users_page.actions")}</p>
                         <button className="btn-option" onClick={() => {
                             ApproveUserById(users[currentUserIndex].id)
                         }}>
                             <Icon path={mdiCheck} size={1}/>
-                            Accepter
+                            {t("manage_users_page.approve")}
                         </button>
                         <button className="btn-option" onClick={() => {
                             RejectUserById(users[currentUserIndex].id)
                         }}>
                             <Icon path={mdiClose} size={1}/>
-                            Refuser
+                            {t("manage_users_page.delete")}
                         </button>
                         {
                             /*
                             <button className="btn-option">
                                <Icon path={mdiAccountCancelOutline} size={1} />
-                               Expulser
+                               {t("manage_users_page.expel")}
                             </button>
                             */
                         }
                         <button className="btn-option">
                             <Icon path={mdiFolderAccountOutline} size={1}/>
-                            Vue Globale
+                            {t("manage_users_page.global_view")}
                         </button>
                     </section>
                 </div>
@@ -258,8 +258,10 @@ const ManageUsers = () => {
                 <div className="dashboard-card">
                     <section>
                         <h5>{t("manage_users_page.related_options")}</h5>
-                        <p><Icon path={mdiFileClockOutline} size={0.7}/> <Link>{t("manage_users_page.not_approved_cvs")}</Link></p>
-                        <p><Icon path={mdiBriefcaseClockOutline} size={0.7}/> <Link>{t("manage_users_page.not_approved_stage")}</Link>
+                        <p><Icon path={mdiFileClockOutline} size={0.7}/>
+                            <Link>{t("manage_users_page.not_approved_cvs")}</Link></p>
+                        <p><Icon path={mdiBriefcaseClockOutline} size={0.7}/>
+                            <Link>{t("manage_users_page.not_approved_stage")}</Link>
                         </p>
                     </section>
                 </div>

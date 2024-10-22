@@ -166,11 +166,18 @@ const DashboardHome = () => {
                                         <span className={"loading-placeholder"}></span>}
                                     </p>
                                 </li>
-                                {currentUser && currentUser.role !== "ADMIN" && currentUser.role !== "EMPLOYEUR" && (
-                                    <li><p>{t("dashboard_home_page.matricule")}: {currentUser.matricule}</p></li>
+                                {currentUser && currentUser.role === "ETUDIANT" && (
+                                    <li>
+                                        <p>{t("dashboard_home_page.studentID")}: {currentUser.matricule}</p>
+                                    </li>
+                                )}
+                                {currentUser && currentUser.role === "PROFESSEUR" && (
+                                    <li>
+                                        <p>{t("dashboard_home_page.employeID")}: {currentUser.matricule}</p>
+                                    </li>
                                 )}
                                 <li>
-                                    <p>{t("dashboard_home_page.role")}: {(currentUser != null) ? currentUser.role :
+                                    <p>{t("dashboard_home_page.role")}: {(currentUser != null) ? t(`bd_role_traduction.${currentUser.role}`) :
                                         <span className={"loading-placeholder"}></span>}
                                     </p>
                                 </li>

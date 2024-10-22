@@ -219,7 +219,8 @@
         "user_info": "Informations sur l'utilisateur",
         "full_name": "Nom complet",
         "email": "Courriel",
-        "matricule": "Numéro d'étudiant/employé",
+        "studentID": "Numéro d'étudiant",
+        "employeID": "Numéro d'employé",
         "role": "Rôle",
         "user_management": "Gestion des utilisateurs",
         "not_approved_users": "Utilisateurs non approuvés"
@@ -245,5 +246,28 @@
 
     "manage_cv_page": {
         "my_cvs": "Mes Curiculums Vitae"
+    },
+
+    "manage_users_page": {
+        "not_approved_users": "Utilisateurs non approuvés",
+        "not_approved_cvs": "CVs non approuvés",
+        "not_approved_stage": "Offres de stage non approuvées",
+        "related_options": "Options associées",
+        "no_users_to_approve": "Aucun utilisateur à approuver",
+        "when_created": "Lorsqu'un utilisateur est créé, il apparaîtra ici",
+        "approve": "Approuver",
+        "approved": "Approuvé",
+        "delete": "Supprimer",
+        "expel": "Expulser",
+
+        "user_details": "Détails de l'utilisateur",
+        "details": "Détails",
+        "in_probation": "En attente d'approbation",
+        "role": "Rôle",
+        "department": "Département",
+        "matricule": "Matricule",
+        "company": "Entreprise",
+        "global_view": "Vue globale",
+        "actions": "Actions"
     }
 }

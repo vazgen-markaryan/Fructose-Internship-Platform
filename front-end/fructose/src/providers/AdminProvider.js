@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {createContext, useContext} from 'react';
 import {AuthContext} from "./AuthProvider";
 
 const AdminContext = createContext(undefined);
@@ -36,7 +36,6 @@ const AdminProvider = ({children}) => {
             },
         })
     };
-
 
     return (
         <AdminContext.Provider value={{GetUnapprovedUsers, ApproveUser, RejectUser}}>

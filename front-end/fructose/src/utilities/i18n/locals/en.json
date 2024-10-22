@@ -104,14 +104,14 @@
     "information_etudiant_page": {
         "information": "School Information",
         "description": "Enter your matriculation number defined by the establishment as well as the study program attended.",
-        "matricule": "Student number",
+        "matricule": "Student ID",
         "program": "Program",
         "continue": "Continue",
 
         "error": {
-            "matricule": "Student number must have 7 digits",
+            "matricule": "Student ID must have 7 digits",
             "department": "No Department is selected",
-            "matricule_taken": "Student number is already taken"
+            "matricule_taken": "Student ID is already taken"
         }
     },
 
@@ -219,7 +219,8 @@
         "user_info": "User Information",
         "full_name": "Full Name",
         "email": "Email",
-        "matricule": "Student/Employee Number",
+        "studentID": "Student ID",
+        "employeID": "Employee ID",
         "role": "Role",
         "user_management": "User Management",
         "not_approved_users": "Not approved users"
@@ -256,6 +257,17 @@
         "when_created": "When a user is created, they will appear here",
         "approve": "Approve",
         "approved": "Approved",
-        "delete": "Delete"
+        "delete": "Delete",
+        "expel": "Expel",
+
+        "user_details": "User details",
+        "details": "Details",
+        "in_probation": "Waiting for approval",
+        "role": "Role",
+        "department": "Department",
+        "matricule": "Student/Employee ID",
+        "company": "Company",
+        "global_view": "Global view",
+        "actions": "Actions"
     }
 }

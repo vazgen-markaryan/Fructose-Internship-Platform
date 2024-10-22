@@ -7,4 +7,4 @@ const PrivateRoute = ({element: Component}) => {
     return isSignedIn() ? Component : <Navigate to="/connexion"/>;
 };
 
-export { PrivateRoute };
+export {PrivateRoute};

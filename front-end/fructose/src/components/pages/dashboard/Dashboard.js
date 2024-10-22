@@ -28,7 +28,8 @@ const Dashboard = () => {
 
                     <AdminProvider>
                         <Routes>
-                            <Route path="/admin/manage-users" element={<RoleRoute element={<ManageUsers/>} roles={['ADMIN']}/>}/>
+                            <Route path="/admin/manage-users"
+                                   element={<RoleRoute element={<ManageUsers/>} roles={['ADMIN']}/>}/>
                         </Routes>
                     </AdminProvider>
                 </div>
