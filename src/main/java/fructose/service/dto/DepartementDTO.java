@@ -29,6 +29,9 @@ public class DepartementDTO {
 
     public static Departement toEntity(DepartementDTO departementDTO) {
         Departement departement = new Departement();
+        if (departementDTO == null) {
+            return null;
+        }
         departement.setId(departementDTO.getId());
         departement.setNom(departementDTO.getNom());
         return departement;
