@@ -4,6 +4,7 @@ import {useTranslation} from "react-i18next";
 import {mdiArrowLeft} from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../providers/AuthProvider";
+import {getDepartement} from "../../utilities/api/apiService";
 
 const CreerOffreStage = () => {
     const [offreStage, setOffreStage] = useState({
@@ -11,15 +12,15 @@ const CreerOffreStage = () => {
         poste: '',
         description: '',
         compagnie: '',
-        programmeEtude: '',
+        departementDTO: '',
         tauxHoraire: 0.0,
         typeEmploi: '',
         adresse: '',
         modaliteTravail: '',
         dateDebut: new Date(),
         dateFin: new Date(),
-        nombreHeuresSemaine: 0,
-        nombrePostes: 0,
+        nombreHeuresSemaine: 1,
+        nombrePostes: 1,
         dateLimiteCandidature: new Date(),
     });
 
@@ -41,7 +42,7 @@ const CreerOffreStage = () => {
     const validateFields = () => {
         const {
             nom, poste, description,
-            compagnie, programmeEtude, tauxHoraire,
+            compagnie, departementDTO, tauxHoraire,
             typeEmploi, adresse, modaliteTravail,
             nombreHeuresSemaine, nombrePostes,
         } = offreStage;
@@ -74,8 +75,8 @@ const CreerOffreStage = () => {
         if (nombrePostes < 1) {
             errors.nombrePostes = t("creer_offre_stage_page.errors.nombre_postes");
         }
-        if (programmeEtude === "select" || programmeEtude === "") {
-            errors.programmeEtude = t("creer_offre_stage_page.errors.programme_etudes_select");
+        if (departementDTO === "select" || departementDTO === "") {
+            errors.departementDTO = t("creer_offre_stage_page.errors.programme_etudes_select");
         }
         if (typeEmploi === "select" || typeEmploi === "") {
             errors.typeEmploi = t("creer_offre_stage_page.errors.type_emploi_select");
@@ -115,8 +116,8 @@ const CreerOffreStage = () => {
             if (prevErrors.nombrePostes) {
                 updatedErrors.nombrePostes = t("creer_offre_stage_page.errors.nombre_postes");
             }
-            if (prevErrors.programmeEtude) {
-                updatedErrors.programmeEtude = t("creer_offre_stage_page.errors.programme_etudes_select");
+            if (prevErrors.departementDTO) {
+                updatedErrors.departementDTO = t("creer_offre_stage_page.errors.programme_etudes_select");
             }
             if (prevErrors.typeEmploi) {
                 updatedErrors.typeEmploi = t("creer_offre_stage_page.errors.type_emploi_select");
@@ -129,15 +130,19 @@ const CreerOffreStage = () => {
         });
     }, [t]);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const errorMessage = validateFields();
         if (Object.keys(errorMessage).length > 0) {
             setErrors(errorMessage);
         } else {
-            offreStage.dateDebut = offreStage.dateDebut.toISOString().split('T')[0];
-            offreStage.dateFin = offreStage.dateFin.toISOString().split('T')[0];
-            offreStage.dateLimiteCandidature = offreStage.dateLimiteCandidature.toISOString().split('T')[0];
+            offreStage.dateDebut = new Date(offreStage.dateDebut).toISOString().split('T')[0];
+            offreStage.dateFin = new Date(offreStage.dateFin).toISOString().split('T')[0];
+            offreStage.dateLimiteCandidature = new Date(offreStage.dateLimiteCandidature).toISOString().split('T')[0];
+            const departement = await getDepartement(offreStage.departementDTO);
+            if (departement) {
+                offreStage.departementDTO = departement;
+            }
             fetch('/creer-offre-stage', {
                 method: 'POST',
                 headers: {
@@ -148,16 +153,15 @@ const CreerOffreStage = () => {
             })
                 .then(response => {
                     if (!response.ok) {
-                        return response.text();
+                        return response.text().then(text => { throw new Error(text) });
                     }
                     return response;
                 }).then(() => {
                 navigate('/dashboard');
             }).catch(error => {
-                    setErrors('Erreur :' + error.message());
-                    console.error('Erreur:', error);
-                }
-            );
+                setErrors('Erreur :' + error.message);
+                console.error('Erreur:', error);
+            });
         }
     };
 
@@ -172,7 +176,8 @@ const CreerOffreStage = () => {
                     <br/>
                     <form onSubmit={handleSubmit}>
                         <label>{t("creer_offre_stage_page.nom")}</label>
-                        <input className={`${errors.nom ? "field-invalid" : ""}`} value={offreStage.nom} type="text" name="nom"
+                        <input className={`${errors.nom ? "field-invalid" : ""}`} value={offreStage.nom} type="text"
+                               name="nom"
                                onChange={handleInputChange} required/>
                         <p className={"field-invalid-text"}>{errors.nom}</p>
 
@@ -187,42 +192,65 @@ const CreerOffreStage = () => {
                         <p className={"field-invalid-text"}>{errors.description}</p>
 
                         <label>{t("creer_offre_stage_page.compagnie")}</label>
-                        <input className={`${errors.compagnie ? "field-invalid" : ""}`} value={offreStage.compagnie} type="text"
+                        <input className={`${errors.compagnie ? "field-invalid" : ""}`} value={offreStage.compagnie}
+                               type="text"
                                name="compagnie" onChange={handleInputChange} required/>
                         <p className={"field-invalid-text"}>{errors.compagnie}</p>
 
                         <label>{t("creer_offre_stage_page.address")}</label>
-                        <input className={`${errors.adresse ? "field-invalid" : ""}`} value={offreStage.adresse} type="text"
+                        <input className={`${errors.adresse ? "field-invalid" : ""}`} value={offreStage.adresse}
+                               type="text"
                                name="adresse" onChange={handleInputChange} required/>
                         <p className={"field-invalid-text"}>{errors.adresse}</p>
 
                         <label>{t("creer_offre_stage_page.taux_horaire")}</label>
-                        <input className={`${errors.tauxHoraire ? "field-invalid" : ""}`} value={offreStage.tauxHoraire}
-                               type="number" name="tauxHoraire" onChange={handleInputChange} required/>
+                        <input
+                            className={`${errors.tauxHoraire ? "field-invalid" : ""}`}
+                            value={offreStage.tauxHoraire}
+                            type="number"
+                            name="tauxHoraire"
+                            onChange={handleInputChange}
+                            required
+                            min="0"
+                        />
                         <p className={"field-invalid-text"}>{errors.tauxHoraire}</p>
 
                         <label>{t("creer_offre_stage_page.nombre_heures_semaine")}</label>
-                        <input className={`${errors.nombreHeuresSemaine ? "field-invalid" : ""}`}
-                               value={offreStage.nombreHeuresSemaine} type="number" name="nombreHeuresSemaine"
-                               onChange={handleInputChange} required/>
+                        <input
+                            className={`${errors.nombreHeuresSemaine ? "field-invalid" : ""}`}
+                            value={offreStage.nombreHeuresSemaine}
+                            type="number"
+                            name="nombreHeuresSemaine"
+                            onChange={handleInputChange}
+                            required
+                            min="1"
+                        />
                         <p className={"field-invalid-text"}>{errors.nombreHeuresSemaine}</p>
 
                         <label>{t("creer_offre_stage_page.nombre_postes")}</label>
-                        <input className={`${errors.nombrePostes ? "field-invalid" : ""}`} value={offreStage.nombrePostes}
-                               type="number" name="nombrePostes" onChange={handleInputChange} required/>
+                        <input
+                            className={`${errors.nombrePostes ? "field-invalid" : ""}`}
+                            value={offreStage.nombrePostes}
+                            type="number"
+                            name="nombrePostes"
+                            onChange={handleInputChange}
+                            required
+                            min="1"
+                        />
                         <p className={"field-invalid-text"}>{errors.nombrePostes}</p>
 
                         <label>{t("creer_offre_stage_page.type_emploi")}</label>
                         <select name="typeEmploi" onChange={handleInputChange} value={offreStage.typeEmploi} required>
                             <option value="select">{t("creer_offre_stage_page.modalites_travail.select")}</option>
                             <option value="virtuel">{t("creer_offre_stage_page.modalites_travail.teletravail")}</option>
-                            <option value="presentiel">{t("creer_offre_stage_page.modalites_travail.presentiel")}</option>
+                            <option
+                                value="presentiel">{t("creer_offre_stage_page.modalites_travail.presentiel")}</option>
                             <option value="hybride">{t("creer_offre_stage_page.modalites_travail.hybride")}</option>
                         </select>
                         <p className={"field-invalid-text"}>{errors.typeEmploi}</p>
 
                         <label>{t("creer_offre_stage_page.programme_etudes")}</label>
-                        <select name="programmeEtude" onChange={handleInputChange} value={offreStage.programmeEtude}
+                        <select name="departementDTO" onChange={handleInputChange} value={offreStage.departementDTO}
                                 required>
                             <option value="">{t("programme.select")}</option>
                             <option value="cinema">{t("programme.cinema")}</option>
@@ -262,7 +290,7 @@ const CreerOffreStage = () => {
                                 value="technologie_genie_physique">{t("programme.technologie_genie_physique")}</option>
                             <option value="tremplin_dec">{t("programme.tremplin_dec")}</option>
                         </select>
-                        <p className={"field-invalid-text"}>{errors.programmeEtude}</p>
+                        <p className={"field-invalid-text"}>{errors.departementDTO}</p>
 
                         <label>{t("creer_offre_stage_page.modalite_travail")}</label>
                         <select name="modaliteTravail" onChange={handleInputChange} value={offreStage.modaliteTravail}
@@ -280,9 +308,19 @@ const CreerOffreStage = () => {
                             type="date"
                             name="dateLimiteCandidature"
                             onChange={handleInputChange}
-                            value={offreStage.dateLimiteCandidature.toISOString().split('T')[0]}
+                            value={offreStage.dateLimiteCandidature instanceof Date && !isNaN(offreStage.dateLimiteCandidature.getTime())
+                                ? offreStage.dateLimiteCandidature.toISOString().split('T')[0]
+                                : ""}
                             required
                             min={new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]}
+                            onKeyDown={(e) => {
+                                const currentDate = new Date(e.target.value);
+                                const minDate = new Date(new Date().setDate(new Date().getDate() + 7));  // 7 days from today
+
+                                if (e.key === 'ArrowDown' && currentDate <= minDate) {
+                                    e.preventDefault(); // Prevent going below 7 days from today
+                                }
+                            }}
                         />
                         <p className={"field-invalid-text"}>{errors.dateLimiteCandidature}</p>
 
@@ -292,9 +330,21 @@ const CreerOffreStage = () => {
                             type="date"
                             name="dateDebut"
                             onChange={handleInputChange}
-                            value={offreStage.dateDebut.toISOString().split('T')[0]}
+                            value={offreStage.dateDebut instanceof Date && !isNaN(offreStage.dateDebut.getTime())
+                                ? offreStage.dateDebut.toISOString().split('T')[0]
+                                : ""}
                             required
-                            min={new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1)).toISOString().split('T')[0]}
+                            min={offreStage.dateLimiteCandidature instanceof Date && !isNaN(offreStage.dateLimiteCandidature.getTime())
+                                ? new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1)).toISOString().split('T')[0]
+                                : ""}
+                            onKeyDown={(e) => {
+                                const currentDate = new Date(e.target.value);
+                                const minDate = new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1));
+
+                                if (e.key === 'ArrowDown' && currentDate <= minDate) {
+                                    e.preventDefault(); // Prevent going below dateLimiteCandidature + 1 day
+                                }
+                            }}
                         />
                         <p className={"field-invalid-text"}>{errors.dateDebut}</p>
 
@@ -304,11 +354,24 @@ const CreerOffreStage = () => {
                             type="date"
                             name="dateFin"
                             onChange={handleInputChange}
-                            value={offreStage.dateFin.toISOString().split('T')[0]}
+                            value={offreStage.dateFin instanceof Date && !isNaN(offreStage.dateFin.getTime())
+                                ? offreStage.dateFin.toISOString().split('T')[0]
+                                : ""}
                             required
-                            min={new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1)).toISOString().split('T')[0]}
+                            min={offreStage.dateDebut instanceof Date && !isNaN(offreStage.dateDebut.getTime())
+                                ? new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1)).toISOString().split('T')[0]
+                                : ""}
+                            onKeyDown={(e) => {
+                                const currentDate = new Date(e.target.value);
+                                const minDate = new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1));
+
+                                if (e.key === 'ArrowDown' && currentDate <= minDate) {
+                                    e.preventDefault(); // Prevent going below dateDebut + 1 day
+                                }
+                            }}
                         />
                         <p className={"field-invalid-text"}>{errors.dateFin}</p>
+
 
                         <br/>
                         <br/>

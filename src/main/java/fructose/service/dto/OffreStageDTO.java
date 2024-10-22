@@ -37,6 +37,7 @@ public class OffreStageDTO {
     @Size(min = 3, max = 100, message = "Le nom de la compagnie doit contenir entre 3 et 100 caractères")
     private String compagnie;
 
+    @NotNull(message = "Le département ne peut pas être null")
     private DepartementDTO departementDTO;
 
     @NotNull(message = "Le taux horaire ne peut pas être null")
@@ -71,7 +72,6 @@ public class OffreStageDTO {
     @NotNull(message = "La date limite de candidature ne peut pas être null")
     private LocalDate dateLimiteCandidature;
 
-    @NotNull(message = "L'utilisateur ne peut pas être null")
     private UtilisateurDTO ownerDTO;
 
     public static OffreStageDTO toDTO(OffreStage offreStage) {

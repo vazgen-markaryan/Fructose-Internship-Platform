@@ -6,7 +6,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
+@ToString(includeFieldNames = true, callSuper = true)
 public class EmployeurDTO extends UtilisateurDTO {
 
     public static EmployeurDTO toDTO(Employeur employeur) {
