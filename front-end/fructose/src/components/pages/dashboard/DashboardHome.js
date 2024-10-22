@@ -1,6 +1,6 @@
-import React, {useContext} from "react";
-import {AuthContext} from "../../../providers/AuthProvider";
-import {Link} from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { Link } from "react-router-dom";
 import Icon from "@mdi/react";
 import {
     mdiBriefcasePlusOutline,
@@ -9,12 +9,29 @@ import {
     mdiFileDocumentOutline,
     mdiPlus
 } from "@mdi/js";
+import { CvContext } from "../../../providers/CvProvider";
 import {useTranslation} from "react-i18next";
 
 const DashboardHome = () => {
 
     const {t} = useTranslation();
-    const {currentUser} = useContext(AuthContext);
+    const { currentUser, currentToken } = useContext(AuthContext);
+    const { GetCvs } = useContext(CvContext);
+    const [cvs, setCvs] = useState([]);
+
+    useEffect(() => {
+        if (currentUser) {
+            (async function () {
+                try {
+                    const response = await GetCvs();
+                    const data = await response.text();
+                    setCvs(JSON.parse(data));
+                } catch (error) {
+                    console.log("error" + error);
+                }
+            })();
+        }
+    }, [currentUser]); // Modifier 'isUserInit' par 'currentUser'
 
     const GetOffreStageSection = () => {
         if (currentUser != null) {
@@ -42,7 +59,7 @@ const DashboardHome = () => {
                             </div>
                         </div>
                     </section>
-                )
+                );
             } else if (currentUser.role === "EMPLOYEUR") {
                 return (
                     <section>
@@ -70,10 +87,10 @@ const DashboardHome = () => {
                             </div>
                         </div>
                     </section>
-                )
+                );
             }
         }
-    }
+    };
 
     return (
         <>
@@ -81,8 +98,8 @@ const DashboardHome = () => {
                 <h1>Accueil</h1>
                 <h5>{t("dashboard_home_page.hello")} {(currentUser != null) ? currentUser.fullName : <div className={"loading-placeholder"}></div>}</h5>
             </div>
-            <div style={{"display": "flex", "gap": "20px"}}>
-                <div style={{"width": "70%"}}>
+            <div style={{ "display": "flex", "gap": "20px" }}>
+                <div style={{ "width": "70%" }}>
                     <div className="dashboard-card">
                         {GetOffreStageSection()}
                         <section>
@@ -95,27 +112,30 @@ const DashboardHome = () => {
                                     <button>{t("dashboard_home_page.add_cv")} <Icon path={mdiPlus} size={1}/></button>
                                 </Link>
                             </div>
-                            <div style={{"padding": "10px 0"}}>
-                                <div style={{
-                                    "width": "400px",
-                                    "display": "flex",
-                                    "alignItems": "center",
-                                    "backgroundColor": "#eee",
-                                    "borderRadius": "5px",
-                                    "gap": "5px",
-                                    "padding": "10px"
-                                }}>
-                                    <Icon path={mdiFileDocumentOutline} size={1}/>
-                                    <p className="m-0">{t("dashboard_home_page.no_cv")}</p>
-                                </div>
+                            <div style={{ "padding": "10px 0" }}>
+                                {cvs.length === 0 ? (
+                                    <div style={{ "width": "400px", "display": "flex", "alignItems": "center", "backgroundColor": "#eee", "borderRadius": "5px", "gap": "5px", "padding": "10px" }}>
+                                        <Icon path={mdiFileDocumentOutline} size={1} />
+                                        <p className="m-0">{t("dashboard_home_page.no_cv")}</p>
+                                    </div>
+                                ) : (
+                                    <div style={{ "width": "400px", "backgroundColor": "#eee", "borderRadius": "5px", "padding": "10px" }}>
+                                        {cvs.map((cv, index) => (
+                                            <div key={index} style={{ "display": "flex", "alignItems": "center", "gap": "5px" }}>
+                                                <Icon path={mdiFileDocumentOutline} size={1} />
+                                                <p className="m-0">{cv.filename}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </section>
-                        <div style={{"height": "520px"}}>
+                        <div style={{ "height": "520px" }}>
 
                         </div>
                     </div>
                 </div>
-                <div style={{"width": "30%"}}>
+                <div style={{ "width": "30%" }}>
                     <div className="dashboard-card">
                         <section>
                             <h4>{t("dashboard_home_page.user_info")}</h4>
@@ -132,6 +152,7 @@ const DashboardHome = () => {
                 </div>
             </div>
         </>
-    )
-}
-export default DashboardHome
+    );
+};
+
+export default DashboardHome;

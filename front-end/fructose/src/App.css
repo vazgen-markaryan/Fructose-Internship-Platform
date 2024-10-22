@@ -9,6 +9,8 @@ body {
 
 :root {
     --color-primay: #ff006c;
+    --color-primay-transparent: rgba(255, 0, 108, 0.05);
+
     --border-radius: 5px
 }
 
@@ -31,22 +33,22 @@ h1 {
 }
 
 h2 {
-    font-weight: 700;
+    font-weight: 500;
     font-size: 42px;
 }
 
 h3 {
-    font-weight: 700;
-    font-size: 42px;
+    font-weight: 400;
+    font-size: 36px;
 }
 
 h4 {
-    font-weight: 500;
+    font-weight: 400;
     font-size: 24px;
 }
 
 h5 {
-    font-weight: 500;
+    font-weight: 400;
     font-size: 20px;
 }
 
@@ -61,6 +63,11 @@ p {
     line-height: 20px;
 }
 
+hr{
+    border: none;
+    border-top: 1px solid grey;
+    margin: 15px 8px
+}
 
 .input-container {
     padding: 7px 0;
@@ -161,7 +168,24 @@ button > * {
     vertical-align: middle;
 }
 
-/*Design du input*/
+button.btn-option, a.btn-option {
+    text-decoration: none;
+    min-height: 42px;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 5px;
+    padding: 0 10px;
+}
+
+button.btn-option:hover {
+    background-color: rgba(128,128,128,0.2);
+}
+
+/*
+  Design du input
+ */
 
 input[type="text"], input[type="password"], input[type="email"], input[type="date"], input[type="number"], textarea, select {
     background-color: transparent;
@@ -347,6 +371,7 @@ header {
     height: 100%;
 }
 
+
 .bg-auth {
     position: absolute;
     overflow: hidden;
@@ -460,7 +485,8 @@ header {
     margin: auto;
     box-sizing: border-box;
     background-color: rgb(240, 246, 246);
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 .dashboard-layout > .dashboard-content{
@@ -504,6 +530,8 @@ header {
     align-items: center;
     padding: 32px 0px;
     gap: 12px;
+    position: sticky;
+    top: 0px;
 }
 
 .dashboard-card-toolbar h1{
@@ -522,7 +550,25 @@ header {
     margin: 0 0 10px 0;
 }
 
+.dashboard-placeholder-card{
+    width: 100%;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eee;
+    border-radius: var(--border-radius);
+}
 
+.dashboard-placeholder-card-horizontal{
+    width: 100%;
+    height: 120px;
+    justify-content: normal;
+}
+
+.dashboard-placeholder-card > div{
+    text-align: center;
+}
 
 
 
@@ -661,3 +707,39 @@ section {
     }
 }
 
+
+.menu-list{
+    box-sizing: border-box;
+}
+
+.menu-list-item{
+    border: 1px solid #8080805c;
+    border-bottom: none;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    min-height: 58px;
+}
+
+.menu-list-item:first-of-type{
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.menu-list-item:last-of-type{
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    border-bottom: 1px solid #8080805c;
+}
+
+.menu-list-item:only-of-type{
+    border-radius: var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius);
+}
+
+.menu-list-item.menu-list-item-selected{
+    border-color: var(--color-primay);
+    background-color: var(--color-primay-transparent);
+}
+
+.menu-list-item.menu-list-item-selected + .menu-list-item{
+    border-top-color: var(--color-primay);
+}
