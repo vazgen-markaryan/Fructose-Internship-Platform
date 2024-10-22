@@ -129,34 +129,36 @@ const DashboardHome = () => {
                 <div style={{ "width": "70%" }}>
                     <div className="dashboard-card">
                         {GetOffreStageSection()}
-                        <section>
-                            <div className={"toolbar-items"}>
-                                <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.portfolio")}</h4>
-                                <Link to="/dashboard/manage-cvs">
-                                    <button>{t("dashboard_home_page.manage")} <Icon path={mdiChevronRight} size={1}/></button>
-                                </Link>
-                                <Link to="/dashboard/upload-cv">
-                                    <button>{t("dashboard_home_page.add_cv")} <Icon path={mdiPlus} size={1}/></button>
-                                </Link>
-                            </div>
-                            <div style={{ "padding": "10px 0" }}>
-                                {cvs.length === 0 ? (
-                                    <div style={{ "width": "400px", "display": "flex", "alignItems": "center", "backgroundColor": "#eee", "borderRadius": "5px", "gap": "5px", "padding": "10px" }}>
-                                        <Icon path={mdiFileDocumentOutline} size={1} />
-                                        <p className="m-0">{t("dashboard_home_page.no_cv")}</p>
-                                    </div>
-                                ) : (
-                                    <div style={{ "width": "400px", "backgroundColor": "#eee", "borderRadius": "5px", "padding": "10px" }}>
-                                        {cvs.map((cv, index) => (
-                                            <div key={index} style={{ "display": "flex", "alignItems": "center", "gap": "5px" }}>
-                                                <Icon path={mdiFileDocumentOutline} size={1} />
-                                                <p className="m-0">{cv.filename}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        </section>
+                        {currentUser && currentUser.role === "ETUDIANT" && (
+                            <section>
+                                <div className={"toolbar-items"}>
+                                    <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.portfolio")}</h4>
+                                    <Link to="/dashboard/manage-cvs">
+                                        <button>{t("dashboard_home_page.manage")} <Icon path={mdiChevronRight} size={1}/></button>
+                                    </Link>
+                                    <Link to="/dashboard/upload-cv">
+                                        <button>{t("dashboard_home_page.add_cv")} <Icon path={mdiPlus} size={1}/></button>
+                                    </Link>
+                                </div>
+                                <div style={{ "padding": "10px 0" }}>
+                                    {cvs.length === 0 ? (
+                                        <div style={{ "width": "400px", "display": "flex", "alignItems": "center", "backgroundColor": "#eee", "borderRadius": "5px", "gap": "5px", "padding": "10px" }}>
+                                            <Icon path={mdiFileDocumentOutline} size={1} />
+                                            <p className="m-0">{t("dashboard_home_page.no_cv")}</p>
+                                        </div>
+                                    ) : (
+                                        <div style={{ "width": "400px", "backgroundColor": "#eee", "borderRadius": "5px", "padding": "10px" }}>
+                                            {cvs.map((cv, index) => (
+                                                <div key={index} style={{ "display": "flex", "alignItems": "center", "gap": "5px" }}>
+                                                    <Icon path={mdiFileDocumentOutline} size={1} />
+                                                    <p className="m-0">{cv.filename}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </section>
+                        )}
                         <div style={{ "height": "520px" }}>
 
                         </div>
