@@ -3,6 +3,7 @@ import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import Icon from "@mdi/react";
 import {useTranslation} from "react-i18next";
 import {isEmailTaken} from "../../../utilities/api/apiService";
+import Swal from "sweetalert2";
 
 const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
 
@@ -17,6 +18,12 @@ const InformationsBase = ({utilisateur, handleChange, switchStep}) => {
         const emailTaken = await isEmailTaken(utilisateur.email);
         if (emailTaken) {
             errorMessage.email = t("information_base_page.error.email_taken");
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: t("information_base_page.error.email_taken"),
+                showConfirmButton: true
+            });
         }
         if (Object.keys(errorMessage).length > 0) {
             setErrors(errorMessage);

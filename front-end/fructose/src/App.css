@@ -288,6 +288,7 @@ header {
     border: 1px solid grey;
     border-radius: var(--border-radius);
     z-index: 10;
+    color: black;
 }
 
 .header-user-menu-profile {

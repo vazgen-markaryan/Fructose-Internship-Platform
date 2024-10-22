@@ -71,7 +71,13 @@
         "security": "Security",
         "pasword": "Create your password",
         "finalization": "Finalization",
-        "dashboard": "Access the dashboard"
+        "dashboard": "Access the dashboard",
+        "success": "Success",
+        "success_message": "Your account has been created successfully. You will be redirected to the login page in a few seconds.",
+
+        "error": {
+            "login_redirect": "An error occurred while redirecting to the login page. Please try again by yourself."
+        }
     },
 
     "selection_role_page": {
