@@ -12,10 +12,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 
 import java.util.stream.Collectors;
@@ -54,6 +51,16 @@ public class OffreStageController {
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la création de l'offre de stage.");
             }
+        } catch (Exception e) {
+            logger.error("Une erreur inattendue s'est produite", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
+        }
+    }
+
+    @GetMapping("/get-offre-stage")
+    public ResponseEntity<?> getOffreStage() {
+        try {
+            return ResponseEntity.ok(offreStageService.getOffresStage());
         } catch (Exception e) {
             logger.error("Une erreur inattendue s'est produite", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");

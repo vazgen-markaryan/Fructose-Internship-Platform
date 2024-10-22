@@ -122,7 +122,8 @@ public class OffreStageService {
                 }
             }
             case EMPLOYEUR -> {
-                offresStage = OffreStageDTO.toDTOs(offreStageRepository.findByEmployeurEmail(utilisateur.getEmail()));
+                offresStage = OffreStageDTO.toDTOs(offreStageRepository.getAllByOwnerId(utilisateur.getId()));
+                System.out.println(offresStage);
                 if (offresStage.isEmpty()) {
                     throw new IllegalArgumentException("Aucune offre de stage trouvée pour l'employeur avec l'email: " + utilisateur.getEmail());
                 }

@@ -11,8 +11,8 @@ import java.util.List;
 
 @Repository
 public interface OffreStageRepository extends JpaRepository<OffreStage, Long> {
-    @Query("SELECT o FROM OffreStage o WHERE o.owner.credentials.email = ?1")
-    List<OffreStage> findByEmployeurEmail(String employeurEmail);
+    @Query("SELECT o FROM OffreStage o WHERE o.owner.id = ?1")
+    List<OffreStage> getAllByOwnerId(Long ownerId);
     @Query("SELECT o FROM OffreStage o WHERE o.departement = ?1")
     List<OffreStage> findByUserDepartement(Long departementId);
 }

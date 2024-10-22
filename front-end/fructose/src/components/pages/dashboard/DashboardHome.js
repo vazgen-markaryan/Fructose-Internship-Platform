@@ -10,6 +10,7 @@ import {
     mdiPlus
 } from "@mdi/js";
 import { CvContext } from "../../../providers/CvProvider";
+import { OffreStageContext } from "../../../providers/OffreStageProvider";
 import {useTranslation} from "react-i18next";
 
 const DashboardHome = () => {
@@ -18,16 +19,29 @@ const DashboardHome = () => {
     const { currentUser, currentToken } = useContext(AuthContext);
     const { GetCvs } = useContext(CvContext);
     const [cvs, setCvs] = useState([]);
+    const { GetOffresStage } = useContext(OffreStageContext);
+    const [offresStage, setOffresStage] = useState([]);
 
     useEffect(() => {
         if (currentUser) {
             (async function () {
-                try {
-                    const response = await GetCvs();
-                    const data = await response.text();
-                    setCvs(JSON.parse(data));
-                } catch (error) {
-                    console.log("error" + error);
+                if (currentUser.role === "ETUDIANT") {
+                    try {
+                        const response = await GetCvs();
+                        const data = await response.text();
+                        setCvs(JSON.parse(data));
+                    } catch (error) {
+                        console.log("error" + error);
+                    }
+                }
+                if (currentUser.role === "EMPLOYEUR") {
+                    try {
+                        const response = await GetOffresStage();
+                        const data = await response.text();
+                        setOffresStage(JSON.parse(data));
+                    } catch (error) {
+                        console.log("error" + error);
+                    }
                 }
             })();
         }
@@ -81,8 +95,21 @@ const DashboardHome = () => {
                                 "borderRadius": "5px"
                             }}>
                                 <div style={{"textAlign": "center"}}>
-                                    <Icon path={mdiBriefcaseRemoveOutline} size={1}/>
-                                    <p>{t("dashboard_home_page.no_offers")}</p>
+                                    {offresStage.length === 0 ? (
+                                        <>
+                                            <Icon path={mdiBriefcaseRemoveOutline} size={1}/>
+                                            <p>{t("dashboard_home_page.no_offers")}</p>
+                                        </>
+                                    ) : (
+                                        <div style={{"display": "flex", "flexDirection": "column", "gap": "5px"}}>
+                                            {offresStage.map((offre, index) => (
+                                                <div key={index} style={{"display": "flex", "alignItems": "center", "gap": "5px"}}>
+                                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                                                    <p className="m-0">{offre.nom}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

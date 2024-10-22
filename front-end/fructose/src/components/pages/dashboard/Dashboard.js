@@ -8,6 +8,7 @@ import ViewCV from "./cv/View";
 import UploadCV from "./cv/Upload";
 import {CvProvider} from "../../../providers/CvProvider";
 import {OffreStageProvider} from "../../../providers/OffreStageProvider";
+import ViewOffreStage from "./offre-stage/ViewOffreStage";
 
 const Dashboard = () => {
     return(
@@ -20,14 +21,18 @@ const Dashboard = () => {
                 <div className="dashboard-content">
 
                     <CvProvider>
-                        <Routes>
-                            <Route path="/manage-cvs" element={<ManageCVs />} />
-                            <Route path="/upload-cv" element={<UploadCV />} />
-                            <Route path="/view-cv" element={<ViewCV />} />
-                            <Route path="/" element={<DashboardHome />} />
-                        </Routes>
+                        <OffreStageProvider>
+                            <Routes>
+                                <Route path="/manage-cvs" element={<ManageCVs />} />
+                                <Route path="/view-offres-stage" element={<ViewOffreStage />} />
+                                <Route path="/upload-cv" element={<UploadCV />} />
+                                <Route path="/view-cv" element={<ViewCV />} />
+                                <Route path="/" element={<DashboardHome />} />
+                            </Routes>
+                        </OffreStageProvider>
                     </CvProvider>
 
+                    // A changer pour le mettre dans OffreStageProvider
                     <Routes>
                         <Route path="/creer-offre-stage" element={<CreerOffreStage />} />
                     </Routes>

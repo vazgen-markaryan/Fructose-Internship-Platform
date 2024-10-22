@@ -5,11 +5,22 @@ const OffreStageContext = createContext(undefined);
 
 const OffreStageProvider = ({ children }) => {
 
-    const { currentToken } = useContext(AuthContext)
+    const { currentToken } = useContext(AuthContext);
+
+    const GetOffresStage = async () => {
+        return fetch("get-offre-stage", {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': currentToken
+            },
+        })
+    };
+
 
 
     return (
-        <OffreStageContext.Provider value={{}}>
+        <OffreStageContext.Provider value={{ GetOffresStage }}>
             {children}
         </OffreStageContext.Provider>
     );
