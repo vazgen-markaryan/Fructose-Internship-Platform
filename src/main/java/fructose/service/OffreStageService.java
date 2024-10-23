@@ -69,6 +69,9 @@ public class OffreStageService {
 
     public void updateOffreStage(OffreStageDTO offreStageDTO) {
         // Step 1: Check if the OffreStage exists
+        if (offreStageDTO == null) {
+            throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
+        }
         if (!offreStageRepository.existsById(offreStageDTO.getId())) {
             throw new IllegalArgumentException("L'offre de stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être mis à jour");
         }
@@ -79,7 +82,7 @@ public class OffreStageService {
 
         // Step 3: Fetch the Departement and Utilisateur (owner) from their repositories if needed
         Departement departement = departementRepository.findById(offreStageDTO.getDepartementDTO().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Departement not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Le département ne peut pas être nul"));
 
         Utilisateur owner = employeurRepository.findById(offreStageDTO.getOwnerDTO().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Owner not found"));
@@ -125,9 +128,6 @@ public class OffreStageService {
         Set<ConstraintViolation<OffreStageDTO>> violations = validator.validate(offreStageDTO);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
-        }
-        if (offreStageDTO.getDepartementDTO() == null) {
-            throw new IllegalArgumentException("Le département ne peut pas être nul");
         }
         if (offreStageDTO.getDateLimiteCandidature().isBefore(LocalDate.now().plusDays(7))) {
             throw new IllegalArgumentException("La date limite de candidature doit être au moins 7 jours après aujourd'hui");
