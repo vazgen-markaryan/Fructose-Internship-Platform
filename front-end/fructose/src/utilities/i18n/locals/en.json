@@ -264,6 +264,17 @@
     "date_debut": "Start Date",
     "date_fin": "End Date",
     "modify_offre_stage": "Modify Internship Offer",
+    "modalites_travail": {
+      "select": "Select a work modality",
+      "teletravail": "Remote work",
+      "presentiel": "On-site",
+      "hybride": "Hybrid"
+    },
+    "types_emploi": {
+      "select": "Select a type of employment",
+      "temps_partiel": "Part-time",
+      "temps_plein": "Full-time"
+    },
     "errors": {
       "nom": "Name must be between 3 and 100 characters.",
       "poste": "Position must be between 3 and 100 characters.",
@@ -280,17 +291,6 @@
       "date_debut": "Please select a valid start date.",
       "date_fin": "Please select a valid end date."
     }
-  },
-  "modalite_travail": {
-    "select": "Select a work modality",
-    "teletravail": "Remote work",
-    "presentiel": "On-site",
-    "hybride": "Hybrid"
-  },
-  "type_emploi": {
-    "select": "Select a type of employment",
-    "temps_partiel": "Part-time",
-    "temps_plein": "Full-time"
   },
   "manage_offre_stage": {
     "titles": {

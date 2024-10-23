@@ -264,6 +264,17 @@
     "date_debut": "Date de début",
     "date_fin": "Date de fin",
     "modify_offre_stage": "Modifier l'offre de stage",
+    "modalites_travail": {
+      "select": "Sélectionner une modalité de travail",
+      "teletravail": "Télétravail",
+      "presentiel": "Présentiel",
+      "hybride": "Hybride"
+    },
+    "types_emploi": {
+      "select": "Sélectionner un type d'emploi",
+      "temps_partiel": "Temps partiel",
+      "temps_plein": "Temps plein"
+    },
     "errors": {
       "nom": "Le nom doit contenir entre 3 et 100 caractères.",
       "poste": "Le poste doit contenir entre 3 et 100 caractères.",
@@ -285,17 +296,6 @@
     "titles": {
       "offre_stages": "Offres de stage",
       "details": "Détails"
-    },
-    "modalite_travail": {
-      "select": "Select a work modality",
-      "teletravail": "Remote work",
-      "presentiel": "On-site",
-      "hybride": "Hybrid"
-    },
-    "type_emploi": {
-      "select": "Select a type of employment",
-      "temps_partiel": "Part-time",
-      "temps_plein": "Full-time"
     },
     "buttons": {
       "add": "Ajouter",
