@@ -1,11 +1,10 @@
 {
-    "bd_role_traduction" : {
+    "bd_role_traduction": {
         "ETUDIANT": "Student",
         "PROFESSEUR": "Professor",
         "EMPLOYEUR": "Employer",
         "ADMIN": "Administrator"
     },
-
     "programme": {
         "select": "Select a program",
         "cinema": "Cinema",
@@ -32,25 +31,21 @@
         "technologie_genie_physique": "Physical Engineering Technology",
         "tremplin_dec": "DEC Transition Program"
     },
-
     "header_main_page": {
         "signup": "Sign up",
         "disconnect": "Disconnect",
         "notifications": "Notifications"
     },
-
     "home_page": {
         "carriere": "Your career",
         "commence": "begins ",
         "ici": "here"
     },
-
     "connexion_page": {
         "connexion": "Log in",
         "email": "Email",
         "password": "Password",
         "continue": "Continue",
-
         "error": {
             "email": "Email is required",
             "password": "Password is required",
@@ -60,7 +55,6 @@
             "unknown_error": "Unknown error occurred. Please try again"
         }
     },
-
     "creer_utilisateur_page": {
         "creer_compte": "Create an account",
         "carriere": "Starting your career has never been easier",
@@ -74,12 +68,10 @@
         "dashboard": "Access the dashboard",
         "success": "Success",
         "success_message": "Your account has been created successfully. You will be redirected to the login page in a few seconds.",
-
         "error": {
             "login_redirect": "An error occurred while redirecting to the login page. Please try again by yourself."
         }
     },
-
     "selection_role_page": {
         "who_are_you": "Who are you?",
         "description": "Select the user type that suits you",
@@ -88,7 +80,6 @@
         "employer": "Employer",
         "continue": "Continue"
     },
-
     "information_base_page": {
         "information": "Basic information",
         "description": "Enter your First Name, Last Name, and the Email address you will use to log in to the platform from now on.",
@@ -96,7 +87,6 @@
         "last_name": "Last name",
         "email": "Email",
         "continue": "Continue",
-
         "error": {
             "first_name_short": "Your first name must contain at least 2 characters.",
             "first_name_letters_only": "Your first name must contain only letters and spaces.",
@@ -106,21 +96,18 @@
             "email_taken": "Email address is already taken"
         }
     },
-
     "information_etudiant_page": {
         "information": "School Information",
         "description": "Enter your matriculation number defined by the establishment as well as the study program attended.",
         "matricule": "Student ID",
         "program": "Program",
         "continue": "Continue",
-
         "error": {
             "matricule": "Student ID must have 7 digits",
             "department": "No Department is selected",
             "matricule_taken": "Student ID is already taken"
         }
     },
-
     "mot_de_passe_page": {
         "title": "Create your password",
         "description": "A complex password is less likely to be guessed by someone else",
@@ -128,25 +115,21 @@
         "password": "Password",
         "confirm_password": "Confirm password",
         "submit": "Submit",
-
         "error": {
             "password_wrong": "Password must contain at least one uppercase letter, one number and one special character",
             "password_doesnt_match": "Passwords do not match."
         }
     },
-
     "information_employeur_page": {
         "title": "Employer information",
         "description": "Enter the required information about the company offering the internships",
         "company_name": "Company name",
         "continue": "Continue",
-
         "error": {
             "company_name_invalid": "The company name must contain only letters and spaces",
             "company_name_lenght": "Company name must be between 3 and 100 characters"
         }
     },
-
     "information_professeur_page": {
         "title": "Information about your employment",
         "description": "Enter your employee number defined by the establishment as well as the department of belonging",
@@ -154,14 +137,12 @@
         "department": "Department",
         "select_department": "Select a department",
         "continue": "Continue",
-
         "error": {
             "employee_number": "Employee number must have 7 digits",
             "department": "No Department is selected",
             "employee_number_taken": "Employee number is already taken"
         }
     },
-
     "creer_offre_stage_page": {
         "title": "Create an internship offer",
         "nom": "Name",
@@ -180,20 +161,17 @@
         "date_fin": "End date",
         "creer_offre_stage": "Create the internship offer",
         "retour": "Return to home",
-
         "types_emploi": {
             "select": "Select a type of employment",
             "temps_partiel": "Part-time",
             "temps_plein": "Full-time"
         },
-
         "modalites_travail": {
             "select": "Select a work modality",
             "teletravail": "Remote work",
             "presentiel": "On-site",
             "hybride": "Hybrid"
         },
-
         "errors": {
             "nom": "The name must be between 3 and 100 characters",
             "poste": "The position must be between 3 and 100 characters",
@@ -209,7 +187,6 @@
             "type_emploi_select": "The type of employment must be selected"
         }
     },
-
     "dashboard_home_page": {
         "home": "Home",
         "offer": "Internship Offers",
@@ -231,16 +208,13 @@
         "user_management": "User Management",
         "not_approved_users": "Not approved users"
     },
-
     "pdf_view_page": {
         "error": "An unknown error occurred"
     },
-
     "view_page": {
         "home": "Home",
         "hello": "Hello"
     },
-
     "upload_page": {
         "drag_drop": "Drag and drop your CV here",
         "or": "OR",
@@ -249,11 +223,9 @@
         "upload": "Upload",
         "upload_cv": "Upload your CV"
     },
-
     "manage_cv_page": {
         "my_cvs": "My Curiculums Vitae"
     },
-
     "manage_users_page": {
         "not_approved_users": "Not approved users",
         "not_approved_cvs": "Not approved CVs",
@@ -265,7 +237,6 @@
         "approved": "Approved",
         "delete": "Delete",
         "expel": "Expel",
-
         "user_details": "User details",
         "details": "Details",
         "in_probation": "Waiting for approval",
@@ -276,7 +247,6 @@
         "global_view": "Global view",
         "actions": "Actions"
     },
-
     "manage_cv": {
         "upload_error": "Error uploading CV",
         "status": {
@@ -299,7 +269,6 @@
             "preview": "Preview"
         }
     },
-
     "upload_cv": {
         "title": "Upload a CV",
         "drag_drop": "Drag your CV here",
@@ -311,18 +280,18 @@
         "upload_error": "An error occurred during the upload.",
         "error_file_size_exceeded": "The file size exceeds the allowed limit of {{maxSize}} KB."
     },
-  "manage_offre_stage": {
-    "titles": {
-      "offre_stages": "Internship Offers",
-      "details": "Details"
-    },
-    "buttons": {
-      "add": "Add",
-      "modify": "Modify",
-      "delete": "Delete"
-    },
-    "messages": {
-      "no_offre_stages": "No internship offers to display at the moment"
+    "manage_offre_stage": {
+        "titles": {
+            "offre_stages": "Internship Offers",
+            "details": "Details"
+        },
+        "buttons": {
+            "add": "Add",
+            "modify": "Modify",
+            "delete": "Delete"
+        },
+        "messages": {
+            "no_offre_stages": "No internship offers to display at the moment"
+        }
     }
-  }
 }
