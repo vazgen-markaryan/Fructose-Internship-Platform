@@ -46,9 +46,7 @@ public class JwtTokenProvider {
     public void validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token);
-        } catch (SecurityException ex) {
-            throw new InvalidJwtTokenException(HttpStatus.BAD_REQUEST, "Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
+        } catch (SecurityException | MalformedJwtException ex) {
             throw new InvalidJwtTokenException(HttpStatus.BAD_REQUEST, "Invalid JWT token");
         } catch (ExpiredJwtException ex) {
             throw new InvalidJwtTokenException(HttpStatus.BAD_REQUEST, "Expired JWT token");

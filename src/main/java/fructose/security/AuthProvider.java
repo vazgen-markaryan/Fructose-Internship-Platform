@@ -23,14 +23,23 @@ public class AuthProvider implements AuthenticationProvider {
         try {
             Utilisateur user = loadUserByEmail(authentication.getPrincipal().toString());
 
-            validateAuthentication(authentication, user);
+            if (user == null) {
+                throw new AuthenticationException(HttpStatus.FORBIDDEN, "Courriel invalide");
+            }
+
+            if (!passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword())) {
+                throw new AuthenticationException(HttpStatus.FORBIDDEN, "Mot de passe invalide");
+            }
+
             return new UsernamePasswordAuthenticationToken(
                     user.getEmail(),
                     user.getPassword(),
                     user.getAuthorities()
             );
+        } catch (AuthenticationException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AuthenticationException(HttpStatus.FORBIDDEN, "Courriel ou mot de passe invalide");
+            throw new AuthenticationException(HttpStatus.FORBIDDEN, "Erreur d'authentification");
         }
     }
 

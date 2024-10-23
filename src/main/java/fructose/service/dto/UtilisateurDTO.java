@@ -19,6 +19,7 @@ public class UtilisateurDTO {
     private Role role;
     private DepartementDTO departementDTO;
     private String companyName;
+    private Boolean isApproved;
 
     public static Utilisateur toEntity(UtilisateurDTO utilisateur_dto) {
         Utilisateur utilisateur = switch (utilisateur_dto.getRole()) {
@@ -34,7 +35,7 @@ public class UtilisateurDTO {
         utilisateur.setDepartement(DepartementDTO.toEntity(utilisateur_dto.getDepartementDTO()));
         utilisateur.setCompanyName(utilisateur_dto.getCompanyName());
         utilisateur.setCredentials(Credentials.builder().email(utilisateur_dto.getEmail()).password(utilisateur_dto.getPassword()).role(utilisateur_dto.getRole()).build());
-
+        utilisateur.setIsApproved(utilisateur_dto.getIsApproved());
         return utilisateur;
     }
 
@@ -54,6 +55,7 @@ public class UtilisateurDTO {
         utilisateur_dto.setRole(utilisateur.getRole());
         utilisateur_dto.setDepartementDTO(DepartementDTO.toDTO(utilisateur.getDepartement()));
         utilisateur_dto.setCompanyName(utilisateur.getCompanyName());
+        utilisateur_dto.setIsApproved(utilisateur.getIsApproved());
         return utilisateur_dto;
     }
 }

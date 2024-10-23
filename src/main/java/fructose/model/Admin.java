@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+
 @Entity
 @Setter
 @Getter
@@ -17,7 +18,7 @@ public class Admin extends Utilisateur {
         super();
     }
 
-    public Admin(String fullName, String email, String password, String matricule, Role role, Departement departement, String companyName) {
-        super(fullName, email, password, matricule, role, departement, companyName);
+    public Admin(String fullName, String email, String password, String matricule, Role role, Departement departement, String companyName, Boolean isApproved) {
+        super(fullName, email, password, matricule, role, departement, companyName, isApproved);
     }
 }

@@ -4,13 +4,13 @@ import Icon from "@mdi/react";
 import {AuthContext} from "../../../providers/AuthProvider";
 import {mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
+import Swal from 'sweetalert2';
 
 const ConnexionUtilisateur = () => {
 
     const {SignInUser} = useContext(AuthContext);
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const [backendError, setBackendError] = useState('');
 
     const [utilisateur, setUtilisateur] = useState({
         email: '',
@@ -32,7 +32,6 @@ const ConnexionUtilisateur = () => {
         e.preventDefault()
 
         let validationErrors = {};
-        setBackendError("")
 
         if (!utilisateur.email) {
             validationErrors.email = t("connexion_page.error.email");
@@ -53,9 +52,19 @@ const ConnexionUtilisateur = () => {
                 navigate("/dashboard")
             }
         } catch (error) {
-            setBackendError(error.toString());
+            const errorMessage =
+                error.message === "L'utilisateur n'est pas approuvé" ? t("connexion_page.error.not_approved") :
+                    error.message === "Courriel invalide" ? t("connexion_page.error.invalid_email") :
+                        error.message === "Mot de passe invalide" ? t("connexion_page.error.invalid_password") :
+                            t("connexion_page.error.unknown_error");
+
+            await Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: errorMessage,
+            });
         }
-    };
+    }
 
     useEffect(() => {
         // Si utilisateur change la langue pendant qu'erreur est affichée, traduire les messages d'erreur
@@ -88,16 +97,16 @@ const ConnexionUtilisateur = () => {
                         <form onSubmit={handleSubmit}>
                             <div className="input-container">
                                 <p>{t("connexion_page.email")}:</p>
-                                <input className={`${errors.email ? "field-invalid" : ""}`} type="email" name="email" required value={utilisateur.email} onChange={handleChange}/>
+                                <input className={`${errors.email ? "field-invalid" : ""}`} type="email" name="email"
+                                       required value={utilisateur.email} onChange={handleChange}/>
                                 {errors.email && <p className={"field-invalid-text"}>{errors.email}</p>}
                             </div>
                             <div className="input-container">
                                 <p>{t("connexion_page.password")}:</p>
-                                <input className={`${errors.password ? "field-invalid" : ""}`} type="password" name="password" onChange={handleChange} value={utilisateur.password} required/>
+                                <input className={`${errors.password ? "field-invalid" : ""}`} type="password"
+                                       name="password" onChange={handleChange} value={utilisateur.password} required/>
                                 {errors.password && <p className={"field-invalid-text"}>{errors.password}</p>}
                             </div>
-
-                            {backendError && <p style={{color: 'red', textAlign: 'center'}}>{backendError}</p>}
 
                             <div style={{display: 'flex', alignItems: 'center', marginTop: '20px'}}>
                                 <div style={{flexGrow: 1}}></div>

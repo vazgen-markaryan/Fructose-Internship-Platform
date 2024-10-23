@@ -168,7 +168,9 @@ const CreerOffreStage = () => {
     return (
         <>
             <div className="dashboard-card-toolbar">
-                <Link to="/dashboard"><button className="btn-icon-dashboard"><Icon path={mdiArrowLeft} size={1.4} /></button></Link>
+                <Link to="/dashboard">
+                    <button className="btn-icon-dashboard"><Icon path={mdiArrowLeft} size={1.4}/></button>
+                </Link>
                 <h1>{t("creer_offre_stage_page.title")}</h1>
             </div>
             <div className="dashboard-card">
@@ -182,13 +184,11 @@ const CreerOffreStage = () => {
                         <p className={"field-invalid-text"}>{errors.nom}</p>
 
                         <label>{t("creer_offre_stage_page.poste")}</label>
-                        <input className={`${errors.poste ? "field-invalid" : ""}`} value={offreStage.poste} type="text"
-                               name="poste" onChange={handleInputChange} required/>
+                        <input className={`${errors.poste ? "field-invalid" : ""}`} value={offreStage.poste} type="text" name="poste" onChange={handleInputChange} required/>
                         <p className={"field-invalid-text"}>{errors.poste}</p>
 
                         <label>{t("creer_offre_stage_page.description")}</label>
-                        <input className={`${errors.description ? "field-invalid" : ""}`} value={offreStage.description}
-                               type="text" name="description" onChange={handleInputChange} required/>
+                        <input className={`${errors.description ? "field-invalid" : ""}`} value={offreStage.description} type="text" name="description" onChange={handleInputChange} required/>
                         <p className={"field-invalid-text"}>{errors.description}</p>
 
                         <label>{t("creer_offre_stage_page.compagnie")}</label>
@@ -255,49 +255,34 @@ const CreerOffreStage = () => {
                             <option value="">{t("programme.select")}</option>
                             <option value="cinema">{t("programme.cinema")}</option>
                             <option value="gestion_commerce">{t("programme.gestion_commerce")}</option>
-                            <option
-                                value="gestion_operations_chaine_logistique">{t("programme.gestion_operations_chaine_logistique")}</option>
+                            <option value="gestion_operations_chaine_logistique">{t("programme.gestion_operations_chaine_logistique")}</option>
                             <option value="journalisme_multimedia">{t("programme.journalisme_multimedia")}</option>
-                            <option
-                                value="langues_trilinguisme_cultures">{t("programme.langues_trilinguisme_cultures")}</option>
-                            <option
-                                value="photographie_design_graphique">{t("programme.photographie_design_graphique")}</option>
+                            <option value="langues_trilinguisme_cultures">{t("programme.langues_trilinguisme_cultures")}</option>
+                            <option value="photographie_design_graphique">{t("programme.photographie_design_graphique")}</option>
                             <option value="sciences_nature">{t("programme.sciences_nature")}</option>
-                            <option
-                                value="sciences_humaines_administration_economie">{t("programme.sciences_humaines_administration_economie")}</option>
-                            <option
-                                value="sciences_humaines_individu_relations_humaines">{t("programme.sciences_humaines_individu_relations_humaines")}</option>
-                            <option
-                                value="sciences_humaines_monde_en_action">{t("programme.sciences_humaines_monde_en_action")}</option>
+                            <option value="sciences_humaines_administration_economie">{t("programme.sciences_humaines_administration_economie")}</option>
+                            <option value="sciences_humaines_individu_relations_humaines">{t("programme.sciences_humaines_individu_relations_humaines")}</option>
+                            <option value="sciences_humaines_monde_en_action">{t("programme.sciences_humaines_monde_en_action")}</option>
                             <option value="soins_infirmiers">{t("programme.soins_infirmiers")}</option>
-                            <option
-                                value="soins_infirmiers_auxiliaires">{t("programme.soins_infirmiers_auxiliaires")}</option>
-                            <option
-                                value="techniques_education_enfance">{t("programme.techniques_education_enfance")}</option>
+                            <option value="soins_infirmiers_auxiliaires">{t("programme.soins_infirmiers_auxiliaires")}</option>
+                            <option value="techniques_education_enfance">{t("programme.techniques_education_enfance")}</option>
                             <option value="techniques_bureautique">{t("programme.techniques_bureautique")}</option>
-                            <option
-                                value="techniques_comptabilite_gestion">{t("programme.techniques_comptabilite_gestion")}</option>
+                            <option value="techniques_comptabilite_gestion">{t("programme.techniques_comptabilite_gestion")}</option>
                             <option value="techniques_informatique">{t("programme.techniques_informatique")}</option>
-                            <option
-                                value="techniques_travail_social">{t("programme.techniques_travail_social")}</option>
+                            <option value="techniques_travail_social">{t("programme.techniques_travail_social")}</option>
                             <option value="technologie_architecture">{t("programme.technologie_architecture")}</option>
-                            <option
-                                value="technologie_estimation_evaluation_batiment">{t("programme.technologie_estimation_evaluation_batiment")}</option>
+                            <option value="technologie_estimation_evaluation_batiment">{t("programme.technologie_estimation_evaluation_batiment")}</option>
                             <option value="technologie_genie_civil">{t("programme.technologie_genie_civil")}</option>
-                            <option
-                                value="technologie_genie_electrique">{t("programme.technologie_genie_electrique")}</option>
-                            <option
-                                value="technologie_genie_physique">{t("programme.technologie_genie_physique")}</option>
+                            <option value="technologie_genie_electrique">{t("programme.technologie_genie_electrique")}</option>
+                            <option value="technologie_genie_physique">{t("programme.technologie_genie_physique")}</option>
                             <option value="tremplin_dec">{t("programme.tremplin_dec")}</option>
                         </select>
                         <p className={"field-invalid-text"}>{errors.departementDTO}</p>
 
                         <label>{t("creer_offre_stage_page.modalite_travail")}</label>
-                        <select name="modaliteTravail" onChange={handleInputChange} value={offreStage.modaliteTravail}
-                                required>
+                        <select name="modaliteTravail" onChange={handleInputChange} value={offreStage.modaliteTravail} required>
                             <option value={"select"}>{t("creer_offre_stage_page.types_emploi.select")}</option>
-                            <option
-                                value="temps_partiel">{t("creer_offre_stage_page.types_emploi.temps_partiel")}</option>
+                            <option value="temps_partiel">{t("creer_offre_stage_page.types_emploi.temps_partiel")}</option>
                             <option value="temps_plein">{t("creer_offre_stage_page.types_emploi.temps_plein")}</option>
                         </select>
                         <p className={"field-invalid-text"}>{errors.modaliteTravail}</p>

@@ -16,7 +16,7 @@ import {useTranslation} from "react-i18next";
 const DashboardHome = () => {
 
     const {t} = useTranslation();
-    const { currentUser, currentToken } = useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
     const { GetCvs } = useContext(CvContext);
     const [cvs, setCvs] = useState([]);
     const {fetchOffresStage} = useContext(OffreStageContext);
@@ -44,7 +44,7 @@ const DashboardHome = () => {
                 }
             })();
         }
-    }, [currentUser]); // Modifier 'isUserInit' par 'currentUser'
+    }, [currentUser, GetCvs]);
 
     const GetOffreStageSection = () => {
         if (currentUser != null) {
@@ -83,8 +83,9 @@ const DashboardHome = () => {
                                 </button>
                             </Link>
                             <Link to="./creer-offre-stage">
-                                <button className={"btn-filled"}>{t("dashboard_home_page.add_offer")} <Icon
-                                    path={mdiBriefcasePlusOutline} size={1}/></button>
+                                <button className={"btn-filled"}>{t("dashboard_home_page.add_offer")}
+                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                                </button>
                             </Link>
                         </div>
                         <div style={{"padding": "10px 0"}}>
@@ -124,65 +125,128 @@ const DashboardHome = () => {
         }
     };
 
+    const GetUserManagementSection = () => {
+        if (currentUser != null) {
+            if (currentUser.role === "ADMIN") {
+                return (
+                    <section>
+                        <div className={"toolbar-items"}>
+                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.user_management")}</h4>
+                            <Link to="./admin/manage-users">
+                                <button>{t("dashboard_home_page.not_approved_users")}
+                                    <Icon path={mdiChevronRight} size={1}/>
+                                </button>
+                            </Link>
+                        </div>
+                    </section>
+                )
+            }
+        }
+    }
+
+    const GetPortfolioSection = () => {
+        if (currentUser != null) {
+            if (currentUser.role === "ETUDIANT") {
+                return (
+                    <section>
+                        <div className={"toolbar-items"}>
+                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.portfolio")}</h4>
+                            <Link to="/dashboard/manage-cvs">
+                                <button>{t("dashboard_home_page.manage")}
+                                    <Icon path={mdiChevronRight} size={1}/>
+                                </button>
+                            </Link>
+                            <Link to="/dashboard/upload-cv">
+                                <button>{t("dashboard_home_page.add_cv")}
+                                    <Icon path={mdiPlus} size={1}/>
+                                </button>
+                            </Link>
+                        </div>
+                        <div style={{"padding": "10px 0"}}>
+                            {cvs.length === 0 ? (
+                                <div style={{
+                                    "width": "400px",
+                                    "display": "flex",
+                                    "alignItems": "center",
+                                    "backgroundColor": "#eee",
+                                    "borderRadius": "5px",
+                                    "gap": "5px",
+                                    "padding": "10px"
+                                }}>
+                                    <Icon path={mdiFileDocumentOutline} size={1}/>
+                                    <p className="m-0">{t("dashboard_home_page.no_cv")}</p>
+                                </div>
+                            ) : (
+                                <div style={{
+                                    "width": "400px",
+                                    "backgroundColor": "#eee",
+                                    "borderRadius": "5px",
+                                    "padding": "10px"
+                                }}>
+                                    {cvs.map((cv, index) => (
+                                        <div key={index}
+                                             style={{"display": "flex", "alignItems": "center", "gap": "5px"}}>
+                                            <Icon path={mdiFileDocumentOutline} size={1}/>
+                                            <p className="m-0">{cv.filename}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </section>
+                )
+            }
+        }
+    }
+
     return (
         <>
             <div className="dashboard-card-titlebar">
-                <h1>Accueil</h1>
+                <h1>{t("dashboard_home_page.home")}</h1>
                 <h5>{t("dashboard_home_page.hello")} {(currentUser != null) ? currentUser.fullName :
-                    <div className={"loading-placeholder"}></div>}</h5>
+                    <div className={"loading-placeholder"}></div>}
+                </h5>
             </div>
             <div style={{"display": "flex", "gap": "20px"}}>
                 <div style={{"width": "70%"}}>
                     <div className="dashboard-card">
                         {GetOffreStageSection()}
-                        {currentUser && currentUser.role === "ETUDIANT" && (
-                            <section>
-                                <div className={"toolbar-items"}>
-                                    <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.portfolio")}</h4>
-                                    <Link to="/dashboard/manage-cvs">
-                                        <button>{t("dashboard_home_page.manage")} <Icon path={mdiChevronRight}
-                                                                                        size={1}/></button>
-                                    </Link>
-                                    <Link to="/dashboard/upload-cv">
-                                        <button>{t("dashboard_home_page.add_cv")} <Icon path={mdiPlus} size={1}/>
-                                        </button>
-                                    </Link>
-                                </div>
-                                <div style={{ "padding": "10px 0" }}>
-                                    {cvs.length === 0 ? (
-                                        <div style={{ "width": "400px", "display": "flex", "alignItems": "center", "backgroundColor": "#eee", "borderRadius": "5px", "gap": "5px", "padding": "10px" }}>
-                                            <Icon path={mdiFileDocumentOutline} size={1} />
-                                            <p className="m-0">{t("dashboard_home_page.no_cv")}</p>
-                                        </div>
-                                    ) : (
-                                        <div style={{ "width": "400px", "backgroundColor": "#eee", "borderRadius": "5px", "padding": "10px" }}>
-                                            {cvs.map((cv, index) => (
-                                                <div key={index} style={{ "display": "flex", "alignItems": "center", "gap": "5px" }}>
-                                                    <Icon path={mdiFileDocumentOutline} size={1} />
-                                                    <p className="m-0">{cv.filename}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            </section>
-                        )}
-                        <div style={{ "height": "520px" }}>
-
+                        {GetPortfolioSection()}
+                        {GetUserManagementSection()}
+                        <div style={{"height": "520px"}}>
                         </div>
                     </div>
                 </div>
-                <div style={{ "width": "30%" }}>
+                <div style={{"width": "30%"}}>
                     <div className="dashboard-card">
                         <section>
                             <h4>{t("dashboard_home_page.user_info")}</h4>
                             <ul>
-                                <li><p>{t("dashboard_home_page.full_name")}: {(currentUser != null) ? currentUser.fullName : <span className={"loading-placeholder"}></span>}</p></li>
-                                <li><p>{t("dashboard_home_page.email")}: {(currentUser != null) ? currentUser.email : <span className={"loading-placeholder"}></span>}</p></li>
-                                {currentUser && currentUser.role !== "ADMIN" && currentUser.role !== "EMPLOYEUR" && (
-                                    <li><p>{t("dashboard_home_page.matricule")}: {currentUser.matricule}</p></li>
+                                <li>
+                                    <p>{t("dashboard_home_page.full_name")}: {(currentUser != null) ? currentUser.fullName :
+                                        <span className={"loading-placeholder"}></span>}
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>{t("dashboard_home_page.email")}: {(currentUser != null) ? currentUser.email :
+                                        <span className={"loading-placeholder"}></span>}
+                                    </p>
+                                </li>
+                                {currentUser && currentUser.role === "ETUDIANT" && (
+                                    <li>
+                                        <p>{t("dashboard_home_page.studentID")}: {currentUser.matricule}</p>
+                                    </li>
                                 )}
-                                <li><p>{t("dashboard_home_page.role")}: {(currentUser != null) ? currentUser.role : <span className={"loading-placeholder"}></span>}</p></li>
+                                {currentUser && currentUser.role === "PROFESSEUR" && (
+                                    <li>
+                                        <p>{t("dashboard_home_page.employeID")}: {currentUser.matricule}</p>
+                                    </li>
+                                )}
+                                <li>
+                                    <p>{t("dashboard_home_page.role")}: {(currentUser != null) ? t(`bd_role_traduction.${currentUser.role}`) :
+                                        <span className={"loading-placeholder"}></span>}
+                                    </p>
+                                </li>
                             </ul>
                         </section>
                     </div>

@@ -1,5 +1,7 @@
 package fructose.controller;
 
+import fructose.model.Utilisateur;
+import fructose.model.auth.Role;
 import fructose.service.DepartementService;
 import fructose.service.UtilisateurService;
 import fructose.service.dto.DepartementDTO;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -37,7 +40,6 @@ public class UtilisateurController {
 
     @PostMapping("/creer-utilisateur")
     public ResponseEntity<?> creerUtilisateur(@RequestBody @Valid UtilisateurDTO utilisateurDTO, BindingResult result) {
-        System.out.println(utilisateurDTO);
         if (result.hasErrors()) {
             String errorMessages = result.getFieldErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -104,7 +106,7 @@ public class UtilisateurController {
             String token = utilisateurService.authenticateUser(loginDTO.getEmail(), loginDTO.getPassword());
             return ResponseEntity.status(HttpStatus.OK).body("Token : " + token);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Une erreur inattendue s'est produite : " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -127,6 +129,44 @@ public class UtilisateurController {
         } catch (Exception e) {
             logger.error("Impossible de récupérer les infos utilisateur:", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossible de récupérer les infos utilisateur: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/non-approved-users")
+    public ResponseEntity<List<UtilisateurDTO>> getNonApprovedUsers(@RequestHeader("Authorization") String token) {
+        if(!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        List<UtilisateurDTO> nonApprovedUsers = utilisateurService.getNonApprovedUsers();
+        return ResponseEntity.ok(nonApprovedUsers);
+    }
+
+    @PutMapping("/approve-user/{id}")
+    public ResponseEntity<?> approveUser(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        if(!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
+        }
+
+        try {
+            utilisateurService.approveUser(id);
+            return ResponseEntity.ok("User approved successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error approving user: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/reject-user/{id}")
+    public ResponseEntity<?> deleteUtilisateurByID(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        if(!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
+        }
+
+        try {
+            utilisateurService.deleteUtilisateurByID(id, utilisateurService.getRoleById(id));
+            return ResponseEntity.ok("User rejected and deleted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error rejecting user: " + e.getMessage());
         }
     }
 }

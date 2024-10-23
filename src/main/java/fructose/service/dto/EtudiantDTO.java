@@ -18,6 +18,7 @@ public class EtudiantDTO extends UtilisateurDTO {
         etudiant_dto.setMatricule(etudiant.getMatricule());
         etudiant_dto.setRole(Role.ETUDIANT);
         etudiant_dto.setDepartementDTO(DepartementDTO.toDTO(etudiant.getDepartement()));
+        etudiant_dto.setIsApproved(etudiant.getIsApproved());
         return etudiant_dto;
     }
 }

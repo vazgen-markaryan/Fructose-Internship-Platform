@@ -22,28 +22,28 @@ import java.util.List;
 @DiscriminatorColumn(name = "RECORD_TYPE", discriminatorType = DiscriminatorType.STRING)
 public class Utilisateur {
 
-	@Id
-	@GeneratedValue
-	@Column(name = "id", nullable = false)
-	private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-	@NotNull
-	@NotEmpty
-	@Size(min = 5, max = 50, message = "Le nom complet doit contenir entre 5 et 50 caractères")
-	@Pattern(regexp = "^[\\p{L}\\s]+$", message = "Le nom complet doit contenir uniquement des lettres et des espaces")
-	private String fullName;
+    @NotNull
+    @NotEmpty
+    @Size(min = 5, max = 50, message = "Le nom complet doit contenir entre 5 et 50 caractères")
+    @Pattern(regexp = "^[\\p{L}\\s]+$", message = "Le nom complet doit contenir uniquement des lettres et des espaces")
+    private String fullName;
 
-	@Column(unique = true)
-	@Pattern(regexp = "^\\d{7}$", message = "Le Matricule doit contenir 7 chiffres")
-	private String matricule;
+    @Column(unique = true)
+    @Pattern(regexp = "^\\d{7}$", message = "Le Matricule doit contenir 7 chiffres")
+    private String matricule;
 
-	@ManyToOne
-	@JoinColumn(name = "departement_id")
-	private Departement departement;
+    @ManyToOne
+    @JoinColumn(name = "departement_id")
+    private Departement departement;
 
-	@Size(min = 3, max = 100, message = "Le nom de l'entreprise doit contenir de 3 à 100 caractères")
-	@Pattern(regexp = "^[A-Za-zÀ-ÿ\\s]+$", message = "Le nom de l'entreprise doit contenir uniquement des lettres et des espaces")
-	private String companyName;
+    @Size(min = 3, max = 100, message = "Le nom de l'entreprise doit contenir de 3 à 100 caractères")
+    @Pattern(regexp = "^[A-Za-zÀ-ÿ\\s]+$", message = "Le nom de l'entreprise doit contenir uniquement des lettres et des espaces")
+    private String companyName;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = CascadeType.ALL)
 	private List<OffreStage> offreStages;
@@ -55,41 +55,47 @@ public class Utilisateur {
     @JsonBackReference
     private List<Cv> cvs;
 
-	public String getEmail() {
-		return credentials.getEmail();
-	}
+	private Boolean isApproved = false;
 
-	public String getPassword() {
-		return credentials.getPassword();
-	}
+    public String getEmail() {
+        return credentials.getEmail();
+    }
 
-	public Role getRole() {
-		return credentials.getRole();
-	}
+    public String getPassword() {
+        return credentials.getPassword();
+    }
 
-	public void setPassword(String password) {
-		credentials.setPassword(password);
-	}
+    public Role getRole() {
+        return credentials.getRole();
+    }
 
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return credentials.getAuthorities();
-	}
+    public void setPassword(String password) {
+        credentials.setPassword(password);
+    }
 
-	public Utilisateur(String fullName, String email, String password, String matricule, Role role, Departement departement, String companyName) {
-		this.fullName = fullName;
-		this.matricule = matricule;
-		this.departement = departement;
-		this.companyName = companyName;
-		this.credentials = Credentials.builder().email(email).password(password).role(role).build();
-	}
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return credentials.getAuthorities();
+    }
 
-	public static Utilisateur createUtilisateur(String type, String fullName, String email, String password, String matricule, Departement departement, String companyName) {
-		return switch (type.toLowerCase()) {
-			case "etudiant" -> new Etudiant(fullName, email, password, matricule, Role.ETUDIANT, departement, companyName);
-			case "employeur" -> new Employeur(fullName, email, password, matricule, Role.EMPLOYEUR, departement, companyName);
-			case "professeur" -> new Professeur(fullName, email, password, matricule, Role.PROFESSEUR, departement, companyName);
-			case "admin" -> new Admin(fullName, email, password, matricule, Role.ADMIN, departement, companyName);
-			default -> throw new IllegalArgumentException("Type d'utilisateur: " + type + " n'est pas supporté");
-		};
-	}
+    public Utilisateur(String fullName, String email,
+                       String password, String matricule,
+                       Role role, Departement departement,
+                       String companyName, Boolean isApproved ) {
+        this.fullName = fullName;
+        this.matricule = matricule;
+        this.departement = departement;
+        this.companyName = companyName;
+        this.credentials = Credentials.builder().email(email).password(password).role(role).build();
+		this.isApproved = isApproved;
+    }
+
+    public static Utilisateur createUtilisateur(String type, String fullName, String email, String password, String matricule, Departement departement, String companyName, Boolean isApproved) {
+        return switch (type.toLowerCase()) {
+            case "etudiant" -> new Etudiant(fullName, email, password, matricule, Role.ETUDIANT, departement, companyName, isApproved);
+            case "employeur" -> new Employeur(fullName, email, password, matricule, Role.EMPLOYEUR, departement, companyName, isApproved);
+            case "professeur" -> new Professeur(fullName, email, password, matricule, Role.PROFESSEUR, departement, companyName, isApproved);
+            case "admin" -> new Admin(fullName, email, password, matricule, Role.ADMIN, departement, companyName, isApproved);
+            default -> throw new IllegalArgumentException("Type d'utilisateur: " + type + " n'est pas supporté");
+        };
+    }
 }

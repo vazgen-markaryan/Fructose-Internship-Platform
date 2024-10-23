@@ -7,7 +7,8 @@ import CreerOffreStage from "./components/offre_stage/CreerOffreStage";
 import ConnexionUtilisateur from "./components/pages/login-signup/ConnexionUtilisateur";
 import Dashboard from "./components/pages/dashboard/Dashboard";
 import {AuthProvider} from "./providers/AuthProvider";
-import {PrivateRoute, RoleRoute} from "./components/routing/PrivateRoute";
+import {PrivateRoute} from "./components/routing/PrivateRoute";
+import {RoleRoute} from "./components/routing/RoleRoute";
 import TemporaireFooterLanguage from "./components/TemporaireFooterLanguage";
 
 function App() {

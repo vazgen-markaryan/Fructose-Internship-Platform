@@ -7,6 +7,9 @@ import DashboardHome from "./DashboardHome";
 import ViewCV from "./cv/View";
 import UploadCV from "./cv/Upload";
 import {CvProvider} from "../../../providers/CvProvider";
+import {AdminProvider} from "../../../providers/AdminProvider";
+import {RoleRoute} from "../../routing/RoleRoute";
+import ManageUsers from "./admin/ManageUsers";
 import {OffreStageProvider} from "../../../providers/OffreStageProvider";
 
 import {RoleRoute} from "../../routing/PrivateRoute";
@@ -14,12 +17,11 @@ import ModifierOffreStage from "../../offre_stage/ModifierOffreStage";
 import ManageOffresStage from "./offre-stage/ManageOffresStage";
 
 const Dashboard = () => {
-    return(
+    return (
         <>
             <HeaderMain theme={"light"}></HeaderMain>
             <div className={"dashboard-layout"}>
                 <div className="dashboard-head">
-
                 </div>
                 <div className="dashboard-content">
 
@@ -36,12 +38,17 @@ const Dashboard = () => {
                         </OffreStageProvider>
                     </CvProvider>
                     <Routes>
-                        <Route path="/creer-offre-stage" element={<CreerOffreStage />} />
+                        <Route path="/creer-offre-stage" element={<CreerOffreStage/>}/>
                     </Routes>
+
+                    <AdminProvider>
+                        <Routes>
+                            <Route path="/admin/manage-users"
+                                   element={<RoleRoute element={<ManageUsers/>} roles={['ADMIN']}/>}/>
+                        </Routes>
+                    </AdminProvider>
                 </div>
             </div>
-
-
         </>
     )
 }

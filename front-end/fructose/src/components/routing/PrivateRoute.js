@@ -7,10 +7,4 @@ const PrivateRoute = ({element: Component}) => {
     return isSignedIn() ? Component : <Navigate to="/connexion"/>;
 };
 
-const RoleRoute = ({element: Component, roles}) => {
-    const {isSignedIn, currentUser} = useContext(AuthContext);
-    if (!isSignedIn() || !currentUser) {return <Navigate to="/dashboard"/>;}
-    return roles.includes(currentUser.role) ? Component : <Navigate to="/dashboard"/>;
-};
-
-export { PrivateRoute, RoleRoute };
+export {PrivateRoute};

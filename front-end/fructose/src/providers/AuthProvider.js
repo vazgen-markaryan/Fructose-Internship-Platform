@@ -3,7 +3,8 @@ import {useNavigate} from "react-router-dom";
 
 const AuthContext = createContext(undefined);
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({children}) => {
+
     const [currentUser, setCurrentUser] = useState(null);
     const navigate = useNavigate();
     const [currentToken, setCurrentToken] = useState(null)
@@ -71,9 +72,8 @@ const AuthProvider = ({ children }) => {
         navigate("/")
     };
 
-
     return (
-        <AuthContext.Provider value={{ isUserInit, currentUser, currentToken, SignInUser, SignOutUser, isSignedIn }}>
+        <AuthContext.Provider value={{isUserInit, currentUser, currentToken, SignInUser, SignOutUser, isSignedIn}}>
             {children}
         </AuthContext.Provider>
     );

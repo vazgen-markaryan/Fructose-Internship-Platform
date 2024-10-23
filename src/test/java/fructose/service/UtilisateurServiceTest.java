@@ -56,9 +56,31 @@ class UtilisateurServiceTest {
     @Mock
     private DepartementRepository departementRepository;
 
+    private Etudiant etudiant;
+    private Professeur professeur;
+    private Employeur employeur;
+    private Admin admin;
+
     @BeforeEach
-    public void setUp() {
+    void setUp() {
+
         utilisateurService = new UtilisateurService(etudiantRepository, professeurRepository, employeurRepository, adminRepository, passwordEncoder, utilisateurRepository, jwtTokenProvider, authenticationManager);
+
+        etudiant = new Etudiant();
+        etudiant.setId(1L);
+        etudiant.setIsApproved(false);
+
+        professeur = new Professeur();
+        professeur.setId(2L);
+        professeur.setIsApproved(false);
+
+        employeur = new Employeur();
+        employeur.setId(3L);
+        employeur.setIsApproved(false);
+
+        admin = new Admin();
+        admin.setId(4L);
+        admin.setIsApproved(false);
     }
 
     // ------------------- GET UTILISATEUR BY ID ------------------- //
@@ -179,7 +201,12 @@ class UtilisateurServiceTest {
 
     @Test
     void authenticate_ValidCredentials_ReturnsToken() {
+        Utilisateur mockUtilisateur = new Utilisateur();
+        mockUtilisateur.setIsApproved(true);
+
+        when(utilisateurRepository.findByEmail("joe@doe.com")).thenReturn(mockUtilisateur);
         utilisateurService.authenticateUser("joe@doe.com", "1234");
+
         verify(authenticationManager).authenticate(any());
     }
 
@@ -294,7 +321,7 @@ class UtilisateurServiceTest {
     // ------------------- DELETE UTILISATEUR ------------------- //
 
     @Test
-    void testDeleteUtilisateur_Success() {
+    void testDeleteUtilisateur_ByID_Success() {
         Long id = 1L;
         Etudiant etudiant = new Etudiant();
         etudiant.setId(id);
@@ -302,13 +329,13 @@ class UtilisateurServiceTest {
         etudiant.setDepartement(new Departement());
         when(etudiantRepository.findById(id)).thenReturn(Optional.of(etudiant));
 
-        utilisateurService.deleteUtilisateur(id, Role.ETUDIANT);
+        utilisateurService.deleteUtilisateurByID(id, Role.ETUDIANT);
 
         verify(etudiantRepository, times(1)).deleteById(id);
     }
 
     @Test
-    void testDeleteUtilisateur_Professeur_Success() {
+    void testDeleteUtilisateur_ByID_Professeur_Success() {
         Long id = 1L;
         Professeur professeur = new Professeur();
         professeur.setId(id);
@@ -316,13 +343,13 @@ class UtilisateurServiceTest {
         professeur.setDepartement(new Departement());
         when(professeurRepository.findById(id)).thenReturn(Optional.of(professeur));
 
-        utilisateurService.deleteUtilisateur(id, Role.PROFESSEUR);
+        utilisateurService.deleteUtilisateurByID(id, Role.PROFESSEUR);
 
         verify(professeurRepository, times(1)).deleteById(id);
     }
 
     @Test
-    void testDeleteUtilisateur_Employeur_Success() {
+    void testDeleteUtilisateur_ByID_Employeur_Success() {
         Long id = 1L;
         Employeur employeur = new Employeur();
         employeur.setId(id);
@@ -330,18 +357,18 @@ class UtilisateurServiceTest {
         employeur.setDepartement(new Departement());
         when(employeurRepository.findById(id)).thenReturn(Optional.of(employeur));
 
-        utilisateurService.deleteUtilisateur(id, Role.EMPLOYEUR);
+        utilisateurService.deleteUtilisateurByID(id, Role.EMPLOYEUR);
 
         verify(employeurRepository, times(1)).deleteById(id);
     }
 
     @Test
-    void testDeleteUtilisateur_NotFound() {
+    void testDeleteUtilisateur_ByID_NotFound() {
         Long id = 1L;
         when(etudiantRepository.findById(id)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.deleteUtilisateur(id, Role.ETUDIANT);
+            utilisateurService.deleteUtilisateurByID(id, Role.ETUDIANT);
         });
 
         assertEquals("Etudiant avec ID: " + id + " n'existe pas", exception.getMessage());
@@ -349,7 +376,7 @@ class UtilisateurServiceTest {
     }
 
     @Test
-    void testDeleteUtilisateur_Admin_Success() {
+    void testDeleteUtilisateur_ByID_Admin_Success() {
         Long id = 1L;
         Admin admin = new Admin();
         admin.setId(id);
@@ -357,18 +384,18 @@ class UtilisateurServiceTest {
         admin.setDepartement(new Departement());
         when(adminRepository.findById(id)).thenReturn(Optional.of(admin));
 
-        utilisateurService.deleteUtilisateur(id, Role.ADMIN);
+        utilisateurService.deleteUtilisateurByID(id, Role.ADMIN);
 
         verify(adminRepository, times(1)).deleteById(id);
     }
 
     @Test
-    void testDeleteUtilisateur_Admin_NotFound() {
+    void testDeleteUtilisateur_ByID_Admin_NotFound() {
         Long adminId = 1L;
         when(adminRepository.findById(adminId)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            utilisateurService.deleteUtilisateur(adminId, Role.ADMIN);
+            utilisateurService.deleteUtilisateurByID(adminId, Role.ADMIN);
         });
 
         assertEquals("Admin avec ID: " + adminId + " n'existe pas", exception.getMessage());
@@ -511,7 +538,26 @@ class UtilisateurServiceTest {
         assertEquals(email, result.getEmail());
     }
 
-    // Test non fonctionnel
+    @Test
+    public void testGetUtilisateurByToken_Admin() {
+        String token = "Bearer validToken";
+        String email = "admin@example.com";
+        Admin admin = new Admin();
+        admin.setId(1L);
+        admin.setCredentials(new Credentials(email, "password123", Role.ADMIN));
+        admin.setDepartement(new Departement());
+        admin.setIsApproved(true);
+
+        when(jwtTokenProvider.getEmailFromJWT(token.substring(7))).thenReturn(email);
+        when(utilisateurRepository.findByEmail(email)).thenReturn(admin);
+        when(adminRepository.findById(admin.getId())).thenReturn(Optional.of(admin));
+
+        UtilisateurDTO result = utilisateurService.getUtilisateurByToken(token);
+
+        assertNotNull(result);
+        assertEquals(Role.ADMIN, result.getRole());
+    }
+
     @Test
     void testGetUtilisateurByToken_InvalidRole() {
         String token = "Bearer validToken";
@@ -555,5 +601,120 @@ class UtilisateurServiceTest {
         assertNotNull(result);
         assertEquals(adminId, result.getId());
         verify(adminRepository).findById(adminId);
+    }
+
+    @Test
+    public void testAuthenticateUser_UserNotApproved() {
+        String email = "test@example.com";
+        String password = "password";
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setIsApproved(false);
+        when(utilisateurRepository.findByEmail(email)).thenReturn(utilisateur);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.authenticateUser(email, password);
+        });
+
+        assertEquals("L'utilisateur n'est pas approuvé", exception.getMessage());
+    }
+
+    @Test
+    public void testGetUtilisateurByEmail_NonExistentEmail() {
+        String email = "nonexistent@example.com";
+        when(utilisateurRepository.findByEmail(email)).thenReturn(null);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.getUtilisateurByEmail(email);
+        });
+
+        assertEquals("L'utilisateur avec email nonexistent@example.com n'existe pas", exception.getMessage());
+    }
+
+    @Test
+    public void testGetRoleById_UserDoesNotExist() {
+        Long id = 999L;
+        when(etudiantRepository.existsById(id)).thenReturn(false);
+        when(professeurRepository.existsById(id)).thenReturn(false);
+        when(employeurRepository.existsById(id)).thenReturn(false);
+        when(adminRepository.existsById(id)).thenReturn(false);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.getRoleById(id);
+        });
+
+        assertEquals("L'utilisateur avec ID 999 n'existe pas", exception.getMessage());
+    }
+
+    @Test
+    public void testGetNonApprovedUsers() {
+        // Simuler un utilisateur non approuvé
+        Utilisateur utilisateur = new Etudiant();
+        utilisateur.setCredentials(new Credentials("test@gmail.com", "password123", Role.ETUDIANT));
+        utilisateur.setDepartement(new Departement());
+        utilisateur.setIsApproved(false);
+        when(utilisateurRepository.findByIsApproved(false)).thenReturn(List.of(utilisateur));
+
+        List<UtilisateurDTO> result = utilisateurService.getNonApprovedUsers();
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testApproveEtudiant() {
+        when(etudiantRepository.existsById(1L)).thenReturn(true);
+        when(etudiantRepository.findById(1L)).thenReturn(Optional.of(etudiant));
+
+        utilisateurService.approveUser(1L);
+
+        assertTrue(etudiant.getIsApproved());
+        verify(etudiantRepository).save(etudiant);
+    }
+
+    @Test
+    void testApproveProfesseur() {
+        when(professeurRepository.existsById(2L)).thenReturn(true);
+        when(professeurRepository.findById(2L)).thenReturn(Optional.of(professeur));
+
+        utilisateurService.approveUser(2L);
+
+        assertTrue(professeur.getIsApproved());
+        verify(professeurRepository).save(professeur);
+    }
+
+    @Test
+    void testApproveEmployeur() {
+        when(employeurRepository.existsById(3L)).thenReturn(true);
+        when(employeurRepository.findById(3L)).thenReturn(Optional.of(employeur));
+
+        utilisateurService.approveUser(3L);
+
+        assertTrue(employeur.getIsApproved());
+        verify(employeurRepository).save(employeur);
+    }
+
+    @Test
+    void testApproveAdmin() {
+        when(adminRepository.existsById(4L)).thenReturn(true);
+        when(adminRepository.findById(4L)).thenReturn(Optional.of(admin));
+
+        utilisateurService.approveUser(4L);
+
+        assertTrue(admin.getIsApproved());
+        verify(adminRepository).save(admin);
+    }
+
+    @Test
+    void testApproveUser_NotFound() {
+        when(etudiantRepository.existsById(999L)).thenReturn(false);
+        when(professeurRepository.existsById(999L)).thenReturn(false);
+        when(employeurRepository.existsById(999L)).thenReturn(false);
+        when(adminRepository.existsById(999L)).thenReturn(false);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            utilisateurService.approveUser(999L);
+        });
+
+        assertEquals("L'utilisateur avec ID 999 n'existe pas", exception.getMessage());
     }
 }
