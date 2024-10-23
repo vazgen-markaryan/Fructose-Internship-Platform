@@ -10,6 +10,7 @@ body {
 :root {
     --color-primay: #ff006c;
     --color-primay-transparent: rgba(255, 0, 108, 0.05);
+
     --border-radius: 5px
 }
 
@@ -166,7 +167,9 @@ button > * {
     vertical-align: middle;
 }
 
-button.btn-option {
+button.btn-option, a.btn-option {
+    /*TODO INVESTIGUER TEXT DECORATION*/
+    text-decoration: none;
     min-height: 42px;
     background-color: transparent;
     display: flex;
@@ -177,10 +180,12 @@ button.btn-option {
 }
 
 button.btn-option:hover {
-    background-color: rgba(128, 128, 128, 0.2);
+    background-color: rgba(128,128,128,0.2);
 }
 
-/*Design du input*/
+/*
+  Design du input
+ */
 
 input[type="text"], input[type="password"], input[type="email"], input[type="date"], input[type="number"], textarea, select {
     background-color: transparent;
@@ -252,7 +257,6 @@ p.field-invalid-text {
     margin: auto;
     padding: 10px 0;
 }
-
 
 img.logo {
     height: 36px;

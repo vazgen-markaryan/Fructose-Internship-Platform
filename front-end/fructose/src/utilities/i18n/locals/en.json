@@ -275,5 +275,40 @@
         "company": "Company",
         "global_view": "Global view",
         "actions": "Actions"
+    },
+
+    "manage_cv": {
+        "upload_error": "Error uploading CV",
+        "status": {
+            "pending": "Pending approval",
+            "approved": "Approved",
+            "rejected": "Rejected"
+        },
+        "buttons": {
+            "add": "Add",
+            "accept": "Accept",
+            "reject": "Reject",
+            "download": "Download",
+            "delete": "Delete"
+        },
+        "messages": {
+            "no_cvs": "No CVs in your folder"
+        },
+        "titles": {
+            "cvs": "My CVs",
+            "preview": "Preview"
+        }
+    },
+
+    "upload_cv": {
+        "title": "Upload a CV",
+        "drag_drop": "Drag your CV here",
+        "or": "OR",
+        "select_button": "Select",
+        "accepted_formats": "Accepted file format: PDF",
+        "upload_button": "Upload",
+        "error_file_required": "Please select a file before submitting.",
+        "upload_error": "An error occurred during the upload.",
+        "error_file_size_exceeded": "The file size exceeds the allowed limit of {{maxSize}} KB."
     }
 }
