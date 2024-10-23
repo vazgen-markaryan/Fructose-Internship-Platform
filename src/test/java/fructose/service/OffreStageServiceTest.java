@@ -25,7 +25,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -72,6 +71,7 @@ public class OffreStageServiceTest {
         EmployeurDTO employeurDTO = new EmployeurDTO();
         employeurDTO.setRole(Role.EMPLOYEUR);
         employeurDTO.setEmail("Mike");
+        employeurDTO.setId(1L);
         employeurDTO.setDepartementDTO(departement);
         offreStageDTO.setOwnerDTO(employeurDTO);
 
@@ -266,10 +266,10 @@ public class OffreStageServiceTest {
     @Test
     void testAddOffreStageProgrammeEtudeNull() {
         offreStageDTO.setDepartementDTO(null);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
             offreStageService.addOffreStage(offreStageDTO);
         });
-        assertEquals("Le département ne peut pas être nul", exception.getMessage());
+        assertEquals("departementDTO: Le département ne peut pas être null", exception.getMessage());
     }
 
     @Test
@@ -535,11 +535,13 @@ public class OffreStageServiceTest {
     @Test
     void testUpdateOffreStageSuccess() {
         OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
+        Employeur employeur = new Employeur();
         when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(offreStage));
-
-
+        when(offreStageRepository.existsById(offreStageDTO.getId())).thenReturn(true);
+        when(departementRepository.findById(offreStageDTO.getDepartementDTO().getId())).thenReturn(Optional.ofNullable(DepartementDTO.toEntity(offreStageDTO.getDepartementDTO())));
+        when(employeurRepository.findById(offreStageDTO.getOwnerDTO().getId())).thenReturn(Optional.of(employeur));
         offreStageDTO.setNom("Microsoft");
-        offreStageService.updateOffreStage(offreStageDTO.getId(), offreStageDTO);
+        offreStageService.updateOffreStage(offreStageDTO);
 
         verify(offreStageRepository, times(1)).save(argThat(savedOffreStage ->
                 savedOffreStage.getNom().equals("Microsoft")));
@@ -547,11 +549,12 @@ public class OffreStageServiceTest {
 
     @Test
     void testUpdateOffreStageIdNull() {
+        offreStageDTO.setId(null);
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            offreStageService.updateOffreStage(null, offreStageDTO);
+            offreStageService.updateOffreStage(offreStageDTO);
         });
 
-        assertEquals("ID ne peut pas être nul", exception.getMessage());
+        assertEquals("L'offre de stage avec l'ID: null n'existe pas, alors il ne peut pas être mis à jour", exception.getMessage());
     }
 
     @Test
@@ -559,36 +562,36 @@ public class OffreStageServiceTest {
         when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            offreStageService.updateOffreStage(offreStageDTO.getId(), offreStageDTO);
+            offreStageService.updateOffreStage(offreStageDTO);
         });
 
-        assertEquals("L'offre stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être mis à jour", exception.getMessage());
+        assertEquals("L'offre de stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être mis à jour", exception.getMessage());
     }
 
     @Test
     void testUpdateOffreStageNull() {
         when(offreStageRepository.findById(offreStageDTO.getId())).thenReturn(Optional.of(OffreStageDTO.toEntity(offreStageDTO)));
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            offreStageService.updateOffreStage(1L, null);
+            offreStageService.updateOffreStage(null);
         });
 
         assertEquals("OffreStageDTO ne peut pas être nul", exception.getMessage());
     }
 
     @Test
-    void testGetOffresStageSuccessForEmployeur() {
-        List<OffreStageDTO> offresStage = List.of(offreStageDTO);
-        List<OffreStage> offreStages = offresStage.stream()
-                .map(OffreStageDTO::toEntity)
-                .collect(Collectors.toList());
-        when(offreStageRepository.findByEmployeurEmail("Mike")).thenReturn(offreStages);
-        offreStageService.getOffresStage();
-        verify(offreStageRepository, times(1)).findByEmployeurEmail("Mike");
+    void testUpdateOffreStageIdDoNotExist() {
+        when(offreStageRepository.existsById(offreStageDTO.getId())).thenReturn(false);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            offreStageService.updateOffreStage(offreStageDTO);
+        });
+
+        assertEquals("L'offre de stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être mis à jour", exception.getMessage());
     }
 
     @Test
     void testGetOffresStageNotFoundForEmployeur() {
-        when(offreStageRepository.findByEmployeurEmail("Mike")).thenReturn(List.of());
+        when(offreStageRepository.getAllByOwnerId(1L)).thenReturn(List.of());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             offreStageService.getOffresStage();
@@ -628,7 +631,7 @@ public class OffreStageServiceTest {
     }
 
     @Test
-    void testGetOffresStageSuccesForEtudiant() {
+    void testGetOffresStageSuccesForEmployeur() {
         List<OffreStageDTO> offresStage = List.of(offreStageDTO);
         List<OffreStage> offreStages = offresStage.stream()
                 .map(OffreStageDTO::toEntity)
