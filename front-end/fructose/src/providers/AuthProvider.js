@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, {createContext, useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 
 const AuthContext = createContext(undefined);
@@ -49,7 +49,7 @@ const AuthProvider = ({children}) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({email, password})
         })
             .then(async response => {
                 if (response.ok !== true) {
@@ -79,4 +79,4 @@ const AuthProvider = ({children}) => {
     );
 };
 
-export { AuthProvider, AuthContext };
+export {AuthProvider, AuthContext};

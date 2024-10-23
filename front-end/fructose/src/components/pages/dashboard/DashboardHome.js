@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../providers/AuthProvider";
-import { Link } from "react-router-dom";
+import React, {useContext, useEffect, useState} from "react";
+import {AuthContext} from "../../../providers/AuthProvider";
+import {Link} from "react-router-dom";
 import Icon from "@mdi/react";
 import {
     mdiBriefcasePlusOutline,
@@ -9,15 +9,15 @@ import {
     mdiFileDocumentOutline,
     mdiPlus
 } from "@mdi/js";
-import { CvContext } from "../../../providers/CvProvider";
-import { OffreStageContext } from "../../../providers/OffreStageProvider";
+import {CvContext} from "../../../providers/CvProvider";
+import {OffreStageContext} from "../../../providers/OffreStageProvider";
 import {useTranslation} from "react-i18next";
 
 const DashboardHome = () => {
 
     const {t} = useTranslation();
-    const { currentUser } = useContext(AuthContext);
-    const { GetCvs } = useContext(CvContext);
+    const {currentUser} = useContext(AuthContext);
+    const {GetCvs} = useContext(CvContext);
     const [cvs, setCvs] = useState([]);
     const {fetchOffresStage} = useContext(OffreStageContext);
     const [offresStage, setOffresStage] = useState([]);

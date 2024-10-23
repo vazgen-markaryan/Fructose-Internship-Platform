@@ -1,6 +1,5 @@
 package fructose.model;
 
-
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,37 +14,37 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name = "cv")
 public class Cv {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id ;
-
-    @Column(name = "filename", nullable = false, length = 255)
-    @Nullable
-    private String filename;
-
-    // Stocke données binaires volumineuses (PDF)
-    @Lob
-    @Column(name = "file_content")
-    @Nullable
-    private byte[] fileContent;
-
-    @ManyToOne
-    @JoinColumn(name = "utilisateur_id", nullable = false)
-    private Utilisateur utilisateur;
-
-    @Column(name = "is_approved", nullable = false)
-    private Boolean isApproved;
-
-    @Column(name = "is_refused", nullable = false)
-    private Boolean isRefused;
-
-    public Cv(Long id, @Nullable String filename, Boolean isApproved, Boolean isRefused, Utilisateur utilisateur) {
-        this.id = id;
-        this.filename = filename;
-        this.isApproved = isApproved;
-        this.isRefused = isRefused;
-        this.utilisateur = utilisateur;
-    }
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Long id;
+	
+	@Column(name = "filename", nullable = false, length = 255)
+	@Nullable
+	private String filename;
+	
+	// Stocke données binaires volumineuses (PDF)
+	@Lob
+	@Column(name = "file_content")
+	@Nullable
+	private byte[] fileContent;
+	
+	@ManyToOne
+	@JoinColumn(name = "utilisateur_id", nullable = false)
+	private Utilisateur utilisateur;
+	
+	@Column(name = "is_approved", nullable = false)
+	private Boolean isApproved;
+	
+	@Column(name = "is_refused", nullable = false)
+	private Boolean isRefused;
+	
+	public Cv(Long id, @Nullable String filename, Boolean isApproved, Boolean isRefused, Utilisateur utilisateur) {
+		this.id = id;
+		this.filename = filename;
+		this.isApproved = isApproved;
+		this.isRefused = isRefused;
+		this.utilisateur = utilisateur;
+	}
 }

@@ -5,7 +5,6 @@ import {
     mdiFolderOpenOutline
 } from "@mdi/js";
 import Icon from "@mdi/react";
-import {AuthContext} from "../../../../providers/AuthProvider";
 import {Link, useNavigate} from "react-router-dom";
 import {useDropzone} from "react-dropzone";
 import {useTranslation} from "react-i18next";
@@ -13,16 +12,13 @@ import PdfPreview from "../../../content/PdfPreview";
 import {CvContext} from "../../../../providers/CvProvider";
 
 const UploadCV = () => {
-    const {t} = useTranslation();
-    const {currentUser} = useContext(AuthContext);
-    const {UploadCv} = useContext(CvContext);
 
+    const {t} = useTranslation();
+    const {UploadCv} = useContext(CvContext);
     const [error, setError] = useState(null);
     const [file, setFile] = useState(null);
     const [filename, setFilename] = useState('');
-
     const navigate = useNavigate();
-
     const MAX_FILE_SIZE = 1048576;
 
     const onDrop = useCallback((acceptedFiles) => {

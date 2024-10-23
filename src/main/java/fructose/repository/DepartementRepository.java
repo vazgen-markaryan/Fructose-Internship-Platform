@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface DepartementRepository extends JpaRepository<Departement, Long> {
-    @Query("SELECT d FROM Departement d WHERE d.nom = ?1")
-    List<Departement> findByNom(String name);
+	@Query("SELECT d FROM Departement d WHERE d.nom = ?1")
+	List<Departement> findByNom(String name);
 }

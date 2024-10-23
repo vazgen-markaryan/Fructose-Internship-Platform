@@ -110,8 +110,7 @@ const ManageCVs = () => {
                     <div className="toolbar-items">
                         <h4 className="m-0 toolbar-spacer"></h4>
                         <Link to="../upload-cv">
-                            <button className="btn-filled">{t('manage_cv.buttons.add')} <Icon
-                                path={mdiFileUploadOutline} size={1}/></button>
+                            <button className="btn-filled">{t('manage_cv.buttons.add')} <Icon path={mdiFileUploadOutline} size={1}/></button>
                         </Link>
                     </div>
                     <br/>
@@ -146,8 +145,7 @@ const ManageCVs = () => {
                         <>
                             <div className="menu-list">
                                 {cvs.slice(0, -1).reverse().map((item, index) => (
-                                    <div key={index} onClick={() => handleCvSelection(item)}
-                                         className={`menu-list-item ${currentCv && item.id === currentCv.id ? "menu-list-item-selected" : ""}`}>
+                                    <div key={index} onClick={() => handleCvSelection(item)} className={`menu-list-item ${currentCv && item.id === currentCv.id ? "menu-list-item-selected" : ""}`}>
                                         <Icon path={mdiFileOutline} size={1}/>
                                         <div>
                                             <p className="m-0">{item.filename}</p>
@@ -212,14 +210,12 @@ const ManageCVs = () => {
                             <Icon path={mdiFileQuestionOutline} size={2}/>
                             <h6 style={{margin: "8px 0 14px 0"}}>{t('manage_cv.messages.no_cvs')}</h6>
                             <Link to="../upload-cv">
-                                <button className="btn-filled">{t('manage_cv.buttons.add')} <Icon
-                                    path={mdiFileUploadOutline} size={1}/></button>
+                                <button className="btn-filled">{t('manage_cv.buttons.add')} <Icon path={mdiFileUploadOutline} size={1}/></button>
                             </Link>
                         </div>
                     </div>
                 </div>
-            )
-                ;
+            );
         } else {
             return (
                 <div className="dashboard-card" style={{width: "65%"}}>

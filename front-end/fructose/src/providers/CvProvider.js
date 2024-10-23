@@ -1,11 +1,11 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {createContext, useContext} from 'react';
 import {AuthContext} from "./AuthProvider";
 
 const CvContext = createContext(undefined);
 
-const CvProvider = ({ children }) => {
+const CvProvider = ({children}) => {
 
-    const { currentToken } = useContext(AuthContext)
+    const {currentToken} = useContext(AuthContext)
 
     const UploadCv = async (file) => {
         let formData = new FormData()
@@ -49,16 +49,11 @@ const CvProvider = ({ children }) => {
         });
     };
 
-
     return (
-        <CvContext.Provider value={{ UploadCv, GetCvs, getCvById, DeleteCv}}>
+        <CvContext.Provider value={{UploadCv, GetCvs, getCvById, DeleteCv}}>
             {children}
         </CvContext.Provider>
     );
-
-
-
-
 };
 
-export { CvProvider, CvContext };
+export {CvProvider, CvContext};

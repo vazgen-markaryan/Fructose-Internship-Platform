@@ -52,15 +52,7 @@ const HeaderMain = ({theme}) => {
                         <button style={{"backgroundColor": "transparent", "color": "inherit", "padding": "0"}}><Icon path={mdiViewDashboardOutline} size={1}/></button>
                     </Link>
                     <button onClick={() => {toggleNotificationMenu()}} style={{"backgroundColor": "transparent", "color": "inherit", "padding": "0 16px"}}><Icon path={mdiMessageOutline} size={1}/></button>
-
-                    <button onClick={() => {toggleMenu()}} style={{
-                        "backgroundColor": "black",
-                        "color": "white",
-                        "background": "url('/assets/auth/default-profile.jpg') center / cover",
-                        "width": "42px",
-                        "height": "42px",
-                        "borderRadius": "50%"
-                    }}></button>
+                    <button onClick={() => {toggleMenu()}} style={{"backgroundColor": "black", "color": "white", "background": "url('/assets/auth/default-profile.jpg') center / cover", "width": "42px", "height": "42px", "borderRadius": "50%"}}></button>
 
                     <div className={"header-user-menu"} style={{"display": (menuOpen) ? "block" : "none"}}>
                         <div className={"header-user-menu-profile"}>
@@ -68,7 +60,9 @@ const HeaderMain = ({theme}) => {
                             <p className={"text-dark"}>{currentUser.email}</p>
                         </div>
 
-                        <button onClick={() => {SignOutUser()}}>{t("header_main_page.disconnect")}</button>
+                        <button onClick={() => {SignOutUser()}}>
+                            {t("header_main_page.disconnect")}
+                        </button>
                     </div>
                     <div className={"header-user-menu"} style={{"display": (notificationMenuOpen) ? "block" : "none"}}>
                         <div className={"header-user-menu-profile"}>

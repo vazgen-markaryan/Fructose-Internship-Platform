@@ -155,7 +155,6 @@ const ManageUsers = () => {
         }
     };
 
-
     const getUserDetailsSection = () => {
         if (currentUserIndex != null) {
             return (
@@ -167,12 +166,9 @@ const ManageUsers = () => {
                                                                                                    size={1}/></button>
                     </div>
                     <div className="user-profile-section">
-                        <div className="user-profile-section-banner">
-
-                        </div>
+                        <div className="user-profile-section-banner"></div>
                         <div className="user-profile-section-profile-picture"
                              style={{"backgroundImage": "url('/assets/auth/default-profile.jpg')"}}>
-
                         </div>
                     </div>
                     <section>
@@ -208,17 +204,11 @@ const ManageUsers = () => {
                         </table>
                         <br/>
                         <p>{t("manage_users_page.actions")}</p>
-                        <button className="btn-option" onClick={() => {
-                            ApproveUserById(users[currentUserIndex].id)
-                        }}>
-                            <Icon path={mdiCheck} size={1}/>
-                            {t("manage_users_page.approve")}
+                        <button className="btn-option" onClick={() => {ApproveUserById(users[currentUserIndex].id)}}>
+                            <Icon path={mdiCheck} size={1}/>{t("manage_users_page.approve")}
                         </button>
-                        <button className="btn-option" onClick={() => {
-                            RejectUserById(users[currentUserIndex].id)
-                        }}>
-                            <Icon path={mdiClose} size={1}/>
-                            {t("manage_users_page.delete")}
+                        <button className="btn-option" onClick={() => {RejectUserById(users[currentUserIndex].id)}}>
+                            <Icon path={mdiClose} size={1}/>{t("manage_users_page.delete")}
                         </button>
                         {
                             /*

@@ -3,6 +3,7 @@ import Icon from "@mdi/react";
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
 import {getDepartement, isMatriculeTaken} from '../../../utilities/api/apiService';
+import Swal from 'sweetalert2';
 
 const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
 
@@ -17,6 +18,12 @@ const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
         const matriculeTaken = await isMatriculeTaken(utilisateur.matricule);
         if (matriculeTaken) {
             errorMessage.matricule = t("information_professeur_page.error.employee_number_taken");
+            Swal.fire({
+                title: t("information_professeur_page.error.error_title"),
+                text: t("information_professeur_page.error.employee_number_taken"),
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
         if (Object.keys(errorMessage).length > 0) {
             setErrors(errorMessage);
@@ -34,6 +41,8 @@ const InformationsProfesseur = ({utilisateur, handleChange, switchStep}) => {
         handleChange(event);
         setErrors((prevErrors) => ({...prevErrors, [name]: ""}));
     };
+
+
 
     const validateFields = (user = {}) => {
         let errors = {};

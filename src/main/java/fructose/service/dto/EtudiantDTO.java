@@ -8,17 +8,17 @@ import lombok.*;
 @Setter
 @ToString
 public class EtudiantDTO extends UtilisateurDTO {
-
-    public static EtudiantDTO toDTO(Etudiant etudiant) {
-        EtudiantDTO etudiant_dto = new EtudiantDTO();
-        etudiant_dto.setId(etudiant.getId());
-        etudiant_dto.setFullName(etudiant.getFullName());
-        etudiant_dto.setEmail(etudiant.getEmail());
-        etudiant_dto.setPassword(etudiant.getPassword());
-        etudiant_dto.setMatricule(etudiant.getMatricule());
-        etudiant_dto.setRole(Role.ETUDIANT);
-        etudiant_dto.setDepartementDTO(DepartementDTO.toDTO(etudiant.getDepartement()));
-        etudiant_dto.setIsApproved(etudiant.getIsApproved());
-        return etudiant_dto;
-    }
+	
+	public static EtudiantDTO toDTO(Etudiant etudiant) {
+		EtudiantDTO etudiant_dto = new EtudiantDTO();
+		etudiant_dto.setId(etudiant.getId());
+		etudiant_dto.setFullName(etudiant.getFullName());
+		etudiant_dto.setEmail(etudiant.getEmail());
+		etudiant_dto.setPassword(etudiant.getPassword());
+		etudiant_dto.setMatricule(etudiant.getMatricule());
+		etudiant_dto.setRole(Role.ETUDIANT);
+		etudiant_dto.setDepartementDTO(DepartementDTO.toDTO(etudiant.getDepartement()));
+		etudiant_dto.setIsApproved(etudiant.getIsApproved());
+		return etudiant_dto;
+	}
 }

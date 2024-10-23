@@ -7,6 +7,8 @@ import InformationsEtudiant from "../../auth/signup/InformationsEtudiant";
 import InformationsEmployeur from "../../auth/signup/InformationsEmployeur";
 import InformationsProfesseur from "../../auth/signup/InformationsProfesseur";
 import {useTranslation} from "react-i18next";
+import '../../../styles/LogInSignIn.css';
+import Swal from 'sweetalert2';
 
 const CreerUtilisateur = () => {
     const [utilisateur, setUtilisateur] = useState({
@@ -27,8 +29,8 @@ const CreerUtilisateur = () => {
     };
 
     const handleSubmit = () => {
-        setError("")
-        utilisateur.fullName = utilisateur.firstName + " " + utilisateur.lastName
+        setError("");
+        utilisateur.fullName = utilisateur.firstName + " " + utilisateur.lastName;
         fetch('/creer-utilisateur', {
             method: 'POST',
             headers: {
@@ -39,17 +41,30 @@ const CreerUtilisateur = () => {
             .then(response => {
                 if (!response.ok) {
                     return response.text().then(text => {
-                        throw new Error(text)
+                        throw new Error(text);
                     });
                 }
                 return response;
             })
             .then(() => {
-                //TODO navigation temporaire car la page de connexion n'est pas encore créée
-                navigate('/');
+                Swal.fire({
+                    title: t("creer_utilisateur_page.success_title"),
+                    text: t("creer_utilisateur_page.success_text"),
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    navigate("/"); // Vu qu'il n'est pas approuvé, on le redirige vers la page d'accueil
+                });
             })
             .catch(error => {
-                console.log(error)
+                Swal.fire({
+                    title: t("creer_utilisateur_page.error_title"),
+                    text: error.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    navigate("/"); // Vu qu'il n'est pas approuvé, on le redirige vers la page d'accueil
+                });
             });
     };
 

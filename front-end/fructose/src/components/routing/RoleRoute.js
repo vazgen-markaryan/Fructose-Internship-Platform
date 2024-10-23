@@ -17,7 +17,6 @@ const RoleRoute = ({element: Component, roles}) => {
         }
         return roles.includes(currentUser.role) ? Component : <Navigate to="/dashboard"/>;
     }
-
 };
 
 export {RoleRoute};

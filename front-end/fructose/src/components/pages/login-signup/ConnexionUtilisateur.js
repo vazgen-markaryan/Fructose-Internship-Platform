@@ -5,6 +5,7 @@ import {AuthContext} from "../../../providers/AuthProvider";
 import {mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
 import Swal from 'sweetalert2';
+import '../../../styles/LogInSignIn.css';
 
 const ConnexionUtilisateur = () => {
 

@@ -33,7 +33,7 @@ const ManageOffresStage = () => {
                 }
             })();
         }
-    }, [currentUser]);
+    }, [currentUser, fetchOffresStage]);
 
     const handleOffreStageSelection = (offreStage) => {
         if (currentOffreStage && offreStage.id === currentOffreStage.id) {
@@ -66,15 +66,13 @@ const ManageOffresStage = () => {
                     <div className="toolbar-items">
                         <h4 className="m-0 toolbar-spacer"></h4>
                         <Link to="../creer-offre-stage">
-                            <button className="btn-filled">{t('manage_offre_stage.buttons.add')} <Icon
-                                path={mdiBriefcasePlusOutline} size={1}/></button>
+                            <button className="btn-filled">{t('manage_offre_stage.buttons.add')} <Icon path={mdiBriefcasePlusOutline} size={1}/></button>
                         </Link>
                     </div>
                     <br/>
                     <div className="menu-list">
                         {offreStages.map((offreStage, index) => (
-                            <div key={index} onClick={() => handleOffreStageSelection(offreStage)}
-                                 className={`menu-list-item ${currentOffreStage && offreStage.id === currentOffreStage.id ? "menu-list-item-selected" : ""}`}>
+                            <div key={index} onClick={() => handleOffreStageSelection(offreStage)} className={`menu-list-item ${currentOffreStage && offreStage.id === currentOffreStage.id ? "menu-list-item-selected" : ""}`}>
                                 <Icon path={mdiBriefcasePlusOutline} size={1}/>
                                 <div>
                                     <p className="m-0">{offreStage.nom}</p>
@@ -94,8 +92,8 @@ const ManageOffresStage = () => {
                     <div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
                         <h6 className="m-0">{t('manage_offre_stage.titles.details')}</h6>
                         <span className="toolbar-spacer"></span>
-                        <button className="btn-icon" onClick={() => setCurrentOffreStage(null)}><Icon path={mdiClose}
-                                                                                                      size={1}/>
+                        <button className="btn-icon" onClick={() => setCurrentOffreStage(null)}>
+                            <Icon path={mdiClose} size={1}/>
                         </button>
                     </div>
                     <section>
@@ -106,8 +104,7 @@ const ManageOffresStage = () => {
                             </div>
                         </div>
                         <br/>
-                        <button className="btn-option"
-                                onClick={() => navigate(`/dashboard/modifier-offre-stage/${currentOffreStage.id}`)}>
+                        <button className="btn-option" onClick={() => navigate(`/dashboard/modifier-offre-stage/${currentOffreStage.id}`)}>
                             <Icon path={mdiCheck} size={1}/>{t('manage_offre_stage.buttons.modify')}
                         </button>
                         <button className="btn-option" onClick={() => handleDeleteOffreStage(currentOffreStage.id)}>
@@ -129,8 +126,7 @@ const ManageOffresStage = () => {
                             <Icon path={mdiBriefcasePlusOutline} size={2}/>
                             <h6 style={{margin: "8px 0 14px 0"}}>{t('manage_offre_stage.messages.no_offre_stages')}</h6>
                             <Link to="../creer-offre-stage">
-                                <button className="btn-filled">{t('manage_offre_stage.buttons.add')} <Icon
-                                    path={mdiBriefcasePlusOutline} size={1}/></button>
+                                <button className="btn-filled">{t('manage_offre_stage.buttons.add')} <Icon path={mdiBriefcasePlusOutline} size={1}/></button>
                             </Link>
                         </div>
                     </div>

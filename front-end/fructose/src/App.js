@@ -3,7 +3,7 @@ import './App.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import HomePage from './components/pages/home/HomePage';
 import CreerUtilisateur from "./components/pages/login-signup/CreerUtilisateur";
-import CreerOffreStage from "./components/offre_stage/CreerOffreStage";
+import CreerOffreStage from "./components/pages/offre_stage/CreerOffreStage";
 import ConnexionUtilisateur from "./components/pages/login-signup/ConnexionUtilisateur";
 import Dashboard from "./components/pages/dashboard/Dashboard";
 import {AuthProvider} from "./providers/AuthProvider";

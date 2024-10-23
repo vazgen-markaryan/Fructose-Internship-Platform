@@ -18,45 +18,45 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    private final JwtTokenProvider tokenProvider;
-    private final UtilisateurRepository userRepository;
-
-    // Injection via constructeur
-    @Autowired
-    public SecurityConfig(JwtTokenProvider tokenProvider, UtilisateurRepository userRepository) {
-        this.tokenProvider = tokenProvider;
-        this.userRepository = userRepository;
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/creer-utilisateur").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/connexion").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/check-email").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/check-matricule").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/check-departement").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/creer-offre-stage").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/infos-utilisateur").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/get-offre-stage").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/get-offre-stage/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/delete-offre-stage/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/modifier-offre-stage").permitAll()
-                        .anyRequest().authenticated()
-                ).addFilterBefore(new JwtAuthentificationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	
+	private final JwtTokenProvider tokenProvider;
+	private final UtilisateurRepository userRepository;
+	
+	// Injection via constructeur
+	@Autowired
+	public SecurityConfig(JwtTokenProvider tokenProvider, UtilisateurRepository userRepository) {
+		this.tokenProvider = tokenProvider;
+		this.userRepository = userRepository;
+	}
+	
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
+	
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http
+				.csrf(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(authorize -> authorize
+						.requestMatchers(HttpMethod.POST, "/creer-utilisateur").permitAll()
+						.requestMatchers(HttpMethod.POST, "/connexion").permitAll()
+						.requestMatchers(HttpMethod.GET, "/check-email").permitAll()
+						.requestMatchers(HttpMethod.GET, "/check-matricule").permitAll()
+						.requestMatchers(HttpMethod.GET, "/check-departement").permitAll()
+						.requestMatchers(HttpMethod.POST, "/creer-offre-stage").permitAll()
+						.requestMatchers(HttpMethod.POST, "/infos-utilisateur").permitAll()
+						.requestMatchers(HttpMethod.GET, "/get-offre-stage").permitAll()
+						.requestMatchers(HttpMethod.GET, "/get-offre-stage/**").permitAll()
+						.requestMatchers(HttpMethod.DELETE, "/delete-offre-stage/**").permitAll()
+						.requestMatchers(HttpMethod.PUT, "/modifier-offre-stage").permitAll()
+						.anyRequest().authenticated()
+				).addFilterBefore(new JwtAuthentificationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
+		return http.build();
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 }

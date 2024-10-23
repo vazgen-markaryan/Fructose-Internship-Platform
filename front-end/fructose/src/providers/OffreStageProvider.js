@@ -1,9 +1,9 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 import {AuthContext} from "./AuthProvider";
 
 const OffreStageContext = createContext(undefined);
 
-const OffreStageProvider = ({ children }) => {
+const OffreStageProvider = ({children}) => {
     const {currentToken} = useContext(AuthContext);
     const [offreStage, setOffreStage] = useState({
         nom: '',
@@ -80,12 +80,9 @@ const OffreStageProvider = ({ children }) => {
             body: JSON.stringify(updatedData)
         });
 
-        // Check if the response is OK (status 2xx)
         if (response.ok) {
-            // If successful, return the JSON response data
-            return response.json(); // <-- No need to throw an error here
+            return response.json();
         } else {
-            // If the response is not OK, handle the error
             const contentType = response.headers.get('content-type');
             if (contentType && contentType.includes('application/json')) {
                 const errorData = await response.json();
@@ -96,9 +93,6 @@ const OffreStageProvider = ({ children }) => {
             }
         }
     };
-
-
-
 
     return (
         <OffreStageContext.Provider value={{
@@ -116,4 +110,4 @@ const OffreStageProvider = ({ children }) => {
     );
 };
 
-export { OffreStageProvider, OffreStageContext };
+export {OffreStageProvider, OffreStageContext};
