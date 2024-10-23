@@ -168,7 +168,6 @@ button > * {
 }
 
 button.btn-option, a.btn-option {
-    /*TODO INVESTIGUER TEXT DECORATION*/
     text-decoration: none;
     min-height: 42px;
     background-color: transparent;

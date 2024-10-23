@@ -15,7 +15,7 @@ import {useTranslation} from "react-i18next";
 const DashboardHome = () => {
 
     const {t} = useTranslation();
-    const { currentUser, currentToken } = useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
     const { GetCvs } = useContext(CvContext);
     const [cvs, setCvs] = useState([]);
 
@@ -31,7 +31,7 @@ const DashboardHome = () => {
                 }
             })();
         }
-    }, [currentUser]); // Modifier 'isUserInit' par 'currentUser'
+    }, [currentUser, GetCvs]);
 
     const GetOffreStageSection = () => {
         if (currentUser != null) {
