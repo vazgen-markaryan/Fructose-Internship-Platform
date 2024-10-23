@@ -1,5 +1,5 @@
 {
-    "bd_role_traduction": {
+    "bd_role_traduction" : {
         "ETUDIANT": "Student",
         "PROFESSEUR": "Professor",
         "EMPLOYEUR": "Employer",
@@ -50,6 +50,7 @@
         "email": "Email",
         "password": "Password",
         "continue": "Continue",
+
         "error": {
             "email": "Email is required",
             "password": "Password is required",
@@ -73,6 +74,7 @@
         "dashboard": "Access the dashboard",
         "success": "Success",
         "success_message": "Your account has been created successfully. You will be redirected to the login page in a few seconds.",
+
         "error": {
             "login_redirect": "An error occurred while redirecting to the login page. Please try again by yourself."
         }
@@ -94,6 +96,7 @@
         "last_name": "Last name",
         "email": "Email",
         "continue": "Continue",
+
         "error": {
             "first_name_short": "Your first name must contain at least 2 characters.",
             "first_name_letters_only": "Your first name must contain only letters and spaces.",
@@ -110,6 +113,7 @@
         "matricule": "Student ID",
         "program": "Program",
         "continue": "Continue",
+
         "error": {
             "matricule": "Student ID must have 7 digits",
             "department": "No Department is selected",
@@ -124,6 +128,7 @@
         "password": "Password",
         "confirm_password": "Confirm password",
         "submit": "Submit",
+
         "error": {
             "password_wrong": "Password must contain at least one uppercase letter, one number and one special character",
             "password_doesnt_match": "Passwords do not match."
@@ -135,6 +140,7 @@
         "description": "Enter the required information about the company offering the internships",
         "company_name": "Company name",
         "continue": "Continue",
+
         "error": {
             "company_name_invalid": "The company name must contain only letters and spaces",
             "company_name_lenght": "Company name must be between 3 and 100 characters"
@@ -148,6 +154,7 @@
         "department": "Department",
         "select_department": "Select a department",
         "continue": "Continue",
+
         "error": {
             "employee_number": "Employee number must have 7 digits",
             "department": "No Department is selected",
@@ -173,17 +180,20 @@
         "date_fin": "End date",
         "creer_offre_stage": "Create the internship offer",
         "retour": "Return to home",
+
         "types_emploi": {
             "select": "Select a type of employment",
             "temps_partiel": "Part-time",
             "temps_plein": "Full-time"
         },
+
         "modalites_travail": {
             "select": "Select a work modality",
             "teletravail": "Remote work",
             "presentiel": "On-site",
             "hybride": "Hybrid"
         },
+
         "errors": {
             "nom": "The name must be between 3 and 100 characters",
             "poste": "The position must be between 3 and 100 characters",
@@ -255,6 +265,7 @@
         "approved": "Approved",
         "delete": "Delete",
         "expel": "Expel",
+
         "user_details": "User details",
         "details": "Details",
         "in_probation": "Waiting for approval",
@@ -313,6 +324,51 @@
         },
         "messages": {
             "no_offre_stages": "No internship offers to display at the moment"
+        }
+    },
+
+    "modifier_offre_stage_page": {
+        "title": "Modify Internship Offer",
+        "nom": "Name",
+        "poste": "Position",
+        "description": "Description",
+        "compagnie": "Company",
+        "adresse": "Address",
+        "taux_horaire": "Hourly Rate",
+        "nombre_heures_semaine": "Number of Hours per Week",
+        "nombre_postes": "Number of Positions",
+        "type_emploi": "Type of Employment",
+        "departement": "Study Program",
+        "modalite_travail": "Work Modality",
+        "date_limite_candidate": "Application Deadline",
+        "date_debut": "Start Date",
+        "date_fin": "End Date",
+        "modify_offre_stage": "Modify Internship Offer",
+        "retour": "Return to Home",
+        "types_emploi": {
+            "select": "Select a type of employment",
+            "temps_partiel": "Part-time",
+            "temps_plein": "Full-time"
+        },
+        "modalites_travail": {
+            "select": "Select a work modality",
+            "teletravail": "Remote work",
+            "presentiel": "On-site",
+            "hybride": "Hybrid"
+        },
+        "errors": {
+            "nom": "The name must be between 3 and 100 characters",
+            "poste": "The position must be between 3 and 100 characters",
+            "description": "The description must be between 10 and 500 characters",
+            "compagnie": "The company name must be between 3 and 100 characters",
+            "address": "The address must be between 3 and 100 characters",
+            "taux_horaire": "The hourly rate must be a positive number",
+            "nombre_heures_semaine_inferieur": "The number of hours per week must be greater than 1",
+            "nombre_heures_semaine_superieur": "The number of hours per week must be less than 40",
+            "nombre_postes": "The number of positions must be a positive number",
+            "programme_etudes_select": "The study program must be selected",
+            "modalite_travail_select": "The work modality must be selected",
+            "type_emploi_select": "The type of employment must be selected"
         }
     }
 }
