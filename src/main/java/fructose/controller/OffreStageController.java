@@ -5,6 +5,7 @@ import fructose.service.dto.OffreStageDTO;
 import fructose.service.OffreStageService;
 import fructose.service.dto.UtilisateurDTO;
 import jakarta.validation.Valid;
+import org.antlr.v4.runtime.Token;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.web.client.HttpServerErrorException;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -59,30 +63,48 @@ public class OffreStageController {
     }
 
     @PutMapping("/modifier-offre-stage")
-    public ResponseEntity<?> modifierOffreStage(@RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
-        System.out.println(offreStageDTO);
+    public ResponseEntity<?> modifierOffreStage(@RequestHeader("Authorization") String token, @RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
+
         if (result.hasErrors()) {
-            String errorMessages = result.getFieldErrors().stream()
+            // Collect validation error messages into a list and return as JSON
+            List<String> errorMessages = result.getFieldErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.joining(", "));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
+                    .collect(Collectors.toList());
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("errors", errorMessages);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         try {
+            // Attempt to update the OffreStage
             offreStageService.updateOffreStage(offreStageDTO);
-            return ResponseEntity.status(HttpStatus.OK).body("Offre de stage modifiée avec succès !");
+            Map<String, String> successResponse = new HashMap<>();
+            successResponse.put("message", "Offre de stage modifiée avec succès !");
+            return ResponseEntity.status(HttpStatus.OK).body(successResponse);
+
         } catch (DataAccessException e) {
+            // Handle unique constraint violations
             if (e.getCause() instanceof ConstraintViolationException violation) {
                 String detailMessage = violation.getSQLException().getMessage();
                 String uniqueValue = detailMessage.substring(detailMessage.indexOf('(') + 1, detailMessage.indexOf(')'));
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Violation de contrainte unique : La valeur \"" + uniqueValue + "\" existe déjà.");
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "Violation de contrainte unique : La valeur \"" + uniqueValue + "\" existe déjà.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
             } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la modification de l'offre de stage.");
+                // General DataAccessException handling
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "Erreur lors de la modification de l'offre de stage.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
             }
         } catch (Exception e) {
+            // Handle any other unexpected exceptions
             logger.error("Une erreur inattendue s'est produite", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Une erreur inattendue s'est produite.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+
 
     @GetMapping("/get-offre-stage")
     public ResponseEntity<?> getOffreStage() {

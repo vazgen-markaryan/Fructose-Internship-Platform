@@ -96,26 +96,32 @@ const ModifierOffreStage = () => {
         if (Object.keys(errorMessage).length > 0) {
             setErrors(errorMessage);
         } else {
-            offreStage.dateDebut = new Date(offreStage.dateDebut).toISOString().split('T')[0];
-            offreStage.dateFin = new Date(offreStage.dateFin).toISOString().split('T')[0];
-            offreStage.dateLimiteCandidature = new Date(offreStage.dateLimiteCandidature).toISOString().split('T')[0];
-            const departement = await getDepartement(offreStage.departementDTO);
-            if (departement) {
-                offreStage.departementDTO = departement;
-            }
             try {
-                const response = await updateOffreStage(offreStage);
-                if (response.ok) {
-                    navigate(-1);
-                } else {
-                    console.error("Error updating offre stage:", response.statusText);
+                // Prepare your date fields for submission
+                offreStage.dateDebut = new Date(offreStage.dateDebut).toISOString().split('T')[0];
+                offreStage.dateFin = new Date(offreStage.dateFin).toISOString().split('T')[0];
+                offreStage.dateLimiteCandidature = new Date(offreStage.dateLimiteCandidature).toISOString().split('T')[0];
+
+                // Update the departement field if necessary
+                const departement = await getDepartement(offreStage.departementDTO);
+                if (departement) {
+                    offreStage.departementDTO = departement;
                 }
-            }
-            catch (error) {
-                console.error("Error updating offre stage:", error);
+
+                // Call the update API
+                const response = await updateOffreStage(offreStage);
+                console.log("Successfully updated offreStage:", response);
+
+                // If successful, navigate back
+                navigate(-1);
+
+            } catch (error) {
+                console.error("Error updating offre stage:", error.message); // Log the actual error message
             }
         }
     };
+
+
 
     if (!offreStage) {
         return <div>Loading...</div>; // Handle loading state

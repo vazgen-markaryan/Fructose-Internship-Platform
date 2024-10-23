@@ -1,9 +1,12 @@
 package fructose.service;
 
+import fructose.model.Departement;
 import fructose.model.OffreStage;
 import fructose.model.Utilisateur;
+import fructose.repository.DepartementRepository;
 import fructose.repository.EmployeurRepository;
 import fructose.repository.OffreStageRepository;
+import fructose.repository.UtilisateurRepository;
 import fructose.service.dto.DepartementDTO;
 import fructose.service.dto.OffreStageDTO;
 import fructose.service.dto.UtilisateurDTO;
@@ -15,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,12 +28,14 @@ import java.util.stream.Stream;
 public class OffreStageService {
     private final OffreStageRepository offreStageRepository;
     private final EmployeurRepository employeurRepository;
+    private final DepartementRepository departementRepository;
     private final Validator validator;
 
 
-    public OffreStageService(OffreStageRepository offreStageRepository, EmployeurRepository utilisateurRepository) {
+    public OffreStageService(OffreStageRepository offreStageRepository, EmployeurRepository employeurRepository, DepartementRepository departementRepository) {
         this.offreStageRepository = offreStageRepository;
-        this.employeurRepository = utilisateurRepository;
+        this.employeurRepository = employeurRepository;
+        this.departementRepository = departementRepository;
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
     }
@@ -62,26 +68,44 @@ public class OffreStageService {
     }
 
     public void updateOffreStage(OffreStageDTO offreStageDTO) {
+        // Step 1: Check if the OffreStage exists
         if (!offreStageRepository.existsById(offreStageDTO.getId())) {
             throw new IllegalArgumentException("L'offre de stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être mis à jour");
         }
-        OffreStage offreStage = offreStageRepository.findById(offreStageDTO.getId()).orElseThrow(() -> new IllegalArgumentException("L'offre de stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être mis à jour"));
-        offreStage.setNom(offreStageDTO.getNom());
-        offreStage.setPoste(offreStageDTO.getPoste());
-        offreStage.setDescription(offreStageDTO.getDescription());
-        offreStage.setCompagnie(offreStageDTO.getCompagnie());
-        offreStage.setDepartement(DepartementDTO.toEntity(offreStageDTO.getDepartementDTO()));
-        offreStage.setTauxHoraire(offreStageDTO.getTauxHoraire());
-        offreStage.setTypeEmploi(offreStageDTO.getTypeEmploi());
-        offreStage.setAdresse(offreStageDTO.getAdresse());
-        offreStage.setModaliteTravail(offreStageDTO.getModaliteTravail());
-        offreStage.setDateDebut(offreStageDTO.getDateDebut());
-        offreStage.setDateFin(offreStageDTO.getDateFin());
-        offreStage.setNombreHeuresSemaine(offreStageDTO.getNombreHeuresSemaine());
-        offreStage.setNombrePostes(offreStageDTO.getNombrePostes());
-        offreStage.setDateLimiteCandidature(offreStageDTO.getDateLimiteCandidature());
-        offreStageRepository.save(offreStage);
+
+        // Step 2: Retrieve the existing OffreStage entity from the DB
+        OffreStage existingOffreStage = offreStageRepository.findById(offreStageDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("OffreStage not found"));
+
+        // Step 3: Fetch the Departement and Utilisateur (owner) from their repositories if needed
+        Departement departement = departementRepository.findById(offreStageDTO.getDepartementDTO().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Departement not found"));
+
+        Utilisateur owner = employeurRepository.findById(offreStageDTO.getOwnerDTO().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Owner not found"));
+
+        // Step 4: Update fields of the existing OffreStage
+        existingOffreStage.setNom(offreStageDTO.getNom());
+        existingOffreStage.setPoste(offreStageDTO.getPoste());
+        existingOffreStage.setDescription(offreStageDTO.getDescription());
+        existingOffreStage.setCompagnie(offreStageDTO.getCompagnie());
+        existingOffreStage.setDepartement(departement);  // Set the existing Departement
+        existingOffreStage.setTauxHoraire(offreStageDTO.getTauxHoraire());
+        existingOffreStage.setTypeEmploi(offreStageDTO.getTypeEmploi());
+        existingOffreStage.setAdresse(offreStageDTO.getAdresse());
+        existingOffreStage.setModaliteTravail(offreStageDTO.getModaliteTravail());
+        existingOffreStage.setDateDebut(offreStageDTO.getDateDebut());
+        existingOffreStage.setDateFin(offreStageDTO.getDateFin());
+        existingOffreStage.setNombreHeuresSemaine(offreStageDTO.getNombreHeuresSemaine());
+        existingOffreStage.setNombrePostes(offreStageDTO.getNombrePostes());
+        existingOffreStage.setNombrePostes(offreStageDTO.getNombrePostes());
+        existingOffreStage.setDateLimiteCandidature(offreStageDTO.getDateLimiteCandidature());
+        existingOffreStage.setOwner(owner);  // Set the existing owner
+
+        // Step 5: Save the updated OffreStage
+        offreStageRepository.save(existingOffreStage);
     }
+
 
 
     public void deleteOffreStage(Long id) {

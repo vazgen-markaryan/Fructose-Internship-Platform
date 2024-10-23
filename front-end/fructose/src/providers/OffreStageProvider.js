@@ -69,7 +69,8 @@ const OffreStageProvider = ({ children }) => {
         });
     }
 
-    const updateOffreStage = async (id, updatedData) => {
+    const updateOffreStage = async (updatedData) => {
+        console.log(updatedData);
         const response = await fetch(`/modifier-offre-stage`, {
             method: 'PUT',
             headers: {
@@ -79,13 +80,25 @@ const OffreStageProvider = ({ children }) => {
             body: JSON.stringify(updatedData)
         });
 
-        if (!response.ok) {
-            const errorMessage = await response.text();
-            throw new Error(errorMessage);
+        // Check if the response is OK (status 2xx)
+        if (response.ok) {
+            // If successful, return the JSON response data
+            return response.json(); // <-- No need to throw an error here
+        } else {
+            // If the response is not OK, handle the error
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "An error occurred while updating the offer.");
+            } else {
+                const errorMessage = await response.text();
+                throw new Error(errorMessage);
+            }
         }
-
-        return response.json();
     };
+
+
+
 
     return (
         <OffreStageContext.Provider value={{
