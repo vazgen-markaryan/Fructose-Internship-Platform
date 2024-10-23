@@ -338,10 +338,9 @@ const CreerOffreStage = () => {
                                 ? new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1)).toISOString().split('T')[0]
                                 : ""}
                             onKeyDown={(e) => {
-                                const currentDate = new Date(e.target.value);
                                 const minDate = new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1));
 
-                                if (e.key === 'ArrowDown' && currentDate <= minDate) {
+                                if (e.key === 'ArrowDown' && offreStage.dateDebut.getTime() <= minDate.getTime()) {
                                     e.preventDefault(); // Prevent going below dateLimiteCandidature + 1 day
                                 }
                             }}
