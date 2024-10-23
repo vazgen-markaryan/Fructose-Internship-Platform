@@ -314,6 +314,9 @@ const ModifierOffreStage = () => {
                         <button type="submit">{t("modifier_offre_stage_page.modify_offre_stage")}</button>
                     </form>
                 </section>
+                <br/>
+                <br/>
+                <br/>
             </div>
         </>
     );
