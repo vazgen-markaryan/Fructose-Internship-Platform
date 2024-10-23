@@ -38,7 +38,6 @@ public class OffreStageController {
     public ResponseEntity<?> creerOffreStage(@RequestHeader("Authorization") String token, @RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
         UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
         offreStageDTO.setOwnerDTO(utilisateurDTO);
-        System.out.println(offreStageDTO);
         if (result.hasErrors()) {
             String errorMessages = result.getFieldErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
