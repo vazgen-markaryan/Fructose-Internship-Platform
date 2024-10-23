@@ -11,8 +11,6 @@ import {AdminProvider} from "../../../providers/AdminProvider";
 import {RoleRoute} from "../../routing/RoleRoute";
 import ManageUsers from "./admin/ManageUsers";
 import {OffreStageProvider} from "../../../providers/OffreStageProvider";
-
-import {RoleRoute} from "../../routing/PrivateRoute";
 import ModifierOffreStage from "../../offre_stage/ModifierOffreStage";
 import ManageOffresStage from "./offre-stage/ManageOffresStage";
 
