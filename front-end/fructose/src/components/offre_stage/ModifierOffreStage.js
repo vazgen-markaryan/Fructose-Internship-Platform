@@ -12,7 +12,7 @@ const ModifierOffreStage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { currentUser, currentToken } = useContext(AuthContext);
-    const [offreStage, setOffreStage] = useState(null);
+    const [offreStage, setOffreStage] = useState({});
     const [errors, setErrors] = useState({});
     const { fetchOffreStage, updateOffreStage } = useContext(OffreStageContext);
 
@@ -22,7 +22,8 @@ const ModifierOffreStage = () => {
                 if (currentUser.role === "EMPLOYEUR") {
                     try {
                         const response = await fetchOffreStage(id);
-                        setOffreStage(response);
+                        await setOffreStage(response);
+                        await console.log("offreStage", response);
                     } catch (error) {
                         console.log("error" + error);
                     }
@@ -32,14 +33,14 @@ const ModifierOffreStage = () => {
     }, [currentUser]);
 
     const handleInputChange = (event) => {
-        const { name, value } = event.target;
+        const {name, value} = event.target;
 
         if (name === 'dateDebut' || name === 'dateFin' || name === 'dateLimiteCandidature') {
-            setOffreStage({ ...offreStage, [name]: new Date(value).toISOString().split('T')[0] });
+            setOffreStage({...offreStage, [name]: new Date(value)});
         } else {
-            setOffreStage({ ...offreStage, [name]: value });
+            setOffreStage({...offreStage, [name]: value});
         }
-    };
+    }
 
     const validateFields = () => {
         const {
@@ -47,44 +48,48 @@ const ModifierOffreStage = () => {
             compagnie, departementDTO, tauxHoraire,
             typeEmploi, adresse, modaliteTravail,
             nombreHeuresSemaine, nombrePostes,
+            dateDebut, dateFin
         } = offreStage;
 
         const errors = {};
 
         if (nom.length < 3 || nom.length > 100) {
-            errors.nom = "Nom must be between 3 and 100 characters.";
+            errors.nom = t("modifier_offre_stage_page.errors.nom");
         }
         if (poste.length < 3 || poste.length > 100) {
-            errors.poste = "Poste must be between 3 and 100 characters.";
+            errors.poste = t("modifier_offre_stage_page.errors.poste");
         }
         if (description.length < 10 || description.length > 500) {
-            errors.description = "Description must be between 10 and 500 characters.";
+            errors.description = t("modifier_offre_stage_page.errors.description");
         }
         if (compagnie.length < 3 || compagnie.length > 100) {
-            errors.compagnie = "Compagnie must be between 3 and 100 characters.";
+            errors.compagnie = t("modifier_offre_stage_page.errors.compagnie");
         }
         if (tauxHoraire < 0) {
-            errors.tauxHoraire = "Taux horaire must be positive.";
+            errors.tauxHoraire = t("modifier_offre_stage_page.errors.taux_horaire");
         }
         if (adresse.length < 3 || adresse.length > 100) {
-            errors.adresse = "Adresse must be between 3 and 100 characters.";
+            errors.adresse = t("modifier_offre_stage_page.errors.address");
         }
         if (nombreHeuresSemaine < 1) {
-            errors.nombreHeuresSemaine = "Nombre d'heures par semaine must be at least 1.";
+            errors.nombreHeuresSemaine = t("modifier_offre_stage_page.errors.nombre_heures_semaine_inferieur");
         } else if (nombreHeuresSemaine > 40) {
-            errors.nombreHeuresSemaine = "Nombre d'heures par semaine must be at most 40.";
+            errors.nombreHeuresSemaine = t("modifier_offre_stage_page.errors.nombre_heures_semaine_superieur");
         }
         if (nombrePostes < 1) {
-            errors.nombrePostes = "Nombre de postes must be at least 1.";
+            errors.nombrePostes = t("modifier_offre_stage_page.errors.nombre_postes");
         }
         if (departementDTO === "select" || departementDTO === "") {
-            errors.departementDTO = "Please select a department.";
+            errors.departementDTO = t("modifier_offre_stage_page.errors.programme_etudes_select");
         }
         if (typeEmploi === "select" || typeEmploi === "") {
-            errors.typeEmploi = "Please select a type of employment.";
+            errors.typeEmploi = t("modifier_offre_stage_page.errors.type_emploi_select");
         }
         if (modaliteTravail === "select" || modaliteTravail === "") {
-            errors.modaliteTravail = "Please select a work modality.";
+            errors.modaliteTravail = t("modifier_offre_stage_page.errors.modalite_travail_select");
+        }
+        if (new Date(dateFin) <= new Date(dateDebut)) {
+            errors.dateFin = t("modifier_offre_stage_page.errors.date_fin_before_date_debut");
         }
 
         return errors;
@@ -191,67 +196,46 @@ const ModifierOffreStage = () => {
                         <p className="field-invalid-text">{errors.typeEmploi}</p>
 
                         <label>{t("modifier_offre_stage_page.departement")}</label>
-                        <select name="programmeDTO" onChange={handleInputChange} // Update to programmeDTO
-                                value={offreStage.programmeDTO || ''} required> // Update to programmeDTO
-                            <option value="">{t("programme.select")}</option> // Update to programme
-                            <option value="cinema">{t("programme.cinema")}</option> // Update to programme
-                            <option value="gestion_commerce">{t("programme.gestion_commerce")}</option> // Update to
-                            programme
+                        <select name="departementDTO" onChange={handleInputChange}
+                                value={offreStage.departementDTO || ''} required>
+                            <option value="">{t("programme.select")}</option>
+                            <option value="cinema">{t("programme.cinema")}</option>
+                            <option value="gestion_commerce">{t("programme.gestion_commerce")}</option>
                             <option
-                                value="gestion_operations_chaine_logistique">{t("programme.gestion_operations_chaine_logistique")}</option> //
-                            Update to programme
-                            <option value="journalisme_multimedia">{t("programme.journalisme_multimedia")}</option> //
-                            Update to programme
+                                value="gestion_operations_chaine_logistique">{t("programme.gestion_operations_chaine_logistique")}</option>
+                            <option value="journalisme_multimedia">{t("programme.journalisme_multimedia")}</option>
                             <option
-                                value="langues_trilinguisme_cultures">{t("programme.langues_trilinguisme_cultures")}</option> //
-                            Update to programme
+                                value="langues_trilinguisme_cultures">{t("programme.langues_trilinguisme_cultures")}</option>
                             <option
-                                value="photographie_design_graphique">{t("programme.photographie_design_graphique")}</option> //
-                            Update to programme
-                            <option value="sciences_nature">{t("programme.sciences_nature")}</option> // Update to
-                            programme
+                                value="photographie_design_graphique">{t("programme.photographie_design_graphique")}</option>
+                            <option value="sciences_nature">{t("programme.sciences_nature")}</option>
                             <option
-                                value="sciences_humaines_administration_economie">{t("programme.sciences_humaines_administration_economie")}</option> //
-                            Update to programme
+                                value="sciences_humaines_administration_economie">{t("programme.sciences_humaines_administration_economie")}</option>
                             <option
-                                value="sciences_humaines_individu_relations_humaines">{t("programme.sciences_humaines_individu_relations_humaines")}</option> //
-                            Update to programme
+                                value="sciences_humaines_individu_relations_humaines">{t("programme.sciences_humaines_individu_relations_humaines")}</option>
                             <option
-                                value="sciences_humaines_monde_en_action">{t("programme.sciences_humaines_monde_en_action")}</option> //
-                            Update to programme
-                            <option value="soins_infirmiers">{t("programme.soins_infirmiers")}</option> // Update to
-                            programme
+                                value="sciences_humaines_monde_en_action">{t("programme.sciences_humaines_monde_en_action")}</option>
+                            <option value="soins_infirmiers">{t("programme.soins_infirmiers")}</option>
                             <option
-                                value="soins_infirmiers_auxiliaires">{t("programme.soins_infirmiers_auxiliaires")}</option> //
-                            Update to programme
+                                value="soins_infirmiers_auxiliaires">{t("programme.soins_infirmiers_auxiliaires")}</option>
                             <option
-                                value="techniques_education_enfance">{t("programme.techniques_education_enfance")}</option> //
-                            Update to programme
-                            <option value="techniques_bureautique">{t("programme.techniques_bureautique")}</option> //
-                            Update to programme
+                                value="techniques_education_enfance">{t("programme.techniques_education_enfance")}</option>
+                            <option value="techniques_bureautique">{t("programme.techniques_bureautique")}</option>
                             <option
-                                value="techniques_comptabilite_gestion">{t("programme.techniques_comptabilite_gestion")}</option> //
-                            Update to programme
-                            <option value="techniques_informatique">{t("programme.techniques_informatique")}</option> //
-                            Update to programme
+                                value="techniques_comptabilite_gestion">{t("programme.techniques_comptabilite_gestion")}</option>
+                            <option value="techniques_informatique">{t("programme.techniques_informatique")}</option>
                             <option
-                                value="techniques_travail_social">{t("programme.techniques_travail_social")}</option> //
-                            Update to programme
+                                value="techniques_travail_social">{t("programme.techniques_travail_social")}</option>
                             <option
-                                value="technologie_architecture">{t("programme.technologie_architecture")}</option> //
-                            Update to programme
+                                value="technologie_architecture">{t("programme.technologie_architecture")}</option>
                             <option
-                                value="technologie_estimation_evaluation_batiment">{t("programme.technologie_estimation_evaluation_batiment")}</option> //
-                            Update to programme
-                            <option value="technologie_genie_civil">{t("programme.technologie_genie_civil")}</option> //
-                            Update to programme
+                                value="technologie_estimation_evaluation_batiment">{t("programme.technologie_estimation_evaluation_batiment")}</option>
+                            <option value="technologie_genie_civil">{t("programme.technologie_genie_civil")}</option>
                             <option
-                                value="technologie_genie_electrique">{t("programme.technologie_genie_electrique")}</option> //
-                            Update to programme
+                                value="technologie_genie_electrique">{t("programme.technologie_genie_electrique")}</option>
                             <option
-                                value="technologie_genie_physique">{t("programme.technologie_genie_physique")}</option> //
-                            Update to programme
-                            <option value="tremplin_dec">{t("programme.tremplin_dec")}</option> // Update to programme
+                                value="technologie_genie_physique">{t("programme.technologie_genie_physique")}</option>
+                            <option value="tremplin_dec">{t("programme.tremplin_dec")}</option>
                         </select>
                         <p className="field-invalid-text">{errors.departementDTO}</p>
 
@@ -272,18 +256,19 @@ const ModifierOffreStage = () => {
                             type="date"
                             name="dateLimiteCandidature"
                             onChange={handleInputChange}
-                            value={offreStage.dateLimiteCandidature}
+                            value={offreStage.dateLimiteCandidature ? new Date(offreStage.dateLimiteCandidature).toISOString().split('T')[0] : ""}
                             required
                             min={new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]}
                             onKeyDown={(e) => {
                                 const currentDate = new Date(e.target.value);
-                                const minDate = new Date(new Date().setDate(new Date().getDate() + 7));  // 7 days from today
+                                const minDate = new Date(new Date().setDate(new Date().getDate() + 7));
+
                                 if (e.key === 'ArrowDown' && currentDate <= minDate) {
-                                    e.preventDefault(); // Prevent going below 7 days from today
+                                    e.preventDefault();
                                 }
                             }}
                         />
-                        <p className="field-invalid-text">{errors.dateLimiteCandidature}</p>
+                        <p className={"field-invalid-text"}>{errors.dateLimiteCandidature}</p>
 
                         <label>{t("modifier_offre_stage_page.date_debut")}</label>
                         <input
@@ -291,11 +276,9 @@ const ModifierOffreStage = () => {
                             type="date"
                             name="dateDebut"
                             onChange={handleInputChange}
-                            value={offreStage.dateDebut}
+                            value={offreStage.dateDebut ? new Date(offreStage.dateDebut).toISOString().split('T')[0] : ""}
                             required
-                            min={offreStage.dateLimiteCandidature instanceof Date && !isNaN(offreStage.dateLimiteCandidature.getTime())
-                                ? new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1)).toISOString().split('T')[0]
-                                : ""}
+                            min={offreStage.dateLimiteCandidature ? new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1)).toISOString().split('T')[0] : ""}
                             onKeyDown={(e) => {
                                 const minDate = new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1));
 
@@ -304,7 +287,7 @@ const ModifierOffreStage = () => {
                                 }
                             }}
                         />
-                        <p className="field-invalid-text">{errors.dateDebut}</p>
+                        <p className={"field-invalid-text"}>{errors.dateDebut}</p>
 
                         <label>{t("modifier_offre_stage_page.date_fin")}</label>
                         <input
@@ -312,21 +295,20 @@ const ModifierOffreStage = () => {
                             type="date"
                             name="dateFin"
                             onChange={handleInputChange}
-                            value={offreStage.dateFin}
+                            value={offreStage.dateFin ? new Date(offreStage.dateFin).toISOString().split('T')[0] : ""}
                             required
-                            min={offreStage.dateDebut instanceof Date && !isNaN(offreStage.dateDebut.getTime())
-                                ? new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1)).toISOString().split('T')[0]
-                                : ""}
+                            min={offreStage.dateDebut ? new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1)).toISOString().split('T')[0] : ""}
                             onKeyDown={(e) => {
                                 const currentDate = new Date(e.target.value);
                                 const minDate = new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1));
 
                                 if (e.key === 'ArrowDown' && currentDate <= minDate) {
-                                    e.preventDefault(); // Prevent going below dateDebut + 1 day
+                                    e.preventDefault();
                                 }
                             }}
                         />
                         <p className={"field-invalid-text"}>{errors.dateFin}</p>
+
                         <br/>
                         <br/>
                         <button type="submit">{t("modifier_offre_stage_page.modify_offre_stage")}</button>
