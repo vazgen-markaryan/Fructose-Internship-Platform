@@ -5,6 +5,7 @@
         "EMPLOYEUR": "Employeur",
         "ADMIN": "Administrateur"
     },
+
     "programme": {
         "select": "Sélectionner un programme",
         "cinema": "Cinéma",
@@ -31,16 +32,19 @@
         "technologie_genie_physique": "Technologie du génie physique",
         "tremplin_dec": "Tremplin DEC"
     },
+
     "header_main_page": {
         "signup": "S'inscrire",
         "disconnect": "Déconnexion",
         "notifications": "Notifications"
     },
+
     "home_page": {
         "carriere": "Votre carrière",
         "commence": "commence ",
         "ici": "ici"
     },
+
     "connexion_page": {
         "connexion": "Connexion",
         "email": "Courriel",
@@ -55,6 +59,7 @@
             "unknown_error": "Erreur inconnue. Veuillez réessayer"
         }
     },
+
     "creer_utilisateur_page": {
         "creer_compte": "Créer un compte",
         "carriere": "Commencer votre carrière n'a jamais été aussi facile",
@@ -67,6 +72,7 @@
         "finalization": "Finalisation",
         "dashboard": "Accéder au tableau de bord"
     },
+
     "selection_role_page": {
         "who_are_you": "Qui êtes-vous?",
         "description": "Sélectionner le type d'utilisateur qui vous correspond",
@@ -75,6 +81,7 @@
         "employer": "Employeur",
         "continue": "Continuer"
     },
+
     "information_base_page": {
         "information": "Informations de base",
         "description": "Entrez votre prénom, nom de famille et l'adresse courriel que vous utiliserez pour vous connecter à la plateforme à partir de maintenant.",
@@ -91,6 +98,7 @@
             "email_taken": "L'adresse courriel est déjà utilisée"
         }
     },
+
     "information_etudiant_page": {
         "information": "Informations scolaires",
         "description": "Entrez votre numéro de matricule défini par l'établissement ainsi que le programme d'études suivi.",
@@ -115,6 +123,7 @@
             "password_doesnt_match": "Les mots de passe ne correspondent pas."
         }
     },
+
     "information_employeur_page": {
         "title": "Informations sur l'employeur",
         "description": "Entrez les informations requises sur l'entreprise offrant les stages",
@@ -125,6 +134,7 @@
             "company_name_lenght": "Le nom de l'entreprise doit contenir entre 3 et 100 caractères"
         }
     },
+
     "information_professeur_page": {
         "title": "Informations sur votre emploi",
         "description": "Entrez votre numéro d'employé défini par l'établissement ainsi que le département d'appartenance",
@@ -138,6 +148,7 @@
             "employee_number_taken": "Le numéro d'employé est déjà utilisé"
         }
     },
+
     "creer_offre_stage_page": {
         "title": "Créer une offre de stage",
         "nom": "Nom",
@@ -156,17 +167,20 @@
         "date_fin": "Date de fin",
         "creer_offre_stage": "Créer l'offre de stage",
         "retour": "Retour a l'accueil",
+
         "types_emploi": {
             "select": "Sélectionner un type d'emploi",
             "temps_partiel": "Temps partiel",
             "temps_plein": "Temps plein"
         },
+
         "modalites_travail": {
             "select": "Sélectionner une modalité de travail",
             "teletravail": "Télétravail",
             "presentiel": "Présentiel",
             "hybride": "Hybride"
         },
+
         "errors": {
             "nom": "Le nom doit contenir entre 3 et 100 caractères",
             "poste": "Le poste doit contenir entre 3 et 100 caractères",
@@ -182,6 +196,7 @@
             "type_emploi_select": "Le type d'emploi doit être sélectionné"
         }
     },
+
     "dashboard_home_page": {
         "home": "Accueil",
         "offer": "Offres de stage",
@@ -203,13 +218,16 @@
         "user_management": "Gestion des utilisateurs",
         "not_approved_users": "Utilisateurs non approuvés"
     },
+
     "pdf_view_page": {
         "error": "Une erreur inconnue est survenue"
     },
+
     "view_page": {
         "home": "Accueil",
         "hello": "Bonjour"
     },
+
     "upload_page": {
         "drag_drop": "Glissez et déposez votre CV ici",
         "or": "OU",
@@ -218,9 +236,11 @@
         "upload": "Téléverser",
         "upload_cv": "Téléversez votre CV"
     },
+
     "manage_cv_page": {
         "my_cvs": "Mes Curiculums Vitae"
     },
+
     "manage_users_page": {
         "not_approved_users": "Utilisateurs non approuvés",
         "not_approved_cvs": "CVs non approuvés",
@@ -242,6 +262,7 @@
         "global_view": "Vue globale",
         "actions": "Actions"
     },
+
     "manage_cv": {
         "upload_error": "Erreur lors du téléchargement du CV",
         "status": {
@@ -264,6 +285,7 @@
             "preview": "Aperçu"
         }
     },
+
     "upload_cv": {
         "title": "Téléverser un CV",
         "drag_drop": "Glissez votre CV ici",
@@ -275,6 +297,7 @@
         "upload_error": "Une erreur est survenue lors du téléversement.",
         "error_file_size_exceeded": "La taille du fichier dépasse la limite autorisée de {{maxSize}} KB."
     },
+
     "manage_offre_stage": {
         "titles": {
             "offre_stages": "Offres de stage",
