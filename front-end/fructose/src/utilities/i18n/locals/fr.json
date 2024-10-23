@@ -286,6 +286,17 @@
       "offre_stages": "Offres de stage",
       "details": "Détails"
     },
+    "modalite_travail": {
+      "select": "Select a work modality",
+      "teletravail": "Remote work",
+      "presentiel": "On-site",
+      "hybride": "Hybrid"
+    },
+    "type_emploi": {
+      "select": "Select a type of employment",
+      "temps_partiel": "Part-time",
+      "temps_plein": "Full-time"
+    },
     "buttons": {
       "add": "Ajouter",
       "modify": "Modifier",

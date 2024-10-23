@@ -281,6 +281,17 @@
       "date_fin": "Please select a valid end date."
     }
   },
+  "modalite_travail": {
+    "select": "Select a work modality",
+    "teletravail": "Remote work",
+    "presentiel": "On-site",
+    "hybride": "Hybrid"
+  },
+  "type_emploi": {
+    "select": "Select a type of employment",
+    "temps_partiel": "Part-time",
+    "temps_plein": "Full-time"
+  },
   "manage_offre_stage": {
     "titles": {
       "offre_stages": "Internship Offers",

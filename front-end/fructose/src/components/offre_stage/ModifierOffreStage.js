@@ -191,46 +191,67 @@ const ModifierOffreStage = () => {
                         <p className="field-invalid-text">{errors.typeEmploi}</p>
 
                         <label>{t("modifier_offre_stage_page.departement")}</label>
-                        <select name="departementDTO" onChange={handleInputChange}
-                                value={offreStage.departementDTO || ''} required>
-                            <option value="">{t("departement.select")}</option>
-                            <option value="cinema">{t("departement.cinema")}</option>
-                            <option value="gestion_commerce">{t("departement.gestion_commerce")}</option>
+                        <select name="programmeDTO" onChange={handleInputChange} // Update to programmeDTO
+                                value={offreStage.programmeDTO || ''} required> // Update to programmeDTO
+                            <option value="">{t("programme.select")}</option> // Update to programme
+                            <option value="cinema">{t("programme.cinema")}</option> // Update to programme
+                            <option value="gestion_commerce">{t("programme.gestion_commerce")}</option> // Update to
+                            programme
                             <option
-                                value="gestion_operations_chaine_logistique">{t("departement.gestion_operations_chaine_logistique")}</option>
-                            <option value="journalisme_multimedia">{t("departement.journalisme_multimedia")}</option>
+                                value="gestion_operations_chaine_logistique">{t("programme.gestion_operations_chaine_logistique")}</option> //
+                            Update to programme
+                            <option value="journalisme_multimedia">{t("programme.journalisme_multimedia")}</option> //
+                            Update to programme
                             <option
-                                value="langues_trilinguisme_cultures">{t("departement.langues_trilinguisme_cultures")}</option>
+                                value="langues_trilinguisme_cultures">{t("programme.langues_trilinguisme_cultures")}</option> //
+                            Update to programme
                             <option
-                                value="photographie_design_graphique">{t("departement.photographie_design_graphique")}</option>
-                            <option value="sciences_nature">{t("departement.sciences_nature")}</option>
+                                value="photographie_design_graphique">{t("programme.photographie_design_graphique")}</option> //
+                            Update to programme
+                            <option value="sciences_nature">{t("programme.sciences_nature")}</option> // Update to
+                            programme
                             <option
-                                value="sciences_humaines_administration_economie">{t("departement.sciences_humaines_administration_economie")}</option>
+                                value="sciences_humaines_administration_economie">{t("programme.sciences_humaines_administration_economie")}</option> //
+                            Update to programme
                             <option
-                                value="sciences_humaines_individu_relations_humaines">{t("departement.sciences_humaines_individu_relations_humaines")}</option>
+                                value="sciences_humaines_individu_relations_humaines">{t("programme.sciences_humaines_individu_relations_humaines")}</option> //
+                            Update to programme
                             <option
-                                value="sciences_humaines_monde_en_action">{t("departement.sciences_humaines_monde_en_action")}</option>
-                            <option value="soins_infirmiers">{t("departement.soins_infirmiers")}</option>
+                                value="sciences_humaines_monde_en_action">{t("programme.sciences_humaines_monde_en_action")}</option> //
+                            Update to programme
+                            <option value="soins_infirmiers">{t("programme.soins_infirmiers")}</option> // Update to
+                            programme
                             <option
-                                value="soins_infirmiers_auxiliaires">{t("departement.soins_infirmiers_auxiliaires")}</option>
+                                value="soins_infirmiers_auxiliaires">{t("programme.soins_infirmiers_auxiliaires")}</option> //
+                            Update to programme
                             <option
-                                value="techniques_education_enfance">{t("departement.techniques_education_enfance")}</option>
-                            <option value="techniques_bureautique">{t("departement.techniques_bureautique")}</option>
+                                value="techniques_education_enfance">{t("programme.techniques_education_enfance")}</option> //
+                            Update to programme
+                            <option value="techniques_bureautique">{t("programme.techniques_bureautique")}</option> //
+                            Update to programme
                             <option
-                                value="techniques_comptabilite_gestion">{t("departement.techniques_comptabilite_gestion")}</option>
-                            <option value="techniques_informatique">{t("departement.techniques_informatique")}</option>
+                                value="techniques_comptabilite_gestion">{t("programme.techniques_comptabilite_gestion")}</option> //
+                            Update to programme
+                            <option value="techniques_informatique">{t("programme.techniques_informatique")}</option> //
+                            Update to programme
                             <option
-                                value="techniques_travail_social">{t("departement.techniques_travail_social")}</option>
+                                value="techniques_travail_social">{t("programme.techniques_travail_social")}</option> //
+                            Update to programme
                             <option
-                                value="technologie_architecture">{t("departement.technologie_architecture")}</option>
+                                value="technologie_architecture">{t("programme.technologie_architecture")}</option> //
+                            Update to programme
                             <option
-                                value="technologie_estimation_evaluation_batiment">{t("departement.technologie_estimation_evaluation_batiment")}</option>
-                            <option value="technologie_genie_civil">{t("departement.technologie_genie_civil")}</option>
+                                value="technologie_estimation_evaluation_batiment">{t("programme.technologie_estimation_evaluation_batiment")}</option> //
+                            Update to programme
+                            <option value="technologie_genie_civil">{t("programme.technologie_genie_civil")}</option> //
+                            Update to programme
                             <option
-                                value="technologie_genie_electrique">{t("departement.technologie_genie_electrique")}</option>
+                                value="technologie_genie_electrique">{t("programme.technologie_genie_electrique")}</option> //
+                            Update to programme
                             <option
-                                value="technologie_genie_physique">{t("departement.technologie_genie_physique")}</option>
-                            <option value="tremplin_dec">{t("departement.tremplin_dec")}</option>
+                                value="technologie_genie_physique">{t("programme.technologie_genie_physique")}</option> //
+                            Update to programme
+                            <option value="tremplin_dec">{t("programme.tremplin_dec")}</option> // Update to programme
                         </select>
                         <p className="field-invalid-text">{errors.departementDTO}</p>
 
