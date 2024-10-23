@@ -19,7 +19,7 @@ const DashboardHome = () => {
     const { currentUser, currentToken } = useContext(AuthContext);
     const { GetCvs } = useContext(CvContext);
     const [cvs, setCvs] = useState([]);
-    const { GetOffresStage } = useContext(OffreStageContext);
+    const {fetchOffresStage} = useContext(OffreStageContext);
     const [offresStage, setOffresStage] = useState([]);
 
     useEffect(() => {
@@ -36,9 +36,8 @@ const DashboardHome = () => {
                 }
                 if (currentUser.role === "EMPLOYEUR") {
                     try {
-                        const response = await GetOffresStage();
-                        const data = await response.text();
-                        setOffresStage(JSON.parse(data));
+                        const response = await fetchOffresStage();
+                        setOffresStage(response);
                     } catch (error) {
                         console.log("error" + error);
                     }
@@ -53,7 +52,7 @@ const DashboardHome = () => {
                 return (
                     <section>
                         <div className={"toolbar-items"}>
-                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.offer")}</h4>
+                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
                             <button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/></button>
                         </div>
                         <div style={{"padding": "10px 0"}}>
@@ -79,39 +78,45 @@ const DashboardHome = () => {
                     <section>
                         <div className={"toolbar-items"}>
                             <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
+                            <Link to="/dashboard/manage-offres-stage">
+                                <button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/>
+                                </button>
+                            </Link>
                             <Link to="./creer-offre-stage">
                                 <button className={"btn-filled"}>{t("dashboard_home_page.add_offer")} <Icon
                                     path={mdiBriefcasePlusOutline} size={1}/></button>
                             </Link>
                         </div>
                         <div style={{"padding": "10px 0"}}>
-                            <div style={{
-                                "width": "400px",
-                                "height": "320px",
-                                "display": "flex",
-                                "alignItems": "center",
-                                "justifyContent": "center",
-                                "backgroundColor": "#eee",
-                                "borderRadius": "5px"
-                            }}>
-                                <div style={{"textAlign": "center"}}>
-                                    {offresStage.length === 0 ? (
-                                        <>
-                                            <Icon path={mdiBriefcaseRemoveOutline} size={1}/>
-                                            <p>{t("dashboard_home_page.no_offers")}</p>
-                                        </>
-                                    ) : (
-                                        <div style={{"display": "flex", "flexDirection": "column", "gap": "5px"}}>
-                                            {offresStage.map((offre, index) => (
-                                                <div key={index} style={{"display": "flex", "alignItems": "center", "gap": "5px"}}>
-                                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                                    <p className="m-0">{offre.nom}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
+                            {offresStage.length === 0 ? (
+                                <div style={{
+                                    "width": "400px",
+                                    "display": "flex",
+                                    "alignItems": "center",
+                                    "backgroundColor": "#eee",
+                                    "borderRadius": "5px",
+                                    "gap": "5px",
+                                    "padding": "10px"
+                                }}>
+                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                                    <p className="m-0">{t("dashboard_home_page.no_offers")}</p>
                                 </div>
-                            </div>
+                            ) : (
+                                <div style={{
+                                    "width": "400px",
+                                    "backgroundColor": "#eee",
+                                    "borderRadius": "5px",
+                                    "padding": "10px"
+                                }}>
+                                    {offresStage.map((offreStage, index) => (
+                                        <div key={index}
+                                             style={{"display": "flex", "alignItems": "center", "gap": "5px"}}>
+                                            <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                                            <p className="m-0">{offreStage.nom}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </section>
                 );
@@ -123,10 +128,11 @@ const DashboardHome = () => {
         <>
             <div className="dashboard-card-titlebar">
                 <h1>Accueil</h1>
-                <h5>{t("dashboard_home_page.hello")} {(currentUser != null) ? currentUser.fullName : <div className={"loading-placeholder"}></div>}</h5>
+                <h5>{t("dashboard_home_page.hello")} {(currentUser != null) ? currentUser.fullName :
+                    <div className={"loading-placeholder"}></div>}</h5>
             </div>
-            <div style={{ "display": "flex", "gap": "20px" }}>
-                <div style={{ "width": "70%" }}>
+            <div style={{"display": "flex", "gap": "20px"}}>
+                <div style={{"width": "70%"}}>
                     <div className="dashboard-card">
                         {GetOffreStageSection()}
                         {currentUser && currentUser.role === "ETUDIANT" && (
@@ -134,10 +140,12 @@ const DashboardHome = () => {
                                 <div className={"toolbar-items"}>
                                     <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.portfolio")}</h4>
                                     <Link to="/dashboard/manage-cvs">
-                                        <button>{t("dashboard_home_page.manage")} <Icon path={mdiChevronRight} size={1}/></button>
+                                        <button>{t("dashboard_home_page.manage")} <Icon path={mdiChevronRight}
+                                                                                        size={1}/></button>
                                     </Link>
                                     <Link to="/dashboard/upload-cv">
-                                        <button>{t("dashboard_home_page.add_cv")} <Icon path={mdiPlus} size={1}/></button>
+                                        <button>{t("dashboard_home_page.add_cv")} <Icon path={mdiPlus} size={1}/>
+                                        </button>
                                     </Link>
                                 </div>
                                 <div style={{ "padding": "10px 0" }}>

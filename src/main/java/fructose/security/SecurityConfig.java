@@ -47,6 +47,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/creer-offre-stage").permitAll()
                         .requestMatchers(HttpMethod.POST, "/infos-utilisateur").permitAll()
                         .requestMatchers(HttpMethod.GET, "/get-offre-stage").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/get-offre-stage/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/delete-offre-stage/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/modifier-offre-stage").permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(new JwtAuthentificationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
         return http.build();

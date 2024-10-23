@@ -4,6 +4,7 @@ import fructose.model.OffreStage;
 import fructose.model.Utilisateur;
 import fructose.repository.EmployeurRepository;
 import fructose.repository.OffreStageRepository;
+import fructose.service.dto.DepartementDTO;
 import fructose.service.dto.OffreStageDTO;
 import fructose.service.dto.UtilisateurDTO;
 import jakarta.validation.*;
@@ -60,13 +61,26 @@ public class OffreStageService {
         offreStageRepository.save(offreStage);
     }
 
-    public void updateOffreStage(Long id, OffreStageDTO offreStageDTO) {
-        if (id == null) {
-            throw new IllegalArgumentException("ID ne peut pas être nul");
+    public void updateOffreStage(OffreStageDTO offreStageDTO) {
+        if (!offreStageRepository.existsById(offreStageDTO.getId())) {
+            throw new IllegalArgumentException("L'offre de stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être mis à jour");
         }
-        offreStageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("L'offre stage avec l'ID: " + id + " n'existe pas, alors il ne peut pas être mis à jour"));
-        validateOffreStage(offreStageDTO);
-        offreStageRepository.save(OffreStageDTO.toEntity(offreStageDTO));
+        OffreStage offreStage = offreStageRepository.findById(offreStageDTO.getId()).orElseThrow(() -> new IllegalArgumentException("L'offre de stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être mis à jour"));
+        offreStage.setNom(offreStageDTO.getNom());
+        offreStage.setPoste(offreStageDTO.getPoste());
+        offreStage.setDescription(offreStageDTO.getDescription());
+        offreStage.setCompagnie(offreStageDTO.getCompagnie());
+        offreStage.setDepartement(DepartementDTO.toEntity(offreStageDTO.getDepartementDTO()));
+        offreStage.setTauxHoraire(offreStageDTO.getTauxHoraire());
+        offreStage.setTypeEmploi(offreStageDTO.getTypeEmploi());
+        offreStage.setAdresse(offreStageDTO.getAdresse());
+        offreStage.setModaliteTravail(offreStageDTO.getModaliteTravail());
+        offreStage.setDateDebut(offreStageDTO.getDateDebut());
+        offreStage.setDateFin(offreStageDTO.getDateFin());
+        offreStage.setNombreHeuresSemaine(offreStageDTO.getNombreHeuresSemaine());
+        offreStage.setNombrePostes(offreStageDTO.getNombrePostes());
+        offreStage.setDateLimiteCandidature(offreStageDTO.getDateLimiteCandidature());
+        offreStageRepository.save(offreStage);
     }
 
 
