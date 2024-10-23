@@ -295,7 +295,6 @@
 
     },
 
-
     "upload_cv": {
         "title": "Téléverser un CV",
         "drag_drop": "Glissez votre CV ici",
@@ -306,5 +305,20 @@
         "error_file_required": "Veuillez sélectionner un fichier avant de soumettre.",
         "upload_error": "Une erreur est survenue lors du téléversement.",
         "error_file_size_exceeded": "La taille du fichier dépasse la limite autorisée de {{maxSize}} KB."
+    },
+
+    "manage_offre_stage": {
+        "titles": {
+            "offre_stages": "Offres de stage",
+            "details": "Détails"
+        },
+        "buttons": {
+            "add": "Ajouter",
+            "modify": "Modifier",
+            "delete": "Supprimer"
+        },
+        "messages": {
+            "no_offre_stages": "Aucune offre de stage à afficher pour le moment"
+        }
     }
 }

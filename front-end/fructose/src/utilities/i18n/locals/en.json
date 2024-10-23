@@ -310,5 +310,20 @@
         "error_file_required": "Please select a file before submitting.",
         "upload_error": "An error occurred during the upload.",
         "error_file_size_exceeded": "The file size exceeds the allowed limit of {{maxSize}} KB."
+    },
+
+    "manage_offre_stage": {
+        "titles": {
+            "offre_stages": "Internship Offers",
+            "details": "Details"
+        },
+        "buttons": {
+            "add": "Add",
+            "modify": "Modify",
+            "delete": "Delete"
+        },
+        "messages": {
+            "no_offre_stages": "No internship offers to display at the moment"
+        }
     }
 }
