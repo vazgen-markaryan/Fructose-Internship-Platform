@@ -118,8 +118,10 @@ public class OffreStageController {
 	public ResponseEntity<?> getOffreStageById(@PathVariable Long id) {
 		try {
 			return ResponseEntity.ok(offreStageService.getOffreStageById(id));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aucune offre de stage n'a été trouvée avec l'ID: " + id);
 		} catch (Exception e) {
-			logger.error("Une erreur inattendue s'est produite", e);
+			logger.error("Une erreur inattendue s'est produite1", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
 		}
 	}
