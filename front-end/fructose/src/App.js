@@ -9,7 +9,6 @@ import Dashboard from "./components/pages/dashboard/Dashboard";
 import {AuthProvider} from "./providers/AuthProvider";
 import {PrivateRoute} from "./components/routing/PrivateRoute";
 import {RoleRoute} from "./components/routing/RoleRoute";
-import TemporaireFooterLanguage from "./components/TemporaireFooterLanguage";
 
 function App() {
 
@@ -24,7 +23,6 @@ function App() {
                         <Route path="/dashboard/*" element={<PrivateRoute element={<Dashboard/>}/>}/>
                         <Route path="/creer-offre-stage" element={<RoleRoute element={<CreerOffreStage/>} roles={['ADMIN', 'EMPLOYEUR']}/>}/>
                     </Routes>
-                    <TemporaireFooterLanguage/>
                 </AuthProvider>
             </div>
         </BrowserRouter>
