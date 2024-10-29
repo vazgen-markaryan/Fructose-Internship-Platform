@@ -13,7 +13,7 @@ import {
     mdiBriefcaseRemove,
     mdiCashMultiple,
     mdiBriefcase,
-    mdiBriefcaseOutline
+    mdiBriefcaseOutline, mdiMapMarkerOutline, mdiFilterMultipleOutline, mdiChevronUp, mdiDomain, mdiBookEducationOutline
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext, AuthProvider} from "../../../../providers/AuthProvider";
@@ -26,10 +26,12 @@ import {OffreStageContext} from "../../../../providers/OffreStageProvider";
 const DiscoverOffers = () => {
     const {t} = useTranslation();
     const {fetchOffresStage} = useContext(OffreStageContext);
-    const {isUserInit} = useContext(AuthContext);
+    const {isUserInit, currentUser} = useContext(AuthContext);
 
     const [offers, setOffers] = useState([])
     const [currentOffer, setCurrentOffer] = useState(null)
+
+    const [displayFiltreWindow, setDisplayFiltreWindow] = useState(false)
 
 
     useEffect(() => {
@@ -49,35 +51,116 @@ const DiscoverOffers = () => {
         setCurrentOffer(offer);
     };
 
-    const getOfferList = () => {
+    const getOfferListSection = () => {
         if (offers.length > 0) {
             return (
-                <>
-                    <h5>{offers.length} Resultats</h5>
-                    <div className="menu-list">
-                        {offers.slice(0, -1).reverse().map((item, index) => (
-                            <div onClick={() => handleOfferSelection(item)} key={index}
-                                 className={`menu-list-item ${currentOffer && item.id === currentOffer.id ? "menu-list-item-selected" : ""}`}
-                                 style={{
-                                     width: "100%",
-                                     padding: "0",
-                                     height: "170px",
-                                     boxSizing: "border-box"
-                                 }}>
-                                <div style={{padding: "16px"}}>
-                                    <p style={{fontSize: "11px", textTransform: "uppercase"}} className="text-dark">
-                                        {t("programme." + item.departementDTO.nom)}
-                                    </p>
-                                    <h4 className="m-0">{item.poste}</h4>
-                                    <p>{item.ownerDTO.companyName}</p>
-                                    <p>{item.adresse}</p>
-                                </div>
+                <div style={{width: "45%"}}>
+                    <div className={"dashboard-card expandable " + ((displayFiltreWindow)?"expanded":"")}>
+                        <section>
+                            <div className="toolbar-items">
+                                <h5 className="m-0">Filtres</h5>
+                                <div className="toolbar-spacer"></div>
+                                <button className="btn-icon" onClick={()=>{setDisplayFiltreWindow(false)}}><Icon path={mdiChevronUp} size={1} /></button>
                             </div>
-                        ))}
+                            <br/>
+                            <div>
+                                <div className="list-bullet">
+                                    <Icon path={mdiBriefcaseOutline} size={1} />
+                                    <div style={{padding: "4px 0"}}>
+                                        <h6 className="m-0" style={{marginBottom: "5px"}}>Type de stage</h6>
+                                        <input type="radio" id="typeTempsTout" name="filtreTypeTemps"/>
+                                        <label htmlFor="typeTempsPartiel">Tous</label>
+                                        <br/>
+                                        <input type="radio" id="typeTempsPartiel" name="filtreTypeTemps"/>
+                                        <label htmlFor="typeTempsPartiel">Temps Partiel</label>
+                                        <br/>
+                                        <input type="radio" id="typeTempsPlein" name="filtreTypeTemps"/>
+                                        <label htmlFor="typeTempsPartiel">Temps Plein</label>
+                                    </div>
+                                </div>
+                                <div className="list-bullet">
+                                    <Icon path={mdiDomain} size={1} />
+                                    <div style={{padding: "4px 0"}}>
+                                        <h6 className="m-0" style={{marginBottom: "5px"}}>Emplacement</h6>
+                                        <input type="radio" id="typeTempsTout" name="filtreTypeEmplacement"/>
+                                        <label htmlFor="typeTempsPartiel">Tous</label>
+                                        <br/>
+                                        <input type="checkbox" id="typeEmplacementVirtuel" name="filtreTypeEmplacement"/>
+                                        <label htmlFor="typeTempsPartiel">Présentiel</label>
+                                        <br/>
+                                        <input type="checkbox" id="typeEmplacementVirtuel" name="filtreTypeEmplacement"/>
+                                        <label htmlFor="typeTempsPartiel">Virtuel</label>
+                                        <br/>
+                                        <input type="checkbox" id="typeEmplacementVirtuel" name="filtreTypeEmplacement"/>
+                                        <label htmlFor="typeTempsPartiel">Hybride</label>
+                                    </div>
+                                </div>
+                                <div className="list-bullet">
+                                    <Icon path={mdiCashMultiple} size={1} />
+                                    <div style={{padding: "4px 0"}}>
+                                        <h6 className="m-0" style={{marginBottom: "5px"}}>Taux Horaire</h6>
+                                        <input type="range" min="0" max="50"/>
+                                    </div>
+                                </div>
+                                <div className="list-bullet">
+                                    <Icon path={mdiBookEducationOutline} size={1} />
+                                    <div style={{padding: "4px 0"}}>
+                                        <h6 className="m-0" style={{marginBottom: "5px"}}>Département</h6>
+                                        <select name="" id="" disabled="disabled">
+                                            <option value="">{t("programme." + currentUser.departementDTO.nom)}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div className="toolbar-items">
+                                <div className="toolbar-spacer"></div>
+                                <button className="btn-filled">Rechercher</button>
+                            </div>
+                        </section>
                     </div>
-                    <br/>
-                    {}
-                </>
+                    <div className="dashboard-card">
+                        <section>
+                            <div>
+                                <div className="toolbar-items">
+                                    <h5 className="m-0">{offers.length} Resultats</h5>
+                                    <div className="toolbar-spacer"></div>
+                                    <select name="" id="" title="Filtrer par" style={{width: "150px"}}>
+                                        <optgroup label="Ordre des résultats">
+                                            <option value="recent">Le Plus Récent</option>
+                                            <option value="recent">Le Plus Ancien</option>
+                                            <option value="recent">Date limite candidature</option>
+                                        </optgroup>
+                                    </select>
+                                    <button onClick={()=>{setDisplayFiltreWindow(!displayFiltreWindow)}}><Icon path={mdiFilterMultipleOutline} size={1} /> Filtrer</button>
+                                </div>
+                                <div className="menu-list">
+                                    {offers.reverse().map((item, index) => (
+                                        <div onClick={() => handleOfferSelection(item)} key={index}
+                                             className={`menu-list-item ${currentOffer && item.id === currentOffer.id ? "menu-list-item-selected" : ""}`}
+                                             style={{
+                                                 width: "100%",
+                                                 padding: "0",
+                                                 height: "170px",
+                                                 boxSizing: "border-box"
+                                             }}>
+                                            <div style={{padding: "16px"}}>
+                                                <p style={{fontSize: "11px", textTransform: "uppercase"}} className="text-dark">
+                                                    {t("programme." + item.departementDTO.nom)}
+                                                </p>
+                                                <h4 className="m-0">{item.poste}</h4>
+                                                <p>{item.ownerDTO.companyName}</p>
+                                                <p>{item.adresse}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <br/>
+                            </div>
+                        </section>
+                    </div>
+                </div>
             );
         }
     };
@@ -85,47 +168,68 @@ const DiscoverOffers = () => {
     const getAppercu = () => {
         if (currentOffer) {
             return (
-                <div className="dashboard-card" style={{width: "55%", position: "sticky", top: "80px"}}>
-                    <div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
-                        <h6 className="m-0">{t('manage_cv.titles.preview')}</h6>
-                        <span className="toolbar-spacer"></span>
-                        <button className="btn-icon" onClick={() => setCurrentOffer(null)}><Icon path={mdiClose} size={1}/>
-                        </button>
+                <>
+                    <div className="dashboard-card" style={{width: "55%", position: "sticky", top: "70px", maxHeight: "85vh", display: "flex", flexDirection:"column"}}>
+                        <div className="user-profile-section">
+                            <div className="company-profile-section-banner" style={{borderRadius: "5px 5px 0 0"}}></div>
+                            <div className="user-profile-section-profile-picture radius-normal"
+                                 style={{"backgroundImage": "url('/assets/offers/default-company.png')"}}>
+                            </div>
+                        </div>
+                        <section>
+                            <div className="toolbar-items" style={{padding: "0 10px"}}>
+                                <div>
+                                    <h4 className="m-0">{currentOffer.poste}</h4>
+                                    <p className="text-dark m-0">{currentOffer.ownerDTO.companyName}</p>
+                                </div>
+                                <div className="toolbar-spacer"></div>
+                                <button className="btn-filled">Postuler</button>
+                            </div>
+                            <br/>
+                            <hr/>
+                        </section>
+                        <div style={{overflowY: "auto"}}>
+                            <section>
+                                <h5>Particularites</h5>
+                                <div className="list-bullet">
+                                    <Icon path={mdiCashMultiple} size={1} />
+                                    <div style={{padding: "4px 0"}}>
+                                        <h6 className="m-0" style={{marginBottom: "5px"}}>Salaire</h6>
+                                        <span className="badge text-mini">C$ {currentOffer.tauxHoraire}.00</span>
+                                    </div>
+                                </div>
+                                <div className="list-bullet">
+                                    <Icon path={mdiBriefcaseOutline} size={1} />
+                                    <div style={{padding: "4px 0"}}>
+                                        <h6 className="m-0" style={{marginBottom: "5px"}}>Type de stage</h6>
+                                        <span className="badge text-mini">{t("creer_offre_stage_page.types_emploi." + currentOffer.modaliteTravail)}</span>
+                                        <span className="badge text-mini">{currentOffer.nombreHeuresSemaine} Heures</span>
+                                    </div>
+                                </div>
+                                <div className="list-bullet">
+                                    <Icon path={mdiBriefcaseOutline} size={1} />
+                                    <div style={{padding: "4px 0"}}>
+                                        <h6 className="m-0" style={{marginBottom: "5px"}}>Horaire</h6>
+                                        <div style={{display: "flex", alignItems: "center"}}>
+                                            <span className="badge text-mini">{t("creer_offre_stage_page.types_emploi." + currentOffer.modaliteTravail)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <h5>Location</h5>
+                                <div className="list-bullet">
+                                    <Icon path={mdiMapMarkerOutline} size={1} />
+                                    <div style={{padding: "4px 0"}}>
+                                        <h6 className="m-0" style={{marginBottom: "5px"}}>{currentOffer.adresse}</h6>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <h5>Description</h5>
+                                <p>{currentOffer.description}</p>
+                            </section>
+                        </div>
                     </div>
-                    <div className="user-profile-section">
-                        <div className="company-profile-section-banner"></div>
-                        <div className="user-profile-section-profile-picture radius-normal"
-                             style={{"backgroundImage": "url('/assets/offers/default-company.png')"}}>
-                        </div>
-                    </div>
-                    <section>
-                        <div className="toolbar-items" style={{padding: "0 10px"}}>
-                            <div>
-                                <h4 className="m-0">{currentOffer.poste}</h4>
-                                <p className="text-dark m-0">{currentOffer.ownerDTO.companyName}</p>
-                            </div>
-                            <div className="toolbar-spacer"></div>
-                            <button className="btn-filled">Postuler</button>
-                        </div>
-                        <br/>
-                        <hr/>
-                        <h5>Particularites</h5>
-                        <div className="list-bullet">
-                            <Icon path={mdiCashMultiple} size={1} />
-                            <div style={{padding: "4px 0"}}>
-                                <h6 className="m-0" style={{marginBottom: "5px"}}>Salaire</h6>
-                                <span className="badge text-mini">C$ {currentOffer.tauxHoraire}.00</span>
-                            </div>
-                        </div>
-                        <div className="list-bullet">
-                            <Icon path={mdiBriefcaseOutline} size={1} />
-                            <div style={{padding: "4px 0"}}>
-                                <h6 className="m-0" style={{marginBottom: "5px"}}>Type de stage</h6>
-                                <span className="badge text-mini">{t("creer_offre_stage_page.types_emploi." + currentOffer.modaliteTravail)}</span>
-                            </div>
-                        </div>
-                    </section>
-                </div>
+                </>
             );
         }
         return null;
@@ -146,11 +250,10 @@ const DiscoverOffers = () => {
             );
         } else {
             return (
-                <div className="dashboard-card" style={{width: "45%"}}>
-                    <section>
-                        {getOfferList()}
-                    </section>
-                </div>
+                <>
+                    {getOfferListSection()}
+                </>
+
             );
         }
     };
