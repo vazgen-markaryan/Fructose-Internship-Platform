@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import Icon from "@mdi/react";
 import {
     mdiCashMultiple,
@@ -6,9 +6,12 @@ import {
     mdiMapMarkerOutline
 } from "@mdi/js";
 import { useTranslation } from "react-i18next";
+import {AuthContext} from "../../../../providers/AuthProvider";
 
 const OfferPreview = ({ currentOffer }) => {
     const { t } = useTranslation();
+    const {currentUser} = useContext(AuthContext)
+
 
     if (currentOffer) {
         return (
@@ -26,7 +29,15 @@ const OfferPreview = ({ currentOffer }) => {
                             <p className="text-dark m-0">{currentOffer.ownerDTO.companyName}</p>
                         </div>
                         <div className="toolbar-spacer"></div>
-                        <button className="btn-filled">Postuler</button>
+
+                        {currentUser.role === "ETUDIANT" ? (
+                            <button className="btn-filled">Postuler</button>
+                        ) : currentUser.role === "ADMIN" ? (
+                            <>
+                                <button className="btn-filled">Accepter</button>
+                                <button className="btn-outlined">Refuser</button>
+                            </>
+                        ) : null}
                     </div>
                     <br />
                     <hr />
