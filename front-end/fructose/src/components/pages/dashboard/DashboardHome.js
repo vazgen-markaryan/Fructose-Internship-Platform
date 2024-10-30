@@ -24,7 +24,7 @@ const DashboardHome = () => {
     const [currentOffer, setCurrentOffer] = useState(null);
     const {fetchOffresStage} = useContext(OffreStageContext);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 2;
+    const itemsPerPage = 10;
 
     useEffect(() => {
         if (currentUser) {
@@ -198,16 +198,8 @@ const DashboardHome = () => {
                                 {Array.from({length: Math.ceil(offresStage.length / itemsPerPage)}, (_, index) => (
                                     <button
                                         key={index}
-                                        onClick={() => handlePageChange(index + 1)}
-                                        style={{
-                                            margin: "0 5px",
-                                            padding: "5px 10px",
-                                            backgroundColor: currentPage === index + 1 ? "#007bff" : "#f9f9f9",
-                                            color: currentPage === index + 1 ? "#fff" : "#000",
-                                            border: "1px solid #ddd",
-                                            borderRadius: "5px",
-                                            cursor: "pointer"
-                                        }}
+                                        className={(currentPage === index + 1) ? "btn-filled" : ""}
+                                        onClick={() => { handlePageChange(index + 1); setCurrentOffer(null); }}
                                     >
                                         {index + 1}
                                     </button>
