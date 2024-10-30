@@ -41,7 +41,7 @@ const DashboardHome = () => {
                 try {
                     const response = await fetchOffresStage();
                     setOffresStage(response);
-                }catch (error) {
+                } catch (error) {
                     console.log("error" + error);
                 }
             })();
@@ -59,7 +59,10 @@ const DashboardHome = () => {
                     <section>
                         <div className={"toolbar-items"}>
                             <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
-                            <Link to="/dashboard/discover-offers"><button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/></button></Link>
+                            <Link to="/dashboard/discover-offers">
+                                <button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/>
+                                </button>
+                            </Link>
                         </div>
                         <div style={{"padding": "10px 0"}}>
                             <div style={{
@@ -134,10 +137,6 @@ const DashboardHome = () => {
                     <section>
                         <div className={"toolbar-items"}>
                             <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.offers")}</h4>
-                            <Link to="/dashboard/manage-offres-stage">
-                                <button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/>
-                                </button>
-                            </Link>
                         </div>
                         <div style={{"padding": "10px 0"}}>
                             {offresStage.length === 0 ? (
@@ -199,7 +198,10 @@ const DashboardHome = () => {
                                     <button
                                         key={index}
                                         className={(currentPage === index + 1) ? "btn-filled" : ""}
-                                        onClick={() => { handlePageChange(index + 1); setCurrentOffer(null); }}
+                                        onClick={() => {
+                                            handlePageChange(index + 1);
+                                            setCurrentOffer(null);
+                                        }}
                                     >
                                         {index + 1}
                                     </button>

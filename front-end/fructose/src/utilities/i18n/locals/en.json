@@ -191,7 +191,6 @@
     "dashboard_home_page": {
         "home": "Home",
         "offer": "Internship Offers",
-        "explore": "Explore",
         "no_offers": "No offers to display at the moment",
         "my_offers": "My Internship Offers",
         "add_offer": "Add",
@@ -286,6 +285,25 @@
         "titles": {
             "offre_stages": "Internship Offers",
             "details": "Details"
+        },
+        "status": {
+            "pending": "Pending",
+            "approved": "Approved",
+            "rejected": "Rejected"
+        },
+        "labels": {
+            "company": "Company",
+            "position": "Position",
+            "department": "Department",
+            "hourly_rate": "Hourly Rate",
+            "type": "Employment Type",
+            "address": "Address",
+            "work_mode": "Work Mode",
+            "start_date": "Start Date",
+            "end_date": "End Date",
+            "hours_per_week": "Hours Per Week",
+            "number_of_positions": "Number of Positions",
+            "application_deadline": "Application Deadline"
         },
         "buttons": {
             "add": "Add",

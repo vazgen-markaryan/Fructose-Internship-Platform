@@ -20,6 +20,9 @@ const OffreStageProvider = ({children}) => {
         nombreHeuresSemaine: 1,
         nombrePostes: 1,
         dateLimiteCandidature: new Date(),
+        isRefused : false,
+        isApproved: false,
+        commentaireRefus: ''
     });
     const [errors, setErrors] = useState({});
 
@@ -53,11 +56,11 @@ const OffreStageProvider = ({children}) => {
             if (response.ok) {
                 return await response.json();
             }
-            return [];
         } catch (error) {
-            return [];
+            console.error("Erreur lors de la récupération de l'offre de stage:", error);
         }
     };
+
 
     const deleteOffreStage = async (id) => {
         return await fetch(`/delete-offre-stage/${id}`, {
@@ -70,7 +73,6 @@ const OffreStageProvider = ({children}) => {
     }
 
     const updateOffreStage = async (updatedData) => {
-        console.log(updatedData);
         const response = await fetch(`/modifier-offre-stage`, {
             method: 'PUT',
             headers: {

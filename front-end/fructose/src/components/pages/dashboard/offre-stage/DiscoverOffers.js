@@ -1,39 +1,25 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
     mdiArrowLeft,
-    mdiCheck,
-    mdiClose,
-    mdiFileOutline,
-    mdiClockOutline,
-    mdiFileUploadOutline,
-    mdiDownloadOutline,
-    mdiDeleteOutline,
-    mdiFileQuestionOutline,
-    mdiBriefcaseRemoveOutline,
     mdiBriefcaseRemove,
     mdiCashMultiple,
-    mdiBriefcase,
-    mdiBriefcaseOutline, mdiMapMarkerOutline, mdiFilterMultipleOutline, mdiChevronUp, mdiDomain, mdiBookEducationOutline
+    mdiBriefcaseOutline, mdiFilterMultipleOutline, mdiChevronUp, mdiDomain, mdiBookEducationOutline
 } from "@mdi/js";
 import Icon from "@mdi/react";
-import {AuthContext, AuthProvider} from "../../../../providers/AuthProvider";
+import {AuthContext} from "../../../../providers/AuthProvider";
 import {Link} from "react-router-dom";
-import PdfPreview from "../../../content/PdfPreview";
-import {CvContext} from "../../../../providers/CvProvider";
 import {useTranslation} from "react-i18next";
 import {OffreStageContext} from "../../../../providers/OffreStageProvider";
 import OfferPreview from "./OfferPreview";
 
 const DiscoverOffers = () => {
+
     const {t} = useTranslation();
     const {fetchOffresStage} = useContext(OffreStageContext);
     const {isUserInit, currentUser} = useContext(AuthContext);
-
     const [offers, setOffers] = useState([])
     const [currentOffer, setCurrentOffer] = useState(null)
-
     const [displayFiltreWindow, setDisplayFiltreWindow] = useState(false)
-
 
     useEffect(() => {
         if (isUserInit) {
@@ -56,17 +42,19 @@ const DiscoverOffers = () => {
         if (offers.length > 0) {
             return (
                 <div style={{width: "45%"}}>
-                    <div className={"dashboard-card expandable " + ((displayFiltreWindow)?"expanded":"")}>
+                    <div className={"dashboard-card expandable " + ((displayFiltreWindow) ? "expanded" : "")}>
                         <section>
                             <div className="toolbar-items">
                                 <h5 className="m-0">Filtres</h5>
                                 <div className="toolbar-spacer"></div>
-                                <button className="btn-icon" onClick={()=>{setDisplayFiltreWindow(false)}}><Icon path={mdiChevronUp} size={1} /></button>
+                                <button className="btn-icon" onClick={() => {
+                                    setDisplayFiltreWindow(false)
+                                }}><Icon path={mdiChevronUp} size={1}/></button>
                             </div>
                             <br/>
                             <div>
                                 <div className="list-bullet">
-                                    <Icon path={mdiBriefcaseOutline} size={1} />
+                                    <Icon path={mdiBriefcaseOutline} size={1}/>
                                     <div style={{padding: "4px 0"}}>
                                         <h6 className="m-0" style={{marginBottom: "5px"}}>Type de stage</h6>
                                         <input type="radio" id="typeTempsTout" name="filtreTypeTemps"/>
@@ -80,31 +68,34 @@ const DiscoverOffers = () => {
                                     </div>
                                 </div>
                                 <div className="list-bullet">
-                                    <Icon path={mdiDomain} size={1} />
+                                    <Icon path={mdiDomain} size={1}/>
                                     <div style={{padding: "4px 0"}}>
                                         <h6 className="m-0" style={{marginBottom: "5px"}}>Emplacement</h6>
                                         <input type="radio" id="typeTempsTout" name="filtreTypeEmplacement"/>
                                         <label htmlFor="typeTempsPartiel">Tous</label>
                                         <br/>
-                                        <input type="checkbox" id="typeEmplacementVirtuel" name="filtreTypeEmplacement"/>
+                                        <input type="checkbox" id="typeEmplacementVirtuel"
+                                               name="filtreTypeEmplacement"/>
                                         <label htmlFor="typeTempsPartiel">Présentiel</label>
                                         <br/>
-                                        <input type="checkbox" id="typeEmplacementVirtuel" name="filtreTypeEmplacement"/>
+                                        <input type="checkbox" id="typeEmplacementVirtuel"
+                                               name="filtreTypeEmplacement"/>
                                         <label htmlFor="typeTempsPartiel">Virtuel</label>
                                         <br/>
-                                        <input type="checkbox" id="typeEmplacementVirtuel" name="filtreTypeEmplacement"/>
+                                        <input type="checkbox" id="typeEmplacementVirtuel"
+                                               name="filtreTypeEmplacement"/>
                                         <label htmlFor="typeTempsPartiel">Hybride</label>
                                     </div>
                                 </div>
                                 <div className="list-bullet">
-                                    <Icon path={mdiCashMultiple} size={1} />
+                                    <Icon path={mdiCashMultiple} size={1}/>
                                     <div style={{padding: "4px 0"}}>
                                         <h6 className="m-0" style={{marginBottom: "5px"}}>Taux Horaire</h6>
                                         <input type="range" min="0" max="50"/>
                                     </div>
                                 </div>
                                 <div className="list-bullet">
-                                    <Icon path={mdiBookEducationOutline} size={1} />
+                                    <Icon path={mdiBookEducationOutline} size={1}/>
                                     <div style={{padding: "4px 0"}}>
                                         <h6 className="m-0" style={{marginBottom: "5px"}}>Département</h6>
                                         <select name="" id="" disabled="disabled">
@@ -134,7 +125,10 @@ const DiscoverOffers = () => {
                                             <option value="recent">Date limite candidature</option>
                                         </optgroup>
                                     </select>
-                                    <button onClick={()=>{setDisplayFiltreWindow(!displayFiltreWindow)}}><Icon path={mdiFilterMultipleOutline} size={1} /> Filtrer</button>
+                                    <button onClick={() => {
+                                        setDisplayFiltreWindow(!displayFiltreWindow)
+                                    }}><Icon path={mdiFilterMultipleOutline} size={1}/> Filtrer
+                                    </button>
                                 </div>
                                 <div className="menu-list">
                                     {offers.reverse().map((item, index) => (
@@ -147,7 +141,8 @@ const DiscoverOffers = () => {
                                                  boxSizing: "border-box"
                                              }}>
                                             <div style={{padding: "16px"}}>
-                                                <p style={{fontSize: "11px", textTransform: "uppercase"}} className="text-dark">
+                                                <p style={{fontSize: "11px", textTransform: "uppercase"}}
+                                                   className="text-dark">
                                                     {t("programme." + item.departementDTO.nom)}
                                                 </p>
                                                 <h4 className="m-0">{item.poste}</h4>
@@ -174,7 +169,7 @@ const DiscoverOffers = () => {
                 <div className="dashboard-card" style={{width: "45%"}}>
                     <div className="dashboard-placeholder-card" style={{backgroundColor: "transparent"}}>
                         <div style={{textAlign: "center"}}>
-                            <Icon path={mdiBriefcaseRemove} size={2} />
+                            <Icon path={mdiBriefcaseRemove} size={2}/>
                             <h6 style={{margin: "8px 0 14px 0"}}>Aucune offre de stage disponible</h6>
                             <p className="text-dark">Elles apparaîtront ici dès qu'elles seront disponibles</p>
                         </div>

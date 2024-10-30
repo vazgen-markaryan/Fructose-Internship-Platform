@@ -70,7 +70,7 @@
         "success_text": "Attendez l'approbation de l'administrateur afin de pouvoir accéder à votre compte",
         "error": {
             "error_title": "Erreur"
-       }
+        }
     },
     "selection_role_page": {
         "who_are_you": "Qui êtes-vous?",
@@ -191,7 +191,6 @@
     "dashboard_home_page": {
         "home": "Accueil",
         "offer": "Offres de stage",
-        "explore": "Explorer",
         "no_offers": "Aucune offre à afficher pour le moment",
         "my_offers": "Mes offres de stage",
         "add_offer": "Ajouter",
@@ -286,6 +285,25 @@
         "titles": {
             "offre_stages": "Offres de stage",
             "details": "Détails"
+        },
+        "status": {
+            "pending": "En attente",
+            "approved": "Approuvé",
+            "rejected": "Rejeté"
+        },
+        "labels": {
+            "company": "Société",
+            "position": "Poste",
+            "department": "Département",
+            "hourly_rate": "Taux horaire",
+            "type": "Type d'emploi",
+            "address": "Adresse",
+            "work_mode": "Modalité de travail",
+            "start_date": "Date de début",
+            "end_date": "Date de fin",
+            "hours_per_week": "Heures par semaine",
+            "number_of_positions": "Nombre de postes",
+            "application_deadline": "Date limite de candidature"
         },
         "buttons": {
             "add": "Ajouter",

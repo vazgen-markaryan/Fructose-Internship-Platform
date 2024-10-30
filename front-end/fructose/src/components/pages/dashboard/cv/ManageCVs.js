@@ -60,7 +60,6 @@ const ManageCVs = () => {
         try {
             const response = await DeleteCv(cvId);
             if (response.ok) {
-                // Mise à jour de la liste des CVs localement après suppression
                 setCvs((prevCvs) => prevCvs.filter((cv) => cv.id !== cvId));
                 if (currentCv && currentCv.id === cvId) {
                     setCurrentCv(null);
@@ -75,21 +74,21 @@ const ManageCVs = () => {
 
     const getStatutElement = () => {
         if (currentCv) {
-            if (!currentCv.is_approved && !currentCv.is_rejected) {
+            if (!currentCv.isApproved && !currentCv.isRefused) {
                 return (
                     <>
                         <p className="m-0 text-orange">{t('manage_cv.status.pending')}</p>
                         <Icon path={mdiClockOutline} size={0.8} className="text-orange"/>
                     </>
                 );
-            } else if (currentCv.is_approved) {
+            } else if (currentCv.isApproved) {
                 return (
                     <>
                         <p className="m-0 text-green">{t('manage_cv.status.approved')}</p>
                         <Icon path={mdiCheck} size={0.8} className="text-green"/>
                     </>
                 );
-            } else {
+            } else if (currentCv.isRefused) {
                 return (
                     <>
                         <p className="m-0 text-red">{t('manage_cv.status.rejected')}</p>
@@ -101,7 +100,6 @@ const ManageCVs = () => {
         return null;
     };
 
-
     const getCvList = () => {
         if (cvs.length > 0) {
             const lastCv = cvs[cvs.length - 1];
@@ -110,7 +108,8 @@ const ManageCVs = () => {
                     <div className="toolbar-items">
                         <h4 className="m-0 toolbar-spacer"></h4>
                         <Link to="../upload-cv">
-                            <button className="btn-filled">{t('manage_cv.buttons.add')} <Icon path={mdiFileUploadOutline} size={1}/></button>
+                            <button className="btn-filled">{t('manage_cv.buttons.add')} <Icon
+                                path={mdiFileUploadOutline} size={1}/></button>
                         </Link>
                     </div>
                     <br/>
@@ -145,7 +144,8 @@ const ManageCVs = () => {
                         <>
                             <div className="menu-list">
                                 {cvs.slice(0, -1).reverse().map((item, index) => (
-                                    <div key={index} onClick={() => handleCvSelection(item)} className={`menu-list-item ${currentCv && item.id === currentCv.id ? "menu-list-item-selected" : ""}`}>
+                                    <div key={index} onClick={() => handleCvSelection(item)}
+                                         className={`menu-list-item ${currentCv && item.id === currentCv.id ? "menu-list-item-selected" : ""}`}>
                                         <Icon path={mdiFileOutline} size={1}/>
                                         <div>
                                             <p className="m-0">{item.filename}</p>
@@ -168,7 +168,8 @@ const ManageCVs = () => {
                     <div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
                         <h6 className="m-0">{t('manage_cv.titles.preview')}</h6>
                         <span className="toolbar-spacer"></span>
-                        <button className="btn-icon" onClick={() => setCurrentCv(null)}><Icon path={mdiClose} size={1}/>
+                        <button className="btn-icon" onClick={() => setCurrentCv(null)}>
+                            <Icon path={mdiClose} size={1}/>
                         </button>
                     </div>
                     <PdfPreview height={300} file={currentCv.fileUrl}/>
@@ -176,18 +177,15 @@ const ManageCVs = () => {
                         <div className="toolbar-items" style={{padding: "0 10px"}}>
                             <div>
                                 <h4 className="m-0">{currentCv.filename}</h4>
-                                <p className="text-dark m-0">{currentCv.fileSize / DIVISER_KB} kb</p>
+                                <p className="text-dark m-0">{(currentCv.fileSize / DIVISER_KB).toFixed(2)} kb</p>
                             </div>
                             <div className="toolbar-spacer"></div>
                             {getStatutElement()}
                         </div>
                         <br/>
-                        <button className="btn-option">
-                            <Icon path={mdiCheck} size={1}/>{t('manage_cv.buttons.accept')}
-                        </button>
-                        <button className="btn-option">
-                            <Icon path={mdiClose} size={1}/>{t('manage_cv.buttons.reject')}
-                        </button>
+                        {currentCv.isRefused && (
+                            <p style={{color: "red", textAlign: "center"}}>{currentCv.commentaireRefus}</p>
+                        )}
                         <a href={currentCv.fileUrl} download={currentCv.filename} className="btn-option">
                             <Icon path={mdiDownloadOutline} size={1}/>{t('manage_cv.buttons.download')}
                         </a>
@@ -210,7 +208,8 @@ const ManageCVs = () => {
                             <Icon path={mdiFileQuestionOutline} size={2}/>
                             <h6 style={{margin: "8px 0 14px 0"}}>{t('manage_cv.messages.no_cvs')}</h6>
                             <Link to="../upload-cv">
-                                <button className="btn-filled">{t('manage_cv.buttons.add')} <Icon path={mdiFileUploadOutline} size={1}/></button>
+                                <button className="btn-filled">{t('manage_cv.buttons.add')} <Icon
+                                    path={mdiFileUploadOutline} size={1}/></button>
                             </Link>
                         </div>
                     </div>
