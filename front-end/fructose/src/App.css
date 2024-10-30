@@ -72,7 +72,7 @@ p.text-mini{
 hr {
     border: none;
     border-top: 1px solid rgba(128, 128, 128, 0.5);
-    margin: 15px 0px
+    margin: 15px 16px
 }
 
 label{
@@ -111,7 +111,7 @@ label{
 
 button {
     border: none;
-    color: black;
+    color: inherit;
     line-height: 36px;
     font-size: 16px;
     padding: 0 12px;
@@ -508,6 +508,10 @@ section {
     box-sizing: border-box;
 }
 
+section.nospace{
+    padding: 2px 16px;
+}
+
 .loading-placeholder {
     width: 100px;
     height: 22px;
@@ -673,7 +677,7 @@ section {
 
 .user-profile-section {
     width: 100%;
-    height: 128px;
+    height: 132px;
     position: relative;
     padding-bottom: 20px;
 }
