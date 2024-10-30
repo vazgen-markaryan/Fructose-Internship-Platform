@@ -23,13 +23,11 @@ const ManageOffresStage = () => {
     useEffect(() => {
         if (currentUser) {
             (async function () {
-                if (currentUser.role === "EMPLOYEUR") {
-                    try {
-                        const response = await fetchOffresStage();
-                        setOffreStages(response);
-                    } catch (error) {
-                        console.log("error" + error);
-                    }
+                try {
+                    const response = await fetchOffresStage();
+                    setOffreStages(response);
+                } catch (error) {
+                    console.log("error" + error);
                 }
             })();
         }
