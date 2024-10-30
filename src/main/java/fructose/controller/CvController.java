@@ -90,7 +90,7 @@ public class CvController {
 	}
 	
 	
-	@GetMapping("/cv-history")
+	@GetMapping("/allCvs")
 	public ResponseEntity<List<CvDTO>> getAllCvs(@RequestHeader("Authorization") String token) {
 		try {
 			if (!utilisateurService.validationToken(token)) {

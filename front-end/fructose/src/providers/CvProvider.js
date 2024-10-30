@@ -40,6 +40,17 @@ const CvProvider = ({children}) => {
         });
     };
 
+    const GetAllCvs = async () => {
+        return fetch(`/allCvs`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': currentToken
+            },
+        });
+    };
+
+
     const DeleteCv = async (id) => {
         return fetch(`/cvs/${id}`, {
             method: 'DELETE',
@@ -50,7 +61,7 @@ const CvProvider = ({children}) => {
     };
 
     return (
-        <CvContext.Provider value={{UploadCv, GetCvs, getCvById, DeleteCv}}>
+        <CvContext.Provider value={{UploadCv, GetCvs, getCvById, DeleteCv, GetAllCvs}}>
             {children}
         </CvContext.Provider>
     );

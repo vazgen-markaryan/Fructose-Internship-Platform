@@ -17,17 +17,20 @@ import OfferPreview from "./offre-stage/OfferPreview";
 const DashboardHome = () => {
 
     const {t} = useTranslation();
-    const {currentUser} = useContext(AuthContext);
-    const {GetCvs} = useContext(CvContext);
+    const {currentUser, isUserInit} = useContext(AuthContext);
+    const {GetCvs, GetAllCvs} = useContext(CvContext);
+    const [allCvs, setAllCvs] = useState([]);
     const [cvs, setCvs] = useState([]);
     const [offresStage, setOffresStage] = useState([]);
     const [currentOffer, setCurrentOffer] = useState(null);
+    const [currentCv, setCurrentCV] = useState(null);
     const {fetchOffresStage} = useContext(OffreStageContext);
     const [currentPage, setCurrentPage] = useState(1);
+    const [currentPageCv, setCurrentPageCv] = useState(1);
     const itemsPerPage = 10;
 
     useEffect(() => {
-        if (currentUser) {
+        if (currentUser && isUserInit) {
             (async function () {
                 if (currentUser.role === "ETUDIANT") {
                     try {
@@ -44,12 +47,23 @@ const DashboardHome = () => {
                 } catch (error) {
                     console.log("error" + error);
                 }
+                try {
+                    const response = await GetAllCvs();
+                    console.log(response)
+                    const data = await response.text();
+                    setAllCvs(JSON.parse(data));
+                } catch (error) {
+                    console.log("error" + error);
+                }
             })();
         }
     }, [currentUser, GetCvs, fetchOffresStage])
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
+    };
+    const handlePageChangeCv = (pageNumber) => {
+        setCurrentPageCv(pageNumber);
     };
 
     const GetOffreStageSection = () => {
@@ -133,6 +147,8 @@ const DashboardHome = () => {
             } else if (currentUser.role === "ADMIN") {
                 const startIndex = (currentPage - 1) * itemsPerPage;
                 const selectedOffresStage = offresStage.slice(startIndex, startIndex + itemsPerPage);
+                const startIndexCvs = (currentPage - 1) * itemsPerPage;
+                const selectedCvs = cvs.slice(startIndexCvs, startIndexCvs + itemsPerPage);
                 return (
                     <section>
                         <div className={"toolbar-items"}>
@@ -201,6 +217,79 @@ const DashboardHome = () => {
                                         onClick={() => {
                                             handlePageChange(index + 1);
                                             setCurrentOffer(null);
+                                        }}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        <div className={"toolbar-items"}>
+                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.cv")}</h4>
+                        </div>
+                        <div style={{"padding": "10px 0"}}>
+                            {allCvs.length === 0 ? (
+                                <div style={{
+                                    "width": "400px",
+                                    "display": "flex",
+                                    "alignItems": "center",
+                                    "backgroundColor": "#eee",
+                                    "borderRadius": "5px",
+                                    "gap": "5px",
+                                    "padding": "10px"
+                                }}>
+                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                                    <p className="m-0">{t("dashboard_home_page.no_cv")}</p>
+                                </div>
+                            ) : (
+                                <div style={{
+                                    "width": "auto",
+                                    "backgroundColor": "#eee",
+                                    "borderRadius": "5px",
+                                    "padding": "10px"
+                                }}>
+                                    <div style={{display: "flex", gap: "20px"}}>
+                                        <div className="menu-list" style={{
+                                            flex: 1,
+                                            backgroundColor: "#f9f9f9",
+                                            borderRadius: "5px",
+                                            padding: "10px"
+                                        }}>
+                                            {allCvs.map((cv, index) => (
+                                                <div key={index}
+                                                     style={{
+                                                         display: "flex",
+                                                         alignItems: "center",
+                                                         gap: "10px",
+                                                         padding: "5px",
+                                                         borderBottom: "1px solid #ddd",
+                                                         cursor: "pointer",
+                                                         backgroundColor: currentCv && currentCv.id === cv.id ? "#e0e0e0" : "transparent"
+                                                     }}
+                                                     onClick={() => setCurrentCV(currentCv && currentCv.id === cv.id ? null : cv)}>
+                                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                                                    <p className="m-0">{cv.filename}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        {currentCv && <OfferPreview currentOffer={currentOffer} style={{
+                                            flex: 2,
+                                            padding: "10px",
+                                            backgroundColor: "#fff",
+                                            borderRadius: "5px",
+                                            boxShadow: "0 0 10px rgba(0,0,0,0.1)"
+                                        }}/>}
+                                    </div>
+                                </div>
+                            )}
+                            <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
+                                {Array.from({length: Math.ceil(allCvs.length / itemsPerPage)}, (_, index) => (
+                                    <button
+                                        key={index}
+                                        className={(currentPageCv === index + 1) ? "btn-filled" : ""}
+                                        onClick={() => {
+                                            handlePageChangeCv(index + 1);
+                                            setCurrentCV(null);
                                         }}
                                     >
                                         {index + 1}
@@ -312,7 +401,7 @@ const DashboardHome = () => {
                             <h4>{t("dashboard_home_page.user_info")}</h4>
                             <ul>
                                 <li>
-                                    <p>{t("dashboard_home_page.full_name")}: {(currentUser != null) ? currentUser.fullName :
+                                <p>{t("dashboard_home_page.full_name")}: {(currentUser != null) ? currentUser.fullName :
                                         <span className={"loading-placeholder"}></span>}
                                     </p>
                                 </li>
