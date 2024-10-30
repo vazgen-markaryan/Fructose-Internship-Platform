@@ -1,4 +1,25 @@
 #!/bin/bash
+# A propos: Script pour obtenir les statistiques des utilisateurs Git
+# Date: 30 octobre 2024
+# Auteur: Vazgen Markaryan (get_user_statistique.sh)
+# Auteur: François Lacoursière (gitcount.sh)
+# Support intéllectuel: Chat GPT + GitHub Copilot
+# Version: 1.0
+
+# Fonctionnement:
+# Ce script génère des statistiques sur les contributions des utilisateurs dans un dépôt Git.
+# Il peut afficher les résultats dans la console ou les exporter en format JSON.
+# Les statistiques incluent les lignes de code ajoutées et supprimées pour chaque utilisateur et pour chaque sprint, ainsi que l'impact total sur le projet.
+
+# Utilisation:
+# ./get_user_statistique.sh {console|json}
+# - console: Affiche les résultats dans la console.
+# - json: Exporte les résultats en format JSON.
+
+# Remarques:
+# - Les noms d'utilisateur peuvent être censurés avec "showRealNames=false" pour des raisons de confidentialité.
+# - Les sprints sont définis pour la session d'automne 2024.
+# - Le script utilise un autre script "gitcount.sh" pour extraire les statistiques Git.
 
 # Vérifie si le premier argument est "console" ou "json"
 if [ "$1" != "console" ] && [ "$1" != "json" ]; then
