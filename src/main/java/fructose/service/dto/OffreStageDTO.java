@@ -69,6 +69,12 @@ public class OffreStageDTO {
 	
 	private UtilisateurDTO ownerDTO;
 	
+	private Boolean isApproved = false;
+	
+	private Boolean isRefused = false;
+	
+	private String commentaireRefus = "Commentaire par défaut";
+	
 	public static OffreStageDTO toDTO(OffreStage offreStage) {
 		OffreStageDTO offreStageDTO = new OffreStageDTO();
 		offreStageDTO.setId(offreStage.getId());
@@ -87,6 +93,9 @@ public class OffreStageDTO {
 		offreStageDTO.setNombrePostes(offreStage.getNombrePostes());
 		offreStageDTO.setDateLimiteCandidature(offreStage.getDateLimiteCandidature());
 		offreStageDTO.setOwnerDTO(UtilisateurDTO.toDTO(offreStage.getOwner()));
+		offreStageDTO.setIsRefused(offreStage.getIsRefused());
+		offreStageDTO.setIsApproved(offreStage.getIsApproved());
+		offreStageDTO.setCommentaireRefus(offreStage.getCommentaireRefus());
 		return offreStageDTO;
 	}
 	
@@ -108,6 +117,9 @@ public class OffreStageDTO {
 		offreStage.setNombrePostes(offreStageDTO.getNombrePostes());
 		offreStage.setDateLimiteCandidature(offreStageDTO.getDateLimiteCandidature());
 		offreStage.setOwner(UtilisateurDTO.toEntity(offreStageDTO.getOwnerDTO()));
+		offreStage.setIsApproved(offreStageDTO.getIsApproved());
+		offreStage.setIsRefused(offreStageDTO.getIsRefused());
+		offreStage.setCommentaireRefus(offreStageDTO.getCommentaireRefus());
 		return offreStage;
 	}
 	

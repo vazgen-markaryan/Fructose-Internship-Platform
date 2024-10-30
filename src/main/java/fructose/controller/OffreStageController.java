@@ -101,7 +101,7 @@ public class OffreStageController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 		}
 	}
- 
+	
 	@GetMapping("/get-offre-stage")
 	public ResponseEntity<?> getOffreStage() {
 		try {
@@ -118,10 +118,8 @@ public class OffreStageController {
 	public ResponseEntity<?> getOffreStageById(@PathVariable Long id) {
 		try {
 			return ResponseEntity.ok(offreStageService.getOffreStageById(id));
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aucune offre de stage n'a été trouvée avec l'ID: " + id);
 		} catch (Exception e) {
-			logger.error("Une erreur inattendue s'est produite1", e);
+			logger.error("Une erreur inattendue s'est produite", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
 		}
 	}
@@ -136,4 +134,15 @@ public class OffreStageController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
 		}
 	}
+	
+	@PostMapping("/refuser-offre-stage/{id}")
+	public ResponseEntity<String> refuserOffreStage(@PathVariable Long id, @RequestBody String commentaireRefus) {
+		try {
+			offreStageService.refuserOffreStage(id, commentaireRefus);
+			return new ResponseEntity<>(commentaireRefus, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Erreur lors du refus de l'offre de stage.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 }

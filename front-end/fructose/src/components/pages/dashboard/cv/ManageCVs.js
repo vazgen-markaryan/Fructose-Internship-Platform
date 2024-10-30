@@ -37,7 +37,7 @@ const ManageCVs = () => {
                 }
             })();
         }
-    }, [isUserInit]);
+    }, [isUserInit, GetCvs, t]);
 
     const fetchCvById = async (cvId) => {
         try {

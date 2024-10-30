@@ -69,16 +69,16 @@ public class OffreStageService {
 		if (!offreStageRepository.existsById(offreStageDTO.getId())) {
 			throw new IllegalArgumentException("L'offre de stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être mis à jour");
 		}
-  
+		
 		OffreStage existingOffreStage = offreStageRepository.findById(offreStageDTO.getId())
 				.orElseThrow(() -> new IllegalArgumentException("OffreStage not found"));
-    
+		
 		Departement departement = departementRepository.findById(offreStageDTO.getDepartementDTO().getId())
 				.orElseThrow(() -> new IllegalArgumentException("Le département ne peut pas être nul"));
 		
 		Utilisateur owner = employeurRepository.findById(offreStageDTO.getOwnerDTO().getId())
 				.orElseThrow(() -> new IllegalArgumentException("Owner not found"));
-    
+		
 		existingOffreStage.setNom(offreStageDTO.getNom());
 		existingOffreStage.setPoste(offreStageDTO.getPoste());
 		existingOffreStage.setDescription(offreStageDTO.getDescription());
@@ -95,7 +95,8 @@ public class OffreStageService {
 		existingOffreStage.setNombrePostes(offreStageDTO.getNombrePostes());
 		existingOffreStage.setDateLimiteCandidature(offreStageDTO.getDateLimiteCandidature());
 		existingOffreStage.setOwner(owner);
-  
+		existingOffreStage.setIsRefused(offreStageDTO.getIsRefused());
+		existingOffreStage.setIsApproved(offreStageDTO.getIsApproved());
 		offreStageRepository.save(existingOffreStage);
 	}
 	
@@ -128,7 +129,7 @@ public class OffreStageService {
 			throw new IllegalArgumentException("La date de fin doit être au moins 1 jour après la date de début");
 		}
 	}
- 
+	
 	public OffreStageDTO getOffreStageById(Long id) {
 		if (id == null) {
 			throw new IllegalArgumentException("ID ne peut pas être nul");
@@ -164,5 +165,16 @@ public class OffreStageService {
 					throw new IllegalArgumentException("Aucune offre de stage n'a été trouvée pour le role inconnue");
 		}
 		return offresStage;
+	}
+	
+	public void refuserOffreStage(Long offreId, String commentaireRefus) {
+		try {
+			OffreStage offreStage = offreStageRepository.findById(offreId).orElseThrow(null);
+			offreStage.setIsRefused(true);
+			offreStage.setCommentaireRefus(commentaireRefus);
+			offreStageRepository.save(offreStage);
+		} catch (Exception e) {
+			throw new RuntimeException("Une erreur est survenue lors du refus de l'offre de stage.", e);
+		}
 	}
 }

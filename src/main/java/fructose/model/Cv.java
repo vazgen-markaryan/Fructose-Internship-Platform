@@ -35,10 +35,14 @@ public class Cv {
 	private Utilisateur utilisateur;
 	
 	@Column(name = "is_approved", nullable = false)
-	private Boolean isApproved;
+	private Boolean isApproved = false;
 	
 	@Column(name = "is_refused", nullable = false)
-	private Boolean isRefused;
+	private Boolean isRefused = false;
+	
+	@Column(name = "commentaire_refus")
+	private String commentaireRefus = "Refusé par Defaut";
+	
 	
 	public Cv(Long id, @Nullable String filename, Boolean isApproved, Boolean isRefused, Utilisateur utilisateur) {
 		this.id = id;

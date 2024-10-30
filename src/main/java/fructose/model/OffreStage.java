@@ -85,6 +85,15 @@ public class OffreStage {
 	)
 	private Set<Etudiant> etudiants;
 	
+	@Column(name = "is_refused", nullable = false)
+	private Boolean isRefused = false;
+	
+	@Column(name = "is_approved", nullable = false)
+	private Boolean isApproved = false;
+	
+	@Column(name = "commentaire_refus")
+	private String commentaireRefus = "Commentaire par défaut";
+	
 	public static OffreStage createOffreStage(String nom,
 	                                          String poste,
 	                                          String description,
@@ -99,7 +108,10 @@ public class OffreStage {
 	                                          int nombreHeuresSemaine,
 	                                          int nombrePostes,
 	                                          LocalDate dateLimiteCandidature,
-	                                          Utilisateur owner) {
+	                                          Utilisateur owner,
+	                                          Boolean isRefused,
+	                                          Boolean isApproved,
+	                                          String commentaireRefus) {
 		OffreStage offreStage = new OffreStage();
 		offreStage.setNom(nom);
 		offreStage.setPoste(poste);
@@ -116,6 +128,9 @@ public class OffreStage {
 		offreStage.setNombrePostes(nombrePostes);
 		offreStage.setDateLimiteCandidature(dateLimiteCandidature);
 		offreStage.setOwner(owner);
+		offreStage.setIsRefused(isRefused);
+		offreStage.setIsApproved(isApproved);
+		offreStage.setCommentaireRefus(commentaireRefus);
 		return offreStage;
 	}
 }

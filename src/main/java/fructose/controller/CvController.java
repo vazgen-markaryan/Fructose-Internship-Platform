@@ -45,7 +45,7 @@ public class CvController {
 		
 		UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
 		try {
-			cvService.addCv(file, utilisateurDTO);
+			cvService.addCv(file, utilisateurDTO, false, false);
 			return new ResponseEntity<>("Fichier PDF enregistré avec succès.", HttpStatus.OK);
 		} catch (IOException e) {
 			return new ResponseEntity<>("Erreur lors de la lecture du fichier.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -123,4 +123,15 @@ public class CvController {
 			return new ResponseEntity<>("Une erreur inattendue s'est produite lors de la suppression du CV.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@PostMapping("/refuser-cv/{id}")
+	public ResponseEntity<String> refuserCv(@PathVariable Long id, @RequestBody String commentaireRefus) {
+		try {
+			cvService.refuserCv(id, commentaireRefus);
+			return new ResponseEntity<>(commentaireRefus, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Erreur lors du refus du CV.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 }

@@ -20,13 +20,13 @@ public class CvService {
 		this.cvRepository = cvRepository;
 	}
 	
-	public void addCv(MultipartFile cv, UtilisateurDTO utilisateurDTO) throws IOException {
+	public void addCv(MultipartFile cv, UtilisateurDTO utilisateurDTO, Boolean IsRefused, Boolean IsApproved) throws IOException {
 		try {
 			Cv saveCv = new Cv();
 			saveCv.setFilename(cv.getOriginalFilename());
 			saveCv.setFileContent(cv.getBytes());
-			saveCv.setIsRefused(false);
-			saveCv.setIsApproved(false);
+			saveCv.setIsRefused(IsRefused);
+			saveCv.setIsApproved(IsApproved);
 			saveCv.setUtilisateur(UtilisateurDTO.toEntity(utilisateurDTO));
 			cvRepository.save(saveCv);
 		} catch (Exception e) {
@@ -50,7 +50,7 @@ public class CvService {
 		
 		return cvDTOList;
 	}
- 
+	
 	public List<CvDTO> getCvsByUser(UtilisateurDTO utilisateurDTO) {
 		List<CvDTO> cvDTOList = new ArrayList<>();
 		Utilisateur utilisateur = UtilisateurDTO.toEntity(utilisateurDTO);
@@ -83,4 +83,16 @@ public class CvService {
 			throw new RuntimeException("Une erreur est survenue lors de la suppression du CV.", e);
 		}
 	}
+	
+	public void refuserCv(Long cvId, String commentaireRefus) {
+		try{
+			Cv cv = cvRepository.findById(cvId).orElseThrow(null);
+			cv.setIsRefused(true);
+			cv.setCommentaireRefus(commentaireRefus);
+			cvRepository.save(cv);
+		}catch (Exception e){
+			throw new RuntimeException("Une erreur est survenue lors de la suppression du CV.", e);
+		}
+	}
+	
 }

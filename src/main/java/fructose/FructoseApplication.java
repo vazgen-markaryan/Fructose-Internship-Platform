@@ -115,7 +115,6 @@ public class FructoseApplication implements CommandLineRunner {
 		createAndPersistOffreStage("Administrateur système", "Gérer les systèmes informatiques", "Administrateur système", "Activision Publishing, Inc", departementInformatique, 22.0, "presentiel", "Santa Clara, Californie, États-Unis", "temps_plein", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 15, 6, LocalDate.of(2025, 5, 1), "activision@gmail.com");
 		createAndPersistOffreStage("Développeur PHP", "Développer des applications PHP", "Développeur PHP", "Activision Publishing, Inc", departementInformatique, 24.0, "virtuel", "Raleigh, Caroline du Nord, États-Unis", "temps_partiel", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 20, 8, LocalDate.of(2025, 5, 1), "activision@gmail.com");
 		createAndPersistOffreStage("Développeur Full Stack", "Développer des applications full stack", "Développeur Full Stack", "Activision Publishing, Inc", departementInformatique, 25.0, "hybride", "San Jose, Californie, États-Unis", "temps_plein", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 28, 9, LocalDate.of(2025, 5, 1), "activision@gmail.com");
-		createAndPersistOffreStage("Développeur .NET", "Développer des applications .NET", "Développeur .NET", "Activision Publishing, Inc", departementInformatique, 30.0, "presentiel", "San Francisco, Californie, États-Unis", "temps_partiel", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 21, 5, LocalDate.of(2025, 5, 1), "activision@gmail.com");
 	}
 	
 	private Departement getDepartement(String nom) {
@@ -144,7 +143,7 @@ public class FructoseApplication implements CommandLineRunner {
 	
 	private void createAndPersistOffreStage(String nom, String description, String poste, String entreprise, Departement departement, double salaire, String modeTravail, String adresse, String typeContrat, LocalDate dateDebut, LocalDate dateFin, int heuresParSemaine, int nombrePostes, LocalDate dateLimite, String emailEmployeur) {
 		UtilisateurDTO employeurDTO = utilisateurService.getUtilisateurByEmail(emailEmployeur);
-		OffreStage offreStage = OffreStage.createOffreStage(nom, description, poste, entreprise, departement, salaire, modeTravail, adresse, typeContrat, dateDebut, dateFin, heuresParSemaine, nombrePostes, dateLimite, UtilisateurDTO.toEntity(employeurDTO));
+		OffreStage offreStage = OffreStage.createOffreStage(nom, description, poste, entreprise, departement, salaire, modeTravail, adresse, typeContrat, dateDebut, dateFin, heuresParSemaine, nombrePostes, dateLimite, UtilisateurDTO.toEntity(employeurDTO), false, false, "Commentaire par défaut");
 		OffreStageDTO offreStageDTO = OffreStageDTO.toDTO(offreStage);
 		addWithHandleException(() -> checkAndAddOffreStage(offreStageDTO, employeurDTO), "Une erreur s'est produite lors de l'ajout de l'offre de stage");
 	}

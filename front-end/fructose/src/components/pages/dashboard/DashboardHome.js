@@ -46,7 +46,7 @@ const DashboardHome = () => {
                 }
             })();
         }
-    }, [currentUser, GetCvs])
+    }, [currentUser, GetCvs, fetchOffresStage])
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);

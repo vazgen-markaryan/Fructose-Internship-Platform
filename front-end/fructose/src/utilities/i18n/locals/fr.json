@@ -191,6 +191,7 @@
     "dashboard_home_page": {
         "home": "Accueil",
         "offer": "Offres de stage",
+        "explore": "Explorer",
         "no_offers": "Aucune offre à afficher pour le moment",
         "my_offers": "Mes offres de stage",
         "add_offer": "Ajouter",
