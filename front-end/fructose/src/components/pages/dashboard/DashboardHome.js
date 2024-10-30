@@ -12,6 +12,7 @@ import {
 import {CvContext} from "../../../providers/CvProvider";
 import {OffreStageContext} from "../../../providers/OffreStageProvider";
 import {useTranslation} from "react-i18next";
+import OfferPreview from "./offre-stage/OfferPreview";
 
 const DashboardHome = () => {
 
@@ -20,6 +21,7 @@ const DashboardHome = () => {
     const {GetCvs} = useContext(CvContext);
     const [cvs, setCvs] = useState([]);
     const [offresStage, setOffresStage] = useState([]);
+    const [currentOffer, setCurrentOffer] = useState(null);
     const {fetchOffresStage} = useContext(OffreStageContext);
 
     useEffect(() => {
@@ -145,20 +147,45 @@ const DashboardHome = () => {
                                 </div>
                             ) : (
                                 <div style={{
-                                    "width": "700px",
+                                    "width": "auto",
                                     "backgroundColor": "#eee",
                                     "borderRadius": "5px",
                                     "padding": "10px"
                                 }}>
-                                    {offresStage.map((offreStage, index) => (
-                                        <div key={index}
-                                             style={{display: "flex", alignItems: "center", gap: "10px"}}>
-                                            <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                            <p className="m-0">{offreStage.nom}</p>
+                                    <div style={{display: "flex", gap: "20px"}}>
+                                        <div className="menu-list" style={{
+                                            flex: 1,
+                                            backgroundColor: "#f9f9f9",
+                                            borderRadius: "5px",
+                                            padding: "10px"
+                                        }}>
+                                            {offresStage.map((offreStage, index) => (
+                                                <div key={index}
+                                                     style={{
+                                                         display: "flex",
+                                                         alignItems: "center",
+                                                         gap: "10px",
+                                                         padding: "5px",
+                                                         borderBottom: "1px solid #ddd",
+                                                         cursor: "pointer",
+                                                         backgroundColor: currentOffer && currentOffer.id === offreStage.id ? "#e0e0e0" : "transparent"
+                                                     }}
+                                                     onClick={() => setCurrentOffer(currentOffer && currentOffer.id === offreStage.id ? null : offreStage)}>
+                                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                                                    <p className="m-0">{offreStage.nom}</p>
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
-                            </div>
-                                )}
+                                        {currentOffer && <OfferPreview currentOffer={currentOffer} style={{
+                                            flex: 2,
+                                            padding: "10px",
+                                            backgroundColor: "#fff",
+                                            borderRadius: "5px",
+                                            boxShadow: "0 0 10px rgba(0,0,0,0.1)"
+                                        }}/>}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </section>
                 );
