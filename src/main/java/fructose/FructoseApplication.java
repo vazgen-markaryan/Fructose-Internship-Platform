@@ -115,6 +115,7 @@ public class FructoseApplication implements CommandLineRunner {
 		createAndPersistOffreStage("Administrateur système", "Gérer les systèmes informatiques", "Administrateur système", "Activision Publishing, Inc", departementInformatique, 22.0, "presentiel", "Santa Clara, Californie, États-Unis", "temps_plein", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 15, 6, LocalDate.of(2025, 5, 1), "activision@gmail.com");
 		createAndPersistOffreStage("Développeur PHP", "Développer des applications PHP", "Développeur PHP", "Activision Publishing, Inc", departementInformatique, 24.0, "virtuel", "Raleigh, Caroline du Nord, États-Unis", "temps_partiel", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 20, 8, LocalDate.of(2025, 5, 1), "activision@gmail.com");
 		createAndPersistOffreStage("Développeur Full Stack", "Développer des applications full stack", "Développeur Full Stack", "Activision Publishing, Inc", departementInformatique, 25.0, "hybride", "San Jose, Californie, États-Unis", "temps_plein", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 28, 9, LocalDate.of(2025, 5, 1), "activision@gmail.com");
+	
 	}
 	
 	private Departement getDepartement(String nom) {
