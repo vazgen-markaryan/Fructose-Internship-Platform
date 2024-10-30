@@ -23,6 +23,8 @@ const DashboardHome = () => {
     const [offresStage, setOffresStage] = useState([]);
     const [currentOffer, setCurrentOffer] = useState(null);
     const {fetchOffresStage} = useContext(OffreStageContext);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 2;
 
     useEffect(() => {
         if (currentUser) {
@@ -45,6 +47,10 @@ const DashboardHome = () => {
             })();
         }
     }, [currentUser, GetCvs])
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     const GetOffreStageSection = () => {
         if (currentUser != null) {
@@ -122,6 +128,8 @@ const DashboardHome = () => {
                     </section>
                 );
             } else if (currentUser.role === "ADMIN") {
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const selectedOffresStage = offresStage.slice(startIndex, startIndex + itemsPerPage);
                 return (
                     <section>
                         <div className={"toolbar-items"}>
@@ -159,7 +167,7 @@ const DashboardHome = () => {
                                             borderRadius: "5px",
                                             padding: "10px"
                                         }}>
-                                            {offresStage.map((offreStage, index) => (
+                                            {selectedOffresStage.map((offreStage, index) => (
                                                 <div key={index}
                                                      style={{
                                                          display: "flex",
@@ -186,6 +194,25 @@ const DashboardHome = () => {
                                     </div>
                                 </div>
                             )}
+                            <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
+                                {Array.from({length: Math.ceil(offresStage.length / itemsPerPage)}, (_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => handlePageChange(index + 1)}
+                                        style={{
+                                            margin: "0 5px",
+                                            padding: "5px 10px",
+                                            backgroundColor: currentPage === index + 1 ? "#007bff" : "#f9f9f9",
+                                            color: currentPage === index + 1 ? "#fff" : "#000",
+                                            border: "1px solid #ddd",
+                                            borderRadius: "5px",
+                                            cursor: "pointer"
+                                        }}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </section>
                 );
