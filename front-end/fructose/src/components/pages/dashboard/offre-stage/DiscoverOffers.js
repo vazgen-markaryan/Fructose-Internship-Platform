@@ -1,22 +1,20 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
+    mdiAlertCircleOutline,
     mdiArrowLeft,
-    mdiClockOutline,
-    mdiBriefcaseRemove,
-    mdiCashMultiple,
+    mdiBookEducationOutline,
     mdiBriefcaseOutline,
-    mdiMapMarkerOutline,
-    mdiFilterMultipleOutline,
+    mdiBriefcaseRemove,
+    mdiCalendarOutline,
+    mdiCashMultiple,
     mdiChevronUp,
     mdiDomain,
-    mdiBookEducationOutline,
-    mdiAlertCircleOutline, mdiCalendarOutline
+    mdiFilterMultipleOutline,
+    mdiMapMarkerOutline
 } from "@mdi/js";
 import Icon from "@mdi/react";
-import {AuthContext, AuthProvider} from "../../../../providers/AuthProvider";
+import {AuthContext} from "../../../../providers/AuthProvider";
 import {Link} from "react-router-dom";
-import PdfPreview from "../../../content/PdfPreview";
-import {CvContext} from "../../../../providers/CvProvider";
 import {useTranslation} from "react-i18next";
 import {OffreStageContext} from "../../../../providers/OffreStageProvider";
 
@@ -33,20 +31,78 @@ const DiscoverOffers = () => {
     const [filters, setFilters] = useState(
         {
             type: "tous",
-            emplacement: [
-                "presentiel",
-                "hybride",
-            ],
+            emplacement: "presentiel",
             tauxHoraire: 0,
             departmenet: null
         }
     )
 
-    const [filterFields, setFilterFields] = useState(
-        {
-
-        }
-    )
+    const filterFields =
+        [
+            {
+                name: "Type de stage",
+                idName: "type",
+                icon: mdiBriefcaseOutline,
+                fields: [
+                    {
+                        type: "radio",
+                        label: "Tous",
+                        value: "tous"
+                    },
+                    {
+                        type: "radio",
+                        label: "Temps Partiel",
+                        value: "temps_partiel"
+                    },
+                    {
+                        type: "radio",
+                        label: "Temps Plein",
+                        value: "temps_plein"
+                    }
+                ]
+            },
+            {
+                name: "Emplacement",
+                idName: "emplacement",
+                icon: mdiDomain,
+                fields: [
+                    {
+                        type: "radio",
+                        label: "Tous",
+                        value: "tous"
+                    },
+                    {
+                        type: "radio",
+                        label: "Presentiel",
+                        value: "presentiel"
+                    },
+                    {
+                        type: "radio",
+                        label: "Virtuel",
+                        value: "virtuel"
+                    },
+                    {
+                        type: "radio",
+                        label: "Hybride",
+                        value: "hybride"
+                    },
+                ]
+            },
+            {
+                name: "Taux Horaire Minimum",
+                idName: "emplacement",
+                icon: mdiCashMultiple,
+                fields: [
+                    {
+                        type: "number",
+                        label: "Tous",
+                        value: "tous",
+                        min: 0,
+                        max: 50
+                    },
+                ]
+            }
+        ]
 
     const [filteredOffers, setFilteredOffers] = useState([])
 
@@ -71,24 +127,10 @@ const DiscoverOffers = () => {
             let currentOffer = offers[i]
             let isEligible = false
             if (filters.type){
-                if (filters.type === "tous" || currentOffer.modaliteTravail === filters.type){
-                    isEligible = true
-                } else {
-                    isEligible = false
-                }
+                isEligible = filters.type === "tous" || currentOffer.modaliteTravail === filters.type;
             }
             if (filters.emplacement && isEligible === true){
-                let eligibiliteEmplacement = false
-                if(Array.isArray(filters.emplacement)){
-                    for (let j = 0; j < filters.emplacement.length; j++){
-                        if(filters.emplacement[j] === currentOffer.typeEmploi){
-                            eligibiliteEmplacement = true
-                        }
-                    }
-                } else if (filters.emplacement === "tous") {
-                    eligibiliteEmplacement = true
-                }
-                isEligible = eligibiliteEmplacement
+                isEligible = filters.emplacement === "tous" || currentOffer.modaliteTravail === filters.emplacement;
             }
             if (filters.tauxHoraire){
                 isEligible = (isEligible === true && currentOffer.tauxHoraire > filters.tauxHoraire)
@@ -108,6 +150,72 @@ const DiscoverOffers = () => {
         setCurrentOffer(offer);
     };
 
+    const handleFilterSelection = (field, value) => {
+        let newFilter = filters;
+        if(newFilter[field] !== null){
+            newFilter[field] = value;
+            setFilters(newFilter);
+            console.log(newFilter)
+        }
+    }
+
+    const renderFields = () => {
+        let finalForm = (<></>)
+        for(let i = 0; i < filterFields.length; i++){
+            let currentField = filterFields[i]
+            let formField = (<></>)
+            for (let j = 0; j < currentField.fields.length; j++){
+                let currentElement = currentField.fields[j]
+                switch (currentElement.type){
+                    case "radio":
+                        formField = (
+                            <>
+                                {formField}
+                                <input type="radio" name={currentField.idName} id={currentField.idName + "." + currentElement.value} onClick={()=>{handleFilterSelection(currentField.idName, currentElement.value)}}/>
+                                <label htmlFor={currentField.idName + "." + currentElement.value}>{currentElement.label}</label>
+                                <br/>
+                            </>
+                        )
+                        break
+                    case "range":
+                        formField = (
+                            <>
+                                {formField}
+                                <input type="range" min={currentElement.min} max={currentElement.max} name={currentField.idName} id="" onChange={(e)=>{handleFilterSelection(currentField.idName, e.target.value)}}/>
+                            </>
+                        )
+                        break
+                    case "number":
+                        formField = (
+                            <>
+                                {formField}
+                                <input type="number" min={currentElement.min} max={currentElement.max} name={currentField.idName} id="" onChange={(e)=>{handleFilterSelection(currentField.idName, e.target.value)}}/>
+                            </>
+                        )
+                        break
+                }
+            }
+            formField = (
+                <>
+                    <div className="list-bullet">
+                        <Icon path={currentField.icon} size={1} />
+                        <div style={{padding: "4px 0"}}>
+                            <h6 className="m-0" style={{marginBottom: "5px"}}>{currentField.name}</h6>
+                            {formField}
+                        </div>
+                    </div>
+                </>
+            )
+            finalForm = (
+                <>
+                    {finalForm}
+                    {formField}
+                </>
+            )
+        }
+        return finalForm
+    }
+
     const getOfferListSection = () => {
         if (offers.length > 0) {
             return (
@@ -120,45 +228,13 @@ const DiscoverOffers = () => {
                                 <button className="btn-icon" onClick={()=>{setDisplayFiltreWindow(false)}}><Icon path={mdiChevronUp} size={1} /></button>
                             </div>
                             <br/>
+
+
+
                             <div>
-                                <div className="list-bullet">
-                                    <Icon path={mdiBriefcaseOutline} size={1} />
-                                    <div style={{padding: "4px 0"}}>
-                                        <h6 className="m-0" style={{marginBottom: "5px"}}>Type de stage</h6>
-                                        <input type="radio" id="typeTempsTout" name="filtreTypeTemps"/>
-                                        <label htmlFor="typeTempsPartiel">Tous</label>
-                                        <br/>
-                                        <input type="radio" id="typeTempsPartiel" name="filtreTypeTemps"/>
-                                        <label htmlFor="typeTempsPartiel">Temps Partiel</label>
-                                        <br/>
-                                        <input type="radio" id="typeTempsPlein" name="filtreTypeTemps"/>
-                                        <label htmlFor="typeTempsPartiel">Temps Plein</label>
-                                    </div>
-                                </div>
-                                <div className="list-bullet">
-                                    <Icon path={mdiDomain} size={1} />
-                                    <div style={{padding: "4px 0"}}>
-                                        <h6 className="m-0" style={{marginBottom: "5px"}}>Emplacement</h6>
-                                        <input type="radio" id="typeTempsTout" name="filtreTypeEmplacement"/>
-                                        <label htmlFor="typeTempsPartiel">Tous</label>
-                                        <br/>
-                                        <input type="checkbox" id="typeEmplacementVirtuel" name="filtreTypeEmplacement"/>
-                                        <label htmlFor="typeTempsPartiel">Présentiel</label>
-                                        <br/>
-                                        <input type="checkbox" id="typeEmplacementVirtuel" name="filtreTypeEmplacement"/>
-                                        <label htmlFor="typeTempsPartiel">Virtuel</label>
-                                        <br/>
-                                        <input type="checkbox" id="typeEmplacementVirtuel" name="filtreTypeEmplacement"/>
-                                        <label htmlFor="typeTempsPartiel">Hybride</label>
-                                    </div>
-                                </div>
-                                <div className="list-bullet">
-                                    <Icon path={mdiCashMultiple} size={1} />
-                                    <div style={{padding: "4px 0"}}>
-                                        <h6 className="m-0" style={{marginBottom: "5px"}}>Taux Horaire Minumum</h6>
-                                        <input type="range" min="0" max="50" value="0"/>
-                                    </div>
-                                </div>
+                                {
+                                    renderFields()
+                                }
                                 <div className="list-bullet">
                                     <Icon path={mdiBookEducationOutline} size={1} />
                                     <div style={{padding: "4px 0"}}>

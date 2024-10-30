@@ -396,7 +396,7 @@ header {
     width: 100%;
     margin: auto;
     box-sizing: border-box;
-    background-color: rgb(240, 246, 246);
+    background-color: rgb(220, 230, 230);
     height: 100vh;
     overflow-y: auto;
 }
@@ -413,7 +413,7 @@ header {
 .dashboard-head {
     width: 100%;
     height: 380px;
-    background: linear-gradient(to top, rgb(240, 246, 246) 10%, rgba(130, 130, 130, 0) 70%), linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/public/assets/dashboard/dash-head.jpg') center / cover, linear-gradient(#ffffff, transparent);
+    background: linear-gradient(to top, rgb(220, 230, 230) 10%, rgba(130, 130, 130, 0) 70%), linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/public/assets/dashboard/dash-head.jpg') center / cover, linear-gradient(#ffffff, transparent);
 }
 
 .dashboard-card {
