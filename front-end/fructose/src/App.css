@@ -72,7 +72,11 @@ p.text-mini{
 hr {
     border: none;
     border-top: 1px solid rgba(128, 128, 128, 0.5);
-    margin: 15px 8px
+    margin: 15px 0px
+}
+
+label{
+    font-family: "Roboto Condensed", sans-serif;
 }
 
 .input-container {
@@ -200,6 +204,11 @@ input[type="text"], input[type="password"], input[type="email"], input[type="dat
     font-size: 16px;
     padding: 0 8px;
     margin: 5px 0 6px 0;
+    font-family: "Roboto Condensed", sans-serif;
+}
+
+option{
+    font-family:  "Roboto Condensed", sans-serif;
 }
 
 input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="date"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
@@ -216,6 +225,10 @@ input.field-invalid {
     background-repeat: no-repeat;
     background-position: right calc(.375em + .1875rem) center;
     background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+}
+
+input[type="radio"],input[type="checkbox"]{
+    margin: 6px 4px;
 }
 
 p.field-invalid-text {
@@ -406,6 +419,7 @@ header {
 .dashboard-card {
     background-color: white;
     border-radius: var(--border-radius);
+    margin-bottom: 16px;
 }
 
 .dashboard-card, .dashboard-card-toolbar, .dashboard-card-titlebar {
@@ -448,8 +462,7 @@ header {
     align-items: center;
     padding: 32px 0;
     gap: 12px;
-    position: sticky;
-    top: 0px;
+    position: relative;
 }
 
 .dashboard-card-toolbar h1 {
@@ -721,4 +734,16 @@ tr {
     padding: 4px 7px;
     font-family: 'Roboto Condensed';
     font-size: 12px;
+    margin: 0 2px;
+}
+
+
+.expandable{
+    height: 0px;
+    overflow: hidden;
+    transition: all .5s ease-in-out;
+}
+
+.expandable.expanded{
+    height: auto;
 }
