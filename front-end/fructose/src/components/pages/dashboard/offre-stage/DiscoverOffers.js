@@ -34,7 +34,8 @@ const DiscoverOffers = () => {
         {
             type: "tous",
             emplacement: [
-                "presentiel"
+                "presentiel",
+                "hybride",
             ],
             tauxHoraire: 0,
             departmenet: null
@@ -70,28 +71,29 @@ const DiscoverOffers = () => {
             let currentOffer = offers[i]
             let isEligible = false
             if (filters.type){
-                if (!(filters.type === "tous" || currentOffer.modaliteTravail === filters.type)){
-                    isEligible = false
-                    continue
-                } else {
+                if (filters.type === "tous" || currentOffer.modaliteTravail === filters.type){
                     isEligible = true
+                } else {
+                    isEligible = false
                 }
             }
-            if (filters.emplacement){
+            if (filters.emplacement && isEligible === true){
+                let eligibiliteEmplacement = false
                 if(Array.isArray(filters.emplacement)){
                     for (let j = 0; j < filters.emplacement.length; j++){
-                        if(filters.emplacement[j] === currentOffer.emplacement){
-                            isEligible = true
+                        if(filters.emplacement[j] === currentOffer.typeEmploi){
+                            eligibiliteEmplacement = true
                         }
                     }
                 } else if (filters.emplacement === "tous") {
-                    isEligible = true
+                    eligibiliteEmplacement = true
                 }
+                isEligible = eligibiliteEmplacement
             }
             if (filters.tauxHoraire){
                 isEligible = (isEligible === true && currentOffer.tauxHoraire > filters.tauxHoraire)
             }
-            if(isEligible){
+            if(isEligible === true){
                 finalOffer.push(currentOffer)
             }
         }
