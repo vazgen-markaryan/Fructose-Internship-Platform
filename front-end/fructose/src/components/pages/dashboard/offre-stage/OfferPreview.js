@@ -35,7 +35,7 @@ const OfferPreview = ({ currentOffer }) => {
                         ) : currentUser.role === "ADMIN" ? (
                             <>
                                 <button className="btn-filled">Accepter</button>
-                                <button className="btn-outlined">Refuser</button>
+                                <button className="btn-outline">Refuser</button>
                             </>
                         ) : null}
                     </div>

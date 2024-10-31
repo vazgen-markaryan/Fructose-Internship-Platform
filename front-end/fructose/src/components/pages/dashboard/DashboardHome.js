@@ -13,12 +13,13 @@ import {CvContext} from "../../../providers/CvProvider";
 import {OffreStageContext} from "../../../providers/OffreStageProvider";
 import {useTranslation} from "react-i18next";
 import OfferPreview from "./offre-stage/OfferPreview";
+import PdfPreview from "../../content/PdfPreview";
 
 const DashboardHome = () => {
 
     const {t} = useTranslation();
     const {currentUser, isUserInit} = useContext(AuthContext);
-    const {GetCvs, GetAllCvs} = useContext(CvContext);
+    const {GetCvs, GetAllCvs, getCvById} = useContext(CvContext);
     const [allCvs, setAllCvs] = useState([]);
     const [cvs, setCvs] = useState([]);
     const [offresStage, setOffresStage] = useState([]);
@@ -49,7 +50,6 @@ const DashboardHome = () => {
                 }
                 try {
                     const response = await GetAllCvs();
-                    console.log(response)
                     const data = await response.text();
                     setAllCvs(JSON.parse(data));
                 } catch (error) {
@@ -148,7 +148,7 @@ const DashboardHome = () => {
                 const startIndex = (currentPage - 1) * itemsPerPage;
                 const selectedOffresStage = offresStage.slice(startIndex, startIndex + itemsPerPage);
                 const startIndexCvs = (currentPage - 1) * itemsPerPage;
-                const selectedCvs = cvs.slice(startIndexCvs, startIndexCvs + itemsPerPage);
+                const selectedCvs = allCvs.slice(startIndexCvs, startIndexCvs + itemsPerPage);
                 return (
                     <section>
                         <div className={"toolbar-items"}>
@@ -255,7 +255,7 @@ const DashboardHome = () => {
                                             borderRadius: "5px",
                                             padding: "10px"
                                         }}>
-                                            {allCvs.map((cv, index) => (
+                                            {selectedCvs.map((cv, index) => (
                                                 <div key={index}
                                                      style={{
                                                          display: "flex",
@@ -266,19 +266,45 @@ const DashboardHome = () => {
                                                          cursor: "pointer",
                                                          backgroundColor: currentCv && currentCv.id === cv.id ? "#e0e0e0" : "transparent"
                                                      }}
-                                                     onClick={() => setCurrentCV(currentCv && currentCv.id === cv.id ? null : cv)}>
+                                                     onClick={() => {
+                                                         if (currentCv && currentCv.id === cv.id) {
+                                                             setCurrentCV(null);
+                                                         } else {
+                                                             setCurrentCV(fetchCvById(cv.id))
+                                                         }
+                                                     }}>
                                                     <Icon path={mdiBriefcasePlusOutline} size={1}/>
                                                     <p className="m-0">{cv.filename}</p>
                                                 </div>
                                             ))}
                                         </div>
-                                        {currentCv && <OfferPreview currentOffer={currentOffer} style={{
-                                            flex: 2,
-                                            padding: "10px",
-                                            backgroundColor: "#fff",
-                                            borderRadius: "5px",
-                                            boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-                                        }}/>}
+
+                                        {currentCv && (
+                                            <div style={{
+                                                flex: 2,
+                                                padding: "10px",
+                                                backgroundColor: "#fff",
+                                                borderRadius: "5px",
+                                                boxShadow: "0 0 10px rgba(0,0,0,0.1)"
+                                            }}>
+                                                <PdfPreview file={currentCv.fileUrl} height={200}/>
+
+                                                <p style={{textAlign: "center", margin: "10px 0", fontWeight: "bold"}}>
+                                                    {currentCv.filename}
+                                                </p>
+
+                                                <div style={{display: "flex", justifyContent: "center", gap: "10px"}}>
+                                                    <button className="btn-filled"
+                                                            onClick={() => handleValidate(currentCv.id)}>
+                                                        {t("dashboard_home_page.validate")}
+                                                    </button>
+                                                    <button className="btn-outline"
+                                                            onClick={() => handleReject(currentCv.id)}>
+                                                        {t("dashboard_home_page.reject")}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )}
@@ -289,7 +315,7 @@ const DashboardHome = () => {
                                         className={(currentPageCv === index + 1) ? "btn-filled" : ""}
                                         onClick={() => {
                                             handlePageChangeCv(index + 1);
-                                            setCurrentCV(null);
+                                            setCurrentCV(null); // Réinitialiser currentCV lors du changement de page
                                         }}
                                     >
                                         {index + 1}
@@ -297,11 +323,33 @@ const DashboardHome = () => {
                                 ))}
                             </div>
                         </div>
+
+
                     </section>
                 );
             }
         }
     }
+
+    const handleValidate = (cvId) => {
+        console.log(`CV ${cvId} validé.`);
+    };
+
+    const handleReject = (cvId) => {
+        console.log(`CV ${cvId} rejeté.`);
+    };
+    const fetchCvById = async (cvId) => {
+        try {
+            const response = await getCvById(cvId);
+            const pdfBlob = await response.blob();
+            const fileUrl = URL.createObjectURL(pdfBlob);
+            const fileSize = pdfBlob.size;
+            setCurrentCV((prev) => ({...prev, fileUrl, fileSize}));
+        } catch (error) {
+            console.error("Erreur lors de la récupération du CV:", error);
+        }
+    };
+
 
     const GetUserManagementSection = () => {
         if (currentUser != null) {
