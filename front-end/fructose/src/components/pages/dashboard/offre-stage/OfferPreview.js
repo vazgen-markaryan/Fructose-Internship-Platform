@@ -39,21 +39,23 @@ const OfferPreview = ({currentOffer}) => {
                             <button className="btn-filled">Postuler</button>
                         )}
                     </div>
-                    {currentOffer.isApproved ? (
-                        <>
-                            <Icon path={mdiCheck} size={1} color="green"/>
-                            <p style={{display: "inline", marginLeft: "5px"}}>{t("offer_status.approved")}</p>
-                        </>
-                    ) : currentOffer.isRefused ? (
-                        <>
-                            <Icon path={mdiClose} size={1} color="red"/>
-                            <p style={{display: "inline", marginLeft: "5px"}}>{t("offer_status.refused")}</p>
-                        </>
-                    ) : (
-                        <>
-                            <Icon path={mdiClockOutline} size={1} color="orange"/>
-                            <p style={{display: "inline", marginLeft: "5px"}}>{t("offer_status.pending")}</p>
-                        </>
+                    {currentUser.role === "EMPLOYEUR" && (
+                        currentOffer.isApproved ? (
+                            <>
+                                <Icon path={mdiCheck} size={1} color="green"/>
+                                <p style={{display: "inline", marginLeft: "5px"}}>{t("offer_status.approved")}</p>
+                            </>
+                        ) : currentOffer.isRefused ? (
+                            <>
+                                <Icon path={mdiClose} size={1} color="red"/>
+                                <p style={{display: "inline", marginLeft: "5px"}}>{t("offer_status.refused")}</p>
+                            </>
+                        ) : (
+                            <>
+                                <Icon path={mdiClockOutline} size={1} color="orange"/>
+                                <p style={{display: "inline", marginLeft: "5px"}}>{t("offer_status.pending")}</p>
+                            </>
+                        )
                     )}
                     <br/>
                     <hr/>
