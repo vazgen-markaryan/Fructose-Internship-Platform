@@ -638,13 +638,14 @@ public class OffreStageServiceTest {
                 .toList();
         Utilisateur utilisateur = new Employeur();
         utilisateur.setDepartement(new Departement());
-        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
+        utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.EMPLOYEUR).build());
         when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
-        when(offreStageRepository.findByUserDepartement(utilisateur.getDepartement().getId())).thenReturn(offreStages);
+        when(offreStageRepository.findByUserDepartementAndIsApproved(utilisateur.getDepartement().getId())).thenReturn(offreStages);
+        when(offreStageRepository.getAllByOwnerId(utilisateur.getId())).thenReturn(offreStages);
 
         offreStageService.getOffresStage();
 
-        verify(offreStageRepository, times(1)).findByUserDepartement(utilisateur.getDepartement().getId());
+        verify(offreStageRepository, times(1)).getAllByOwnerId(utilisateur.getDepartement().getId());
     }
 
     @Test
@@ -667,13 +668,14 @@ public class OffreStageServiceTest {
         Utilisateur utilisateur = new Employeur();
         // Doit être changer lorsque le usecase sera implémenté
         utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.PROFESSEUR).build());
+        utilisateur.setDepartement(new Departement());
         when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             offreStageService.getOffresStage();
         });
 
-        assertEquals("Aucune offre de stage n'a été trouvée pour le role inconnue", exception.getMessage());
+        assertEquals("Aucune offre de stage approuvée trouvée pour le professeur dans le département: " + utilisateur.getDepartement(), exception.getMessage());
     }
 
     @Test
