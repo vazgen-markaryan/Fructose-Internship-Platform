@@ -155,8 +155,14 @@ public class OffreStageService {
 					throw new IllegalArgumentException("Aucune offre de stage trouvée pour l'employeur avec l'email: " + utilisateur.getEmail());
 				}
 			}
+			case PROFESSEUR -> {
+				offresStage = OffreStageDTO.toDTOs(offreStageRepository.findByUserDepartementAndIsApproved(utilisateur.getDepartement().getId()));
+				if (offresStage.isEmpty()) {
+					throw new IllegalArgumentException("Aucune offre de stage approuvée trouvée pour le professeur dans le département: " + utilisateur.getDepartement());
+				}
+			}
 			case ETUDIANT -> {
-				offresStage = OffreStageDTO.toDTOs(offreStageRepository.findByUserDepartement(utilisateur.getDepartement().getId()));
+				offresStage = OffreStageDTO.toDTOs(offreStageRepository.findByUserDepartementAndIsApproved(utilisateur.getDepartement().getId()));
 				if (offresStage.isEmpty()) {
 					throw new IllegalArgumentException("Aucune offre de stage trouvée pour l'étudiant dans le département: " + utilisateur.getDepartement());
 				}

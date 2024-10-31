@@ -143,7 +143,7 @@ public class FructoseApplication implements CommandLineRunner {
 	
 	private void createAndPersistOffreStage(String nom, String description, String poste, String entreprise, Departement departement, double salaire, String modeTravail, String adresse, String typeContrat, LocalDate dateDebut, LocalDate dateFin, int heuresParSemaine, int nombrePostes, LocalDate dateLimite, String emailEmployeur) {
 		UtilisateurDTO employeurDTO = utilisateurService.getUtilisateurByEmail(emailEmployeur);
-		OffreStage offreStage = OffreStage.createOffreStage(nom, description, poste, entreprise, departement, salaire, modeTravail, adresse, typeContrat, dateDebut, dateFin, heuresParSemaine, nombrePostes, dateLimite, UtilisateurDTO.toEntity(employeurDTO), false, false, "Commentaire par défaut");
+		OffreStage offreStage = OffreStage.createOffreStage(nom, description, poste, entreprise, departement, salaire, modeTravail, adresse, typeContrat, dateDebut, dateFin, heuresParSemaine, nombrePostes, dateLimite, UtilisateurDTO.toEntity(employeurDTO), false, true, "Commentaire par défaut");
 		OffreStageDTO offreStageDTO = OffreStageDTO.toDTO(offreStage);
 		addWithHandleException(() -> checkAndAddOffreStage(offreStageDTO, employeurDTO), "Une erreur s'est produite lors de l'ajout de l'offre de stage");
 	}

@@ -4,8 +4,8 @@ import {Link} from "react-router-dom";
 import Icon from "@mdi/react";
 import {
     mdiBriefcasePlusOutline,
-    mdiBriefcaseRemoveOutline,
-    mdiChevronRight,
+    mdiBriefcaseRemoveOutline, mdiCheck,
+    mdiChevronRight, mdiClockOutline, mdiClose,
     mdiFileDocumentOutline,
     mdiPlus
 } from "@mdi/js";
@@ -13,6 +13,7 @@ import {CvContext} from "../../../providers/CvProvider";
 import {OffreStageContext} from "../../../providers/OffreStageProvider";
 import {useTranslation} from "react-i18next";
 import OfferPreview from "./offre-stage/OfferPreview";
+import ManageOffresStage from "./offre-stage/ManageOffresStage";
 
 const DashboardHome = () => {
 
@@ -82,55 +83,7 @@ const DashboardHome = () => {
                         </div>
                     </section>
                 );
-            } else if (currentUser.role === "EMPLOYEUR") {
-                return (
-                    <section>
-                        <div className={"toolbar-items"}>
-                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
-                            <Link to="/dashboard/manage-offres-stage">
-                                <button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/>
-                                </button>
-                            </Link>
-                            <Link to="./creer-offre-stage">
-                                <button className={"btn-filled"}>{t("dashboard_home_page.add_offer")}
-                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                </button>
-                            </Link>
-                        </div>
-                        <div style={{"padding": "10px 0"}}>
-                            {offresStage.length === 0 ? (
-                                <div style={{
-                                    "width": "400px",
-                                    "display": "flex",
-                                    "alignItems": "center",
-                                    "backgroundColor": "#eee",
-                                    "borderRadius": "5px",
-                                    "gap": "5px",
-                                    "padding": "10px"
-                                }}>
-                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                    <p className="m-0">{t("dashboard_home_page.no_offers")}</p>
-                                </div>
-                            ) : (
-                                <div style={{
-                                    "width": "400px",
-                                    "backgroundColor": "#eee",
-                                    "borderRadius": "5px",
-                                    "padding": "10px"
-                                }}>
-                                    {offresStage.map((offreStage, index) => (
-                                        <div key={index}
-                                             style={{"display": "flex", "alignItems": "center", "gap": "5px"}}>
-                                            <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                            <p className="m-0">{offreStage.nom}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </section>
-                );
-            } else if (currentUser.role === "ADMIN") {
+            } else {
                 const startIndex = (currentPage - 1) * itemsPerPage;
                 const selectedOffresStage = offresStage.slice(startIndex, startIndex + itemsPerPage);
                 return (
@@ -138,6 +91,7 @@ const DashboardHome = () => {
                         <div className={"toolbar-items"}>
                             <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.offers")}</h4>
                         </div>
+
                         <div style={{"padding": "10px 0"}}>
                             {offresStage.length === 0 ? (
                                 <div style={{
@@ -179,6 +133,17 @@ const DashboardHome = () => {
                                                      }}
                                                      onClick={() => setCurrentOffer(currentOffer && currentOffer.id === offreStage.id ? null : offreStage)}>
                                                     <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                                                    {currentUser.role === "EMPLOYEUR" && offreStage && (
+                                                        <div>
+                                                            {offreStage.isApproved ? (
+                                                                <Icon path={mdiCheck} size={1} color="green" />
+                                                            ) : offreStage.isRefused ? (
+                                                                <Icon path={mdiClose} size={1} color="red" />
+                                                            ) : (
+                                                                <Icon path={mdiClockOutline} size={1} color="orange" />
+                                                            )}
+                                                        </div>
+                                                    )}
                                                     <p className="m-0">{offreStage.nom}</p>
                                                 </div>
                                             ))}
