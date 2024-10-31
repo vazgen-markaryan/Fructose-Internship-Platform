@@ -90,7 +90,17 @@ const DashboardHome = () => {
                     <section>
                         <div className={"toolbar-items"}>
                             <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.offers")}</h4>
+                            {currentUser.role === "EMPLOYEUR" && (
+                                <Link to="/dashboard/creer-offre-stage">
+
+                                    <button className={"btn-filled"}>
+                                        <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                                        {t("dashboard_home_page.add_offer")}
+                                    </button>
+                                </Link>
+                            )}
                         </div>
+
 
                         <div style={{"padding": "10px 0"}}>
                             {offresStage.length === 0 ? (
