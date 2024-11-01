@@ -77,14 +77,6 @@ public class OffreStage {
 	@JoinColumn (name = "owner_id")
 	private Utilisateur owner;
 	
-	@ManyToMany
-	@JoinTable (
-		name = "offre_stage_etudiant",
-		joinColumns = @JoinColumn (name = "offre_stage_id"),
-		inverseJoinColumns = @JoinColumn (name = "etudiant_id")
-	)
-	private Set<Etudiant> etudiants;
-	
 	@Column (name = "is_refused", nullable = false)
 	private Boolean isRefused = false;
 	
