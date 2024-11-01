@@ -751,3 +751,30 @@ tr {
 .expandable.expanded{
     height: auto;
 }
+
+.card {
+    border-radius: var(--border-radius);
+    border: 1px solid #d1d1d1;
+}
+
+.card > .card-image{
+    height: 160px;
+    width: 100%;
+    background-color: grey;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    position: relative;
+    background: url('/public/assets/offers/default-company-banner.jpg') center / cover, linear-gradient(#eeeeee, #eeeeee);
+
+}
+
+.card > .card-image > h5{
+    font-weight: 300;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: white;
+}
+
+.card > .card-content{
+    padding: 10px 8px;
+}

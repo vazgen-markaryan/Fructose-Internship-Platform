@@ -3,6 +3,7 @@ import {AuthContext} from "../../../providers/AuthProvider";
 import {Link} from "react-router-dom";
 import Icon from "@mdi/react";
 import {
+    mdiAlertCircleOutline,
     mdiBriefcasePlusOutline,
     mdiBriefcaseRemoveOutline,
     mdiChevronRight,
@@ -34,7 +35,7 @@ const DashboardHome = () => {
                         console.log("error" + error);
                     }
                 }
-                if (currentUser.role === "EMPLOYEUR") {
+                if (currentUser.role === "EMPLOYEUR" || currentUser.role === "ETUDIANT") {
                     try {
                         const response = await fetchOffresStage();
                         setOffresStage(response);
@@ -49,30 +50,63 @@ const DashboardHome = () => {
     const GetOffreStageSection = () => {
         if (currentUser != null) {
             if (currentUser.role === "ETUDIANT") {
-                return (
-                    <section>
-                        <div className={"toolbar-items"}>
-                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
-                            <Link to="/dashboard/discover-offers"><button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/></button></Link>
-                        </div>
-                        <div style={{"padding": "10px 0"}}>
-                            <div style={{
-                                "width": "400px",
-                                "height": "320px",
-                                "display": "flex",
-                                "alignItems": "center",
-                                "justifyContent": "center",
-                                "backgroundColor": "#eee",
-                                "borderRadius": "5px"
-                            }}>
-                                <div style={{"textAlign": "center"}}>
-                                    <Icon path={mdiBriefcaseRemoveOutline} size={1}/>
-                                    <p>{t("dashboard_home_page.no_offers")}</p>
+                if (offresStage.length !== 0){
+                    return (
+                        <Link to="/dashboard/discover-offers" style={{textDecoration: "none"}}>
+                        <section>
+                            <div className={"toolbar-items"}>
+                                <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
+                                <button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/></button>
+                            </div>
+                            <div style={{"padding": "10px 0", display: "flex", gap: "10px"}}>
+                                {offresStage.reverse().slice(0, 3).map((item, index) => (
+                                    <div key={index} style={{width: "33%"}} className="card">
+                                        <div className="card-image">
+                                            <h5>{item.poste}</h5>
+                                        </div>
+                                        <div className="card-content">
+                                            <p style={{fontSize: "11px", textTransform: "uppercase"}} className="text-dark">
+                                                {t("programme." + item.departementDTO.nom)}
+                                            </p>
+                                            <p>{item.ownerDTO.companyName}</p>
+                                            {
+                                                (item.nombrePostes <= 5)?<span className="badge text-mini"><Icon path={mdiAlertCircleOutline} size={0.5} /> Places limitées</span>
+                                                    :<></>
+                                            }
+
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                        </Link>
+                    );
+                } else {
+                    return (
+                        <section>
+                            <div className={"toolbar-items"}>
+                                <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
+                                <Link to="/dashboard/discover-offers"><button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/></button></Link>
+                            </div>
+                            <div style={{"padding": "10px 0"}}>
+                                <div style={{
+                                    "width": "400px",
+                                    "height": "320px",
+                                    "display": "flex",
+                                    "alignItems": "center",
+                                    "justifyContent": "center",
+                                    "backgroundColor": "#eee",
+                                    "borderRadius": "5px"
+                                }}>
+                                    <div style={{"textAlign": "center"}}>
+                                        <Icon path={mdiBriefcaseRemoveOutline} size={1}/>
+                                        <p>{t("dashboard_home_page.no_offers")}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </section>
-                );
+                        </section>
+                    );
+                }
             } else if (currentUser.role === "EMPLOYEUR") {
                 return (
                     <section>
