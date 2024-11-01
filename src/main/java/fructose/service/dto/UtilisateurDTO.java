@@ -2,7 +2,7 @@ package fructose.service.dto;
 
 import fructose.model.*;
 import fructose.model.auth.Credentials;
-import fructose.model.auth.Role;
+import fructose.model.enumerator.Role;
 import lombok.*;
 
 @Getter

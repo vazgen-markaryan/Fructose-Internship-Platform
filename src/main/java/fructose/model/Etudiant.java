@@ -1,9 +1,10 @@
 package fructose.model;
 
-import fructose.model.auth.Role;
+import fructose.model.enumerator.Role;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,10 +15,13 @@ import java.util.Set;
 @Setter
 @Getter
 @ToString
-@DiscriminatorValue("RECORD_ETUDIANT")
+@DiscriminatorValue ("RECORD_ETUDIANT")
 public class Etudiant extends Utilisateur {
-	@ManyToMany(mappedBy = "etudiants")
+	@ManyToMany (mappedBy = "etudiants")
 	private Set<OffreStage> offresStage;
+	
+	@OneToMany (mappedBy = "etudiant")
+	private Set<Candidature> candidatures;
 	
 	public Etudiant() {
 		super();
