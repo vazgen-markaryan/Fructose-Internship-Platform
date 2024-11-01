@@ -28,12 +28,28 @@ const DiscoverOffers = () => {
 
     const [displayFiltreWindow, setDisplayFiltreWindow] = useState(false)
 
+    const [filterCount, setFilterCount] = useState(0)
+
+    const [filteredOffers, setFilteredOffers] = useState(null)
+
     const [filters, setFilters] = useState(
         {
-            type: "tous",
-            emplacement: "presentiel",
-            tauxHoraire: 0,
-            departmenet: null
+            type: {
+                default: "tous",
+                value: "tous"
+            },
+            emplacement: {
+                default: "tous",
+                value: "tous"
+            },
+            tauxHoraire: {
+                default: 0,
+                value: 0
+            },
+            departmenet: {
+                default: 0,
+                value: 0
+            },
         }
     )
 
@@ -90,21 +106,18 @@ const DiscoverOffers = () => {
             },
             {
                 name: "Taux Horaire Minimum",
-                idName: "emplacement",
+                idName: "tauxHoraire",
                 icon: mdiCashMultiple,
                 fields: [
                     {
                         type: "number",
-                        label: "Tous",
-                        value: "tous",
+                        value: 0,
                         min: 0,
                         max: 50
                     },
                 ]
             }
         ]
-
-    const [filteredOffers, setFilteredOffers] = useState([])
 
 
     useEffect(() => {
@@ -121,29 +134,55 @@ const DiscoverOffers = () => {
         }
     }, [isUserInit]);
 
+
     const filterOffers = (offers, filters) => {
         let finalOffer = []
         for (let i = 0; i < offers.length; i++){
             let currentOffer = offers[i]
             let isEligible = false
+            let filterCount  = 0
             if (filters.type){
-                isEligible = filters.type === "tous" || currentOffer.modaliteTravail === filters.type;
+                isEligible = filters.type.value === "tous" || currentOffer.modaliteTravail === filters.type.value;
+                if(filters.type.default != filters.type.value){
+                    filterCount++
+                }
             }
             if (filters.emplacement && isEligible === true){
-                isEligible = filters.emplacement === "tous" || currentOffer.modaliteTravail === filters.emplacement;
+                isEligible = filters.emplacement.value === "tous" || currentOffer.typeEmploi === filters.emplacement.value;
+                if(filters.emplacement.default != filters.emplacement.value){
+                    filterCount++
+                }
             }
             if (filters.tauxHoraire){
-                isEligible = (isEligible === true && currentOffer.tauxHoraire > filters.tauxHoraire)
+                isEligible = (isEligible === true && currentOffer.tauxHoraire > filters.tauxHoraire.value)
+                if(filters.tauxHoraire.default != filters.tauxHoraire.value){
+                    filterCount++
+                }
             }
             if(isEligible === true){
                 finalOffer.push(currentOffer)
             }
+            setFilterCount(filterCount)
         }
         return finalOffer
     }
 
     const handleOfferFilterSelection = () => {
-        setFilteredOffers(filterOffers(offers, filters))
+        let newOffers = filterOffers(offers, filters)
+        setFilteredOffers(newOffers)
+        setDisplayFiltreWindow(false)
+        if(newOffers.length > 0){
+            setCurrentOffer(newOffers[0])
+        } else {
+            setCurrentOffer(null);
+        }
+    }
+
+    const resetOfferFilterSelection = () => {
+        for (const [key, value] of Object.entries(filters)) {
+            value.value = value.default
+        }
+        handleOfferFilterSelection()
     }
 
     const handleOfferSelection = (offer) => {
@@ -153,9 +192,8 @@ const DiscoverOffers = () => {
     const handleFilterSelection = (field, value) => {
         let newFilter = filters;
         if(newFilter[field] !== null){
-            newFilter[field] = value;
+            newFilter[field].value = value;
             setFilters(newFilter);
-            console.log(newFilter)
         }
     }
 
@@ -171,7 +209,7 @@ const DiscoverOffers = () => {
                         formField = (
                             <>
                                 {formField}
-                                <input type="radio" name={currentField.idName} id={currentField.idName + "." + currentElement.value} onClick={()=>{handleFilterSelection(currentField.idName, currentElement.value)}}/>
+                                <input type="radio" defaultChecked={currentElement.value === filters[currentField.idName].value} name={currentField.idName} id={currentField.idName + "." + currentElement.value} onChange={()=>{handleFilterSelection(currentField.idName, currentElement.value)}}/>
                                 <label htmlFor={currentField.idName + "." + currentElement.value}>{currentElement.label}</label>
                                 <br/>
                             </>
@@ -181,7 +219,7 @@ const DiscoverOffers = () => {
                         formField = (
                             <>
                                 {formField}
-                                <input type="range" min={currentElement.min} max={currentElement.max} name={currentField.idName} id="" onChange={(e)=>{handleFilterSelection(currentField.idName, e.target.value)}}/>
+                                <input type="range" defaultValue={filters[currentField.idName].value} min={currentElement.min} max={currentElement.max} name={currentField.idName} id="" onChange={(e)=>{handleFilterSelection(currentField.idName, e.target.value)}}/>
                             </>
                         )
                         break
@@ -189,7 +227,7 @@ const DiscoverOffers = () => {
                         formField = (
                             <>
                                 {formField}
-                                <input type="number" min={currentElement.min} max={currentElement.max} name={currentField.idName} id="" onChange={(e)=>{handleFilterSelection(currentField.idName, e.target.value)}}/>
+                                <input type="number" defaultValue={filters[currentField.idName].value} min={currentElement.min} max={currentElement.max} name={currentField.idName} id="" onChange={(e)=>{handleFilterSelection(currentField.idName, e.target.value)}}/>
                             </>
                         )
                         break
@@ -249,25 +287,20 @@ const DiscoverOffers = () => {
 
                             <div className="toolbar-items">
                                 <div className="toolbar-spacer"></div>
+                                <button onClick={()=>{resetOfferFilterSelection()}}>Reset</button>
                                 <button className="btn-filled" onClick={()=>{handleOfferFilterSelection()}}>Rechercher</button>
                             </div>
                         </section>
                     </div>
-                    <div className="dashboard-card">
+                    <div className="dashboard-card" style={{minHeight: "480px"}}>
                         <section>
                             <div>
                                 <div className="toolbar-items">
                                     <h5 className="m-0">{filteredOffers.length} Resultats</h5>
                                     <div className="toolbar-spacer"></div>
-                                    <select name="" id="" title="Ordonner par" style={{width: "150px"}}>
-                                        <optgroup label="Ordre des résultats">
-                                            <option value="recent">Le Plus Récent</option>
-                                            <option value="recent">Le Plus Ancien</option>
-                                            <option value="recent">Date limite candidature</option>
-                                        </optgroup>
-                                    </select>
-                                    <button onClick={()=>{setDisplayFiltreWindow(!displayFiltreWindow)}}><Icon path={mdiFilterMultipleOutline} size={1} /> Filtres</button>
+                                    <button onClick={()=>{setDisplayFiltreWindow(!displayFiltreWindow)}}><Icon path={mdiFilterMultipleOutline} size={1} /> Filtres ({filterCount})</button>
                                 </div>
+                                <br/>
                                 <div className="menu-list">
                                     {filteredOffers.reverse().map((item, index) => (
                                         <div onClick={() => handleOfferSelection(item)} key={index}
@@ -376,8 +409,20 @@ const DiscoverOffers = () => {
                             <hr/>
                             <section className="nospace">
                                 <h5>Employeur</h5>
-                                <p>{currentOffer.ownerDTO.fullName}</p>
-                                <p>{currentOffer.ownerDTO.companyName}</p>
+
+                                <div className="list-bullet">
+                                    <div className="user-profile-section-profile-picture" style={{"background": "url('/assets/auth/default-profile.jpg') center / cover", width: "32px", height: "32px", margin: 0}}>
+
+                                    </div>
+                                    <div>
+                                        <h6 className="m-0">{currentOffer.ownerDTO.fullName}</h6>
+                                        <p className="m-0 text-dark">{currentOffer.ownerDTO.companyName}</p>
+                                    </div>
+                                    <div className="toolbar-spacer">
+
+                                    </div>
+                                    <a href={"mailto:" + currentOffer.ownerDTO.email}><button>Contacter</button></a>
+                                </div>
                             </section>
                         </div>
                     </div>
@@ -388,7 +433,17 @@ const DiscoverOffers = () => {
     };
 
     const getOffreListSection = () => {
-        if (offers.length === 0) {
+        if (offers === null || filteredOffers === null) {
+            return (
+                <div className="dashboard-card" style={{width: "45%", height: "420px"}}>
+                    <div className="loader-container">
+                        <div className="loader">
+
+                        </div>
+                    </div>
+                </div>
+            );
+        } else if (offers.length === 0) {
             return (
                 <div className="dashboard-card" style={{width: "45%"}}>
                     <div className="dashboard-placeholder-card" style={{backgroundColor: "transparent"}}>
