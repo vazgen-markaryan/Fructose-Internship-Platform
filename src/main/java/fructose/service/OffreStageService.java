@@ -100,7 +100,6 @@ public class OffreStageService {
 		offreStageRepository.save(existingOffreStage);
 	}
 	
-	
 	public void deleteOffreStage(Long id) {
 		if (id == null) {
 			throw new IllegalArgumentException("ID ne peut pas être nul");

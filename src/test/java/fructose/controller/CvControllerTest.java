@@ -62,7 +62,7 @@ public class CvControllerTest {
 	}
 	
 	@Test
-	public void testEnregistrerCV_Failure_FileEmpty() throws Exception {
+	public void testEnregistrerCV_Failure_FileEmpty() {
 		MockMultipartFile file = new MockMultipartFile("file", "", "", new byte[0]);
 		String token = "validToken";
 		
@@ -198,7 +198,7 @@ public class CvControllerTest {
 		Long cvId = 1L;
 		
 		when(utilisateurService.validationToken(token)).thenReturn(true);
-		byte[] fileContent = new byte[]{1, 2, 3};
+		byte[] fileContent = new byte[] {1, 2, 3};
 		when(cvService.getCvFileContentById(cvId)).thenReturn(fileContent);
 		
 		ResponseEntity<byte[]> response = cvController.getCVFile(token, cvId);

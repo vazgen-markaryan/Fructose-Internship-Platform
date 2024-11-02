@@ -1,8 +1,10 @@
 package fructose.service.dto;
 
 import fructose.model.Professeur;
-import fructose.model.auth.Role;
-import lombok.*;
+import fructose.model.enumerator.Role;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter

@@ -62,7 +62,7 @@ public class OffreStageControllerTest {
 	void testCreerOffreStageInvalide() {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		when(bindingResult.getFieldErrors()).thenReturn(
-				List.of(new FieldError("offreStageDTO", "nom", "Le nom n'est pas valide"))
+			List.of(new FieldError("offreStageDTO", "nom", "Le nom n'est pas valide"))
 		);
 		
 		ResponseEntity<?> response = offreStageController.creerOffreStage("token", offreStageDTO, bindingResult);

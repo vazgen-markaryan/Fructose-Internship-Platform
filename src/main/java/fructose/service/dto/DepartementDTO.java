@@ -1,7 +1,8 @@
 package fructose.service.dto;
 
 import fructose.model.Departement;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package fructose.controller;
 
-import fructose.model.auth.Role;
+import fructose.model.enumerator.Role;
 import fructose.service.DepartementService;
 import fructose.service.UtilisateurService;
 import fructose.service.dto.DepartementDTO;
@@ -9,16 +9,12 @@ import fructose.service.dto.auth.LoginDTO;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,12 +33,12 @@ public class UtilisateurController {
 		this.departementService = departementService;
 	}
 	
-	@PostMapping("/creer-utilisateur")
+	@PostMapping ("/creer-utilisateur")
 	public ResponseEntity<?> creerUtilisateur(@RequestBody @Valid UtilisateurDTO utilisateurDTO, BindingResult result) {
 		if (result.hasErrors()) {
 			String errorMessages = result.getFieldErrors().stream()
-					.map(DefaultMessageSourceResolvable::getDefaultMessage)
-					.collect(Collectors.joining(", "));
+				.map(DefaultMessageSourceResolvable::getDefaultMessage)
+				.collect(Collectors.joining(", "));
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
 		}
 		try {
@@ -66,7 +62,7 @@ public class UtilisateurController {
 		}
 	}
 	
-	@GetMapping("/check-email")
+	@GetMapping ("/check-email")
 	public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestParam String email) {
 		boolean emailTaken = utilisateurService.isEmailTaken(email);
 		Map<String, Boolean> response = new HashMap<>();
@@ -74,7 +70,7 @@ public class UtilisateurController {
 		return ResponseEntity.ok(response);
 	}
 	
-	@GetMapping("/check-matricule")
+	@GetMapping ("/check-matricule")
 	public ResponseEntity<Map<String, Boolean>> checkMatricule(@RequestParam String matricule) {
 		boolean matriculeTaken = utilisateurService.isMatriculeTaken(matricule);
 		Map<String, Boolean> response = new HashMap<>();
@@ -82,7 +78,7 @@ public class UtilisateurController {
 		return ResponseEntity.ok(response);
 	}
 	
-	@GetMapping("/check-departement")
+	@GetMapping ("/check-departement")
 	public ResponseEntity<Map<String, DepartementDTO>> checkDepartement(@RequestParam String departementName) {
 		DepartementDTO departementDTO = departementService.getDepartementByNom(departementName);
 		if (departementDTO == null) {
@@ -93,12 +89,12 @@ public class UtilisateurController {
 		return ResponseEntity.ok(response);
 	}
 	
-	@PostMapping("/connexion")
+	@PostMapping ("/connexion")
 	public ResponseEntity<?> connexion(@RequestBody @Valid LoginDTO loginDTO, BindingResult result) {
 		if (result.hasErrors()) {
 			String errorMessages = result.getFieldErrors().stream()
-					.map(DefaultMessageSourceResolvable::getDefaultMessage)
-					.collect(Collectors.joining(", "));
+				.map(DefaultMessageSourceResolvable::getDefaultMessage)
+				.collect(Collectors.joining(", "));
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
 		}
 		try {
@@ -109,8 +105,8 @@ public class UtilisateurController {
 		}
 	}
 	
-	@PostMapping("/valider-token")
-	public ResponseEntity<?> validerToken(@RequestHeader("Authorization") String token) {
+	@PostMapping ("/valider-token")
+	public ResponseEntity<?> validerToken(@RequestHeader ("Authorization") String token) {
 		try {
 			String tokenFiltrer = token.startsWith("Bearer ") ? token.substring(7) : token;
 			boolean estValide = utilisateurService.validationToken(tokenFiltrer);
@@ -120,8 +116,8 @@ public class UtilisateurController {
 		}
 	}
 	
-	@PostMapping("/infos-utilisateur")
-	public ResponseEntity<?> getInfosUtilisateur(@RequestHeader("Authorization") String token) {
+	@PostMapping ("/infos-utilisateur")
+	public ResponseEntity<?> getInfosUtilisateur(@RequestHeader ("Authorization") String token) {
 		try {
 			UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
 			return ResponseEntity.status(HttpStatus.OK).body(utilisateurDTO);
@@ -131,8 +127,8 @@ public class UtilisateurController {
 		}
 	}
 	
-	@GetMapping("/non-approved-users")
-	public ResponseEntity<List<UtilisateurDTO>> getNonApprovedUsers(@RequestHeader("Authorization") String token) {
+	@GetMapping ("/non-approved-users")
+	public ResponseEntity<List<UtilisateurDTO>> getNonApprovedUsers(@RequestHeader ("Authorization") String token) {
 		if (!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
@@ -141,8 +137,8 @@ public class UtilisateurController {
 		return ResponseEntity.ok(nonApprovedUsers);
 	}
 	
-	@PutMapping("/approve-user/{id}")
-	public ResponseEntity<?> approveUser(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+	@PutMapping ("/approve-user/{id}")
+	public ResponseEntity<?> approveUser(@RequestHeader ("Authorization") String token, @PathVariable Long id) {
 		if (!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
 		}
@@ -155,8 +151,8 @@ public class UtilisateurController {
 		}
 	}
 	
-	@DeleteMapping("/reject-user/{id}")
-	public ResponseEntity<?> deleteUtilisateurByID(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+	@DeleteMapping ("/reject-user/{id}")
+	public ResponseEntity<?> deleteUtilisateurByID(@RequestHeader ("Authorization") String token, @PathVariable Long id) {
 		if (!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
 		}

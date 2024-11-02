@@ -11,7 +11,8 @@ import org.springframework.security.core.AuthenticationException;
 
 import java.io.IOException;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class JwtAuthentificationEntryPointTest {
 	

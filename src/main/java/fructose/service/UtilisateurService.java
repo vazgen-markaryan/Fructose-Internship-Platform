@@ -1,7 +1,7 @@
 package fructose.service;
 
 import fructose.model.*;
-import fructose.model.auth.Role;
+import fructose.model.enumerator.Role;
 import fructose.repository.*;
 import fructose.security.JwtTokenProvider;
 import fructose.security.exception.InvalidJwtTokenException;
