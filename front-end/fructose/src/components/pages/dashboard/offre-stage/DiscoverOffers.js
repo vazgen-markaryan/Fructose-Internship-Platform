@@ -5,17 +5,17 @@ import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {OffreStageContext} from "../../../../providers/OffreStageProvider";
 import {
-    mdiAlertCircleOutline,
-    mdiArrowLeft,
-    mdiBookEducationOutline,
-    mdiBriefcaseOutline,
-    mdiBriefcaseRemove,
-    mdiCalendarOutline,
-    mdiCashMultiple,
-    mdiChevronUp,
-    mdiDomain,
-    mdiFilterMultipleOutline,
-    mdiMapMarkerOutline
+	mdiAlertCircleOutline,
+	mdiArrowLeft,
+	mdiBookEducationOutline,
+	mdiBriefcaseOutline,
+	mdiBriefcaseRemove,
+	mdiCalendarOutline,
+	mdiCashMultiple,
+	mdiChevronUp,
+	mdiDomain,
+	mdiFilterMultipleOutline,
+	mdiMapMarkerOutline
 } from "@mdi/js";
 
 const DiscoverOffers = () => {
@@ -269,20 +269,17 @@ const DiscoverOffers = () => {
 								}}><Icon path={mdiChevronUp} size={1}/></button>
 							</div>
 							<br/>
-							<div>
-								{
-									renderFields()
-								}
-								<div className="list-bullet">
-									<Icon path={mdiBookEducationOutline} size={1}/>
-									<div style={{padding: "4px 0"}}>
-										<h6 className="m-0" style={{marginBottom: "5px"}}>Département</h6>
-										<select name="" id="" disabled="disabled">
-											<option value="">{t("programme." + currentUser.departementDTO.nom)}</option>
-										</select>
-									</div>
-								</div>
 							
+							<div>{renderFields()}</div>
+							
+							<div className="list-bullet" style={{display: (currentUser.role === "EMPLOYEUR") ? "block" : "none"}}>
+								<Icon path={mdiBookEducationOutline} size={1}/>
+								<div style={{padding: "4px 0"}}>
+									<h6 className="m-0" style={{marginBottom: "5px"}}>Département</h6>
+									<select name="" id="" disabled="disabled">
+										<option value="">{t("programme." + currentUser.departementDTO.nom)}</option>
+									</select>
+								</div>
 							</div>
 							
 							<div className="toolbar-items">

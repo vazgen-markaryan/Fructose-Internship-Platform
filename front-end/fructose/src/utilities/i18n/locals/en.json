@@ -1,367 +1,367 @@
 {
-  "bd_role_traduction": {
-    "ETUDIANT": "Student",
-    "PROFESSEUR": "Professor",
-    "EMPLOYEUR": "Employer",
-    "ADMIN": "Administrator"
-  },
-  "programme": {
-    "select": "Select a program",
-    "cinema": "Cinema",
-    "gestion_commerce": "Business Management",
-    "gestion_operations_chaine_logistique": "Operations and Supply Chain Management",
-    "journalisme_multimedia": "Multimedia Journalism",
-    "langues_trilinguisme_cultures": "Languages – Trilingualism and Cultures",
-    "photographie_design_graphique": "Photography and Graphic Design",
-    "sciences_nature": "Natural Sciences",
-    "sciences_humaines_administration_economie": "Human Sciences – Administration and Economics Profile",
-    "sciences_humaines_individu_relations_humaines": "Human Sciences – Individual and Human Relations Profile",
-    "sciences_humaines_monde_en_action": "Human Sciences – World in Action Profile",
-    "soins_infirmiers": "Nursing",
-    "soins_infirmiers_auxiliaires": "Nursing for Assistants",
-    "techniques_education_enfance": "Early Childhood Education Techniques",
-    "techniques_bureautique": "Office Automation Techniques",
-    "techniques_comptabilite_gestion": "Accounting and Management Techniques",
-    "techniques_informatique": "Computer Science",
-    "techniques_travail_social": "Social Work Techniques",
-    "technologie_architecture": "Architecture Technology",
-    "technologie_estimation_evaluation_batiment": "Building Estimation and Evaluation Technology",
-    "technologie_genie_civil": "Civil Engineering Technology",
-    "technologie_genie_electrique": "Electrical Engineering Technology: Automation and Control",
-    "technologie_genie_physique": "Physical Engineering Technology",
-    "tremplin_dec": "DEC Transition Program"
-  },
-  "header_main_page": {
-    "signup": "Sign up",
-    "disconnect": "Disconnect",
-    "notifications": "Notifications"
-  },
-  "home_page": {
-    "carriere": "Your career",
-    "commence": "begins ",
-    "ici": "here"
-  },
-  "connexion_page": {
-    "connexion": "Log in",
-    "email": "Email",
-    "password": "Password",
-    "continue": "Continue",
-    "error": {
-      "email": "Email is required",
-      "password": "Password is required",
-      "not_approved": "Your account is not approved by Admin yet. Please wait for approval.",
-      "invalid_email": "Invalid email",
-      "invalid_password": "Invalid password",
-      "unknown_error": "Unknown error occurred. Please try again"
-    }
-  },
-  "creer_utilisateur_page": {
-    "creer_compte": "Create an account",
-    "carriere": "Starting your career has never been easier",
-    "profile": "Your profile",
-    "profile_2": "Crucial information for your profile",
-    "school": "School information",
-    "school_2": "Information related to your academic progress",
-    "security": "Security",
-    "pasword": "Create your password",
-    "finalization": "Finalization",
-    "dashboard": "Access the dashboard",
-    "success_title": "Account successfully created",
-    "success_text": "Please wait for administrator approval to access your account",
-    "error": {
-      "error_title": "Error"
-    }
-  },
-  "selection_role_page": {
-    "who_are_you": "Who are you?",
-    "description": "Select the user type that suits you",
-    "student": "Student",
-    "teacher": "Teacher",
-    "employer": "Employer",
-    "continue": "Continue"
-  },
-  "information_base_page": {
-    "information": "Basic information",
-    "description": "Enter your First Name, Last Name, and the Email address you will use to log in to the platform from now on.",
-    "first_name": "First name",
-    "last_name": "Last name",
-    "email": "Email",
-    "continue": "Continue",
-    "error": {
-      "first_name_short": "Your first name must contain at least 2 characters.",
-      "first_name_letters_only": "Your first name must contain only letters and spaces.",
-      "last_name_short": "Your last name must contain at least 2 characters.",
-      "last_name_letters_only": "Your last name must contain only letters and spaces.",
-      "email": "Email address must be valid: example@gmail.com",
-      "email_taken": "Email address is already taken"
-    }
-  },
-  "information_etudiant_page": {
-    "information": "School Information",
-    "description": "Enter your matriculation number defined by the establishment as well as the study program attended.",
-    "matricule": "Student ID",
-    "program": "Program",
-    "continue": "Continue",
-    "error": {
-      "matricule": "Student ID must have 7 digits",
-      "department": "No Department is selected",
-      "matricule_taken": "Student ID is already taken"
-    }
-  },
-  "mot_de_passe_page": {
-    "title": "Create your password",
-    "description": "A complex password is less likely to be guessed by someone else",
-    "description_2": "Your password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number and one symbol",
-    "password": "Password",
-    "confirm_password": "Confirm password",
-    "submit": "Submit",
-    "error": {
-      "password_wrong": "Password must contain at least one uppercase letter, one number and one special character",
-      "password_doesnt_match": "Passwords do not match."
-    }
-  },
-  "information_employeur_page": {
-    "title": "Employer information",
-    "description": "Enter the required information about the company offering the internships",
-    "company_name": "Company name",
-    "continue": "Continue",
-    "error": {
-      "company_name_invalid": "The company name must contain only letters and spaces",
-      "company_name_lenght": "Company name must be between 3 and 100 characters"
-    }
-  },
-  "information_professeur_page": {
-    "title": "Information about your employment",
-    "description": "Enter your employee number defined by the establishment as well as the department of belonging",
-    "employee_number": "Employee number",
-    "department": "Department",
-    "select_department": "Select a department",
-    "continue": "Continue",
-    "error": {
-      "error_title": "Error",
-      "employee_number": "Employee number must have 7 digits",
-      "department": "No Department is selected",
-      "employee_number_taken": "This ID is already used by another user"
-    }
-  },
-  "creer_offre_stage_page": {
-    "title": "Create an internship offer",
-    "nom": "Name",
-    "poste": "Position",
-    "description": "Description",
-    "compagnie": "Company",
-    "address": "Address",
-    "taux_horaire": "Hourly rate",
-    "nombre_heures_semaine": "Number of hours per week",
-    "nombre_postes": "Number of positions",
-    "type_emploi": "Type of employment",
-    "programme_etudes": "Study program",
-    "modalite_travail": "Work modality",
-    "date_limite_candidate": "Application deadline",
-    "date_debut": "Start date",
-    "date_fin": "End date",
-    "creer_offre_stage": "Create the internship offer",
-    "retour": "Return to home",
-    "types_emploi": {
-      "select": "Select a type of employment",
-      "temps_partiel": "Part-time",
-      "temps_plein": "Full-time"
-    },
-    "modalites_travail": {
-      "select": "Select a work modality",
-      "teletravail": "Remote work",
-      "presentiel": "On-site",
-      "hybride": "Hybrid"
-    },
-    "errors": {
-      "nom": "The name must be between 3 and 100 characters",
-      "poste": "The position must be between 3 and 100 characters",
-      "description": "The description must be between 10 and 500 characters",
-      "compagnie": "The company name must be between 3 and 100 characters",
-      "address": "The address must be between 3 and 100 characters",
-      "taux_horaire": "The hourly rate must be a positive number",
-      "nombre_heures_semaine_inferieur": "The number of hours per week must be greater than 1",
-      "nombre_heures_semaine_superieur": "The number of hours per week must be less than 40",
-      "nombre_postes": "The number of positions must be a positive number",
-      "programme_etudes_select": "The study program must be selected",
-      "modalite_travail_select": "The work modality must be selected",
-      "type_emploi_select": "The type of employment must be selected"
-    }
-  },
-  "dashboard_home_page": {
-    "home": "Home",
-    "offer": "Internship Offers",
-    "explore": "Explore",
-    "no_offers": "No offers to display at the moment",
-    "my_offers": "My Internship Offers",
-    "add_offer": "New offer",
-    "offers": "Internship Offers",
-    "hello": "Hello",
-    "portfolio": "My Portfolio",
-    "add_cv": "Add a CV",
-    "manage": "Manage",
-    "no_cv": "No CV",
-    "user_info": "User Information",
-    "full_name": "Full Name",
-    "email": "Email",
-    "studentID": "Student ID",
-    "employeID": "Employee ID",
-    "role": "Role",
-    "user_management": "User Management",
-    "not_approved_users": "Not approved users"
-  },
-  "pdf_view_page": {
-    "error": "An unknown error occurred"
-  },
-  "view_page": {
-    "home": "Home",
-    "hello": "Hello"
-  },
-  "upload_page": {
-    "drag_drop": "Drag and drop your CV here",
-    "or": "OR",
-    "browse": "Browse",
-    "accepted_formats": "Accepted formats: PDF",
-    "upload": "Upload",
-    "upload_cv": "Upload your CV"
-  },
-  "manage_cv_page": {
-    "my_cvs": "My Curiculums Vitae"
-  },
-  "manage_users_page": {
-    "not_approved_users": "Not approved users",
-    "not_approved_cvs": "Not approved CVs",
-    "not_approved_stage": "Not approved Stage Offers",
-    "related_options": "Related options",
-    "no_users_to_approve": "No users to approve",
-    "when_created": "When a user is created, they will appear here",
-    "approve": "Approve",
-    "approved": "Approved",
-    "delete": "Delete",
-    "expel": "Expel",
-    "user_details": "User details",
-    "details": "Details",
-    "in_probation": "Waiting for approval",
-    "role": "Role",
-    "department": "Department",
-    "matricule": "Student/Employee ID",
-    "company": "Company",
-    "global_view": "Global view",
-    "actions": "Actions"
-  },
-  "manage_cv": {
-    "upload_error": "Error uploading CV",
-    "status": {
-      "pending": "Pending approval",
-      "approved": "Approved",
-      "rejected": "Rejected"
-    },
-    "buttons": {
-      "add": "Add",
-      "accept": "Accept",
-      "reject": "Reject",
-      "download": "Download",
-      "delete": "Delete"
-    },
-    "messages": {
-      "no_cvs": "No CVs in your folder"
-    },
-    "titles": {
-      "cvs": "My CVs",
-      "preview": "Preview"
-    }
-  },
-  "upload_cv": {
-    "title": "Upload a CV",
-    "drag_drop": "Drag your CV here",
-    "or": "OR",
-    "select_button": "Select",
-    "accepted_formats": "Accepted file format: PDF",
-    "upload_button": "Upload",
-    "error_file_required": "Please select a file before submitting.",
-    "upload_error": "An error occurred during the upload.",
-    "error_file_size_exceeded": "The file size exceeds the allowed limit of {{maxSize}} KB."
-  },
-  "manage_offre_stage": {
-    "titles": {
-      "offre_stages": "Internship Offers",
-      "details": "Details"
-    },
-    "status": {
-      "pending": "Pending",
-      "approved": "Approved",
-      "rejected": "Rejected"
-    },
-    "labels": {
-      "company": "Company",
-      "position": "Position",
-      "department": "Department",
-      "hourly_rate": "Hourly Rate",
-      "type": "Employment Type",
-      "address": "Address",
-      "work_mode": "Work Mode",
-      "start_date": "Start Date",
-      "end_date": "End Date",
-      "hours_per_week": "Hours Per Week",
-      "number_of_positions": "Number of Positions",
-      "application_deadline": "Application Deadline"
-    },
-    "buttons": {
-      "add": "Add",
-      "modify": "Modify",
-      "delete": "Delete"
-    },
-    "messages": {
-      "no_offre_stages": "No internship offers to display at the moment"
-    }
-  },
-  "modifier_offre_stage_page": {
-    "title": "Modify Internship Offer",
-    "nom": "Name",
-    "poste": "Position",
-    "description": "Description",
-    "compagnie": "Company",
-    "adresse": "Address",
-    "taux_horaire": "Hourly Rate",
-    "nombre_heures_semaine": "Number of Hours per Week",
-    "nombre_postes": "Number of Positions",
-    "type_emploi": "Type of Employment",
-    "departement": "Study Program",
-    "modalite_travail": "Work Modality",
-    "date_limite_candidate": "Application Deadline",
-    "date_debut": "Start Date",
-    "date_fin": "End Date",
-    "modify_offre_stage": "Modify Internship Offer",
-    "retour": "Return to Home",
-    "types_emploi": {
-      "select": "Select a type of employment",
-      "temps_partiel": "Part-time",
-      "temps_plein": "Full-time"
-    },
-    "modalites_travail": {
-      "select": "Select a work modality",
-      "teletravail": "Remote work",
-      "presentiel": "On-site",
-      "hybride": "Hybrid"
-    },
-    "errors": {
-      "nom": "The name must be between 3 and 100 characters",
-      "poste": "The position must be between 3 and 100 characters",
-      "description": "The description must be between 10 and 500 characters",
-      "compagnie": "The company name must be between 3 and 100 characters",
-      "address": "The address must be between 3 and 100 characters",
-      "taux_horaire": "The hourly rate must be a positive number",
-      "nombre_heures_semaine_inferieur": "The number of hours per week must be greater than 1",
-      "nombre_heures_semaine_superieur": "The number of hours per week must be less than 40",
-      "nombre_postes": "The number of positions must be a positive number",
-      "programme_etudes_select": "The study program must be selected",
-      "modalite_travail_select": "The work modality must be selected",
-      "type_emploi_select": "The type of employment must be selected"
-    }
-  },
-  "offer_status": {
-    "approved": "Approved",
-    "refused": "Refused",
-    "pending": "Pending"
-  }
+	"bd_role_traduction": {
+		"ETUDIANT": "Student",
+		"PROFESSEUR": "Professor",
+		"EMPLOYEUR": "Employer",
+		"ADMIN": "Administrator"
+	},
+	"programme": {
+		"select": "Select a program",
+		"cinema": "Cinema",
+		"gestion_commerce": "Business Management",
+		"gestion_operations_chaine_logistique": "Operations and Supply Chain Management",
+		"journalisme_multimedia": "Multimedia Journalism",
+		"langues_trilinguisme_cultures": "Languages – Trilingualism and Cultures",
+		"photographie_design_graphique": "Photography and Graphic Design",
+		"sciences_nature": "Natural Sciences",
+		"sciences_humaines_administration_economie": "Human Sciences – Administration and Economics Profile",
+		"sciences_humaines_individu_relations_humaines": "Human Sciences – Individual and Human Relations Profile",
+		"sciences_humaines_monde_en_action": "Human Sciences – World in Action Profile",
+		"soins_infirmiers": "Nursing",
+		"soins_infirmiers_auxiliaires": "Nursing for Assistants",
+		"techniques_education_enfance": "Early Childhood Education Techniques",
+		"techniques_bureautique": "Office Automation Techniques",
+		"techniques_comptabilite_gestion": "Accounting and Management Techniques",
+		"techniques_informatique": "Computer Science",
+		"techniques_travail_social": "Social Work Techniques",
+		"technologie_architecture": "Architecture Technology",
+		"technologie_estimation_evaluation_batiment": "Building Estimation and Evaluation Technology",
+		"technologie_genie_civil": "Civil Engineering Technology",
+		"technologie_genie_electrique": "Electrical Engineering Technology: Automation and Control",
+		"technologie_genie_physique": "Physical Engineering Technology",
+		"tremplin_dec": "DEC Transition Program"
+	},
+	"header_main_page": {
+		"signup": "Sign up",
+		"disconnect": "Disconnect",
+		"notifications": "Notifications"
+	},
+	"home_page": {
+		"carriere": "Your career",
+		"commence": "begins ",
+		"ici": "here"
+	},
+	"connexion_page": {
+		"connexion": "Log in",
+		"email": "Email",
+		"password": "Password",
+		"continue": "Continue",
+		"error": {
+			"email": "Email is required",
+			"password": "Password is required",
+			"not_approved": "Your account is not approved by Admin yet. Please wait for approval.",
+			"invalid_email": "Invalid email",
+			"invalid_password": "Invalid password",
+			"unknown_error": "Unknown error occurred. Please try again"
+		}
+	},
+	"creer_utilisateur_page": {
+		"creer_compte": "Create an account",
+		"carriere": "Starting your career has never been easier",
+		"profile": "Your profile",
+		"profile_2": "Crucial information for your profile",
+		"school": "School information",
+		"school_2": "Information related to your academic progress",
+		"security": "Security",
+		"pasword": "Create your password",
+		"finalization": "Finalization",
+		"dashboard": "Access the dashboard",
+		"success_title": "Account successfully created",
+		"success_text": "Please wait for administrator approval to access your account",
+		"error": {
+			"error_title": "Error"
+		}
+	},
+	"selection_role_page": {
+		"who_are_you": "Who are you?",
+		"description": "Select the user type that suits you",
+		"student": "Student",
+		"teacher": "Teacher",
+		"employer": "Employer",
+		"continue": "Continue"
+	},
+	"information_base_page": {
+		"information": "Basic information",
+		"description": "Enter your First Name, Last Name, and the Email address you will use to log in to the platform from now on.",
+		"first_name": "First name",
+		"last_name": "Last name",
+		"email": "Email",
+		"continue": "Continue",
+		"error": {
+			"first_name_short": "Your first name must contain at least 2 characters.",
+			"first_name_letters_only": "Your first name must contain only letters and spaces.",
+			"last_name_short": "Your last name must contain at least 2 characters.",
+			"last_name_letters_only": "Your last name must contain only letters and spaces.",
+			"email": "Email address must be valid: example@gmail.com",
+			"email_taken": "Email address is already taken"
+		}
+	},
+	"information_etudiant_page": {
+		"information": "School Information",
+		"description": "Enter your matriculation number defined by the establishment as well as the study program attended.",
+		"matricule": "Student ID",
+		"program": "Program",
+		"continue": "Continue",
+		"error": {
+			"matricule": "Student ID must have 7 digits",
+			"department": "No Department is selected",
+			"matricule_taken": "Student ID is already taken"
+		}
+	},
+	"mot_de_passe_page": {
+		"title": "Create your password",
+		"description": "A complex password is less likely to be guessed by someone else",
+		"description_2": "Your password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number and one symbol",
+		"password": "Password",
+		"confirm_password": "Confirm password",
+		"submit": "Submit",
+		"error": {
+			"password_wrong": "Password must contain at least one uppercase letter, one number and one special character",
+			"password_doesnt_match": "Passwords do not match."
+		}
+	},
+	"information_employeur_page": {
+		"title": "Employer information",
+		"description": "Enter the required information about the company offering the internships",
+		"company_name": "Company name",
+		"continue": "Continue",
+		"error": {
+			"company_name_invalid": "The company name must contain only letters and spaces",
+			"company_name_lenght": "Company name must be between 3 and 100 characters"
+		}
+	},
+	"information_professeur_page": {
+		"title": "Information about your employment",
+		"description": "Enter your employee number defined by the establishment as well as the department of belonging",
+		"employee_number": "Employee number",
+		"department": "Department",
+		"select_department": "Select a department",
+		"continue": "Continue",
+		"error": {
+			"error_title": "Error",
+			"employee_number": "Employee number must have 7 digits",
+			"department": "No Department is selected",
+			"employee_number_taken": "This ID is already used by another user"
+		}
+	},
+	"creer_offre_stage_page": {
+		"title": "Create an internship offer",
+		"nom": "Name",
+		"poste": "Position",
+		"description": "Description",
+		"compagnie": "Company",
+		"address": "Address",
+		"taux_horaire": "Hourly rate",
+		"nombre_heures_semaine": "Number of hours per week",
+		"nombre_postes": "Number of positions",
+		"type_emploi": "Type of employment",
+		"programme_etudes": "Study program",
+		"modalite_travail": "Work modality",
+		"date_limite_candidate": "Application deadline",
+		"date_debut": "Start date",
+		"date_fin": "End date",
+		"creer_offre_stage": "Create the internship offer",
+		"retour": "Return to home",
+		"types_emploi": {
+			"select": "Select a type of employment",
+			"temps_partiel": "Part-time",
+			"temps_plein": "Full-time"
+		},
+		"modalites_travail": {
+			"select": "Select a work modality",
+			"virtuel": "Remote",
+			"presentiel": "On-site",
+			"hybride": "Hybrid"
+		},
+		"errors": {
+			"nom": "The name must be between 3 and 100 characters",
+			"poste": "The position must be between 3 and 100 characters",
+			"description": "The description must be between 10 and 500 characters",
+			"compagnie": "The company name must be between 3 and 100 characters",
+			"address": "The address must be between 3 and 100 characters",
+			"taux_horaire": "The hourly rate must be a positive number",
+			"nombre_heures_semaine_inferieur": "The number of hours per week must be greater than 1",
+			"nombre_heures_semaine_superieur": "The number of hours per week must be less than 40",
+			"nombre_postes": "The number of positions must be a positive number",
+			"programme_etudes_select": "The study program must be selected",
+			"modalite_travail_select": "The work modality must be selected",
+			"type_emploi_select": "The type of employment must be selected"
+		}
+	},
+	"dashboard_home_page": {
+		"home": "Home",
+		"offer": "Internship Offers",
+		"explore": "Explore",
+		"no_offers": "No offers to display at the moment",
+		"my_offers": "My Internship Offers",
+		"add_offer": "New offer",
+		"offers": "Internship Offers",
+		"hello": "Hello",
+		"portfolio": "My Portfolio",
+		"add_cv": "Add a CV",
+		"manage": "Manage",
+		"no_cv": "No CV",
+		"user_info": "User Information",
+		"full_name": "Full Name",
+		"email": "Email",
+		"studentID": "Student ID",
+		"employeID": "Employee ID",
+		"role": "Role",
+		"user_management": "User Management",
+		"not_approved_users": "Not approved users"
+	},
+	"pdf_view_page": {
+		"error": "An unknown error occurred"
+	},
+	"view_page": {
+		"home": "Home",
+		"hello": "Hello"
+	},
+	"upload_page": {
+		"drag_drop": "Drag and drop your CV here",
+		"or": "OR",
+		"browse": "Browse",
+		"accepted_formats": "Accepted formats: PDF",
+		"upload": "Upload",
+		"upload_cv": "Upload your CV"
+	},
+	"manage_cv_page": {
+		"my_cvs": "My Curiculums Vitae"
+	},
+	"manage_users_page": {
+		"not_approved_users": "Not approved users",
+		"not_approved_cvs": "Not approved CVs",
+		"not_approved_stage": "Not approved Stage Offers",
+		"related_options": "Related options",
+		"no_users_to_approve": "No users to approve",
+		"when_created": "When a user is created, they will appear here",
+		"approve": "Approve",
+		"approved": "Approved",
+		"delete": "Delete",
+		"expel": "Expel",
+		"user_details": "User details",
+		"details": "Details",
+		"in_probation": "Waiting for approval",
+		"role": "Role",
+		"department": "Department",
+		"matricule": "Student/Employee ID",
+		"company": "Company",
+		"global_view": "Global view",
+		"actions": "Actions"
+	},
+	"manage_cv": {
+		"upload_error": "Error uploading CV",
+		"status": {
+			"pending": "Pending approval",
+			"approved": "Approved",
+			"rejected": "Rejected"
+		},
+		"buttons": {
+			"add": "Add",
+			"accept": "Accept",
+			"reject": "Reject",
+			"download": "Download",
+			"delete": "Delete"
+		},
+		"messages": {
+			"no_cvs": "No CVs in your folder"
+		},
+		"titles": {
+			"cvs": "My CVs",
+			"preview": "Preview"
+		}
+	},
+	"upload_cv": {
+		"title": "Upload a CV",
+		"drag_drop": "Drag your CV here",
+		"or": "OR",
+		"select_button": "Select",
+		"accepted_formats": "Accepted file format: PDF",
+		"upload_button": "Upload",
+		"error_file_required": "Please select a file before submitting.",
+		"upload_error": "An error occurred during the upload.",
+		"error_file_size_exceeded": "The file size exceeds the allowed limit of {{maxSize}} KB."
+	},
+	"manage_offre_stage": {
+		"titles": {
+			"offre_stages": "Internship Offers",
+			"details": "Details"
+		},
+		"status": {
+			"pending": "Pending",
+			"approved": "Approved",
+			"rejected": "Rejected"
+		},
+		"labels": {
+			"company": "Company",
+			"position": "Position",
+			"department": "Department",
+			"hourly_rate": "Hourly Rate",
+			"type": "Employment Type",
+			"address": "Address",
+			"work_mode": "Work Mode",
+			"start_date": "Start Date",
+			"end_date": "End Date",
+			"hours_per_week": "Hours Per Week",
+			"number_of_positions": "Number of Positions",
+			"application_deadline": "Application Deadline"
+		},
+		"buttons": {
+			"add": "Add",
+			"modify": "Modify",
+			"delete": "Delete"
+		},
+		"messages": {
+			"no_offre_stages": "No internship offers to display at the moment"
+		}
+	},
+	"modifier_offre_stage_page": {
+		"title": "Modify Internship Offer",
+		"nom": "Name",
+		"poste": "Position",
+		"description": "Description",
+		"compagnie": "Company",
+		"adresse": "Address",
+		"taux_horaire": "Hourly Rate",
+		"nombre_heures_semaine": "Number of Hours per Week",
+		"nombre_postes": "Number of Positions",
+		"type_emploi": "Type of Employment",
+		"departement": "Study Program",
+		"modalite_travail": "Work Modality",
+		"date_limite_candidate": "Application Deadline",
+		"date_debut": "Start Date",
+		"date_fin": "End Date",
+		"modify_offre_stage": "Modify Internship Offer",
+		"retour": "Return to Home",
+		"types_emploi": {
+			"select": "Select a type of employment",
+			"temps_partiel": "Part-time",
+			"temps_plein": "Full-time"
+		},
+		"modalites_travail": {
+			"select": "Select a work modality",
+			"teletravail": "Remote work",
+			"presentiel": "On-site",
+			"hybride": "Hybrid"
+		},
+		"errors": {
+			"nom": "The name must be between 3 and 100 characters",
+			"poste": "The position must be between 3 and 100 characters",
+			"description": "The description must be between 10 and 500 characters",
+			"compagnie": "The company name must be between 3 and 100 characters",
+			"address": "The address must be between 3 and 100 characters",
+			"taux_horaire": "The hourly rate must be a positive number",
+			"nombre_heures_semaine_inferieur": "The number of hours per week must be greater than 1",
+			"nombre_heures_semaine_superieur": "The number of hours per week must be less than 40",
+			"nombre_postes": "The number of positions must be a positive number",
+			"programme_etudes_select": "The study program must be selected",
+			"modalite_travail_select": "The work modality must be selected",
+			"type_emploi_select": "The type of employment must be selected"
+		}
+	},
+	"offer_status": {
+		"approved": "Approved",
+		"refused": "Refused",
+		"pending": "Pending"
+	}
 }
