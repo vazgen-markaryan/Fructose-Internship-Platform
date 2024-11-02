@@ -47,9 +47,9 @@ const HeaderMain = ({theme}) => {
         if (currentUser == null) {
             return (
                 <>
-                    <button onClick={() => {toggleLanguageMenu()}} className="btn-icon" style={{marginRight: "20px"}}><Icon path={mdiWeb} size={1}/></button>
+                    <button onClick={() => {toggleLanguageMenu()}} className="btn-icon"><Icon path={mdiWeb} size={1}/></button>
                     <Link to="/connexion">
-                        <button className="btn-icon"><Icon path={mdiAccount} size={1}/></button>
+                        <button className="btn-icon" style={{marginRight: "10px"}}><Icon path={mdiAccount} size={1}/></button>
                     </Link>
                     <Link to="/creer-utilisateur">
                         <button className={"btn-filled"}>{t("header_main_page.signup")}</button>
