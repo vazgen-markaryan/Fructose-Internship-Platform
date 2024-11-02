@@ -119,6 +119,10 @@ public class FructoseApplication implements CommandLineRunner {
 		createAndPersistOffreStage("Développeur PHP", "Développer des applications PHP", "Développeur PHP", "Activision Publishing, Inc", departementInformatique, 24.0, "virtuel", "Raleigh, Caroline du Nord, États-Unis", "temps_partiel", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 20, 8, LocalDate.of(2025, 5, 1), "activision@gmail.com");
 		createAndPersistOffreStage("Développeur Full Stack", "Développer des applications full stack", "Développeur Full Stack", "Activision Publishing, Inc", departementInformatique, 25.0, "hybride", "San Jose, Californie, États-Unis", "temps_plein", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 8, 31), 28, 9, LocalDate.of(2025, 5, 1), "activision@gmail.com");
 		
+		// APPROUVER OFFRES DE STAGE
+		System.out.println(); // Ajouter une ligne vide pour la lisibilité
+		approuverOffresStage( 5L, 6L, 7L, 8L, 9L, 10L, 15L, 16L, 17L, 18L, 19L, 20L, 25L, 26L, 27L, 28L, 29L, 30L);
+		
 		//CANDIDATURE
 		System.out.println(); // Ajouter une ligne vide pour la lisibilité
 		createAndPersistCandidature("vazgen@gmail.com", 10L, 20L, 30L);
@@ -193,6 +197,16 @@ public class FructoseApplication implements CommandLineRunner {
 		}
 	}
 	
+	public void approuverOffresStage(Long... offreIds) {
+		for (Long offreStageId : offreIds) {
+			try {
+				offreStageService.approuverOffreStage(offreStageId);
+				System.out.println("OFFRE STAGE avec le nom \"" + offreStageService.getOffreStageById(offreStageId).getNom() + "\" approuvée avec succès !");
+			} catch (Exception e) {
+				logger.error("Erreur lors de l'approbation de l'offre de stage avec ID {}", offreStageId, e);
+			}
+		}
+	}
 	
 	//UTILITY METHODS
 	private Departement getDepartement(String nom) {

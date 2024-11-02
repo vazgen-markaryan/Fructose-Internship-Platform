@@ -3,15 +3,15 @@ import {AuthContext} from "../../../providers/AuthProvider";
 import {Link} from "react-router-dom";
 import Icon from "@mdi/react";
 import {
-    mdiAlertCircleOutline,
-    mdiBriefcasePlusOutline,
-    mdiBriefcaseRemoveOutline,
-    mdiCheck,
-    mdiChevronRight,
-    mdiClockOutline,
-    mdiClose,
-    mdiFileDocumentOutline,
-    mdiPlus
+	mdiAlertCircleOutline,
+	mdiBriefcasePlusOutline,
+	mdiBriefcaseRemoveOutline,
+	mdiCheck,
+	mdiChevronRight,
+	mdiClockOutline,
+	mdiClose,
+	mdiFileDocumentOutline,
+	mdiPlus
 } from "@mdi/js";
 import {CvContext} from "../../../providers/CvProvider";
 import {OffreStageContext} from "../../../providers/OffreStageProvider";
@@ -91,7 +91,7 @@ const DashboardHome = () => {
 												<p>{item.ownerDTO.companyName}</p>
 												{
 													(item.nombrePostes <= 5) ?
-														<span className="badge text-mini"><Icon path={mdiAlertCircleOutline} size={0.5}/> Places limitées</span>
+														<span className="badge text-mini"><Icon path={mdiAlertCircleOutline} size={0.5}/>{t("dashboard_home_page.limited_places")}</span>
 														: <></>
 												}
 											</div>
@@ -101,8 +101,7 @@ const DashboardHome = () => {
 							</section>
 						</Link>
 					);
-				}
-                                else {
+				} else {
 					return (
 						<section>
 							<div className={"toolbar-items"}>
@@ -132,8 +131,7 @@ const DashboardHome = () => {
 						</section>
 					);
 				}
-			}
-                        else if (currentUser.role === "EMPLOYEUR") {
+			} else if (currentUser.role === "EMPLOYEUR") {
 				const startIndex = (currentPage - 1) * itemsPerPage;
 				const selectedOffresStage = offresStage.slice(startIndex, startIndex + itemsPerPage);
 				

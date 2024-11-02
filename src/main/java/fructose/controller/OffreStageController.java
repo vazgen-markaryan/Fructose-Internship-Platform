@@ -145,4 +145,13 @@ public class OffreStageController {
 		}
 	}
 	
+	@PostMapping ("/approuver-offre-stage/{id}")
+	public ResponseEntity<String> approuverOffreStage(@PathVariable Long id) {
+		try {
+			offreStageService.approuverOffreStage(id);
+			return new ResponseEntity<>("Offre de stage approuvée avec succès !", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Erreur lors de l'approbation de l'offre de stage.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

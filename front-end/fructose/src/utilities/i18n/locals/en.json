@@ -208,7 +208,8 @@
 		"employeID": "Employee ID",
 		"role": "Role",
 		"user_management": "User Management",
-		"not_approved_users": "Not approved users"
+		"not_approved_users": "Not approved users",
+		"limited_places": "Limited places"
 	},
 	"pdf_view_page": {
 		"error": "An unknown error occurred"
@@ -238,7 +239,6 @@
 		"approve": "Approve",
 		"approved": "Approved",
 		"delete": "Delete",
-		"expel": "Expel",
 		"user_details": "User details",
 		"details": "Details",
 		"in_probation": "Waiting for approval",

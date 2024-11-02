@@ -128,7 +128,7 @@ const DiscoverOffers = () => {
 				}
 			})();
 		}
-	}, [isUserInit]);
+	}, [isUserInit, fetchOffresStage, filters]);
 	
 	const filterOffers = (offers, filters) => {
 		let finalOffer = []
@@ -174,7 +174,7 @@ const DiscoverOffers = () => {
 	}
 	
 	const resetOfferFilterSelection = () => {
-		for (const [key, value] of Object.entries(filters)) {
+		for (const [value] of Object.entries(filters)) {
 			value.value = value.default
 		}
 		handleOfferFilterSelection()

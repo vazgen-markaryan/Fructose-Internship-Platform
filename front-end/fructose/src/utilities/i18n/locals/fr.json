@@ -208,7 +208,8 @@
 		"employeID": "Numéro d'employé",
 		"role": "Rôle",
 		"user_management": "Gestion des utilisateurs",
-		"not_approved_users": "Utilisateurs non approuvés"
+		"not_approved_users": "Utilisateurs non approuvés",
+		"limited_places": "Places limitées"
 	},
 	"pdf_view_page": {
 		"error": "Une erreur inconnue est survenue"
@@ -238,7 +239,6 @@
 		"approve": "Approuver",
 		"approved": "Approuvé",
 		"delete": "Supprimer",
-		"expel": "Expulser",
 		"user_details": "Détails de l'utilisateur",
 		"details": "Détails",
 		"in_probation": "En attente d'approbation",

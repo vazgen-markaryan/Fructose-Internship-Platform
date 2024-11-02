@@ -37,24 +37,26 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-				.csrf(AbstractHttpConfigurer::disable)
-				.authorizeHttpRequests(authorize -> authorize
-						.requestMatchers(HttpMethod.POST, "/creer-utilisateur").permitAll()
-						.requestMatchers(HttpMethod.POST, "/connexion").permitAll()
-						.requestMatchers(HttpMethod.GET, "/check-email").permitAll()
-						.requestMatchers(HttpMethod.GET, "/check-matricule").permitAll()
-						.requestMatchers(HttpMethod.GET, "/check-departement").permitAll()
-						.requestMatchers(HttpMethod.POST, "/creer-offre-stage").permitAll()
-						.requestMatchers(HttpMethod.POST, "/infos-utilisateur").permitAll()
-						.requestMatchers(HttpMethod.GET, "/get-offre-stage").permitAll()
-						.requestMatchers(HttpMethod.GET, "/get-offre-stage/**").permitAll()
-						.requestMatchers(HttpMethod.DELETE, "/delete-offre-stage/**").permitAll()
-						.requestMatchers(HttpMethod.PUT, "/modifier-offre-stage").permitAll()
-					.requestMatchers(HttpMethod.POST, "/candidatures/postuler").authenticated()
-					.requestMatchers(HttpMethod.PUT, "/candidatures/approuver/**").authenticated()
-					.requestMatchers(HttpMethod.PUT, "/candidatures/refuser/**").authenticated()
-						.anyRequest().authenticated()
-				).addFilterBefore(new JwtAuthentificationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
+			.csrf(AbstractHttpConfigurer::disable)
+			.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers(HttpMethod.POST, "/creer-utilisateur").permitAll()
+				.requestMatchers(HttpMethod.POST, "/connexion").permitAll()
+				.requestMatchers(HttpMethod.GET, "/check-email").permitAll()
+				.requestMatchers(HttpMethod.GET, "/check-matricule").permitAll()
+				.requestMatchers(HttpMethod.GET, "/check-departement").permitAll()
+				.requestMatchers(HttpMethod.POST, "/creer-offre-stage").permitAll()
+				.requestMatchers(HttpMethod.POST, "/infos-utilisateur").permitAll()
+				.requestMatchers(HttpMethod.GET, "/get-offre-stage").permitAll()
+				.requestMatchers(HttpMethod.GET, "/get-offre-stage/**").permitAll()
+				.requestMatchers(HttpMethod.DELETE, "/delete-offre-stage/**").permitAll()
+				.requestMatchers(HttpMethod.PUT, "/modifier-offre-stage").permitAll()
+				.requestMatchers(HttpMethod.POST, "/candidatures/postuler").authenticated()
+				.requestMatchers(HttpMethod.PUT, "/candidatures/approuver/**").authenticated()
+				.requestMatchers(HttpMethod.PUT, "/candidatures/refuser/**").authenticated()
+				.requestMatchers(HttpMethod.PUT, "/refuser-offre-stage/**").authenticated()
+				.requestMatchers(HttpMethod.PUT, "/approuver-offre-stage/**").authenticated()
+				.anyRequest().authenticated()
+			).addFilterBefore(new JwtAuthentificationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 	
