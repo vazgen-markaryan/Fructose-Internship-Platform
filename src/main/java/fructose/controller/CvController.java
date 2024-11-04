@@ -72,8 +72,8 @@ public class CvController {
 		}
 	}
 	
-	@GetMapping(value = "/cvs/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
-	public ResponseEntity<byte[]> getCVFile(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+	@GetMapping(value = "/cvContenu/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+	public ResponseEntity<byte[]> getCVContenuFile(@RequestHeader("Authorization") String token, @PathVariable Long id) {
 		if (!utilisateurService.validationToken(token)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
@@ -98,7 +98,6 @@ public class CvController {
 			}
 			
 			List<CvDTO> cvs = cvService.getAllCvs();
-			System.out.println(cvs);
 			return new ResponseEntity<>(cvs, HttpStatus.OK);
 		} catch (RuntimeException e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -133,5 +132,31 @@ public class CvController {
 			return new ResponseEntity<>("Erreur lors du refus du CV.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+	@PostMapping("/accepter-cv/{id}")
+	public ResponseEntity<?> accepterOffreStage(@PathVariable Long id){
+		try {
+			cvService.accepterCv(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Erreur lors du refus de l'offre de stage.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping(value = "/cvs/{id}")
+	public ResponseEntity<CvDTO> getCVFile(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+		if (!utilisateurService.validationToken(token)) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+
+		try {
+			CvDTO cvDTO = cvService.getCvById(id);
+			if (cvDTO == null) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<>(cvDTO, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }

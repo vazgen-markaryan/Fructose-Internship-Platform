@@ -19,10 +19,10 @@ import {useTranslation} from "react-i18next";
 
 const ManageCVs = () => {
     const {t} = useTranslation();
-    const {GetCvs, getCvById, DeleteCv} = useContext(CvContext);
+    const {GetCvs, getCvById, DeleteCv,getCvContenuById} = useContext(CvContext);
     const {isUserInit} = useContext(AuthContext);
-
     const [cvs, setCvs] = useState([]);
+    const [currentContenueCv, setCurrentContenueCv] = useState(null);
     const [currentCv, setCurrentCv] = useState(null);
 
     useEffect(() => {
@@ -39,20 +39,33 @@ const ManageCVs = () => {
         }
     }, [isUserInit, GetCvs, t]);
 
-    const fetchCvById = async (cvId) => {
+    const fetchCvContenuById = async (cvId) => {
         try {
-            const response = await getCvById(cvId);
+            const response = await getCvContenuById(cvId);
             const pdfBlob = await response.blob();
             const fileUrl = URL.createObjectURL(pdfBlob);
             const fileSize = pdfBlob.size;
-            setCurrentCv((prev) => ({...prev, fileUrl, fileSize}));
+            setCurrentContenueCv((prev) => ({...prev, fileUrl, fileSize}));
+        } catch (error) {
+            console.error("Erreur lors de la récupération du CV:", error);
+        }
+    };
+
+
+
+    const fetchCvById = async (cvId) => {
+        try {
+            const response = await getCvById(cvId);
+            setCurrentCv(response);
+            console.log(response);
         } catch (error) {
             console.error("Erreur lors de la récupération du CV:", error);
         }
     };
 
     const handleCvSelection = (cv) => {
-        setCurrentCv(cv);
+        setCurrentContenueCv(cv);
+        fetchCvContenuById(cv.id);
         fetchCvById(cv.id);
     };
 
@@ -61,8 +74,8 @@ const ManageCVs = () => {
             const response = await DeleteCv(cvId);
             if (response.ok) {
                 setCvs((prevCvs) => prevCvs.filter((cv) => cv.id !== cvId));
-                if (currentCv && currentCv.id === cvId) {
-                    setCurrentCv(null);
+                if (currentContenueCv && currentContenueCv.id === cvId) {
+                    setCurrentContenueCv(null);
                 }
             } else {
                 console.error("Erreur lors de la suppression du CV:", response.statusText);
@@ -73,22 +86,22 @@ const ManageCVs = () => {
     };
 
     const getStatutElement = () => {
-        if (currentCv) {
-            if (!currentCv.isApproved && !currentCv.isRefused) {
+        if (currentContenueCv) {
+            if (!currentContenueCv.isApproved && !currentContenueCv.isRefused) {
                 return (
                     <>
                         <p className="m-0 text-orange">{t('manage_cv.status.pending')}</p>
                         <Icon path={mdiClockOutline} size={0.8} className="text-orange"/>
                     </>
                 );
-            } else if (currentCv.isApproved) {
+            } else if (currentContenueCv.isApproved) {
                 return (
                     <>
                         <p className="m-0 text-green">{t('manage_cv.status.approved')}</p>
                         <Icon path={mdiCheck} size={0.8} className="text-green"/>
                     </>
                 );
-            } else if (currentCv.isRefused) {
+            } else if (currentContenueCv.isRefused) {
                 return (
                     <>
                         <p className="m-0 text-red">{t('manage_cv.status.rejected')}</p>
@@ -116,7 +129,7 @@ const ManageCVs = () => {
                     <div className="menu-list">
                         <div onClick={() => handleCvSelection(lastCv)}>
                             <div
-                                className={`menu-list-item ${currentCv && lastCv.id === currentCv.id ? "menu-list-item-selected" : ""}`}
+                                className={`menu-list-item ${currentContenueCv && lastCv.id === currentContenueCv.id ? "menu-list-item-selected" : ""}`}
                                 style={{
                                     width: "100%",
                                     display: "flex",
@@ -145,7 +158,7 @@ const ManageCVs = () => {
                             <div className="menu-list">
                                 {cvs.slice(0, -1).reverse().map((item, index) => (
                                     <div key={index} onClick={() => handleCvSelection(item)}
-                                         className={`menu-list-item ${currentCv && item.id === currentCv.id ? "menu-list-item-selected" : ""}`}>
+                                         className={`menu-list-item ${currentContenueCv && item.id === currentContenueCv.id ? "menu-list-item-selected" : ""}`}>
                                         <Icon path={mdiFileOutline} size={1}/>
                                         <div>
                                             <p className="m-0">{item.filename}</p>
@@ -162,34 +175,34 @@ const ManageCVs = () => {
 
     const DIVISER_KB = 1000;
     const getAppercu = () => {
-        if (currentCv) {
+        if (currentContenueCv) {
             return (
                 <div className="dashboard-card" style={{width: "35%"}}>
                     <div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
                         <h6 className="m-0">{t('manage_cv.titles.preview')}</h6>
                         <span className="toolbar-spacer"></span>
-                        <button className="btn-icon" onClick={() => setCurrentCv(null)}>
+                        <button className="btn-icon" onClick={() => setCurrentContenueCv(null)}>
                             <Icon path={mdiClose} size={1}/>
                         </button>
                     </div>
-                    <PdfPreview height={300} file={currentCv.fileUrl}/>
+                    <PdfPreview height={300} file={currentContenueCv.fileUrl}/>
                     <section>
                         <div className="toolbar-items" style={{padding: "0 10px"}}>
                             <div>
-                                <h4 className="m-0">{currentCv.filename}</h4>
-                                <p className="text-dark m-0">{(currentCv.fileSize / DIVISER_KB).toFixed(2)} kb</p>
+                                <h4 className="m-0">{currentContenueCv.filename}</h4>
+                                <p className="text-dark m-0">{(currentContenueCv.fileSize / DIVISER_KB).toFixed(2)} kb</p>
                             </div>
                             <div className="toolbar-spacer"></div>
                             {getStatutElement()}
                         </div>
                         <br/>
-                        {currentCv.isRefused && (
+                        {currentContenueCv.isRefused && (
                             <p style={{color: "red", textAlign: "center"}}>{currentCv.commentaireRefus}</p>
                         )}
-                        <a href={currentCv.fileUrl} download={currentCv.filename} className="btn-option">
+                        <a href={currentContenueCv.fileUrl} download={currentContenueCv.filename} className="btn-option">
                             <Icon path={mdiDownloadOutline} size={1}/>{t('manage_cv.buttons.download')}
                         </a>
-                        <button className="btn-option" onClick={() => handleDeleteCv(currentCv.id)}>
+                        <button className="btn-option" onClick={() => handleDeleteCv(currentContenueCv.id)}>
                             <Icon path={mdiDeleteOutline} size={1}/>{t('manage_cv.buttons.delete')}
                         </button>
                     </section>

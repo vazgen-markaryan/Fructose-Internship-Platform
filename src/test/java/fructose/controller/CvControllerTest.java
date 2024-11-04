@@ -201,7 +201,7 @@ public class CvControllerTest {
 		byte[] fileContent = new byte[]{1, 2, 3};
 		when(cvService.getCvFileContentById(cvId)).thenReturn(fileContent);
 		
-		ResponseEntity<byte[]> response = cvController.getCVFile(token, cvId);
+		ResponseEntity<byte[]> response = cvController.getCVContenuFile(token, cvId);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(fileContent, response.getBody());
@@ -215,7 +215,7 @@ public class CvControllerTest {
 		when(utilisateurService.validationToken(token)).thenReturn(true);
 		when(cvService.getCvFileContentById(cvId)).thenReturn(null);
 		
-		ResponseEntity<byte[]> response = cvController.getCVFile(token, cvId);
+		ResponseEntity<byte[]> response = cvController.getCVContenuFile(token, cvId);
 		
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 		assertNull(response.getBody());
@@ -228,7 +228,7 @@ public class CvControllerTest {
 		
 		when(utilisateurService.validationToken(token)).thenReturn(false);
 		
-		ResponseEntity<byte[]> response = cvController.getCVFile(token, cvId);
+		ResponseEntity<byte[]> response = cvController.getCVContenuFile(token, cvId);
 		
 		assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
 	}
@@ -302,7 +302,7 @@ public class CvControllerTest {
 		when(utilisateurService.validationToken(token)).thenReturn(true);
 		when(cvService.getCvFileContentById(cvId)).thenThrow(new RuntimeException("Unexpected error"));
 		
-		ResponseEntity<byte[]> response = cvController.getCVFile(token, cvId);
+		ResponseEntity<byte[]> response = cvController.getCVContenuFile(token, cvId);
 		
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 	}

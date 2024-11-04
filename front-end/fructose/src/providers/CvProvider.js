@@ -30,8 +30,8 @@ const CvProvider = ({children}) => {
         })
     };
 
-    const getCvById = async (id) => {
-        return fetch(`/cvs/${id}`, {
+    const getCvContenuById = async (id) => {
+        return fetch(`/cvContenu/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,6 +39,22 @@ const CvProvider = ({children}) => {
             },
         });
     };
+
+    const getCvById = async (id) => {
+        const response = await fetch(`/cvs/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': currentToken
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    };
+
+
 
     const GetAllCvs = async () => {
         return fetch(`/allCvs`, {
@@ -61,7 +77,7 @@ const CvProvider = ({children}) => {
     };
 
     return (
-        <CvContext.Provider value={{UploadCv, GetCvs, getCvById, DeleteCv, GetAllCvs}}>
+        <CvContext.Provider value={{UploadCv, GetCvs, getCvById, DeleteCv, GetAllCvs, getCvContenuById}}>
             {children}
         </CvContext.Provider>
     );

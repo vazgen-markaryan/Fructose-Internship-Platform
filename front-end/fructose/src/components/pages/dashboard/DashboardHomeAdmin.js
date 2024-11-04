@@ -7,10 +7,11 @@ import {useTranslation} from "react-i18next";
 import {CvContext} from "../../../providers/CvProvider";
 import {AuthContext} from "../../../providers/AuthProvider";
 import {OffreStageContext} from "../../../providers/OffreStageProvider";
+import {Modal} from "@react-pdf-viewer/core";
 
 const DashboardHome = ({}) => {
     const {t} = useTranslation();
-    const {getCvById, GetAllCvs, GetCvs} = useContext(CvContext);
+    const {getCvContenuById, GetAllCvs, GetCvs} = useContext(CvContext);
     const {fetchOffresStage} = useContext(OffreStageContext);
     const [allCvs, setAllCvs] = useState([]);
     const [offresStage, setOffresStage] = useState([]);
@@ -23,6 +24,7 @@ const DashboardHome = ({}) => {
     const textareaRef = useRef(null);
     const {currentToken} = useContext(AuthContext)
     const [isRejectModalOpen, setRejectModalOpen] = useState(false);
+    const [isRejectModalOpenCv, setRejectModalOpenCv] = useState(false);
 
     useEffect(() => {
         if (currentUser && isUserInit) {
@@ -49,13 +51,34 @@ const DashboardHome = ({}) => {
         console.log(`CV ${cvId} validé.`);
     };
 
-    const handleRejectCv = (cvId) => {
-        console.log(`CV ${cvId} rejeté.`);
+    const handleRejectCv = (cvId, string) => {
+        fetch(`/refuser-cv/` + cvId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": currentToken
+            },
+            body: string,
+        })
+            .then(response => {
+                if (response.ok) {
+                    setAllCvs((prevCv) => prevCv.filter((cv) => cv.id !== cvId));
+                    setCurrentCV(null);
+                    return response;
+                }
+                throw new Error("Erreur lors du refus du Cv");
+            })
+            .then(data => {
+                setRejectModalOpenCv(false);
+            })
+            .catch(error => {
+                console.error("Erreur lors du refus du cv:", error);
+            });
     };
 
     const fetchCvById = async (cvId) => {
         try {
-            const response = await getCvById(cvId);
+            const response = await getCvContenuById(cvId);
             const pdfBlob = await response.blob();
             const fileUrl = URL.createObjectURL(pdfBlob);
             const fileSize = pdfBlob.size;
@@ -130,6 +153,17 @@ const DashboardHome = ({}) => {
     const startIndexCvs = (currentPageCv - 1) * itemsPerPage;
     const selectedCvs = allCvs.slice(startIndexCvs, startIndexCvs + itemsPerPage);
     const totalPagesCv = Math.ceil(allCvs.length / itemsPerPage);
+
+    function Modal({ children, onClose }) {
+        return (
+            <div className="modal-overlay">
+                <div className="modal-content" style={{ pointerEvents: "auto" }}>
+                    {children}
+                    <button onClick={onClose}>Fermer</button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <section>
@@ -283,9 +317,8 @@ const DashboardHome = ({}) => {
                                                     onClick={() => handleValidateCv(currentCv.id)}>
                                                 {t("dashboard_home_page.validate")}
                                             </button>
-                                            <button className="btn-outline"
-                                                    onClick={() => handleRejectCv(currentCv.id)}>
-                                                {t("dashboard_home_page.reject")}
+                                            <button className="btn-outline" onClick={() => setRejectModalOpenCv(true)}>
+                                                {t("creer_offre_stage_page.reject")}
                                             </button>
                                         </div>
                                     </div>
@@ -308,7 +341,23 @@ const DashboardHome = ({}) => {
                         </button>
                     ))}
                 </div>
-
+                {isRejectModalOpenCv && (
+                    <Modal onClose={() => setRejectModalOpenCv(false)}>
+                        <h4>{t("creer_offre_stage_page.reject_reason")}</h4>
+                        <textarea
+                            ref={textareaRef}
+                            placeholder="Entrez le commentaire de refus ici..."
+                            style={{ width: "100%", height: "100px" }}
+                        />
+                        <button onClick={() => {
+                            handleRejectCv(currentCv.id, textareaRef.current.value);
+                            textareaRef.current.value = "";
+                            setRejectModalOpenCv(false);
+                        }} className="btn-filled">
+                            Envoyer
+                        </button>
+                    </Modal>
+                )}
             </div>
         </section>
     );

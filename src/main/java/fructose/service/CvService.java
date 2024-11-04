@@ -94,5 +94,22 @@ public class CvService {
 			throw new RuntimeException("Une erreur est survenue lors de la suppression du CV.", e);
 		}
 	}
-	
+
+    public void accepterCv(Long id) {
+		try{
+			Cv cv = cvRepository.findById(id).orElseThrow(null);
+			cv.setIsApproved(true);
+			cvRepository.save(cv);
+		}catch (Exception e){
+			throw new RuntimeException("Une erreur est survenue lors de la suppression du CV.", e);
+		}
+    }
+
+	public CvDTO getCvById(Long id) {
+		Cv cv = cvRepository.findById(id).orElse(null);
+		if (cv != null) {
+			return CvDTO.toDTO(cv);
+		}
+		return null;
+	}
 }
