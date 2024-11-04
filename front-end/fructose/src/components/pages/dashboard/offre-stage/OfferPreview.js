@@ -1,13 +1,43 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import Icon from "@mdi/react";
-import {mdiBriefcaseOutline, mdiCalendarOutline, mdiCashMultiple, mdiDomain, mdiMapMarkerOutline} from "@mdi/js";
+import {
+	mdiBriefcaseOutline,
+	mdiCalendarOutline,
+	mdiCashMultiple,
+	mdiCheck,
+	mdiDeleteOutline,
+	mdiDomain,
+	mdiMapMarkerOutline
+} from "@mdi/js";
 import {useTranslation} from "react-i18next";
 import {differenceInMonths, endOfMonth, format} from "date-fns";
 import {AuthContext} from "../../../../providers/AuthProvider";
+import {useNavigate} from "react-router-dom";
+import {OffreStageContext} from "../../../../providers/OffreStageProvider";
 
 const OfferPreview = ({currentOffer}) => {
 	const {t} = useTranslation();
 	const {currentUser} = useContext(AuthContext);
+	const navigate = useNavigate();
+	const {deleteOffreStage} = useContext(OffreStageContext);
+	const [currentOffreStage, setCurrentOffreStage] = useState(null);
+	const [offreStages, setOffreStages] = useState([]);
+	
+	const handleDeleteOffreStage = async (offreStageId) => {
+		try {
+			const response = await deleteOffreStage(offreStageId);
+			if (response.ok) {
+				setOffreStages((prevOffreStages) => prevOffreStages.filter((offreStage) => offreStage.id !== offreStageId));
+				if (currentOffreStage && currentOffreStage.id === offreStageId) {
+					setCurrentOffreStage(null);
+				}
+			} else {
+				console.error("Error deleting offre stage:", response.statusText);
+			}
+		} catch (error) {
+			console.error("Error deleting offre stage:", error);
+		}
+	};
 	
 	if (currentOffer) {
 		const dateDebut = new Date(currentOffer.dateDebut);
@@ -100,27 +130,50 @@ const OfferPreview = ({currentOffer}) => {
 						</section>
 						<hr/>
 						<section className="nospace">
-							<h5>{t("discover_offers_page.employer")}</h5>
+							
+							{currentUser && currentUser.role !== "EMPLOYEUR" && (
+								<>
+									<h5>{t("discover_offers_page.employer")}</h5>
+								</>
+							)}
 							
 							<div className="list-bullet">
-								<div className="user-profile-section-profile-picture" style={{
-									"background": "url('/assets/auth/default-profile.jpg') center / cover",
-									width: "32px",
-									height: "32px",
-									margin: 0
-								}}>
 								
-								</div>
-								<div>
-									<h6 className="m-0">{currentOffer.ownerDTO.fullName}</h6>
-									<p className="m-0 text-dark">{currentOffer.ownerDTO.companyName}</p>
-								</div>
-								<div className="toolbar-spacer">
+								{currentUser && currentUser.role !== "EMPLOYEUR" && (
+									<>
+										<div className="user-profile-section-profile-picture" style={{
+											"background": "url('/assets/auth/default-profile.jpg') center / cover",
+											width: "32px",
+											height: "32px",
+											margin: 0
+										}}></div>
+										<div>
+											<h6 className="m-0">{currentOffer.ownerDTO.fullName}</h6>
+											<p className="m-0 text-dark">{currentOffer.ownerDTO.companyName}</p>
+										</div>
+										<div className="toolbar-spacer"></div>
+										<a href={"mailto:" + currentOffer.ownerDTO.email}>
+											<button>{t("discover_offers_page.contact")}</button>
+										</a>
+									</>
+								)}
 								
-								</div>
-								<a href={"mailto:" + currentOffer.ownerDTO.email}>
-									<button>{t("discover_offers_page.contact")}</button>
-								</a>
+								{currentUser && currentUser.role === "EMPLOYEUR" && (
+									<>
+										{currentOffer.isRefused && (
+											<p style={{
+												color: "red",
+												textAlign: "center"
+											}}>{currentOffer.commentaireRefus}</p>
+										)}
+										<button className="btn-option" onClick={() => navigate(`/dashboard/offres-stage/${currentOffer.id}`)}>
+											<Icon path={mdiCheck} size={1}/>{t('manage_offre_stage.buttons.modify')}
+										</button>
+										<button className="btn-option" onClick={() => handleDeleteOffreStage(currentOffer.id)}>
+											<Icon path={mdiDeleteOutline} size={1}/>{t('manage_offre_stage.buttons.delete')}
+										</button>
+									</>
+								)}
 							</div>
 						</section>
 					</div>

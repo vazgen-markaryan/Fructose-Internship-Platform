@@ -1,16 +1,15 @@
 import React, {useContext, useEffect, useState} from "react";
-import {mdiArrowLeft, mdiBriefcasePlusOutline, mdiCheck, mdiClockOutline, mdiClose, mdiDeleteOutline,} from "@mdi/js";
+import {mdiArrowLeft, mdiBriefcasePlusOutline, mdiCheck, mdiClockOutline, mdiClose} from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../../../providers/AuthProvider";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {OffreStageContext} from "../../../../providers/OffreStageProvider";
 import {useTranslation} from "react-i18next";
 
 const ManageOffresStage = () => {
 	const {t} = useTranslation();
 	const {currentUser} = useContext(AuthContext);
-	const navigate = useNavigate();
-	const {fetchOffresStage, deleteOffreStage, fetchOffreStage} = useContext(OffreStageContext);
+	const {fetchOffresStage, fetchOffreStage} = useContext(OffreStageContext);
 	const [offreStages, setOffreStages] = useState([]);
 	const [setOffreStage] = useState([]);
 	const [currentOffreStage, setCurrentOffreStage] = useState(null);
@@ -45,22 +44,6 @@ const ManageOffresStage = () => {
 		} else {
 			setCurrentOffreStage(offreStage);
 			getOffreStageById(offreStage.id);
-		}
-	};
-	
-	const handleDeleteOffreStage = async (offreStageId) => {
-		try {
-			const response = await deleteOffreStage(offreStageId);
-			if (response.ok) {
-				setOffreStages((prevOffreStages) => prevOffreStages.filter((offreStage) => offreStage.id !== offreStageId));
-				if (currentOffreStage && currentOffreStage.id === offreStageId) {
-					setCurrentOffreStage(null);
-				}
-			} else {
-				console.error("Error deleting offre stage:", response.statusText);
-			}
-		} catch (error) {
-			console.error("Error deleting offre stage:", error);
 		}
 	};
 	
@@ -126,60 +109,6 @@ const ManageOffresStage = () => {
 		}
 	};
 	
-	const getOffreStageDetails = () => {
-		if (currentOffreStage) {
-			return (
-				<div className="dashboard-card" style={{width: "35%"}}>
-					<div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
-						<h6 className="m-0">{t('manage_offre_stage.titles.details')}</h6>
-						<span className="toolbar-spacer"></span>
-						<button className="btn-icon" onClick={() => setCurrentOffreStage(null)}>
-							<Icon path={mdiClose} size={1}/>
-						</button>
-					</div>
-					<section>
-						<div className="toolbar-items" style={{padding: "0 10px"}}>
-							<div>
-								<h4 className="m-0">{currentOffreStage.nom}</h4>
-								<p className="text-dark m-0">{currentOffreStage.description}</p>
-								<p className="text-dark m-0">{t('manage_offre_stage.labels.company')}: {currentOffreStage.compagnie}</p>
-								<p className="text-dark m-0">{t('manage_offre_stage.labels.position')}: {currentOffreStage.poste}</p>
-								<p className="text-dark m-0">{t('manage_offre_stage.labels.department')}: {currentOffreStage.departementDTO.nom}</p>
-								<p className="text-dark m-0">{t('manage_offre_stage.labels.hourly_rate')}: {currentOffreStage.tauxHoraire} €</p>
-								<p className="text-dark m-0">{t('manage_offre_stage.labels.type')}: {currentOffreStage.typeEmploi}</p>
-								<p className="text-dark m-0">{t('manage_offre_stage.labels.address')}: {currentOffreStage.adresse}</p>
-								<p className="text-dark m-0">{t('manage_offre_stage.labels.work_mode')}: {currentOffreStage.modaliteTravail}</p>
-								<p className="text-dark m-0">{t('manage_offre_stage.labels.start_date')}: {currentOffreStage.dateDebut.toString()}</p>
-								<p className="text-dark m-0">{t('manage_offre_stage.labels.end_date')}: {currentOffreStage.dateFin.toString()}</p>
-								<p className="text-dark m-0">{t('manage_offre_stage.labels.hours_per_week')}: {currentOffreStage.nombreHeuresSemaine}</p>
-								<p className="text-dark m-0">{t('manage_offre_stage.labels.number_of_positions')}: {currentOffreStage.nombrePostes}</p>
-								<p className="text-dark m-0">{t('manage_offre_stage.labels.application_deadline')}: {currentOffreStage.dateLimiteCandidature.toString()}</p>
-							</div>
-						</div>
-						<br/>
-						<div className="toolbar-items toolbar-offreStage-items">
-							{getStatutElement(currentOffreStage)}
-						</div>
-						{currentOffreStage.isRefused && (
-							<p style={{
-								color: "red",
-								textAlign: "center"
-							}}>{currentOffreStage.commentaireRefus}</p>
-						)}
-						<button className="btn-option"
-						        onClick={() => navigate(`/dashboard/modifier-offre-stage/${currentOffreStage.id}`)}>
-							<Icon path={mdiCheck} size={1}/>{t('manage_offre_stage.buttons.modify')}
-						</button>
-						<button className="btn-option" onClick={() => handleDeleteOffreStage(currentOffreStage.id)}>
-							<Icon path={mdiDeleteOutline} size={1}/>{t('manage_offre_stage.buttons.delete')}
-						</button>
-					</section>
-				</div>
-			);
-		}
-		return null;
-	};
-	
 	const getOffreStageListSection = () => {
 		if (offreStages.length === 0) {
 			return (
@@ -221,7 +150,6 @@ const ManageOffresStage = () => {
 			</div>
 			<div style={{display: "flex", gap: "20px", alignItems: "start"}}>
 				{getOffreStageListSection()}
-				{getOffreStageDetails()}
 			</div>
 		</>
 	);
