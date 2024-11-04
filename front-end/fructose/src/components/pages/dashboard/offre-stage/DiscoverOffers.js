@@ -34,18 +34,21 @@ const DiscoverOffers = () => {
 		for (const offer of offers) {
 			const dateDebut = new Date(offer.dateDebut);
 			if (dateDebut.getMonth() >= 0 && dateDebut.getMonth() <= 4) {
-				if (!sessions.includes("Hiver " + dateDebut.getFullYear())) {
-					sessions.push("Hiver " + dateDebut.getFullYear());
+				const winterSession = `${t("discover_offers_page.filters.sessions.hiver")} ${dateDebut.getFullYear()}`;
+				if (!sessions.includes(winterSession)) {
+					sessions.push(winterSession);
 				}
 			}
 			if (dateDebut.getMonth() >= 8 && dateDebut.getMonth() <= 11) {
-				if (!sessions.includes("Automne " + dateDebut.getFullYear())) {
-					sessions.push("Automne " + dateDebut.getFullYear());
+				const fallSession = `${t("discover_offers_page.filters.sessions.automne")} ${dateDebut.getFullYear()}`;
+				if (!sessions.includes(fallSession)) {
+					sessions.push(fallSession);
 				}
 			}
 		}
 		return sessions;
 	}
+	
 	const sessions = createSessionList();
 	
 	const [filters, setFilters] = useState(
@@ -76,7 +79,7 @@ const DiscoverOffers = () => {
 	const filterFields =
 		[
 			{
-				name: "Type de stage",
+				name: t("discover_offers_page.filters.internship_type.title"),
 				idName: "type",
 				icon: mdiBriefcaseOutline,
 				fields: [
@@ -87,18 +90,18 @@ const DiscoverOffers = () => {
 					// },
 					{
 						type: "radio",
-						label: "Temps Partiel",
+						label: t("discover_offers_page.filters.internship_type.temps_partiel"),
 						value: "temps_partiel"
 					},
 					{
 						type: "radio",
-						label: "Temps Plein",
+						label: t("discover_offers_page.filters.internship_type.temps_plein"),
 						value: "temps_plein"
 					}
 				]
 			},
 			{
-				name: "Emplacement",
+				name: t("discover_offers_page.filters.emplacement.title"),
 				idName: "emplacement",
 				icon: mdiDomain,
 				fields: [
@@ -109,23 +112,23 @@ const DiscoverOffers = () => {
 					// },
 					{
 						type: "radio",
-						label: "Presentiel",
+						label: t("discover_offers_page.filters.emplacement.presentiel"),
 						value: "presentiel"
 					},
 					{
 						type: "radio",
-						label: "Virtuel",
+						label: t("discover_offers_page.filters.emplacement.virtuel"),
 						value: "virtuel"
 					},
 					{
 						type: "radio",
-						label: "Hybride",
+						label: t("discover_offers_page.filters.emplacement.hybride"),
 						value: "hybride"
-					},
+					}
 				]
 			},
 			{
-				name: "Taux Horaire Minimum",
+				name: t("discover_offers_page.filters.taux_horaire_minimum.title"),
 				idName: "tauxHoraire",
 				icon: mdiCashMultiple,
 				fields: [
@@ -134,11 +137,11 @@ const DiscoverOffers = () => {
 						value: 0,
 						min: 0,
 						max: 50
-					},
+					}
 				]
 			},
 			{
-				name: "Session",
+				name: t("discover_offers_page.filters.sessions.title"),
 				idName: "sessions",
 				icon: mdiSchool,
 				fields: [
@@ -151,10 +154,20 @@ const DiscoverOffers = () => {
 			}
 		]
 	
+	// sessions.forEach(session => {
+	// 	filterFields.find(field => field.idName === "sessions").fields.push({
+	// 		type: "radio",
+	// 		label: session,
+	// 		value: session
+	// 	});
+	// });
+	
 	sessions.forEach(session => {
+		// Construire dynamiquement la clé en fonction de la session
+		const translatedLabel = t(`${session}`) || session;
 		filterFields.find(field => field.idName === "sessions").fields.push({
 			type: "radio",
-			label: session,
+			label: translatedLabel,
 			value: session
 		});
 	});
@@ -200,7 +213,7 @@ const DiscoverOffers = () => {
 			if (filters.sessions && isEligible === true) {
 				const dateDebut = new Date(currentOffer.dateDebut);
 				const session = (dateDebut.getMonth() >= 0 && dateDebut.getMonth() <= 4) ? "Hiver " + dateDebut.getFullYear() : (dateDebut.getMonth() >= 8 && dateDebut.getMonth() <= 11) ? "Automne " + dateDebut.getFullYear() : "";
-				isEligible = (filters.sessions.value === "tous"  && (dateDebut.getMonth() <= 4 || dateDebut.getMonth() >= 8) || filters.sessions.value === session);
+				isEligible = (filters.sessions.value === "tous" && (dateDebut.getMonth() <= 4 || dateDebut.getMonth() >= 8) || filters.sessions.value === session);
 				if (filters.sessions.default !== filters.sessions.value) {
 					filterCount++;
 				}
@@ -338,11 +351,11 @@ const DiscoverOffers = () => {
 								<div className="toolbar-spacer"></div>
 								<button onClick={() => {
 									resetOfferFilterSelection()
-								}}>Reset
+								}}>{t("discover_offers_page.reset")}
 								</button>
 								<button className="btn-filled" onClick={() => {
 									handleOfferFilterSelection()
-								}}>Rechercher
+								}}>{t("discover_offers_page.search")}
 								</button>
 							</div>
 						</section>

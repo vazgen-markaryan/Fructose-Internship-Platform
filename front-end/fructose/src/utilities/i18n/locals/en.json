@@ -395,19 +395,27 @@
 		"limited_places": "Limited places",
 		"filters": {
 			"title": "Filters",
-			"department": "Department",
-			"salary": {
-				"min": "Minimum",
-				"max": "Maximum"
+			"internship_type": {
+				"title": "Type of Internship",
+				"temps_partiel": "Part-time",
+				"temps_plein": "Full-time"
 			},
-			"hours": {
-				"min": "Minimum",
-				"max": "Maximum"
+			"emplacement": {
+				"title": "Location",
+				"presentiel": "On-site",
+				"virtuel": "Remote",
+				"hybride": "Hybrid"
 			},
-			"duration": {
-				"min": "Minimum",
-				"max": "Maximum"
+			"taux_horaire_minimum": {
+				"title": "Minimum Hourly Rate"
+			},
+			"sessions": {
+				"title": "Session",
+				"hiver": "Winter",
+				"automne": "Fall"
 			}
-		}
+		},
+		"reset": "Reset",
+		"search": "Search"
 	}
 }

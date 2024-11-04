@@ -379,19 +379,43 @@
 		},
 		"work_type": {
 			"title": "Modalité de travail",
-			"virtuel": "Télétravail",
-			"presentiel": "Présentiel",
+			"virtuel": "À distance",
+			"presentiel": "En présentiel",
 			"hybride": "Hybride"
 		},
 		"internship_duration": "Durée du stage",
-		"location": "Lieu",
+		"location": "Emplacement",
 		"description": "Description",
 		"employer": "Employeur",
-		"contact": "Contacter",
+		"contact": "Contact",
 		"month_one": "{{count}} Mois",
 		"month_other": "{{count}} Mois",
 		"no_offers": "Aucune offre à afficher pour le moment",
-		"future_offers": "Elles apparaîtront ici dès qu'elles seront disponibles",
-		"limited_places": "Places limitées"
+		"future_offers": "Elles apparaîtront ici lorsqu'elles seront disponibles",
+		"limited_places": "Places limitées",
+		"filters": {
+			"title": "Filtres",
+			"internship_type": {
+				"title": "Type de stage",
+				"temps_partiel": "Temps partiel",
+				"temps_plein": "Temps plein"
+			},
+			"emplacement": {
+				"title": "Emplacement",
+				"presentiel": "Présentiel",
+				"virtuel": "Virtuel",
+				"hybride": "Hybride"
+			},
+			"taux_horaire_minimum": {
+				"title": "Taux horaire minimum"
+			},
+			"sessions": {
+				"title": "Session",
+				"hiver": "Hiver",
+				"automne": "Automne"
+			}
+		},
+		"reset": "Réinitialiser",
+		"search": "Rechercher"
 	}
 }
