@@ -295,11 +295,11 @@ const DashboardHome = () => {
 
                                                 <div style={{display: "flex", justifyContent: "center", gap: "10px"}}>
                                                     <button className="btn-filled"
-                                                            onClick={() => handleValidate(currentCv.id)}>
+                                                            onClick={() => handleValidateCv(currentCv.id)}>
                                                         {t("dashboard_home_page.validate")}
                                                     </button>
                                                     <button className="btn-outline"
-                                                            onClick={() => handleReject(currentCv.id)}>
+                                                            onClick={() => handleRejectCv(currentCv.id)}>
                                                         {t("dashboard_home_page.reject")}
                                                     </button>
                                                 </div>
@@ -315,7 +315,7 @@ const DashboardHome = () => {
                                         className={(currentPageCv === index + 1) ? "btn-filled" : ""}
                                         onClick={() => {
                                             handlePageChangeCv(index + 1);
-                                            setCurrentCV(null); // Réinitialiser currentCV lors du changement de page
+                                            setCurrentCV(null);
                                         }}
                                     >
                                         {index + 1}
@@ -331,11 +331,11 @@ const DashboardHome = () => {
         }
     }
 
-    const handleValidate = (cvId) => {
+    const handleValidateCv = (cvId) => {
         console.log(`CV ${cvId} validé.`);
     };
 
-    const handleReject = (cvId) => {
+    const handleRejectCv = (cvId) => {
         console.log(`CV ${cvId} rejeté.`);
     };
     const fetchCvById = async (cvId) => {

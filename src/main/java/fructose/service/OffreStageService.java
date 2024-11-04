@@ -177,4 +177,14 @@ public class OffreStageService {
 			throw new RuntimeException("Une erreur est survenue lors du refus de l'offre de stage.", e);
 		}
 	}
+
+    public void accepterOffreStage(Long id) {
+		try {
+			OffreStage offreStage = offreStageRepository.findById(id).orElseThrow(null);
+			offreStage.setIsApproved(true);
+			offreStageRepository.save(offreStage);
+		} catch (Exception e) {
+			throw new RuntimeException("Une erreur est survenue lors du refus de l'offre de stage.", e);
+		}
+    }
 }

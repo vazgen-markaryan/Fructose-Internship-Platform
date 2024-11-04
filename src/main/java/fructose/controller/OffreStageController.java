@@ -144,5 +144,14 @@ public class OffreStageController {
 			return new ResponseEntity<>("Erreur lors du refus de l'offre de stage.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
+	@PostMapping("/accepter-offre-stage/{id}")
+	public ResponseEntity<?> accepterOffreStage(@PathVariable Long id){
+		try {
+			offreStageService.accepterOffreStage(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Erreur lors du refus de l'offre de stage.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
