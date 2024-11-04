@@ -85,28 +85,28 @@ const ManageCVs = () => {
         }
     };
 
-    const getStatutElement = () => {
-        if (currentContenueCv) {
-            if (!currentContenueCv.isApproved && !currentContenueCv.isRefused) {
+    const getStatutElement = (cv) => {
+        if (cv) {
+            if (!cv.isApproved && !cv.isRefused) {
                 return (
-                    <>
+                    <div style={{display : "flex"}}>
                         <p className="m-0 text-orange">{t('manage_cv.status.pending')}</p>
                         <Icon path={mdiClockOutline} size={0.8} className="text-orange"/>
-                    </>
+                    </div>
                 );
-            } else if (currentContenueCv.isApproved) {
+            } else if (cv.isApproved) {
                 return (
-                    <>
+                    <div style={{display : "flex"}}>
                         <p className="m-0 text-green">{t('manage_cv.status.approved')}</p>
                         <Icon path={mdiCheck} size={0.8} className="text-green"/>
-                    </>
+                    </div>
                 );
-            } else if (currentContenueCv.isRefused) {
+            } else if (cv.isRefused) {
                 return (
-                    <>
+                    <div style={{display : "flex"}}>
                         <p className="m-0 text-red">{t('manage_cv.status.rejected')}</p>
                         <Icon path={mdiClose} size={0.8} className="text-red"/>
-                    </>
+                    </div>
                 );
             }
         }
@@ -148,6 +148,7 @@ const ManageCVs = () => {
                                 </div>
                                 <div style={{padding: "16px"}}>
                                     <h4 className="m-0">{lastCv.filename}</h4>
+                                    {getStatutElement(lastCv)}
                                 </div>
                             </div>
                         </div>
@@ -162,6 +163,7 @@ const ManageCVs = () => {
                                         <Icon path={mdiFileOutline} size={1}/>
                                         <div>
                                             <p className="m-0">{item.filename}</p>
+                                            {getStatutElement(item)}
                                         </div>
                                     </div>
                                 ))}
@@ -193,10 +195,10 @@ const ManageCVs = () => {
                                 <p className="text-dark m-0">{(currentContenueCv.fileSize / DIVISER_KB).toFixed(2)} kb</p>
                             </div>
                             <div className="toolbar-spacer"></div>
-                            {getStatutElement()}
+                            {getStatutElement(currentContenueCv)}
                         </div>
                         <br/>
-                        {currentContenueCv.isRefused && (
+                        {currentContenueCv.isRefused && currentCv && (
                             <p style={{color: "red", textAlign: "center"}}>{currentCv.commentaireRefus}</p>
                         )}
                         <a href={currentContenueCv.fileUrl} download={currentContenueCv.filename} className="btn-option">

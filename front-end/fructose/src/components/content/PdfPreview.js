@@ -22,6 +22,11 @@ const PdfPreview = ({ file, height = 500 }) => {
         setPageNumber(1);
     }
 
+    function onDocumentLoadError() {
+        setNumPages(null);
+        setPageNumber(1);
+    }
+
     function changePage(offset) {
         setPageNumber(prevPageNumber => prevPageNumber + offset);
     }
@@ -45,14 +50,19 @@ const PdfPreview = ({ file, height = 500 }) => {
             </button>
 
             <div style={{ height: isFullScreen ? 'calc(100% - 40px)' : '100%', overflowY: isFullScreen ? 'auto' : 'hidden', overflowX: 'hidden' }}>
-                <Document
-                    file={file}
-                    onLoadSuccess={onDocumentLoadSuccess}
-                    loading={<div className="loader-container"><div className="loader"></div></div>}
-                    error={<div className="loader-container text-dark"><div><Icon path={mdiFileAlertOutline} size={1.5} /><p>{t("pdf_view_page.error")}</p></div></div>}
-                >
-                    <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} height={isFullScreen ? undefined : height} />
-                </Document>
+                {file && (
+                    <Document
+                        file={file}
+                        onLoadSuccess={onDocumentLoadSuccess}
+                        onLoadError={onDocumentLoadError}
+                        loading={<div className="loader-container"><div className="loader"></div></div>}
+                        error={<div className="loader-container text-dark"><div><Icon path={mdiFileAlertOutline} size={1.5} /><p>{t("pdf_view_page.error")}</p></div></div>}
+                    >
+                        {numPages && pageNumber <= numPages && (
+                            <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} height={isFullScreen ? undefined : height} />
+                        )}
+                    </Document>
+                )}
             </div>
 
             <div className="pdf-file-preview-navigation">

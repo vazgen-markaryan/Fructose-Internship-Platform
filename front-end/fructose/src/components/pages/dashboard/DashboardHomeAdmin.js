@@ -48,7 +48,30 @@ const DashboardHome = ({}) => {
 
 
     const handleValidateCv = (cvId) => {
-        console.log(`CV ${cvId} validé.`);
+        fetch(`/accepter-cv/` + cvId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": currentToken
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    setAllCvs((prevCv) => {
+                        const updatedCvs = prevCv.filter((cv) => cv.id !== cvId);
+                        if (updatedCvs.length === 0) {
+                            setCurrentCV(null);
+                        }
+                        return updatedCvs;
+                    });
+                    setCurrentCV(null);
+                    return response;
+                }
+                throw new Error("Erreur lors de l'acceptation du Cv");
+            })
+            .catch(error => {
+                console.error("Erreur lors de l'acceptation du cv:", error);
+            });
     };
 
     const handleRejectCv = (cvId, string) => {
@@ -62,7 +85,13 @@ const DashboardHome = ({}) => {
         })
             .then(response => {
                 if (response.ok) {
-                    setAllCvs((prevCv) => prevCv.filter((cv) => cv.id !== cvId));
+                    setAllCvs((prevCv) => {
+                        const updatedCvs = prevCv.filter((cv) => cv.id !== cvId);
+                        if (updatedCvs.length === 0) {
+                            setCurrentCV(null);
+                        }
+                        return updatedCvs;
+                    });
                     setCurrentCV(null);
                     return response;
                 }
@@ -100,7 +129,13 @@ const DashboardHome = ({}) => {
             .then(response => {
                 if (response.ok) {
                     console.log("Offre de stage acceptée avec succès");
-                    setOffresStage((prevOffreStages) => prevOffreStages.filter((offreStage) => offreStage.id !== id));
+                    setOffresStage((prevOffreStages) => {
+                        const updatedOffres = prevOffreStages.filter((offreStage) => offreStage.id !== id);
+                        if (updatedOffres.length === 0) {
+                            setCurrentOffer(null);
+                        }
+                        return updatedOffres;
+                    });
                     setCurrentOffer(null);
                 } else {
                     throw new Error("Erreur lors de l'acceptation de l'offre");
@@ -122,7 +157,13 @@ const DashboardHome = ({}) => {
         })
             .then(response => {
                 if (response.ok) {
-                    setOffresStage((prevOffreStages) => prevOffreStages.filter((offreStage) => offreStage.id !== id));
+                    setOffresStage((prevOffreStages) => {
+                        const updatedOffres = prevOffreStages.filter((offreStage) => offreStage.id !== id);
+                        if (updatedOffres.length === 0) {
+                            setCurrentOffer(null);
+                        }
+                        return updatedOffres;
+                    });
                     setCurrentOffer(null);
                     return response;
                 }
@@ -148,11 +189,11 @@ const DashboardHome = ({}) => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const selectedOffresStage = offresStage.filter(offre => !offre.isApproved && !offre.isRefused)
         .slice(startIndex, startIndex + itemsPerPage);
-    const totalPages = Math.ceil(offresStage.filter(offre => !offre.isApproved && !offre.isRefused).length / itemsPerPage);
+    const totalPages = Math.ceil(selectedOffresStage.filter(offre => !offre.isApproved && !offre.isRefused).length / itemsPerPage);
 
     const startIndexCvs = (currentPageCv - 1) * itemsPerPage;
-    const selectedCvs = allCvs.slice(startIndexCvs, startIndexCvs + itemsPerPage);
-    const totalPagesCv = Math.ceil(allCvs.length / itemsPerPage);
+    const selectedCvs = allCvs.filter(cv => !cv.isApproved && !cv.isRefused).slice(startIndexCvs, startIndexCvs + itemsPerPage);
+    const totalPagesCv = Math.ceil(selectedCvs.length / itemsPerPage);
 
     function Modal({ children, onClose }) {
         return (
@@ -171,7 +212,7 @@ const DashboardHome = ({}) => {
                 <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.offers")}</h4>
             </div>
             <div style={{padding: "10px 0"}}>
-                {offresStage.length === 0 ? (
+                {selectedOffresStage.length === 0 ? (
                     <div style={{
                         width: "400px",
                         display: "flex",
@@ -246,7 +287,7 @@ const DashboardHome = ({}) => {
                 <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.cv")}</h4>
             </div>
             <div style={{padding: "10px 0"}}>
-                {allCvs.length === 0 ? (
+                {selectedCvs.length === 0 ? (
                     <div style={{
                         alignItems: "center",
                         width: "400px",
