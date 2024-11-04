@@ -80,8 +80,7 @@ const ManageOffresStage = () => {
 			return (
 				<>
 					<div className="toolbar-items">
-						{/*TODO On a brisé la fonctionnalité de modifier OS. Button n'est pas là*/}
-						<h4 className="m-0 toolbar-spacer"></h4>
+						<div className="m-0 toolbar-spacer"></div>
 						<Link to="../creer-offre-stage">
 							<button className="btn-filled">{t('manage_offre_stage.buttons.add')}
 								<Icon

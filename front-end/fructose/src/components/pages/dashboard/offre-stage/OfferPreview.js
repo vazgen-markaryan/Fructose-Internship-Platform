@@ -21,7 +21,7 @@ const OfferPreview = ({currentOffer}) => {
 	const navigate = useNavigate();
 	const {deleteOffreStage} = useContext(OffreStageContext);
 	const [currentOffreStage, setCurrentOffreStage] = useState(null);
-	const [offreStages, setOffreStages] = useState([]);
+	const [setOffreStages] = useState([]);
 	
 	const handleDeleteOffreStage = async (offreStageId) => {
 		try {

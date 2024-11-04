@@ -154,8 +154,13 @@ const DiscoverOffers = () => {
 			}
 		]
 	
-	sessions.forEach(session => {
-		// Construire dynamiquement la clé en fonction de la session
+	const sortedSessions = sessions.sort((a, b) => {
+		const yearA = parseInt(a.split(" ")[1]);
+		const yearB = parseInt(b.split(" ")[1]);
+		return yearA - yearB;
+	});
+	
+	sortedSessions.forEach(session => {
 		const translatedLabel = t(`${session}`) || session;
 		filterFields.find(field => field.idName === "sessions").fields.push({
 			type: "radio",
@@ -205,7 +210,7 @@ const DiscoverOffers = () => {
 			if (filters.sessions && isEligible === true) {
 				const dateDebut = new Date(currentOffer.dateDebut);
 				const session = (dateDebut.getMonth() >= 0 && dateDebut.getMonth() <= 4) ? "Hiver " + dateDebut.getFullYear() : (dateDebut.getMonth() >= 8 && dateDebut.getMonth() <= 11) ? "Automne " + dateDebut.getFullYear() : "";
-				isEligible = (filters.sessions.value === "tous" && (dateDebut.getMonth() <= 4 || dateDebut.getMonth() >= 8) || filters.sessions.value === session);
+				isEligible = ((filters.sessions.value === "tous" && (dateDebut.getMonth() <= 4 || dateDebut.getMonth() >= 8)) || filters.sessions.value === session);
 				if (filters.sessions.default !== filters.sessions.value) {
 					filterCount++;
 				}
