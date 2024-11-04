@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../../../providers/AuthProvider";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {OffreStageContext} from "../../../../providers/OffreStageProvider";
 import OfferPreview from "./OfferPreview";
@@ -18,6 +18,7 @@ import {
 	mdiSchool
 } from "@mdi/js";
 
+
 const DiscoverOffers = () => {
 	
 	const {t} = useTranslation();
@@ -28,6 +29,8 @@ const DiscoverOffers = () => {
 	const [displayFiltreWindow, setDisplayFiltreWindow] = useState(false)
 	const [filterCount, setFilterCount] = useState(0)
 	const [filteredOffers, setFilteredOffers] = useState(null)
+	const location = useLocation();
+	const offerId = new URLSearchParams(location.search).get("offer");
 	
 	const createSessionList = () => {
 		const sessions = [];
@@ -168,20 +171,28 @@ const DiscoverOffers = () => {
 			value: session
 		});
 	});
-	
+
 	useEffect(() => {
 		if (isUserInit) {
 			(async function () {
 				try {
 					const response = await fetchOffresStage();
-					setOffers(response)
-					setFilteredOffers(filterOffers(response, filters))
+					setOffers(response);
+					setFilteredOffers(filterOffers(response, filters));
 				} catch (error) {
-				
+					// Handle error
 				}
 			})();
 		}
 	}, [isUserInit, fetchOffresStage, filters]);
+
+	useEffect(() => {
+		if (offerId && offers.length > 0) {
+			const selectedOffer = offers.find((offer) => offer.id === parseInt(offerId));
+			console.log("selectedOffer", selectedOffer);
+			setCurrentOffer(selectedOffer);
+		}
+	}, [location.search, offerId, offers]);
 	
 	const filterOffers = (offers, filters) => {
 		let finalOffer = []

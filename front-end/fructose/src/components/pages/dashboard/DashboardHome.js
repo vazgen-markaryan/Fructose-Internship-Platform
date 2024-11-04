@@ -79,7 +79,6 @@ const DashboardHome = () => {
 			if (currentUser.role === "ETUDIANT") {
 				if (offresStage.length !== 0) {
 					return (
-						<Link to="/dashboard/discover-offers" style={{textDecoration: "none"}}>
 							<section>
 								<div className={"toolbar-items"}>
 									<h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
@@ -90,32 +89,36 @@ const DashboardHome = () => {
 								<div style={{
 									"padding": "10px 0",
 									display: "flex",
-									gap: "10px"
+									gap: "10px",
+									width: "100%"
 								}}>
 									{offresStage.reverse().slice(0, 3).map((item, index) => (
-										<div key={index} style={{width: "33%"}} className="card">
-											<div className="card-image">
-												<h5>{item.poste}</h5>
+										<Link to={`/dashboard/discover-offers?offer=${item.id}`} key={index} style={{ textDecoration: "none", flex: 1 }}>
+											<div className="card">
+												<div className="card-image">
+													<h5>{item.poste}</h5>
+												</div>
+												<div className="card-content">
+													<p style={{
+														fontSize: "11px",
+														textTransform: "uppercase"
+													}} className="text-dark">
+														{t("programme." + item.departementDTO.nom)}
+													</p>
+													<p>{item.ownerDTO.companyName}</p>
+													{
+														(item.nombrePostes <= 5) ?
+															<span className="badge text-mini"><Icon
+																path={mdiAlertCircleOutline}
+																size={0.5}/>{t("dashboard_home_page.limited_places")}</span>
+															: <></>
+													}
+												</div>
 											</div>
-											<div className="card-content">
-												<p style={{
-													fontSize: "11px",
-													textTransform: "uppercase"
-												}} className="text-dark">
-													{t("programme." + item.departementDTO.nom)}
-												</p>
-												<p>{item.ownerDTO.companyName}</p>
-												{
-													(item.nombrePostes <= 5) ?
-														<span className="badge text-mini"><Icon path={mdiAlertCircleOutline} size={0.5}/>{t("dashboard_home_page.limited_places")}</span>
-														: <></>
-												}
-											</div>
-										</div>
+										</Link>
 									))}
 								</div>
 							</section>
-						</Link>
 					);
 				} else {
 					return (
@@ -123,7 +126,7 @@ const DashboardHome = () => {
 							<div className={"toolbar-items"}>
 								<h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
 								<Link to="/dashboard/discover-offers">
-									<button>{t("dashboard_home_page.explore")}
+								<button>{t("dashboard_home_page.explore")}
 										<Icon path={mdiChevronRight} size={1}/>
 									</button>
 								</Link>
