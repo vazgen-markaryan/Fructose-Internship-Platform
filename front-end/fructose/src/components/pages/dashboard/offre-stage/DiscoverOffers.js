@@ -154,14 +154,6 @@ const DiscoverOffers = () => {
 			}
 		]
 	
-	// sessions.forEach(session => {
-	// 	filterFields.find(field => field.idName === "sessions").fields.push({
-	// 		type: "radio",
-	// 		label: session,
-	// 		value: session
-	// 	});
-	// });
-	
 	sessions.forEach(session => {
 		// Construire dynamiquement la clé en fonction de la session
 		const translatedLabel = t(`${session}`) || session;
