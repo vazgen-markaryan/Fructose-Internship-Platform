@@ -15,29 +15,10 @@ import {AuthContext} from "../../../../providers/AuthProvider";
 import {useNavigate} from "react-router-dom";
 import {OffreStageContext} from "../../../../providers/OffreStageProvider";
 
-const OfferPreview = ({currentOffer}) => {
+const OfferPreview = ({currentOffer, handleDeleteOffreStage}) => {
 	const {t} = useTranslation();
 	const {currentUser} = useContext(AuthContext);
 	const navigate = useNavigate();
-	const {deleteOffreStage} = useContext(OffreStageContext);
-	const [currentOffreStage, setCurrentOffreStage] = useState(null);
-	const [setOffreStages] = useState([]);
-	
-	const handleDeleteOffreStage = async (offreStageId) => {
-		try {
-			const response = await deleteOffreStage(offreStageId);
-			if (response.ok) {
-				setOffreStages((prevOffreStages) => prevOffreStages.filter((offreStage) => offreStage.id !== offreStageId));
-				if (currentOffreStage && currentOffreStage.id === offreStageId) {
-					setCurrentOffreStage(null);
-				}
-			} else {
-				console.error("Error deleting offre stage:", response.statusText);
-			}
-		} catch (error) {
-			console.error("Error deleting offre stage:", error);
-		}
-	};
 	
 	if (currentOffer) {
 		const dateDebut = new Date(currentOffer.dateDebut);
@@ -166,7 +147,7 @@ const OfferPreview = ({currentOffer}) => {
 												textAlign: "center"
 											}}>{currentOffer.commentaireRefus}</p>
 										)}
-										<button className="btn-option" onClick={() => navigate(`/dashboard/offres-stage/${currentOffer.id}`)}>
+										<button className="btn-option" onClick={() => navigate(`/dashboard/modifier-offre-stage/${currentOffer.id}`)}>
 											<Icon path={mdiCheck} size={1}/>{t('manage_offre_stage.buttons.modify')}
 										</button>
 										<button className="btn-option" onClick={() => handleDeleteOffreStage(currentOffer.id)}>

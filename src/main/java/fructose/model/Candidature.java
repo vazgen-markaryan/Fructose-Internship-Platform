@@ -3,6 +3,8 @@ package fructose.model;
 import fructose.model.enumerator.EtatCandidature;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Setter
@@ -20,10 +22,12 @@ public class Candidature {
 	
 	@ManyToOne
 	@JoinColumn (name = "etudiant_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Etudiant etudiant;
 	
 	@ManyToOne
 	@JoinColumn (name = "offre_stage_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private OffreStage offreStage;
 	
 	@Enumerated (EnumType.STRING)

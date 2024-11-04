@@ -27,6 +27,7 @@ const DashboardHome = () => {
 	const [offresStage, setOffresStage] = useState([]);
 	const [currentOffer, setCurrentOffer] = useState(null);
 	const {fetchOffresStage} = useContext(OffreStageContext);
+	const {deleteOffreStage} = useContext(OffreStageContext);
 	const [currentPage, setCurrentPage] = useState(1);
 	const itemsPerPage = 10;
 	
@@ -53,6 +54,21 @@ const DashboardHome = () => {
 			})();
 		}
 	}, [currentUser, GetCvs, fetchOffresStage])
+
+	const handleDeleteOffreStage = async (offreStageId) => {
+		try {
+			const response = await deleteOffreStage(offreStageId);
+			if (response.ok) {
+				setOffresStage((prevOffreStages) => prevOffreStages.filter((offreStage) => offreStage.id !== offreStageId));
+				setCurrentOffer(null);
+				console.log("Offre stage deleted successfully");
+			} else {
+				console.error("Error deleting offre stage:", response.statusText);
+			}
+		} catch (error) {
+			console.error("Error deleting offre stage:", error);
+		}
+	};
 	
 	const handlePageChange = (pageNumber) => {
 		setCurrentPage(pageNumber);
@@ -206,7 +222,10 @@ const DashboardHome = () => {
 											))}
 										</div>
 										{currentOffer &&
-											<OfferPreview currentOffer={currentOffer} style={{
+											<OfferPreview
+												currentOffer={currentOffer}
+												handleDeleteOffreStage={handleDeleteOffreStage}
+												style={{
 												flex: 2,
 												padding: "10px",
 												backgroundColor: "#fff",
