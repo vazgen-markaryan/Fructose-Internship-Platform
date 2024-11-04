@@ -638,13 +638,13 @@ public class OffreStageServiceTest {
 			.toList();
 		Utilisateur utilisateur = new Employeur();
 		utilisateur.setDepartement(new Departement());
-		utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.ETUDIANT).build());
+		utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.EMPLOYEUR).build());
 		when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
-		when(offreStageRepository.findByUserDepartement(utilisateur.getDepartement().getId())).thenReturn(offreStages);
+		when(offreStageRepository.getAllByOwnerId(utilisateur.getDepartement().getId())).thenReturn(offreStages);
 		
 		offreStageService.getOffresStage();
 		
-		verify(offreStageRepository, times(1)).findByUserDepartement(utilisateur.getDepartement().getId());
+		verify(offreStageRepository, times(1)).getAllByOwnerId(utilisateur.getDepartement().getId());
 	}
 	
 	@Test
@@ -663,17 +663,14 @@ public class OffreStageServiceTest {
 	}
 	
 	@Test
-	void testGetOffresStageNotFoundDefault() {
+	void testGetOffresStageNull() {
 		Utilisateur utilisateur = new Employeur();
-		// Doit être changer lorsque le usecase sera implémenté
-		utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.PROFESSEUR).build());
+		utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(null).build());
 		when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
 		
-		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-			offreStageService.getOffresStage();
-		});
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> offreStageService.getOffresStage());
 		
-		assertEquals("Aucune offre de stage n'a été trouvée pour le role inconnue", exception.getMessage());
+		assertEquals("Le role de l'utilisateur ne peut pas être nul", exception.getMessage());
 	}
 	
 	@Test

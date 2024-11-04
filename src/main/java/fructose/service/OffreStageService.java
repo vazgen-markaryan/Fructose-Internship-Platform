@@ -137,6 +137,9 @@ public class OffreStageService {
 	public List<OffreStageDTO> getOffresStage() {
 		Utilisateur utilisateur = getUtilisateurEnCours();
 		List<OffreStageDTO> offresStage;
+		if (utilisateur.getRole() == null) {
+			throw new IllegalArgumentException("Le role de l'utilisateur ne peut pas être nul");
+		}
 		switch (utilisateur.getRole()) {
 			case ADMIN -> {
 				offresStage = OffreStageDTO.toDTOs(offreStageRepository.findAll());
