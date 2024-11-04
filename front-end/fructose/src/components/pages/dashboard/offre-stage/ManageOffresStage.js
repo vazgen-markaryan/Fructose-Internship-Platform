@@ -39,7 +39,7 @@ const ManageOffresStage = () => {
     const getOffreStageById = async (id) => {
         try {
             const data = await fetchOffreStage(id);
-            setOffreStage(data);
+            console.log(data);
         } catch (error) {
             console.error("Error fetching offer:", error);
         }
@@ -50,6 +50,7 @@ const ManageOffresStage = () => {
             setCurrentOffreStage(null);
         } else {
             setCurrentOffreStage(offreStage);
+            console.log(offreStage);
             getOffreStageById(offreStage.id);
         }
     };

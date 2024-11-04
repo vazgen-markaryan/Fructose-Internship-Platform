@@ -8,53 +8,11 @@ import {
 import { useTranslation } from "react-i18next";
 import { AuthContext } from "../../../../providers/AuthProvider";
 
-const OfferPreview = ({ currentOffer }) => {
+const OfferPreview = ({ currentOffer , handleValidate, handlerefused}) => {
     const { t } = useTranslation();
     const { currentUser } = useContext(AuthContext);
     const [isRejectModalOpen, setRejectModalOpen] = useState(false);
     const textareaRef = useRef(null);
-    const {currentToken} = useContext(AuthContext)
-    function handleValidateOffer(id) {
-        fetch(`/accepter-offre-stage/` + id, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": currentToken
-            }
-        })
-            .then(response => {
-                if (response.ok) {
-                    console.log("Offre de stage acceptée avec succès");
-                } else {
-                    throw new Error("Erreur lors de l'acceptation de l'offre");
-                }
-            })
-            .catch(error => {
-                console.error("Erreur lors de l'acceptation de l'offre:", error);
-            });
-    }
-
-
-    function handleRejectOffer(id) {
-        const commentValue = textareaRef.current.value;
-        fetch(`/refuser-offre-stage/` + id, {
-            method: "POST",
-            headers: { "Content-Type": "application/json",
-                        "Authorization" : currentToken},
-            body: JSON.stringify({ commentaireRefus: commentValue }),
-        })
-            .then(response => {
-                if (response.ok) return response.json();
-                throw new Error("Erreur lors du refus de l'offre");
-            })
-            .then(data => {
-                setRejectModalOpen(false);
-                textareaRef.current.value = "";
-            })
-            .catch(error => {
-                console.error("Erreur lors du refus de l'offre:", error);
-            });
-    }
 
     function Modal({ children, onClose }) {
         return (
@@ -89,7 +47,7 @@ const OfferPreview = ({ currentOffer }) => {
                                 <button className="btn-filled">Postuler</button>
                             ) : currentUser.role === "ADMIN" ? (
                                 <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-                                    <button className="btn-filled" onClick={() => handleValidateOffer(currentOffer.id)}>
+                                    <button className="btn-filled" onClick={() => handleValidate(currentOffer.id)}>
                                         {t("creer_offre_stage_page.validate")}
                                     </button>
                                     <button className="btn-outline" onClick={() => setRejectModalOpen(true)}>
@@ -152,7 +110,11 @@ const OfferPreview = ({ currentOffer }) => {
                         placeholder="Entrez le commentaire de refus ici..."
                         style={{ width: "100%", height: "100px" }}
                     />
-                    <button onClick={() => handleRejectOffer(currentOffer.id)} className="btn-filled">
+                    <button onClick={() => {
+                        handlerefused(currentOffer.id, textareaRef.current.value);
+                        textareaRef.current.value = "";
+                        setRejectModalOpen(false);
+                    }} className="btn-filled">
                         Envoyer
                     </button>
                 </Modal>

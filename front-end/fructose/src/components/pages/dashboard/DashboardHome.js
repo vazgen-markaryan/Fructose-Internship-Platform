@@ -10,25 +10,15 @@ import {
     mdiPlus
 } from "@mdi/js";
 import {CvContext} from "../../../providers/CvProvider";
-import {OffreStageContext} from "../../../providers/OffreStageProvider";
 import {useTranslation} from "react-i18next";
-import OfferPreview from "./offre-stage/OfferPreview";
-import PdfPreview from "../../content/PdfPreview";
+import DashboardHomeAdmin from "./DashboardHomeAdmin";
 
 const DashboardHome = () => {
-
     const {t} = useTranslation();
     const {currentUser, isUserInit} = useContext(AuthContext);
-    const {GetCvs, GetAllCvs, getCvById} = useContext(CvContext);
-    const [allCvs, setAllCvs] = useState([]);
+    const {GetCvs} = useContext(CvContext);
     const [cvs, setCvs] = useState([]);
     const [offresStage, setOffresStage] = useState([]);
-    const [currentOffer, setCurrentOffer] = useState(null);
-    const [currentCv, setCurrentCV] = useState(null);
-    const {fetchOffresStage} = useContext(OffreStageContext);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentPageCv, setCurrentPageCv] = useState(1);
-    const itemsPerPage = 10;
 
     useEffect(() => {
         if (currentUser && isUserInit) {
@@ -42,29 +32,9 @@ const DashboardHome = () => {
                         console.log("error" + error);
                     }
                 }
-                try {
-                    const response = await fetchOffresStage();
-                    setOffresStage(response);
-                } catch (error) {
-                    console.log("error" + error);
-                }
-                try {
-                    const response = await GetAllCvs();
-                    const data = await response.text();
-                    setAllCvs(JSON.parse(data));
-                } catch (error) {
-                    console.log("error" + error);
-                }
             })();
         }
-    }, [currentUser, GetCvs, fetchOffresStage])
-
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-    const handlePageChangeCv = (pageNumber) => {
-        setCurrentPageCv(pageNumber);
-    };
+    }, [currentUser, GetCvs])
 
     const GetOffreStageSection = () => {
         if (currentUser != null) {
@@ -74,11 +44,10 @@ const DashboardHome = () => {
                         <div className={"toolbar-items"}>
                             <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
                             <Link to="/dashboard/discover-offers">
-                                <button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/>
-                                </button>
+                                <button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/></button>
                             </Link>
                         </div>
-                        <div style={{"padding": "10px 0"}}>
+                        <div style={{ "padding": "10px 0" }}>
                             <div style={{
                                 "width": "400px",
                                 "height": "320px",
@@ -88,8 +57,8 @@ const DashboardHome = () => {
                                 "backgroundColor": "#eee",
                                 "borderRadius": "5px"
                             }}>
-                                <div style={{"textAlign": "center"}}>
-                                    <Icon path={mdiBriefcaseRemoveOutline} size={1}/>
+                                <div style={{ "textAlign": "center" }}>
+                                    <Icon path={mdiBriefcaseRemoveOutline} size={1} />
                                     <p>{t("dashboard_home_page.no_offers")}</p>
                                 </div>
                             </div>
@@ -102,16 +71,14 @@ const DashboardHome = () => {
                         <div className={"toolbar-items"}>
                             <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
                             <Link to="/dashboard/manage-offres-stage">
-                                <button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/>
-                                </button>
+                                <button>{t("dashboard_home_page.explore")} <Icon path={mdiChevronRight} size={1}/></button>
                             </Link>
                             <Link to="./creer-offre-stage">
                                 <button className={"btn-filled"}>{t("dashboard_home_page.add_offer")}
-                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                </button>
+                                    <Icon path={mdiBriefcasePlusOutline} size={1}/></button>
                             </Link>
                         </div>
-                        <div style={{"padding": "10px 0"}}>
+                        <div style={{ "padding": "10px 0" }}>
                             {offresStage.length === 0 ? (
                                 <div style={{
                                     "width": "400px",
@@ -134,7 +101,7 @@ const DashboardHome = () => {
                                 }}>
                                     {offresStage.map((offreStage, index) => (
                                         <div key={index}
-                                             style={{"display": "flex", "alignItems": "center", "gap": "5px"}}>
+                                             style={{ "display": "flex", "alignItems": "center", "gap": "5px" }}>
                                             <Icon path={mdiBriefcasePlusOutline} size={1}/>
                                             <p className="m-0">{offreStage.nom}</p>
                                         </div>
@@ -145,210 +112,14 @@ const DashboardHome = () => {
                     </section>
                 );
             } else if (currentUser.role === "ADMIN") {
-                const startIndex = (currentPage - 1) * itemsPerPage;
-                const selectedOffresStage = offresStage.slice(startIndex, startIndex + itemsPerPage);
-                const startIndexCvs = (currentPage - 1) * itemsPerPage;
-                const selectedCvs = allCvs.slice(startIndexCvs, startIndexCvs + itemsPerPage);
                 return (
-                    <section>
-                        <div className={"toolbar-items"}>
-                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.offers")}</h4>
-                        </div>
-                        <div style={{"padding": "10px 0"}}>
-                            {offresStage.length === 0 ? (
-                                <div style={{
-                                    "width": "400px",
-                                    "display": "flex",
-                                    "alignItems": "center",
-                                    "backgroundColor": "#eee",
-                                    "borderRadius": "5px",
-                                    "gap": "5px",
-                                    "padding": "10px"
-                                }}>
-                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                    <p className="m-0">{t("dashboard_home_page.no_offers")}</p>
-                                </div>
-                            ) : (
-                                <div style={{
-                                    "width": "auto",
-                                    "backgroundColor": "#eee",
-                                    "borderRadius": "5px",
-                                    "padding": "10px"
-                                }}>
-                                    <div style={{display: "flex", gap: "20px"}}>
-                                        <div className="menu-list" style={{
-                                            flex: 1,
-                                            backgroundColor: "#f9f9f9",
-                                            borderRadius: "5px",
-                                            padding: "10px"
-                                        }}>
-                                            {selectedOffresStage.map((offreStage, index) => (
-                                                <div key={index}
-                                                     style={{
-                                                         display: "flex",
-                                                         alignItems: "center",
-                                                         gap: "10px",
-                                                         padding: "5px",
-                                                         borderBottom: "1px solid #ddd",
-                                                         cursor: "pointer",
-                                                         backgroundColor: currentOffer && currentOffer.id === offreStage.id ? "#e0e0e0" : "transparent"
-                                                     }}
-                                                     onClick={() => setCurrentOffer(currentOffer && currentOffer.id === offreStage.id ? null : offreStage)}>
-                                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                                    <p className="m-0">{offreStage.nom}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        {currentOffer && <OfferPreview currentOffer={currentOffer} style={{
-                                            flex: 2,
-                                            padding: "10px",
-                                            backgroundColor: "#fff",
-                                            borderRadius: "5px",
-                                            boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-                                        }}/>}
-                                    </div>
-                                </div>
-                            )}
-                            <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
-                                {Array.from({length: Math.ceil(offresStage.length / itemsPerPage)}, (_, index) => (
-                                    <button
-                                        key={index}
-                                        className={(currentPage === index + 1) ? "btn-filled" : ""}
-                                        onClick={() => {
-                                            handlePageChange(index + 1);
-                                            setCurrentOffer(null);
-                                        }}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                        <div className={"toolbar-items"}>
-                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.cv")}</h4>
-                        </div>
-                        <div style={{"padding": "10px 0"}}>
-                            {allCvs.length === 0 ? (
-                                <div style={{
-                                    "width": "400px",
-                                    "display": "flex",
-                                    "alignItems": "center",
-                                    "backgroundColor": "#eee",
-                                    "borderRadius": "5px",
-                                    "gap": "5px",
-                                    "padding": "10px"
-                                }}>
-                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                    <p className="m-0">{t("dashboard_home_page.no_cv")}</p>
-                                </div>
-                            ) : (
-                                <div style={{
-                                    "width": "auto",
-                                    "backgroundColor": "#eee",
-                                    "borderRadius": "5px",
-                                    "padding": "10px"
-                                }}>
-                                    <div style={{display: "flex", gap: "20px"}}>
-                                        <div className="menu-list" style={{
-                                            flex: 1,
-                                            backgroundColor: "#f9f9f9",
-                                            borderRadius: "5px",
-                                            padding: "10px"
-                                        }}>
-                                            {selectedCvs.map((cv, index) => (
-                                                <div key={index}
-                                                     style={{
-                                                         display: "flex",
-                                                         alignItems: "center",
-                                                         gap: "10px",
-                                                         padding: "5px",
-                                                         borderBottom: "1px solid #ddd",
-                                                         cursor: "pointer",
-                                                         backgroundColor: currentCv && currentCv.id === cv.id ? "#e0e0e0" : "transparent"
-                                                     }}
-                                                     onClick={() => {
-                                                         if (currentCv && currentCv.id === cv.id) {
-                                                             setCurrentCV(null);
-                                                         } else {
-                                                             setCurrentCV(fetchCvById(cv.id))
-                                                         }
-                                                     }}>
-                                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                                    <p className="m-0">{cv.filename}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        {currentCv && (
-                                            <div style={{
-                                                flex: 2,
-                                                padding: "10px",
-                                                backgroundColor: "#fff",
-                                                borderRadius: "5px",
-                                                boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-                                            }}>
-                                                <PdfPreview file={currentCv.fileUrl} height={200}/>
-
-                                                <p style={{textAlign: "center", margin: "10px 0", fontWeight: "bold"}}>
-                                                    {currentCv.filename}
-                                                </p>
-
-                                                <div style={{display: "flex", justifyContent: "center", gap: "10px"}}>
-                                                    <button className="btn-filled"
-                                                            onClick={() => handleValidateCv(currentCv.id)}>
-                                                        {t("dashboard_home_page.validate")}
-                                                    </button>
-                                                    <button className="btn-outline"
-                                                            onClick={() => handleRejectCv(currentCv.id)}>
-                                                        {t("dashboard_home_page.reject")}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
-                            <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
-                                {Array.from({length: Math.ceil(allCvs.length / itemsPerPage)}, (_, index) => (
-                                    <button
-                                        key={index}
-                                        className={(currentPageCv === index + 1) ? "btn-filled" : ""}
-                                        onClick={() => {
-                                            handlePageChangeCv(index + 1);
-                                            setCurrentCV(null);
-                                        }}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-
-                    </section>
+                    <DashboardHomeAdmin />
                 );
             }
         }
-    }
-
-    const handleValidateCv = (cvId) => {
-        console.log(`CV ${cvId} validé.`);
     };
 
-    const handleRejectCv = (cvId) => {
-        console.log(`CV ${cvId} rejeté.`);
-    };
-    const fetchCvById = async (cvId) => {
-        try {
-            const response = await getCvById(cvId);
-            const pdfBlob = await response.blob();
-            const fileUrl = URL.createObjectURL(pdfBlob);
-            const fileSize = pdfBlob.size;
-            setCurrentCV((prev) => ({...prev, fileUrl, fileSize}));
-        } catch (error) {
-            console.error("Erreur lors de la récupération du CV:", error);
-        }
-    };
+
 
 
     const GetUserManagementSection = () => {
