@@ -363,5 +363,51 @@
 		"approved": "Approved",
 		"refused": "Refused",
 		"pending": "Pending"
+	},
+	"discover_offers_page": {
+		"title": "Discover Internship Offers",
+		"results": "Results",
+		"apply": "Apply",
+		"particularities": "Particularities",
+		"salary": "Salary",
+		"internship_type": "Internship Type",
+		"hours_one": "{{count}} Hour",
+		"hours_other": "{{count}} Hours",
+		"types_emploi": {
+			"temps_partiel": "Part-time",
+			"temps_plein": "Full-time"
+		},
+		"work_type": {
+			"title": "Work Modality",
+			"virtuel": "Remote",
+			"presentiel": "On-site",
+			"hybride": "Hybrid"
+		},
+		"internship_duration": "Internship Duration",
+		"location": "Location",
+		"description": "Description",
+		"employer": "Employer",
+		"contact": "Contact",
+		"month_one": "{{count}} Month",
+		"month_other": "{{count}} Months",
+		"no_offers": "No offers to display at the moment",
+		"future_offers": "They will appear here when they are available",
+		"limited_places": "Limited places",
+		"filters": {
+			"title": "Filters",
+			"department": "Department",
+			"salary": {
+				"min": "Minimum",
+				"max": "Maximum"
+			},
+			"hours": {
+				"min": "Minimum",
+				"max": "Maximum"
+			},
+			"duration": {
+				"min": "Minimum",
+				"max": "Maximum"
+			}
+		}
 	}
 }

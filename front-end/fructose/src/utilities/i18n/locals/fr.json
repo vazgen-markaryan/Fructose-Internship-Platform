@@ -363,5 +363,35 @@
 		"approved": "Approuvé",
 		"refused": "Refusé",
 		"pending": "En attente"
+	},
+	"discover_offers_page": {
+		"title": "Découvrir les offres de stage",
+		"results": "Résultats",
+		"apply": "Postuler",
+		"particularities": "Particularités",
+		"salary": "Salaire",
+		"internship_type": "Type de stage",
+		"hours_one": "{{count}} Heure",
+		"hours_other": "{{count}} Heures",
+		"types_emploi": {
+			"temps_partiel": "Temps partiel",
+			"temps_plein": "Temps plein"
+		},
+		"work_type": {
+			"title": "Modalité de travail",
+			"virtuel": "Télétravail",
+			"presentiel": "Présentiel",
+			"hybride": "Hybride"
+		},
+		"internship_duration": "Durée du stage",
+		"location": "Lieu",
+		"description": "Description",
+		"employer": "Employeur",
+		"contact": "Contacter",
+		"month_one": "{{count}} Mois",
+		"month_other": "{{count}} Mois",
+		"no_offers": "Aucune offre à afficher pour le moment",
+		"future_offers": "Elles apparaîtront ici dès qu'elles seront disponibles",
+		"limited_places": "Places limitées"
 	}
 }

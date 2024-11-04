@@ -67,8 +67,8 @@ const ConnexionUtilisateur = () => {
 		}
 	}
 	
-	{/*TODO DELETE handleTestLogin DIV ON PRODUCTION*/
-	}
+	/*TODO DELETE handleTestLogin DIV ON PRODUCTION*/
+	
 	const handleTestLogin = async (email, password) => {
 		try {
 			await SignInUser(email, password);
@@ -140,11 +140,7 @@ const ConnexionUtilisateur = () => {
 						</form>
 						{/*TODO DELETE THIS DIV ON PRODUCTION*/}
 						<div style={{marginTop: '20px', textAlign: 'center'}}>
-							<h6 style={{textAlign: 'center'}}>Fatigué de changer accounts?</h6>
-							<h6 style={{textAlign: 'center'}}>Pourquoi taper à la main?</h6>
-							<h6 style={{textAlign: 'center'}}>Essaie Connexion Rapide!</h6>
-							<h6 style={{textAlign: 'center'}}>Clique sur un bouton ci-dessous!</h6>
-							<h6 style={{textAlign: 'center'}}>C'est simple, rapide et efficace!</h6>
+							<h6 style={{textAlign: 'center'}}>Connexion Rapide!</h6>
 							<div style={{
 								display: 'flex',
 								flexWrap: 'wrap',

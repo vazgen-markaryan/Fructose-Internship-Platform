@@ -215,7 +215,7 @@ const CreerOffreStage = () => {
 						<label>{t("creer_offre_stage_page.type_emploi")}</label>
 						<select name="typeEmploi" onChange={handleInputChange} value={offreStage.typeEmploi} required>
 							<option value="select">{t("creer_offre_stage_page.modalites_travail.select")}</option>
-							<option value="virtuel">{t("creer_offre_stage_page.modalites_travail.teletravail")}</option>
+							<option value="virtuel">{t("creer_offre_stage_page.modalites_travail.virtuel")}</option>
 							<option value="presentiel">{t("creer_offre_stage_page.modalites_travail.presentiel")}</option>
 							<option value="hybride">{t("creer_offre_stage_page.modalites_travail.hybride")}</option>
 						</select>

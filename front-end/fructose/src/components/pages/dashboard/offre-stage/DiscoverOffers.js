@@ -4,18 +4,18 @@ import {AuthContext} from "../../../../providers/AuthProvider";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {OffreStageContext} from "../../../../providers/OffreStageProvider";
+import OfferPreview from "./OfferPreview";
 import {
 	mdiAlertCircleOutline,
 	mdiArrowLeft,
 	mdiBookEducationOutline,
 	mdiBriefcaseOutline,
 	mdiBriefcaseRemove,
-	mdiCalendarOutline,
 	mdiCashMultiple,
 	mdiChevronUp,
 	mdiDomain,
 	mdiFilterMultipleOutline,
-	mdiMapMarkerOutline
+	mdiSchool
 } from "@mdi/js";
 
 const DiscoverOffers = () => {
@@ -28,6 +28,25 @@ const DiscoverOffers = () => {
 	const [displayFiltreWindow, setDisplayFiltreWindow] = useState(false)
 	const [filterCount, setFilterCount] = useState(0)
 	const [filteredOffers, setFilteredOffers] = useState(null)
+	
+	const creeateSessionList = () => {
+		const sessions = [];
+		for (const offer of offers) {
+			const dateDebut = new Date(offer.dateDebut);
+			if (dateDebut.getMonth() >= 0 && dateDebut.getMonth() <= 4) {
+				if (!sessions.includes("Hiver " + dateDebut.getFullYear())) {
+					sessions.push("Hiver " + dateDebut.getFullYear());
+				}
+			}
+			if (dateDebut.getMonth() >= 8 && dateDebut.getMonth() <= 11) {
+				if (!sessions.includes("Automne " + dateDebut.getFullYear())) {
+					sessions.push("Automne " + dateDebut.getFullYear());
+				}
+			}
+		}
+		return sessions;
+	}
+	const sessions = creeateSessionList();
 	
 	const [filters, setFilters] = useState(
 		{
@@ -47,6 +66,10 @@ const DiscoverOffers = () => {
 				default: 0,
 				value: 0
 			},
+			sessions: {
+				default: "tous",
+				value: "tous"
+			}
 		}
 	)
 	
@@ -113,8 +136,28 @@ const DiscoverOffers = () => {
 						max: 50
 					},
 				]
+			},
+			{
+				name: "Session",
+				idName: "sessions",
+				icon: mdiSchool,
+				fields: [
+					{
+						type: "radio",
+						label: "Tous",
+						value: "tous"
+					},
+				]
 			}
 		]
+	
+	sessions.forEach(session => {
+		filterFields.find(field => field.idName === "sessions").fields.push({
+			type: "radio",
+			label: session,
+			value: session
+		});
+	});
 	
 	useEffect(() => {
 		if (isUserInit) {
@@ -138,20 +181,28 @@ const DiscoverOffers = () => {
 			let filterCount = 0
 			if (filters.type) {
 				isEligible = filters.type.value === "tous" || currentOffer.modaliteTravail === filters.type.value;
-				if (filters.type.default != filters.type.value) {
+				if (filters.type.default !== filters.type.value) {
 					filterCount++
 				}
 			}
 			if (filters.emplacement && isEligible === true) {
 				isEligible = filters.emplacement.value === "tous" || currentOffer.typeEmploi === filters.emplacement.value;
-				if (filters.emplacement.default != filters.emplacement.value) {
+				if (filters.emplacement.default !== filters.emplacement.value) {
 					filterCount++
 				}
 			}
 			if (filters.tauxHoraire) {
 				isEligible = (isEligible === true && currentOffer.tauxHoraire > filters.tauxHoraire.value)
-				if (filters.tauxHoraire.default != filters.tauxHoraire.value) {
+				if (filters.tauxHoraire.default !== parseInt(filters.tauxHoraire.value)) {
 					filterCount++
+				}
+			}
+			if (filters.sessions && isEligible === true) {
+				const dateDebut = new Date(currentOffer.dateDebut);
+				const session = (dateDebut.getMonth() >= 0 && dateDebut.getMonth() <= 4) ? "Hiver " + dateDebut.getFullYear() : (dateDebut.getMonth() >= 8 && dateDebut.getMonth() <= 11) ? "Automne " + dateDebut.getFullYear() : "";
+				isEligible = (filters.sessions.value === "tous"  && (dateDebut.getMonth() <= 4 || dateDebut.getMonth() >= 8) || filters.sessions.value === session);
+				if (filters.sessions.default !== filters.sessions.value) {
+					filterCount++;
 				}
 			}
 			if (isEligible === true) {
@@ -174,7 +225,8 @@ const DiscoverOffers = () => {
 	}
 	
 	const resetOfferFilterSelection = () => {
-		for (const [value] of Object.entries(filters)) {
+		// NE PAS ENLEVER KEY! SINON ÇA VA PAS COMPILE
+		for (const [key, value] of Object.entries(filters)) {
 			value.value = value.default
 		}
 		handleOfferFilterSelection()
@@ -212,21 +264,21 @@ const DiscoverOffers = () => {
 							</>
 						)
 						break
-					case "range":
-						formField = (
-							<>
-								{formField}
-								<input type="range" defaultValue={filters[currentField.idName].value} min={currentElement.min} max={currentElement.max} name={currentField.idName} id="" onChange={(e) => {
-									handleFilterSelection(currentField.idName, e.target.value)
-								}}/>
-							</>
-						)
-						break
 					case "number":
 						formField = (
 							<>
 								{formField}
 								<input type="number" defaultValue={filters[currentField.idName].value} min={currentElement.min} max={currentElement.max} name={currentField.idName} id="" onChange={(e) => {
+									handleFilterSelection(currentField.idName, e.target.value)
+								}}/>
+							</>
+						)
+						break
+					default:
+						formField = (
+							<>
+								{formField}
+								<input type="text" defaultValue={filters[currentField.idName].value} min={currentElement.min} max={currentElement.max} name={currentField.idName} id="" onChange={(e) => {
 									handleFilterSelection(currentField.idName, e.target.value)
 								}}/>
 							</>
@@ -262,7 +314,7 @@ const DiscoverOffers = () => {
 					<div className={"dashboard-card"} style={{display: (displayFiltreWindow) ? "block" : "none"}}>
 						<section>
 							<div className="toolbar-items">
-								<h5 className="m-0">Filtres</h5>
+								<h5 className="m-0">{t("discover_offers_page.filters.title")}</h5>
 								<div className="toolbar-spacer"></div>
 								<button className="btn-icon" onClick={() => {
 									setDisplayFiltreWindow(false)
@@ -275,7 +327,7 @@ const DiscoverOffers = () => {
 							<div className="list-bullet" style={{display: (currentUser.role === "EMPLOYEUR") ? "block" : "none"}}>
 								<Icon path={mdiBookEducationOutline} size={1}/>
 								<div style={{padding: "4px 0"}}>
-									<h6 className="m-0" style={{marginBottom: "5px"}}>Département</h6>
+									<h6 className="m-0" style={{marginBottom: "5px"}}>{t("discover_offers_page.filters.department")}</h6>
 									<select name="" id="" disabled="disabled">
 										<option value="">{t("programme." + currentUser.departementDTO.nom)}</option>
 									</select>
@@ -299,12 +351,12 @@ const DiscoverOffers = () => {
 						<section>
 							<div>
 								<div className="toolbar-items">
-									<h5 className="m-0">{filteredOffers.length} Resultats</h5>
+									<h5 className="m-0">{filteredOffers.length} {t("discover_offers_page.results")}</h5>
 									<div className="toolbar-spacer"></div>
 									<button onClick={() => {
 										setDisplayFiltreWindow(!displayFiltreWindow)
 									}}>
-										<Icon path={mdiFilterMultipleOutline} size={1}/> Filtres ({filterCount})
+										<Icon path={mdiFilterMultipleOutline} size={1}/> {t("discover_offers_page.filters.title")} ({filterCount})
 									</button>
 								</div>
 								<br/>
@@ -331,7 +383,7 @@ const DiscoverOffers = () => {
 												<p>{item.adresse}</p>
 												{
 													(item.nombrePostes <= 5) ?
-														<span className="badge text-mini"><Icon path={mdiAlertCircleOutline} size={0.5}/> Places limitées</span>
+														<span className="badge text-mini"><Icon path={mdiAlertCircleOutline} size={0.5}/>{t("discover_offers_page.limited_places")}</span>
 														: <></>
 												}
 											</div>
@@ -345,116 +397,6 @@ const DiscoverOffers = () => {
 				</div>
 			);
 		}
-	};
-	
-	const getAppercu = () => {
-		if (currentOffer) {
-			return (
-				<>
-					<div className="dashboard-card" style={{
-						width: "55%",
-						position: "sticky",
-						top: "70px",
-						height: "90vh",
-						display: "flex",
-						flexDirection: "column"
-					}}>
-						<div className="user-profile-section">
-							<div className="company-profile-section-banner" style={{borderRadius: "5px 5px 0 0"}}></div>
-							<div className="user-profile-section-profile-picture radius-normal"
-							     style={{"backgroundImage": "url('/assets/offers/default-company.png')"}}>
-							</div>
-						</div>
-						<section>
-							<div className="toolbar-items" style={{padding: "0 10px"}}>
-								<div>
-									<h4 className="m-0">{currentOffer.poste}</h4>
-									<p className="text-dark m-0">{currentOffer.ownerDTO.companyName}</p>
-								</div>
-								<div className="toolbar-spacer"></div>
-								<button className="btn-filled">Postuler</button>
-							</div>
-						</section>
-						<hr/>
-						<div style={{overflowY: "auto"}}>
-							<section className="nospace">
-								<h5>Particularites</h5>
-								<div className="list-bullet">
-									<Icon path={mdiCashMultiple} size={1}/>
-									<div style={{padding: "4px 0"}}>
-										<h6 className="m-0" style={{marginBottom: "5px"}}>Salaire</h6>
-										<span className="badge text-mini">C$ {currentOffer.tauxHoraire}.00</span>
-									</div>
-								</div>
-								<div className="list-bullet">
-									<Icon path={mdiBriefcaseOutline} size={1}/>
-									<div style={{padding: "4px 0"}}>
-										<h6 className="m-0" style={{marginBottom: "5px"}}>Type de stage</h6>
-										<span className="badge text-mini">{t("creer_offre_stage_page.types_emploi." + currentOffer.modaliteTravail)}</span>
-										<span className="badge text-mini">{currentOffer.nombreHeuresSemaine} Heures</span>
-									</div>
-								</div>
-								<div className="list-bullet">
-									<Icon path={mdiDomain} size={1}/>
-									<div style={{padding: "4px 0"}}>
-										<h6 className="m-0" style={{marginBottom: "5px"}}>Emplacement</h6>
-										<span className="badge text-mini">{t("creer_offre_stage_page.modalites_travail." + currentOffer.typeEmploi)}</span>
-									</div>
-								</div>
-								<div className="list-bullet">
-									<Icon path={mdiCalendarOutline} size={1}/>
-									<div style={{padding: "4px 0"}}>
-										<h6 className="m-0" style={{marginBottom: "5px"}}>Durée du stage</h6>
-										<span className="badge text-mini">{currentOffer.dateDebut} - {currentOffer.dateFin} (3 Mois)</span>
-									</div>
-								</div>
-							</section>
-							<hr/>
-							<section className="nospace">
-								<h5>Location</h5>
-								<div className="list-bullet">
-									<Icon path={mdiMapMarkerOutline} size={1}/>
-									<div style={{padding: "4px 0"}}>
-										<h6 className="m-0" style={{marginBottom: "5px"}}>{currentOffer.adresse}</h6>
-									</div>
-								</div>
-							</section>
-							<hr/>
-							<section className="nospace">
-								<h5>Description</h5>
-								<p>{currentOffer.description}</p>
-							</section>
-							<hr/>
-							<section className="nospace">
-								<h5>Employeur</h5>
-								
-								<div className="list-bullet">
-									<div className="user-profile-section-profile-picture" style={{
-										"background": "url('/assets/auth/default-profile.jpg') center / cover",
-										width: "32px",
-										height: "32px",
-										margin: 0
-									}}>
-									
-									</div>
-									<div>
-										<h6 className="m-0">{currentOffer.ownerDTO.fullName}</h6>
-										<p className="m-0 text-dark">{currentOffer.ownerDTO.companyName}</p>
-									</div>
-									<div className="toolbar-spacer">
-									
-									</div>
-									<a href={"mailto:" + currentOffer.ownerDTO.email}>
-										<button>Contacter</button>
-									</a>
-								</div>
-							</section>
-						</div>
-					</div>
-				</>
-			);
-		}
-		return null;
 	};
 	
 	const getOffreListSection = () => {
@@ -474,8 +416,8 @@ const DiscoverOffers = () => {
 					<div className="dashboard-placeholder-card" style={{backgroundColor: "transparent"}}>
 						<div style={{textAlign: "center"}}>
 							<Icon path={mdiBriefcaseRemove} size={2}/>
-							<h6 style={{margin: "8px 0 14px 0"}}>Aucune offre de stage disponible</h6>
-							<p className="text-dark">Elles apparaîtront ici dès qu'elles seront disponibles</p>
+							<h6 style={{margin: "8px 0 14px 0"}}>{t("discover_offers_page.no_offers")}</h6>
+							<p className="text-dark">{t("discover_offers_page.future_offers")}</p>
 						</div>
 					</div>
 				</div>
@@ -498,11 +440,11 @@ const DiscoverOffers = () => {
 						<Icon path={mdiArrowLeft} size={1.4}/>
 					</button>
 				</Link>
-				<h1>Offres de Stage</h1>
+				<h1>{t("discover_offers_page.title")}</h1>
 			</div>
 			<div style={{display: "flex", gap: "20px", alignItems: "start"}}>
 				{getOffreListSection()}
-				{getAppercu()}
+				{currentOffer && <OfferPreview currentOffer={currentOffer}/>}
 			</div>
 		</>
 	);

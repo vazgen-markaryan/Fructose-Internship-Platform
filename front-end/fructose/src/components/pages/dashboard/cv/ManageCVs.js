@@ -1,14 +1,14 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
-    mdiArrowLeft,
-    mdiCheck,
-    mdiClockOutline,
-    mdiClose,
-    mdiDeleteOutline,
-    mdiDownloadOutline,
-    mdiFileOutline,
-    mdiFileQuestionOutline,
-    mdiFileUploadOutline
+	mdiArrowLeft,
+	mdiCheck,
+	mdiClockOutline,
+	mdiClose,
+	mdiDeleteOutline,
+	mdiDownloadOutline,
+	mdiFileOutline,
+	mdiFileQuestionOutline,
+	mdiFileUploadOutline
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../../../providers/AuthProvider";
@@ -76,19 +76,19 @@ const ManageCVs = () => {
 		if (currentCv) {
 			if (!currentCv.isApproved && !currentCv.isRefused) {
 				return (<>
-						<p className="m-0 text-orange">{t('manage_cv.status.pending')}</p>
-						<Icon path={mdiClockOutline} size={0.8} className="text-orange"/>
-					</>);
+					<p className="m-0 text-orange">{t('manage_cv.status.pending')}</p>
+					<Icon path={mdiClockOutline} size={0.8} className="text-orange"/>
+				</>);
 			} else if (currentCv.isApproved) {
 				return (<>
-						<p className="m-0 text-green">{t('manage_cv.status.approved')}</p>
-						<Icon path={mdiCheck} size={0.8} className="text-green"/>
-					</>);
+					<p className="m-0 text-green">{t('manage_cv.status.approved')}</p>
+					<Icon path={mdiCheck} size={0.8} className="text-green"/>
+				</>);
 			} else if (currentCv.isRefused) {
 				return (<>
-						<p className="m-0 text-red">{t('manage_cv.status.rejected')}</p>
-						<Icon path={mdiClose} size={0.8} className="text-red"/>
-					</>);
+					<p className="m-0 text-red">{t('manage_cv.status.rejected')}</p>
+					<Icon path={mdiClose} size={0.8} className="text-red"/>
+				</>);
 			}
 		}
 		return null;
@@ -98,55 +98,55 @@ const ManageCVs = () => {
 		if (cvs.length > 0) {
 			const lastCv = cvs[cvs.length - 1];
 			return (<>
-					<div className="toolbar-items">
-						<h4 className="m-0 toolbar-spacer"></h4>
-						<Link to="../upload-cv">
-							<button className="btn-filled">{t('manage_cv.buttons.add')}
-								<Icon
-									path={mdiFileUploadOutline} size={1}/></button>
-						</Link>
-					</div>
-					<br/>
-					<div className="menu-list">
-						<div onClick={() => handleCvSelection(lastCv)}>
-							<div
-								className={`menu-list-item ${currentCv && lastCv.id === currentCv.id ? "menu-list-item-selected" : ""}`}
-								style={{
-									width: "100%",
-									display: "flex",
-									padding: "0",
-									height: "170px",
-									boxSizing: "border-box"
-								}}>
-								<div style={{
-									backgroundColor: "rgb(206,206,206)",
-									padding: "10px 40px",
-									height: "100%",
-									boxSizing: "border-box",
-									borderRadius: "var(--border-radius) 0 0 var(--border-radius)"
-								}}>
-									<img src="/assets/dashboard/preview.png" alt="" style={{height: "100%"}}/>
-								</div>
-								<div style={{padding: "16px"}}>
-									<h4 className="m-0">{lastCv.filename}</h4>
-								</div>
+				<div className="toolbar-items">
+					<div className="m-0 toolbar-spacer"></div>
+					<Link to="../upload-cv">
+						<button className="btn-filled">{t('manage_cv.buttons.add')}
+							<Icon path={mdiFileUploadOutline} size={1}/>
+						</button>
+					</Link>
+				</div>
+				<br/>
+				<div className="menu-list">
+					<div onClick={() => handleCvSelection(lastCv)}>
+						<div
+							className={`menu-list-item ${currentCv && lastCv.id === currentCv.id ? "menu-list-item-selected" : ""}`}
+							style={{
+								width: "100%",
+								display: "flex",
+								padding: "0",
+								height: "170px",
+								boxSizing: "border-box"
+							}}>
+							<div style={{
+								backgroundColor: "rgb(206,206,206)",
+								padding: "10px 40px",
+								height: "100%",
+								boxSizing: "border-box",
+								borderRadius: "var(--border-radius) 0 0 var(--border-radius)"
+							}}>
+								<img src="/assets/dashboard/preview.png" alt="" style={{height: "100%"}}/>
+							</div>
+							<div style={{padding: "16px"}}>
+								<h4 className="m-0">{lastCv.filename}</h4>
 							</div>
 						</div>
 					</div>
-					<br/>
-					{cvs.length > 1 && (<>
-							<div className="menu-list">
-								{cvs.slice(0, -1).reverse().map((item, index) => (
-									<div key={index} onClick={() => handleCvSelection(item)}
-									     className={`menu-list-item ${currentCv && item.id === currentCv.id ? "menu-list-item-selected" : ""}`}>
-										<Icon path={mdiFileOutline} size={1}/>
-										<div>
-											<p className="m-0">{item.filename}</p>
-										</div>
-									</div>))}
-							</div>
-						</>)}
-				</>);
+				</div>
+				<br/>
+				{cvs.length > 1 && (<>
+					<div className="menu-list">
+						{cvs.slice(0, -1).reverse().map((item, index) => (
+							<div key={index} onClick={() => handleCvSelection(item)}
+							     className={`menu-list-item ${currentCv && item.id === currentCv.id ? "menu-list-item-selected" : ""}`}>
+								<Icon path={mdiFileOutline} size={1}/>
+								<div>
+									<p className="m-0">{item.filename}</p>
+								</div>
+							</div>))}
+					</div>
+				</>)}
+			</>);
 		}
 	};
 	
@@ -154,36 +154,36 @@ const ManageCVs = () => {
 	const getAppercu = () => {
 		if (currentCv) {
 			return (<div className="dashboard-card" style={{width: "35%"}}>
-					<div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
-						<h6 className="m-0">{t('manage_cv.titles.preview')}</h6>
-						<span className="toolbar-spacer"></span>
-						<button className="btn-icon" onClick={() => setCurrentCv(null)}>
-							<Icon path={mdiClose} size={1}/>
-						</button>
-					</div>
-					<PdfPreview height={300} file={currentCv.fileUrl}/>
-					<section>
-						<div className="toolbar-items" style={{padding: "0 10px"}}>
-							<div>
-								<h4 className="m-0">{currentCv.filename}</h4>
-								<p className="text-dark m-0">{(currentCv.fileSize / DIVISER_KB).toFixed(2)} kb</p>
-							</div>
-							<div className="toolbar-spacer"></div>
-							{getStatutElement()}
+				<div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
+					<h6 className="m-0">{t('manage_cv.titles.preview')}</h6>
+					<span className="toolbar-spacer"></span>
+					<button className="btn-icon" onClick={() => setCurrentCv(null)}>
+						<Icon path={mdiClose} size={1}/>
+					</button>
+				</div>
+				<PdfPreview height={300} file={currentCv.fileUrl}/>
+				<section>
+					<div className="toolbar-items" style={{padding: "0 10px"}}>
+						<div>
+							<h4 className="m-0">{currentCv.filename}</h4>
+							<p className="text-dark m-0">{(currentCv.fileSize / DIVISER_KB).toFixed(2)} kb</p>
 						</div>
-						<br/>
-						{currentCv.isRefused && (<p style={{
-								color: "red",
-								textAlign: "center"
-							}}>{currentCv.commentaireRefus}</p>)}
-						<a href={currentCv.fileUrl} download={currentCv.filename} className="btn-option">
-							<Icon path={mdiDownloadOutline} size={1}/>{t('manage_cv.buttons.download')}
-						</a>
-						<button className="btn-option" onClick={() => handleDeleteCv(currentCv.id)}>
-							<Icon path={mdiDeleteOutline} size={1}/>{t('manage_cv.buttons.delete')}
-						</button>
-					</section>
-				</div>);
+						<div className="toolbar-spacer"></div>
+						{getStatutElement()}
+					</div>
+					<br/>
+					{currentCv.isRefused && (<p style={{
+						color: "red",
+						textAlign: "center"
+					}}>{currentCv.commentaireRefus}</p>)}
+					<a href={currentCv.fileUrl} download={currentCv.filename} className="btn-option">
+						<Icon path={mdiDownloadOutline} size={1}/>{t('manage_cv.buttons.download')}
+					</a>
+					<button className="btn-option" onClick={() => handleDeleteCv(currentCv.id)}>
+						<Icon path={mdiDeleteOutline} size={1}/>{t('manage_cv.buttons.delete')}
+					</button>
+				</section>
+			</div>);
 		}
 		return null;
 	};
@@ -191,42 +191,42 @@ const ManageCVs = () => {
 	const getCvListSection = () => {
 		if (cvs.length === 0) {
 			return (<div className="dashboard-card" style={{width: "65%"}}>
-					<div className="dashboard-placeholder-card" style={{backgroundColor: "transparent"}}>
-						<div style={{textAlign: "center"}}>
-							<Icon path={mdiFileQuestionOutline} size={2}/>
-							<h6 style={{margin: "8px 0 14px 0"}}>{t('manage_cv.messages.no_cvs')}</h6>
-							<Link to="../upload-cv">
-								<button className="btn-filled">{t('manage_cv.buttons.add')}
-									<Icon
-										path={mdiFileUploadOutline} size={1}/>
-								</button>
-							</Link>
-						</div>
+				<div className="dashboard-placeholder-card" style={{backgroundColor: "transparent"}}>
+					<div style={{textAlign: "center"}}>
+						<Icon path={mdiFileQuestionOutline} size={2}/>
+						<h6 style={{margin: "8px 0 14px 0"}}>{t('manage_cv.messages.no_cvs')}</h6>
+						<Link to="../upload-cv">
+							<button className="btn-filled">{t('manage_cv.buttons.add')}
+								<Icon
+									path={mdiFileUploadOutline} size={1}/>
+							</button>
+						</Link>
 					</div>
-				</div>);
+				</div>
+			</div>);
 		} else {
 			return (<div className="dashboard-card" style={{width: "65%"}}>
-					<section>
-						{getCvList()}
-					</section>
-				</div>);
+				<section>
+					{getCvList()}
+				</section>
+			</div>);
 		}
 	};
 	
 	return (<>
-			<div className="dashboard-card-toolbar">
-				<Link to="/dashboard">
-					<button className="btn-icon-dashboard">
-						<Icon path={mdiArrowLeft} size={1.4}/>
-					</button>
-				</Link>
-				<h1>{t('manage_cv.titles.cvs')}</h1>
-			</div>
-			<div style={{display: "flex", gap: "20px", alignItems: "start"}}>
-				{getCvListSection()}
-				{getAppercu()}
-			</div>
-		</>);
+		<div className="dashboard-card-toolbar">
+			<Link to="/dashboard">
+				<button className="btn-icon-dashboard">
+					<Icon path={mdiArrowLeft} size={1.4}/>
+				</button>
+			</Link>
+			<h1>{t('manage_cv.titles.cvs')}</h1>
+		</div>
+		<div style={{display: "flex", gap: "20px", alignItems: "start"}}>
+			{getCvListSection()}
+			{getAppercu()}
+		</div>
+	</>);
 };
 
 export default ManageCVs;

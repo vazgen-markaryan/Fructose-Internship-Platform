@@ -305,7 +305,7 @@ header {
     box-sizing: border-box;
     border: 1px solid grey;
     border-radius: var(--border-radius);
-    z-index: 10;
+    z-index: 100;
     color: black;
 }
 
