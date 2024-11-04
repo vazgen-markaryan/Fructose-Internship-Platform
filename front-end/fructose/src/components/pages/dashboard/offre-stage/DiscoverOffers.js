@@ -29,7 +29,7 @@ const DiscoverOffers = () => {
 	const [filterCount, setFilterCount] = useState(0)
 	const [filteredOffers, setFilteredOffers] = useState(null)
 	
-	const creeateSessionList = () => {
+	const createSessionList = () => {
 		const sessions = [];
 		for (const offer of offers) {
 			const dateDebut = new Date(offer.dateDebut);
@@ -46,7 +46,7 @@ const DiscoverOffers = () => {
 		}
 		return sessions;
 	}
-	const sessions = creeateSessionList();
+	const sessions = createSessionList();
 	
 	const [filters, setFilters] = useState(
 		{
@@ -80,11 +80,11 @@ const DiscoverOffers = () => {
 				idName: "type",
 				icon: mdiBriefcaseOutline,
 				fields: [
-					{
-						type: "radio",
-						label: "Tous",
-						value: "tous"
-					},
+					// {
+					// 	type: "radio",
+					// 	label: "Tous",
+					// 	value: "tous"
+					// },
 					{
 						type: "radio",
 						label: "Temps Partiel",
@@ -102,11 +102,11 @@ const DiscoverOffers = () => {
 				idName: "emplacement",
 				icon: mdiDomain,
 				fields: [
-					{
-						type: "radio",
-						label: "Tous",
-						value: "tous"
-					},
+					// {
+					// 	type: "radio",
+					// 	label: "Tous",
+					// 	value: "tous"
+					// },
 					{
 						type: "radio",
 						label: "Presentiel",
@@ -142,11 +142,11 @@ const DiscoverOffers = () => {
 				idName: "sessions",
 				icon: mdiSchool,
 				fields: [
-					{
-						type: "radio",
-						label: "Tous",
-						value: "tous"
-					},
+					// {
+					// 	type: "radio",
+					// 	label: "Tous",
+					// 	value: "tous"
+					// },
 				]
 			}
 		]
