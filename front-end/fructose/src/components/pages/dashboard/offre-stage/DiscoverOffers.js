@@ -17,6 +17,7 @@ import {
 	mdiFilterMultipleOutline,
 	mdiSchool
 } from "@mdi/js";
+import ApplyOffreWindow from "./ApplyOffreWindow";
 
 
 const DiscoverOffers = () => {
@@ -455,6 +456,8 @@ const DiscoverOffers = () => {
 	
 	return (
 		<>
+			<ApplyOffreWindow>TEMPORAIRE</ApplyOffreWindow>
+
 			<div className="dashboard-card-toolbar">
 				<Link to="/dashboard">
 					<button className="btn-icon-dashboard">
