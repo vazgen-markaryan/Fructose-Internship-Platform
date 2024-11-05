@@ -1,7 +1,7 @@
 package fructose.auth;
 
 import fructose.model.auth.Credentials;
-import fructose.model.auth.Role;
+import fructose.model.enumerator.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -14,10 +14,10 @@ class CredentialsTest {
 	@Test
 	void testGetAuthorities() {
 		Credentials credentials = Credentials.builder()
-				.email("test@example.com")
-				.password("Password1!")
-				.role(Role.ETUDIANT)
-				.build();
+			.email("test@example.com")
+			.password("Password1!")
+			.role(Role.ETUDIANT)
+			.build();
 		
 		Collection<? extends GrantedAuthority> authorities = credentials.getAuthorities();
 		assertNotNull(authorities);
@@ -28,10 +28,10 @@ class CredentialsTest {
 	@Test
 	void testGetPassword() {
 		Credentials credentials = Credentials.builder()
-				.email("test@example.com")
-				.password("Password1!")
-				.role(Role.ETUDIANT)
-				.build();
+			.email("test@example.com")
+			.password("Password1!")
+			.role(Role.ETUDIANT)
+			.build();
 		
 		assertEquals("Password1!", credentials.getPassword());
 	}
@@ -39,10 +39,10 @@ class CredentialsTest {
 	@Test
 	void testGetUsername() {
 		Credentials credentials = Credentials.builder()
-				.email("test@example.com")
-				.password("Password1!")
-				.role(Role.ETUDIANT)
-				.build();
+			.email("test@example.com")
+			.password("Password1!")
+			.role(Role.ETUDIANT)
+			.build();
 		
 		assertEquals("test@example.com", credentials.getUsername());
 	}
@@ -50,10 +50,10 @@ class CredentialsTest {
 	@Test
 	void testIsAccountNonExpired() {
 		Credentials credentials = Credentials.builder()
-				.email("test@example.com")
-				.password("Password1!")
-				.role(Role.ETUDIANT)
-				.build();
+			.email("test@example.com")
+			.password("Password1!")
+			.role(Role.ETUDIANT)
+			.build();
 		
 		assertTrue(credentials.isAccountNonExpired());
 	}
@@ -61,10 +61,10 @@ class CredentialsTest {
 	@Test
 	void testIsAccountNonLocked() {
 		Credentials credentials = Credentials.builder()
-				.email("test@example.com")
-				.password("Password1!")
-				.role(Role.ETUDIANT)
-				.build();
+			.email("test@example.com")
+			.password("Password1!")
+			.role(Role.ETUDIANT)
+			.build();
 		
 		assertTrue(credentials.isAccountNonLocked());
 	}
@@ -72,10 +72,10 @@ class CredentialsTest {
 	@Test
 	void testIsCredentialsNonExpired() {
 		Credentials credentials = Credentials.builder()
-				.email("test@example.com")
-				.password("Password1!")
-				.role(Role.ETUDIANT)
-				.build();
+			.email("test@example.com")
+			.password("Password1!")
+			.role(Role.ETUDIANT)
+			.build();
 		
 		assertTrue(credentials.isCredentialsNonExpired());
 	}
@@ -83,10 +83,10 @@ class CredentialsTest {
 	@Test
 	void testIsEnabled() {
 		Credentials credentials = Credentials.builder()
-				.email("test@example.com")
-				.password("Password1!")
-				.role(Role.ETUDIANT)
-				.build();
+			.email("test@example.com")
+			.password("Password1!")
+			.role(Role.ETUDIANT)
+			.build();
 		
 		assertTrue(credentials.isEnabled());
 	}
@@ -94,10 +94,10 @@ class CredentialsTest {
 	@Test
 	void testToString() {
 		Credentials credentials = Credentials.builder()
-				.email("test@example.com")
-				.password("Password1!")
-				.role(Role.ETUDIANT)
-				.build();
+			.email("test@example.com")
+			.password("Password1!")
+			.role(Role.ETUDIANT)
+			.build();
 		
 		String expected = "Credentials(email=test@example.com, password=Password1!, role=ETUDIANT)";
 		assertEquals(expected, credentials.toString());

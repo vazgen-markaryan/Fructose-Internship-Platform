@@ -1,5 +1,6 @@
 package fructose.model.auth;
 
+import fructose.model.enumerator.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;

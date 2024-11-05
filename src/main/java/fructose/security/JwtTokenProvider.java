@@ -1,5 +1,6 @@
 package fructose.security;
 
+import fructose.security.exception.InvalidJwtTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import fructose.security.exception.InvalidJwtTokenException;
 
 import java.security.Key;
 import java.util.Date;

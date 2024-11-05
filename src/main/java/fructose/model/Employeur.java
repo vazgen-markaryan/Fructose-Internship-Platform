@@ -1,6 +1,6 @@
 package fructose.model;
 
-import fructose.model.auth.Role;
+import fructose.model.enumerator.Role;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package fructose.model.auth;
+package fructose.model.enumerator;
 
 import java.util.HashSet;
 import java.util.Set;

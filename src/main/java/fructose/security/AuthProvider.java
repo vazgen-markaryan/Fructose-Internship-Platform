@@ -1,8 +1,8 @@
 package fructose.security;
 
-import fructose.security.exception.AuthenticationException;
 import fructose.model.Utilisateur;
 import fructose.repository.UtilisateurRepository;
+import fructose.security.exception.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -52,7 +52,7 @@ public class AuthProvider implements AuthenticationProvider {
 		return userAppRepository.findByEmail(email);
 	}
 	
-	//TODO: Il dit unutilisé mais je ne sais pas si je peux le supprimer donc on le laisse
+	//TODO: Il dit unused mais je ne sais pas si je peux le supprimer donc on le laisse
 	private void validateAuthentication(Authentication authentication, Utilisateur user) {
 		if (!passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword())) {
 			throw new AuthenticationException(HttpStatus.FORBIDDEN, "Incorrect username or password");

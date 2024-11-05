@@ -2,9 +2,12 @@ package fructose.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import fructose.model.auth.Credentials;
-import fructose.model.auth.Role;
+import fructose.model.enumerator.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 

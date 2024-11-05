@@ -62,7 +62,7 @@ public class OffreStageControllerTest {
 	void testCreerOffreStageInvalide() {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		when(bindingResult.getFieldErrors()).thenReturn(
-				List.of(new FieldError("offreStageDTO", "nom", "Le nom n'est pas valide"))
+			List.of(new FieldError("offreStageDTO", "nom", "Le nom n'est pas valide"))
 		);
 		
 		ResponseEntity<?> response = offreStageController.creerOffreStage("token", offreStageDTO, bindingResult);
@@ -284,5 +284,31 @@ public class OffreStageControllerTest {
 		// Vérification de la réponse en cas d'exception inattendue
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 		assertEquals("Une erreur inattendue s'est produite.", response.getBody());
+	}
+	
+	@Test
+	void testApprouverOffreStageSuccess() {
+		Long offreStageId = 1L;
+		
+		doNothing().when(offreStageService).approuverOffreStage(offreStageId);
+		
+		ResponseEntity<String> response = offreStageController.approuverOffreStage(offreStageId);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals("Offre de stage approuvée avec succès !", response.getBody());
+		verify(offreStageService, times(1)).approuverOffreStage(offreStageId);
+	}
+	
+	@Test
+	void testApprouverOffreStageException() {
+		Long offreStageId = 1L;
+		
+		doThrow(new RuntimeException("Unexpected error")).when(offreStageService).approuverOffreStage(offreStageId);
+		
+		ResponseEntity<String> response = offreStageController.approuverOffreStage(offreStageId);
+		
+		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+		assertEquals("Erreur lors de l'approbation de l'offre de stage.", response.getBody());
+		verify(offreStageService, times(1)).approuverOffreStage(offreStageId);
 	}
 }

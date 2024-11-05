@@ -70,14 +70,11 @@ public class OffreStageService {
 			throw new IllegalArgumentException("L'offre de stage avec l'ID: " + offreStageDTO.getId() + " n'existe pas, alors il ne peut pas être mis à jour");
 		}
 		
-		OffreStage existingOffreStage = offreStageRepository.findById(offreStageDTO.getId())
-				.orElseThrow(() -> new IllegalArgumentException("OffreStage not found"));
+		OffreStage existingOffreStage = offreStageRepository.findById(offreStageDTO.getId()).orElseThrow(() -> new IllegalArgumentException("OffreStage not found"));
 		
-		Departement departement = departementRepository.findById(offreStageDTO.getDepartementDTO().getId())
-				.orElseThrow(() -> new IllegalArgumentException("Le département ne peut pas être nul"));
+		Departement departement = departementRepository.findById(offreStageDTO.getDepartementDTO().getId()).orElseThrow(() -> new IllegalArgumentException("Le département ne peut pas être nul"));
 		
-		Utilisateur owner = employeurRepository.findById(offreStageDTO.getOwnerDTO().getId())
-				.orElseThrow(() -> new IllegalArgumentException("Owner not found"));
+		Utilisateur owner = employeurRepository.findById(offreStageDTO.getOwnerDTO().getId()).orElseThrow(() -> new IllegalArgumentException("Owner not found"));
 		
 		existingOffreStage.setNom(offreStageDTO.getNom());
 		existingOffreStage.setPoste(offreStageDTO.getPoste());
@@ -99,8 +96,7 @@ public class OffreStageService {
 		existingOffreStage.setIsApproved(offreStageDTO.getIsApproved());
 		offreStageRepository.save(existingOffreStage);
 	}
-	
-	
+
 	public void deleteOffreStage(Long id) {
 		if (id == null) {
 			throw new IllegalArgumentException("ID ne peut pas être nul");
@@ -141,6 +137,9 @@ public class OffreStageService {
 	public List<OffreStageDTO> getOffresStage() {
 		Utilisateur utilisateur = getUtilisateurEnCours();
 		List<OffreStageDTO> offresStage;
+		if (utilisateur.getRole() == null) {
+			throw new IllegalArgumentException("Le role de l'utilisateur ne peut pas être nul");
+		}
 		switch (utilisateur.getRole()) {
 			case ADMIN -> {
 				offresStage = OffreStageDTO.toDTOs(offreStageRepository.findAll());
@@ -155,14 +154,20 @@ public class OffreStageService {
 					throw new IllegalArgumentException("Aucune offre de stage trouvée pour l'employeur avec l'email: " + utilisateur.getEmail());
 				}
 			}
+			case PROFESSEUR -> {
+				offresStage = OffreStageDTO.toDTOs(offreStageRepository.findByUserDepartementAndIsApproved(utilisateur.getDepartement().getId()));
+				if (offresStage.isEmpty()) {
+					throw new IllegalArgumentException("Aucune offre de stage approuvée trouvée pour le professeur dans le département: " + utilisateur.getDepartement());
+				}
+			}
 			case ETUDIANT -> {
-				offresStage = OffreStageDTO.toDTOs(offreStageRepository.findByUserDepartement(utilisateur.getDepartement().getId()));
+				offresStage = OffreStageDTO.toDTOs(offreStageRepository.findByUserDepartementAndIsApproved(utilisateur.getDepartement().getId()));
 				if (offresStage.isEmpty()) {
 					throw new IllegalArgumentException("Aucune offre de stage trouvée pour l'étudiant dans le département: " + utilisateur.getDepartement());
 				}
 			}
 			default ->
-					throw new IllegalArgumentException("Aucune offre de stage n'a été trouvée pour le role inconnue");
+				throw new IllegalArgumentException("Aucune offre de stage n'a été trouvée pour le role inconnue");
 		}
 		return offresStage;
 	}

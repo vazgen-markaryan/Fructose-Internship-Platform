@@ -1,19 +1,19 @@
 package fructose.controller;
 
+import fructose.service.OffreStageService;
 import fructose.service.UtilisateurService;
 import fructose.service.dto.OffreStageDTO;
-import fructose.service.OffreStageService;
 import fructose.service.dto.UtilisateurDTO;
 import jakarta.validation.Valid;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,14 +32,14 @@ public class OffreStageController {
 		this.utilisateurService = utilisateurService;
 	}
 	
-	@PostMapping("/creer-offre-stage")
-	public ResponseEntity<?> creerOffreStage(@RequestHeader("Authorization") String token, @RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
+	@PostMapping ("/creer-offre-stage")
+	public ResponseEntity<?> creerOffreStage(@RequestHeader ("Authorization") String token, @RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
 		UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
 		offreStageDTO.setOwnerDTO(utilisateurDTO);
 		if (result.hasErrors()) {
 			String errorMessages = result.getFieldErrors().stream()
-					.map(DefaultMessageSourceResolvable::getDefaultMessage)
-					.collect(Collectors.joining(", "));
+				.map(DefaultMessageSourceResolvable::getDefaultMessage)
+				.collect(Collectors.joining(", "));
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
 		}
 		try {
@@ -59,14 +59,14 @@ public class OffreStageController {
 		}
 	}
 	
-	@PutMapping("/modifier-offre-stage")
-	public ResponseEntity<?> modifierOffreStage(@RequestHeader("Authorization") String token, @RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
+	@PutMapping ("/modifier-offre-stage")
+	public ResponseEntity<?> modifierOffreStage(@RequestHeader ("Authorization") String token, @RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
 		
 		if (result.hasErrors()) {
 			// Collect validation error messages into a list and return as JSON
 			List<String> errorMessages = result.getFieldErrors().stream()
-					.map(DefaultMessageSourceResolvable::getDefaultMessage)
-					.collect(Collectors.toList());
+				.map(DefaultMessageSourceResolvable::getDefaultMessage)
+				.collect(Collectors.toList());
 			Map<String, Object> errorResponse = new HashMap<>();
 			errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
 			errorResponse.put("errors", errorMessages);
@@ -102,7 +102,7 @@ public class OffreStageController {
 		}
 	}
 	
-	@GetMapping("/get-offre-stage")
+	@GetMapping ("/get-offre-stage")
 	public ResponseEntity<?> getOffreStage() {
 		try {
 			return ResponseEntity.ok(offreStageService.getOffresStage());
@@ -114,7 +114,7 @@ public class OffreStageController {
 		}
 	}
 	
-	@GetMapping("/get-offre-stage/{id}")
+	@GetMapping ("/get-offre-stage/{id}")
 	public ResponseEntity<?> getOffreStageById(@PathVariable Long id) {
 		try {
 			return ResponseEntity.ok(offreStageService.getOffreStageById(id));
@@ -124,7 +124,7 @@ public class OffreStageController {
 		}
 	}
 	
-	@DeleteMapping("/delete-offre-stage/{id}")
+	@DeleteMapping ("/delete-offre-stage/{id}")
 	public ResponseEntity<?> deleteOffreStage(@PathVariable Long id) {
 		try {
 			offreStageService.deleteOffreStage(id);
@@ -135,7 +135,7 @@ public class OffreStageController {
 		}
 	}
 	
-	@PostMapping("/refuser-offre-stage/{id}")
+	@PostMapping ("/refuser-offre-stage/{id}")
 	public ResponseEntity<String> refuserOffreStage(@PathVariable Long id, @RequestBody String commentaireRefus) {
 		try {
 			offreStageService.refuserOffreStage(id, commentaireRefus);

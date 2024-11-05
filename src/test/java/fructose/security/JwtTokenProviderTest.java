@@ -53,11 +53,11 @@ class JwtTokenProviderTest {
 		Key key = (Key) keyMethod.invoke(jwtTokenProvider);
 		
 		String expiredToken = Jwts.builder()
-				.setSubject("user@example.com")
-				.setIssuedAt(new Date(System.currentTimeMillis() - 3600000))
-				.setExpiration(new Date(System.currentTimeMillis() - 1800000))
-				.signWith(key, SignatureAlgorithm.HS512)
-				.compact();
+			.setSubject("user@example.com")
+			.setIssuedAt(new Date(System.currentTimeMillis() - 3600000))
+			.setExpiration(new Date(System.currentTimeMillis() - 1800000))
+			.signWith(key, SignatureAlgorithm.HS512)
+			.compact();
 		
 		InvalidJwtTokenException exception = assertThrows(InvalidJwtTokenException.class, () -> {
 			jwtTokenProvider.validateToken(expiredToken);
@@ -88,9 +88,9 @@ class JwtTokenProviderTest {
 		PrivateKey privateKey = keyPair.getPrivate();
 		
 		String unsupportedToken = Jwts.builder()
-				.setPayload("{ \"sub\": \"user@example.com\" }")
-				.signWith(privateKey, SignatureAlgorithm.RS256)  // Use an unsupported algorithm
-				.compact();
+			.setPayload("{ \"sub\": \"user@example.com\" }")
+			.signWith(privateKey, SignatureAlgorithm.RS256)  // Use an unsupported algorithm
+			.compact();
 		
 		InvalidJwtTokenException exception = assertThrows(InvalidJwtTokenException.class, () -> {
 			jwtTokenProvider.validateToken(unsupportedToken);

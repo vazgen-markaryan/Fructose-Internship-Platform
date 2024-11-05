@@ -2,6 +2,7 @@ package fructose.security;
 
 import fructose.model.Utilisateur;
 import fructose.model.auth.Credentials;
+import fructose.model.enumerator.Role;
 import fructose.repository.UtilisateurRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -10,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.context.SecurityContextHolder;
-import fructose.model.auth.Role;
 
 import java.io.IOException;
 

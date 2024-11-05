@@ -6,8 +6,8 @@ import { mdiChevronLeft, mdiChevronRight, mdiFileAlertOutline, mdiFullscreen, md
 import { useTranslation } from "react-i18next";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.mjs',
-    import.meta.url,
+	'pdfjs-dist/build/pdf.worker.min.mjs',
+	import.meta.url,
 ).toString();
 
 const PdfPreview = ({ file, height = 500 }) => {

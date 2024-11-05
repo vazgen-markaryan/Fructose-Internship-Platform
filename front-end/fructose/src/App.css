@@ -72,7 +72,7 @@ p.text-mini{
 hr {
     border: none;
     border-top: 1px solid rgba(128, 128, 128, 0.5);
-    margin: 15px 0px
+    margin: 15px 16px
 }
 
 label{
@@ -111,7 +111,7 @@ label{
 
 button {
     border: none;
-    color: black;
+    color: inherit;
     line-height: 36px;
     font-size: 16px;
     padding: 0 12px;
@@ -305,7 +305,7 @@ header {
     box-sizing: border-box;
     border: 1px solid grey;
     border-radius: var(--border-radius);
-    z-index: 10;
+    z-index: 100;
     color: black;
 }
 
@@ -396,7 +396,7 @@ header {
     width: 100%;
     margin: auto;
     box-sizing: border-box;
-    background-color: rgb(240, 246, 246);
+    background-color: rgb(220, 230, 230);
     height: 100vh;
     overflow-y: auto;
 }
@@ -413,7 +413,7 @@ header {
 .dashboard-head {
     width: 100%;
     height: 380px;
-    background: linear-gradient(to top, rgb(240, 246, 246) 10%, rgba(130, 130, 130, 0) 70%), linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/public/assets/dashboard/dash-head.jpg') center / cover, linear-gradient(#ffffff, transparent);
+    background: linear-gradient(to top, rgb(220, 230, 230) 10%, rgba(130, 130, 130, 0) 70%), linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/public/assets/dashboard/dash-head.jpg') center / cover, linear-gradient(#ffffff, transparent);
 }
 
 .dashboard-card {
@@ -506,6 +506,10 @@ section {
     width: 100%;
     padding: 20px 16px;
     box-sizing: border-box;
+}
+
+section.nospace{
+    padding: 2px 16px;
 }
 
 .loading-placeholder {
@@ -673,7 +677,7 @@ section {
 
 .user-profile-section {
     width: 100%;
-    height: 128px;
+    height: 132px;
     position: relative;
     padding-bottom: 20px;
 }
@@ -746,6 +750,33 @@ tr {
 
 .expandable.expanded{
     height: auto;
+}
+
+.card {
+    border-radius: var(--border-radius);
+    border: 1px solid #d1d1d1;
+}
+
+.card > .card-image{
+    height: 160px;
+    width: 100%;
+    background-color: grey;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    position: relative;
+    background: url('/public/assets/offers/default-company-banner.jpg') center / cover, linear-gradient(#eeeeee, #eeeeee);
+
+}
+
+.card > .card-image > h5{
+    font-weight: 300;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: white;
+}
+
+.card > .card-content{
+    padding: 10px 8px;
 }
 
 

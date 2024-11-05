@@ -1,14 +1,14 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
-    mdiArrowLeft,
-    mdiCheck,
-    mdiClose,
-    mdiFileOutline,
-    mdiClockOutline,
-    mdiFileUploadOutline,
-    mdiDownloadOutline,
-    mdiDeleteOutline,
-    mdiFileQuestionOutline
+	mdiArrowLeft,
+	mdiCheck,
+	mdiClockOutline,
+	mdiClose,
+	mdiDeleteOutline,
+	mdiDownloadOutline,
+	mdiFileOutline,
+	mdiFileQuestionOutline,
+	mdiFileUploadOutline
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../../../providers/AuthProvider";
