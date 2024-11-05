@@ -380,6 +380,10 @@
 		"particularities": "Particularités",
 		"salary": "Salaire",
 		"internship_type": "Type de stage",
+		"approved": "Approuver",
+		"refused": "Refuser",
+		"pending": "En attente",
+		"refusal_reason": "Raison du refus : ",
 		"hours_one": "{{count}} Heure",
 		"hours_other": "{{count}} Heures",
 		"types_emploi": {

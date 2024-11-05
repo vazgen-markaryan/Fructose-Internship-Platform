@@ -4,7 +4,7 @@ import {
 	mdiBriefcaseOutline,
 	mdiCalendarOutline,
 	mdiCashMultiple,
-	mdiCheck,
+	mdiCheck, mdiClockOutline, mdiClose,
 	mdiDeleteOutline,
 	mdiDomain,
 	mdiMapMarkerOutline
@@ -67,19 +67,46 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 								<p className="text-dark m-0">{currentOffer.ownerDTO.companyName}</p>
 							</div>
 							<div className="toolbar-spacer"></div>
-								{currentUser.role === "ETUDIANT" ? (
-									<button className="btn-filled">{t("discover_offers_page.apply")}</button>
-								) : currentUser.role === "ADMIN" ? (
-									<div style={{display: "flex", justifyContent: "center", gap: "10px"}}>
-										<button className="btn-filled" onClick={() => handleValidate(currentOffer.id)}>
-											{t("modal.validate")}
-										</button>
-										<button className="btn-outline" onClick={() => setRejectModalOpen(true)}>
-											{t("modal.reject")}
-										</button>
-									</div>
-								) : null}
+							{currentUser.role === "ETUDIANT" ? (
+								<button className="btn-filled">{t("discover_offers_page.apply")}</button>
+							) : currentUser.role === "ADMIN" ? (
+								<div style={{display: "flex", justifyContent: "center", gap: "10px"}}>
+									<button className="btn-filled" onClick={() => handleValidate(currentOffer.id)}>
+										{t("modal.validate")}
+									</button>
+									<button className="btn-outline" onClick={() => setRejectModalOpen(true)}>
+										{t("modal.reject")}
+									</button>
+								</div>
+							) : null}
+							{
+								<div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+									{currentOffer.isApproved ? (
+										<>
+											<Icon path={mdiCheck} size={0.75} color="green" />
+											<span>{t("discover_offers_page.approved")}</span>
+										</>
+									) : currentOffer.isRefused ? (
+										<>
+											<Icon path={mdiClose} size={1} color="red" />
+											<span>{t("discover_offers_page.refused")}</span>
+										</>
+									) : (
+										<>
+											<span>{t("discover_offers_page.pending")}</span>
+											<Icon path={mdiClockOutline} size={1} color="orange" />
+										</>
+									)}
+								</div>
+							}
 						</div>
+						{currentOffer.isRefused && (
+							<p style={{
+								color: "red",
+								textAlign: "center",
+								marginTop: "10px"
+							}}>{t("discover_offers_page.refusal_reason")}{currentOffer.commentaireRefus}</p>
+						)}
 					</section>
 					<hr/>
 					<div style={{overflowY: "auto"}}>
@@ -171,20 +198,13 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 
 								{currentUser && currentUser.role === "EMPLOYEUR" && (
 									<>
-										{currentOffer.isRefused && (
-											<p style={{
-												color: "red",
-												textAlign: "center"
-											}}>{currentOffer.commentaireRefus}</p>
-										)}
 										<button className="btn-option"
 												onClick={() => navigate(`/dashboard/modifier-offre-stage/${currentOffer.id}`)}>
 											<Icon path={mdiCheck} size={1}/>{t('manage_offre_stage.buttons.modify')}
 										</button>
 										<button className="btn-option"
 												onClick={() => handleDeleteOffreStage(currentOffer.id)}>
-											<Icon path={mdiDeleteOutline}
-												  size={1}/>{t('manage_offre_stage.buttons.delete')}
+											<Icon path={mdiDeleteOutline} size={1}/>{t('manage_offre_stage.buttons.delete')}
 										</button>
 									</>
 								)}

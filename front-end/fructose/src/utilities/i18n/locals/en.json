@@ -379,6 +379,10 @@
 		"particularities": "Particularities",
 		"salary": "Salary",
 		"internship_type": "Internship Type",
+		"approved": "Approved",
+		"refused": "Refused",
+		"pending": "Pending",
+		"refusal_reason": "Refusal Reason : ",
 		"hours_one": "{{count}} Hour",
 		"hours_other": "{{count}} Hours",
 		"types_emploi": {
