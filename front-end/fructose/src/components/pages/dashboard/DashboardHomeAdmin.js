@@ -187,13 +187,24 @@ const DashboardHome = ({}) => {
 
 
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const selectedOffresStage = offresStage.filter(offre => !offre.isApproved && !offre.isRefused)
-        .slice(startIndex, startIndex + itemsPerPage);
-    const totalPages = Math.ceil(selectedOffresStage.filter(offre => !offre.isApproved && !offre.isRefused).length / itemsPerPage);
+    const endIndex = startIndex + itemsPerPage;
+
+    let selectedOffresStage = offresStage.filter(offre => !offre.isApproved && !offre.isRefused)
+        .slice(startIndex, endIndex);
+
+    const totalPages = Math.ceil(offresStage.filter(offre => !offre.isApproved && !offre.isRefused).length / itemsPerPage);
+
+    if (selectedOffresStage.length === 0 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+    }
 
     const startIndexCvs = (currentPageCv - 1) * itemsPerPage;
     const selectedCvs = allCvs.filter(cv => !cv.isApproved && !cv.isRefused).slice(startIndexCvs, startIndexCvs + itemsPerPage);
-    const totalPagesCv = Math.ceil(selectedCvs.length / itemsPerPage);
+    const totalPagesCv = Math.ceil(allCvs.filter(cv => !cv.isApproved && !cv.isRefused).length / itemsPerPage);
+
+    if (selectedCvs.length === 0 && currentPageCv > 1) {
+        setCurrentPageCv(currentPageCv - 1);
+    }
 
     function Modal({ children, onClose }) {
         return (

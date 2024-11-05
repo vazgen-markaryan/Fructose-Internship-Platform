@@ -92,8 +92,8 @@ public class OffreStageService {
 		existingOffreStage.setNombrePostes(offreStageDTO.getNombrePostes());
 		existingOffreStage.setDateLimiteCandidature(offreStageDTO.getDateLimiteCandidature());
 		existingOffreStage.setOwner(owner);
-		existingOffreStage.setIsRefused(offreStageDTO.getIsRefused());
-		existingOffreStage.setIsApproved(offreStageDTO.getIsApproved());
+		existingOffreStage.setIsRefused(false);
+		existingOffreStage.setIsApproved(false);
 		offreStageRepository.save(existingOffreStage);
 	}
 
