@@ -220,7 +220,7 @@ const DashboardHome = ({}) => {
     return (
         <section>
             <div className="toolbar-items">
-                <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.offers")}</h4>
+                <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.manage_offers")}</h4>
             </div>
             <div style={{padding: "10px 0"}}>
                 {selectedOffresStage.length === 0 ? (
@@ -295,7 +295,7 @@ const DashboardHome = ({}) => {
                 </div>
             </div>
             <div className="toolbar-items">
-                <h4 className="m-0 toolbar-spacer">Cv</h4>
+                <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.manage_cv")}</h4>
             </div>
             <div style={{padding: "10px 0"}}>
                 {selectedCvs.length === 0 ? (
