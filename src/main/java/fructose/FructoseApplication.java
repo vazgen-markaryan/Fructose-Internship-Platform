@@ -211,7 +211,7 @@ public class FructoseApplication implements CommandLineRunner {
 	public void approuverOffresStage(Long... offreIds) {
 		for (Long offreStageId : offreIds) {
 			try {
-				offreStageService.approuverOffreStage(offreStageId);
+				offreStageService.accepterOffreStage(offreStageId);
 				System.out.println("OFFRE STAGE avec le nom \"" + offreStageService.getOffreStageById(offreStageId).getNom() + "\" approuvée avec succès !");
 			} catch (Exception e) {
 				logger.error("Erreur lors de l'approbation de l'offre de stage avec ID {}", offreStageId, e);
