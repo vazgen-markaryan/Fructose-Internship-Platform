@@ -188,6 +188,14 @@
 			"type_emploi_select": "Le type d'emploi doit être sélectionné"
 		}
 	},
+	"modal" : {
+		"validate": "Accepter",
+		"reject": "Rejeter",
+		"reject_reason" : "Raison du refus",
+		"reject_reason_placeholder" : "Entrez le commentaire du refus ici",
+		"send" : "Envoyer",
+		"close" : "Fermer"
+	},
 	"dashboard_home_page": {
 		"home": "Accueil",
 		"offer": "Offres de stage",
@@ -209,7 +217,8 @@
 		"role": "Rôle",
 		"user_management": "Gestion des utilisateurs",
 		"not_approved_users": "Utilisateurs non approuvés",
-		"limited_places": "Places limitées"
+		"limited_places": "Places limitées",
+		"modalFermer": "Fermer"
 	},
 	"pdf_view_page": {
 		"error": "Une erreur inconnue est survenue"

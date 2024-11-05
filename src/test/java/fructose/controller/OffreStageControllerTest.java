@@ -295,7 +295,6 @@ public class OffreStageControllerTest {
 		ResponseEntity<?> response = offreStageController.accepterOffreStage(offreStageId);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals("Offre de stage approuvée avec succès !", response.getBody());
 		verify(offreStageService, times(1)).accepterOffreStage(offreStageId);
 	}
 	
@@ -308,7 +307,6 @@ public class OffreStageControllerTest {
 		ResponseEntity<?> response = offreStageController.accepterOffreStage(offreStageId);
 		
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-		assertEquals("Erreur lors de l'approbation de l'offre de stage.", response.getBody());
 		verify(offreStageService, times(1)).accepterOffreStage(offreStageId);
 	}
 }

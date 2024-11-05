@@ -188,6 +188,14 @@
 			"type_emploi_select": "The type of employment must be selected"
 		}
 	},
+	"modal": {
+		"validate": "Validate",
+		"reject": "Reject",
+		"reject_reason": "Reason for rejection",
+		"reject_reason_placeholder": "Enter the reason for rejection",
+		"send": "Send",
+		"close": "Close"
+	},
 	"dashboard_home_page": {
 		"home": "Home",
 		"offer": "Internship Offers",

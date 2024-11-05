@@ -34,7 +34,7 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 				<div className="modal-overlay">
 					<div className="modal-content" style={{pointerEvents: "auto"}}>
 						{children}
-						<button onClick={onClose}>Fermer</button>
+						<button onClick={onClose}>{t("modal.close")}</button>
 					</div>
 				</div>
 			);
@@ -72,10 +72,10 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 								) : currentUser.role === "ADMIN" ? (
 									<div style={{display: "flex", justifyContent: "center", gap: "10px"}}>
 										<button className="btn-filled" onClick={() => handleValidate(currentOffer.id)}>
-											{t("creer_offre_stage_page.validate")}
+											{t("modal.validate")}
 										</button>
 										<button className="btn-outline" onClick={() => setRejectModalOpen(true)}>
-											{t("creer_offre_stage_page.reject")}
+											{t("modal.reject")}
 										</button>
 									</div>
 								) : null}
@@ -194,10 +194,10 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 				</div>
 				{isRejectModalOpen && (
 					<Modal onClose={() => setRejectModalOpen(false)}>
-						<h4>{t("creer_offre_stage_page.reject_reason")}</h4>
+						<h4>{t("modal.reject_reason")}</h4>
 						<textarea
 							ref={textareaRef}
-							placeholder="Entrez le commentaire de refus ici..."
+							placeholder={t("modal.reject_reason_placeholder")}
 							style={{width: "100%", height: "100px"}}
 						/>
 						<button onClick={() => {
@@ -205,7 +205,7 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 							textareaRef.current.value = "";
 							setRejectModalOpen(false);
 						}} className="btn-filled">
-							Envoyer
+							{t("modal.send")}
 						</button>
 					</Modal>
 				)}
