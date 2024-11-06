@@ -15,9 +15,9 @@ import {
 	mdiChevronUp,
 	mdiDomain,
 	mdiFilterMultipleOutline,
-	mdiSchool
+	mdiSchool, mdiSchoolOutline
 } from "@mdi/js";
-import ApplyOffreWindow from "./ApplyOffreWindow";
+import {useApplyOffreWindow, ApplyOffreWindow} from "./ApplyOffreWindow";
 
 
 const DiscoverOffers = () => {
@@ -32,6 +32,15 @@ const DiscoverOffers = () => {
 	const [filteredOffers, setFilteredOffers] = useState(null)
 	const location = useLocation();
 	const offerId = new URLSearchParams(location.search).get("offer");
+
+	const candidatureWindow = useApplyOffreWindow();
+
+	const handleApplyStage = async () => {
+		const isConfirmed = await candidatureWindow(currentOffer);
+		if (isConfirmed) {
+			alert("OK")
+		}
+	};
 	
 	const createSessionList = () => {
 		const sessions = [];
@@ -147,7 +156,7 @@ const DiscoverOffers = () => {
 			{
 				name: t("discover_offers_page.filters.sessions.title"),
 				idName: "sessions",
-				icon: mdiSchool,
+				icon: mdiSchoolOutline,
 				fields: [
 					// {
 					// 	type: "radio",
@@ -456,7 +465,7 @@ const DiscoverOffers = () => {
 	
 	return (
 		<>
-			<ApplyOffreWindow>TEMPORAIRE</ApplyOffreWindow>
+			<ApplyOffreWindow></ApplyOffreWindow>
 
 			<div className="dashboard-card-toolbar">
 				<Link to="/dashboard">
@@ -468,7 +477,7 @@ const DiscoverOffers = () => {
 			</div>
 			<div style={{display: "flex", gap: "20px", alignItems: "start"}}>
 				{getOffreListSection()}
-				{currentOffer && <OfferPreview currentOffer={currentOffer}/>}
+				{currentOffer && <OfferPreview currentOffer={currentOffer} handleApply={()=>{handleApplyStage()}}/>}
 			</div>
 		</>
 	);

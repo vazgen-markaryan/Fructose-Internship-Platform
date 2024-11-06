@@ -15,7 +15,7 @@ import {AuthContext} from "../../../../providers/AuthProvider";
 import {useNavigate} from "react-router-dom";
 import {OffreStageContext} from "../../../../providers/OffreStageProvider";
 
-const OfferPreview = ({currentOffer, handleDeleteOffreStage}) => {
+const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleApply}) => {
 	const {t} = useTranslation();
 	const {currentUser} = useContext(AuthContext);
 	const navigate = useNavigate();
@@ -56,7 +56,7 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage}) => {
 							</div>
 							<div className="toolbar-spacer"></div>
 							<div style={{display: (currentUser.role === "ETUDIANT") ? "block" : "none"}}>
-								<button className="btn-filled">{t("discover_offers_page.apply")}</button>
+								<button className="btn-filled" onClick={() => handleApply()}>{t("discover_offers_page.apply")}</button>
 							</div>
 						</div>
 					</section>
