@@ -86,11 +86,11 @@ const DiscoverOffers = () => {
 				idName: "type",
 				icon: mdiBriefcaseOutline,
 				fields: [
-					// {
-					// 	type: "radio",
-					// 	label: "Tous",
-					// 	value: "tous"
-					// },
+					{
+						type: "radio",
+						label: "Tous",
+						value: "tous"
+					},
 					{
 						type: "radio",
 						label: t("discover_offers_page.filters.internship_type.temps_partiel"),
@@ -108,11 +108,11 @@ const DiscoverOffers = () => {
 				idName: "emplacement",
 				icon: mdiDomain,
 				fields: [
-					// {
-					// 	type: "radio",
-					// 	label: "Tous",
-					// 	value: "tous"
-					// },
+					{
+						type: "radio",
+						label: "Tous",
+						value: "tous"
+					},
 					{
 						type: "radio",
 						label: t("discover_offers_page.filters.emplacement.presentiel"),
@@ -148,11 +148,11 @@ const DiscoverOffers = () => {
 				idName: "sessions",
 				icon: mdiSchool,
 				fields: [
-					// {
-					// 	type: "radio",
-					// 	label: "Tous",
-					// 	value: "tous"
-					// },
+					{
+						type: "radio",
+						label: "Tous",
+						value: "tous"
+					},
 				]
 			}
 		]
