@@ -178,7 +178,7 @@ const ModifierOffreStage = () => {
 						
 						<label>{t("modifier_offre_stage_page.departement")}</label>
 						<select name="departementDTO" onChange={handleInputChange}
-						        value={offreStage.departementDTO || ''} required>
+						        value={(offreStage.departementDTO)?offreStage.departementDTO.nom:''} required>
 							<option value="">{t("programme.select")}</option>
 							<option value="cinema">{t("programme.cinema")}</option>
 							<option value="gestion_commerce">{t("programme.gestion_commerce")}</option>
