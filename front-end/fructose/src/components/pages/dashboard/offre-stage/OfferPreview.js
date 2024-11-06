@@ -79,25 +79,26 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 									</button>
 								</div>
 							) : null}
-							{
-								<div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+							{(currentUser && (currentUser.role === "EMPLOYEUR" || currentUser.role === "ADMIN"))?
+								<div style={{ display: "flex", alignItems: "center", gap: "2px" }}>
 									{currentOffer.isApproved ? (
 										<>
-											<Icon path={mdiCheck} size={0.75} color="green" />
-											<span>{t("discover_offers_page.approved")}</span>
+											<Icon path={mdiCheck} size={1} className="text-green" />
+											<p className="text-green m-0">{t("discover_offers_page.approved")}</p>
 										</>
 									) : currentOffer.isRefused ? (
 										<>
-											<Icon path={mdiClose} size={1} color="red" />
-											<span>{t("discover_offers_page.refused")}</span>
+											<Icon path={mdiClose} size={1} className="text-red" />
+											<p className="text-red m-0">{t("discover_offers_page.refused")}</p>
 										</>
 									) : (
 										<>
-											<span>{t("discover_offers_page.pending")}</span>
-											<Icon path={mdiClockOutline} size={1} color="orange" />
+											<Icon path={mdiClockOutline} size={1} className="text-orange" />
+											<p className="text-orange m-0">{t("discover_offers_page.pending")}</p>
 										</>
 									)}
 								</div>
+								:null
 							}
 						</div>
 						{currentOffer.isRefused && (
@@ -110,6 +111,22 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 					</section>
 					<hr/>
 					<div style={{overflowY: "auto"}}>
+							{currentUser && currentUser.role === "EMPLOYEUR" && (
+								<>
+									<section className="nospace">
+										<h5>Actions</h5>
+										<button className="btn-option"
+												onClick={() => navigate(`/dashboard/modifier-offre-stage/${currentOffer.id}`)}>
+											<Icon path={mdiCheck} size={1}/>{t('manage_offre_stage.buttons.modify')}
+										</button>
+										<button className="btn-option"
+												onClick={() => handleDeleteOffreStage(currentOffer.id)}>
+											<Icon path={mdiDeleteOutline} size={1}/>{t('manage_offre_stage.buttons.delete')}
+										</button>
+									</section>
+									<br/>
+								</>
+							)}
 						<section className="nospace">
 							<h5>{t("discover_offers_page.particularities")}</h5>
 							<div className="list-bullet">
@@ -196,18 +213,6 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 									</>
 								)}
 
-								{currentUser && currentUser.role === "EMPLOYEUR" && (
-									<>
-										<button className="btn-option"
-												onClick={() => navigate(`/dashboard/modifier-offre-stage/${currentOffer.id}`)}>
-											<Icon path={mdiCheck} size={1}/>{t('manage_offre_stage.buttons.modify')}
-										</button>
-										<button className="btn-option"
-												onClick={() => handleDeleteOffreStage(currentOffer.id)}>
-											<Icon path={mdiDeleteOutline} size={1}/>{t('manage_offre_stage.buttons.delete')}
-										</button>
-									</>
-								)}
 							</div>
 						</section>
 					</div>
