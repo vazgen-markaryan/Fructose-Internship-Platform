@@ -23,12 +23,17 @@ public class Candidature {
 	@ManyToOne
 	@JoinColumn (name = "etudiant_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Etudiant etudiant;
+	private Utilisateur etudiant;
 	
 	@ManyToOne
 	@JoinColumn (name = "offre_stage_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private OffreStage offreStage;
+
+	@ManyToOne
+	@JoinColumn (name = "cv_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Cv cv;
 	
 	@Enumerated (EnumType.STRING)
 	private EtatCandidature etat;

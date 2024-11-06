@@ -1,8 +1,9 @@
 package fructose.controller;
 
-import fructose.model.Etudiant;
-import fructose.model.OffreStage;
 import fructose.service.CandidatureService;
+import fructose.service.UtilisateurService;
+import fructose.service.dto.CvDTO;
+import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +17,14 @@ public class CandidatureController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CandidatureController.class);
 	private final CandidatureService candidatureService;
+	private final UtilisateurService utilisateurService;
 	
-	@PostMapping ("/postuler")
+	@PostMapping ("/postuler/{id}")
 	@ResponseStatus (HttpStatus.CREATED)
-	public void postuler(@RequestBody Etudiant etudiant, @RequestBody OffreStage offreStage) {
+	public void postuler(@RequestHeader ("Authorization") String token, @PathVariable Long id, @RequestBody CvDTO cvDTO) {
+		UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
 		try {
-			candidatureService.postuler(etudiant, offreStage);
+			candidatureService.postuler(utilisateurDTO, id, cvDTO);
 		} catch (RuntimeException e) {
 			logger.error("Erreur lors de la soumission de la candidature", e);
 			throw new RuntimeException("Une erreur est survenue lors de la soumission de la candidature.");
