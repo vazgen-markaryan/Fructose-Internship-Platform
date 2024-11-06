@@ -15,16 +15,17 @@ import {
 	mdiChevronUp,
 	mdiDomain,
 	mdiFilterMultipleOutline,
-	mdiSchool, mdiSchoolOutline
+	mdiSchoolOutline
 } from "@mdi/js";
-import {useApplyOffreWindow, ApplyOffreWindow} from "./ApplyOffreWindow";
+import {ApplyOffreWindowContext, ApplyOffreWindow} from "./ApplyOffreWindow";
 
 
 const DiscoverOffers = () => {
-	
+
 	const {t} = useTranslation();
 	const {fetchOffresStage} = useContext(OffreStageContext);
 	const {isUserInit, currentUser} = useContext(AuthContext);
+	const {openCandidatureWindow} = useContext(ApplyOffreWindowContext);
 	const [offers, setOffers] = useState([])
 	const [currentOffer, setCurrentOffer] = useState(null)
 	const [displayFiltreWindow, setDisplayFiltreWindow] = useState(false)
@@ -33,10 +34,8 @@ const DiscoverOffers = () => {
 	const location = useLocation();
 	const offerId = new URLSearchParams(location.search).get("offer");
 
-	const candidatureWindow = useApplyOffreWindow();
-
 	const handleApplyStage = async () => {
-		const isConfirmed = await candidatureWindow(currentOffer);
+		const isConfirmed = await openCandidatureWindow(currentOffer);
 		if (isConfirmed) {
 			alert("OK")
 		}
@@ -465,7 +464,6 @@ const DiscoverOffers = () => {
 	
 	return (
 		<>
-			<ApplyOffreWindow></ApplyOffreWindow>
 
 			<div className="dashboard-card-toolbar">
 				<Link to="/dashboard">
@@ -484,3 +482,4 @@ const DiscoverOffers = () => {
 };
 
 export default DiscoverOffers;
+

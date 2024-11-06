@@ -7,17 +7,15 @@ import {Link} from "react-router-dom";
 
 const ApplyOffreWindowContext = createContext(undefined);
 
-const useApplyOffreWindow = () => {
-    return useContext(ApplyOffreWindowContext);
-};
 const ApplyOffreWindow = ({children}) => {
     const {isUserInit} = useContext(AuthContext);
     const {GetCvs} = useContext(CvContext);
 
-    const [dialogState, setDialogState] = useState({ open: false, cv: null, onConfirm: null });
+    const [dialogState, setDialogState] = useState({ open: false, cvId: null, onConfirm: null, offre:null });
     const [approvedCvs, setApprovedCvs] = useState(null)
+    const [currentCv, setCurrentCv] = useState(null)
 
-    useEffect(() => {
+    const openCandidatureWindow = useCallback((offreStage) => {
         if (isUserInit) {
             (async function () {
                 const response = await GetCvs();
@@ -31,28 +29,31 @@ const ApplyOffreWindow = ({children}) => {
                 }
                 setApprovedCvs(approvedCvs)
             })();
-        }
-    }, [isUserInit, GetCvs]);
-
-    const openCandidatureWindow = useCallback((offreStage) => {
-        return new Promise((resolve) => {
-            setDialogState({
-                open: true,
-                offreStage,
-                onConfirm: () => {
-                    resolve(true);
-                    setDialogState({ ...dialogState, open: false });
-                },
-                onClose: () => {
-                    resolve(false);
-                    setDialogState({ ...dialogState, open: false });
-                }
+            return new Promise((resolve) => {
+                setDialogState({
+                    open: true,
+                    offre: offreStage,
+                    onConfirm: (cv) => {
+                        resolve(true);
+                        setDialogState({ ...dialogState, cvId: cv, open: false });
+                    },
+                    onClose: () => {
+                        resolve(false);
+                        setDialogState({ ...dialogState, open: false });
+                    }
+                });
             });
-        });
-    }, [dialogState]);
+        }
+    }, [dialogState, isUserInit, GetCvs]);
+
+    const handleCompleteSubmission = () => {
+        if(currentCv !== null){
+             dialogState.onConfirm(currentCv.id)
+        }
+    }
 
     return(
-        <ApplyOffreWindowContext.Provider value={openCandidatureWindow}>
+        <ApplyOffreWindowContext.Provider value={{openCandidatureWindow}}>
             {children}
             {(dialogState.open)
             ?
@@ -60,7 +61,7 @@ const ApplyOffreWindow = ({children}) => {
                     <div className="window">
                         <div className="window-titlebar">
                             <h5>Envoyer une candidature</h5>
-                            <button className="btn-icon"><Icon path={mdiClose} size={1}/></button>
+                            <button className="btn-icon" onClick={dialogState.onClose}><Icon path={mdiClose} size={1}/></button>
                         </div>
                         <div className="window-content">
                             <section className="nospace">
@@ -73,8 +74,8 @@ const ApplyOffreWindow = ({children}) => {
                                         margin: 0
                                     }}></div>
                                     <div>
-                                        <h4 className="m-0">Faire je ne sais quoi</h4>
-                                        <h6 className="m-0 text-dark">Ubisoft de quoi</h6>
+                                        <h4 className="m-0">{dialogState.offre.nom}</h4>
+                                        <h6 className="m-0 text-dark">{dialogState.offre.compagnie}</h6>
                                     </div>
                                 </div>
                             </section>
@@ -83,7 +84,7 @@ const ApplyOffreWindow = ({children}) => {
                                 <div className="list-bullet">
                                     <Icon path={mdiMapMarkerOutline} size={1}/>
                                     <div style={{padding: "4px 0"}}>
-                                        <h6 className="m-0" style={{marginBottom: "5px"}}>123 Street Street </h6>
+                                        <h6 className="m-0" style={{marginBottom: "5px"}}>{dialogState.offre.adresse}</h6>
                                     </div>
                                 </div>
                             </section>
@@ -112,8 +113,8 @@ const ApplyOffreWindow = ({children}) => {
                         </div>
                         <div className="window-options">
                             <div className="toolbar-spacer"></div>
-                            <button>Annuler</button>
-                            <button className="btn-filled" disabled={(approvedCvs !== null)?(approvedCvs.length === 0):true}>Postuler</button>
+                            <button onClick={dialogState.onClose}>Annuler</button>
+                            <button className="btn-filled" disabled={(approvedCvs !== null)?(approvedCvs.length === 0):true} onClick={handleCompleteSubmission()}>Postuler</button>
                         </div>
                     </div>
                 </div>
@@ -122,4 +123,4 @@ const ApplyOffreWindow = ({children}) => {
         </ApplyOffreWindowContext.Provider>
     )
 }
-export {ApplyOffreWindow, useApplyOffreWindow};
+export {ApplyOffreWindow, ApplyOffreWindowContext};
