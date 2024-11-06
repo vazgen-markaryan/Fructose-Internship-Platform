@@ -14,9 +14,9 @@ import {
     mdiHumanMaleBoard,
 } from "@mdi/js";
 import Icon from "@mdi/react";
-import {AuthContext} from "../../../../providers/AuthProvider";
+import {AuthContext} from "../../providers/AuthProvider";
 import {Link} from "react-router-dom";
-import {AdminContext} from "../../../../providers/AdminProvider";
+import {AdminContext} from "../../providers/AdminProvider";
 import {useTranslation} from "react-i18next";
 
 const ManageUsers = () => {

@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
-import InformationsBase from "../../auth/signup/InformationsBase";
-import MotDePasse from "../../auth/signup/MotDePasse";
-import SelectionRole from "../../auth/signup/SelectionRole";
-import InformationsEtudiant from "../../auth/signup/InformationsEtudiant";
-import InformationsEmployeur from "../../auth/signup/InformationsEmployeur";
-import InformationsProfesseur from "../../auth/signup/InformationsProfesseur";
+import InformationsBase from "../formulaire/InformationsBase";
+import MotDePasse from "../formulaire/MotDePasse";
+import SelectionRole from "../formulaire/SelectionRole";
+import InformationsEtudiant from "../formulaire/InformationsEtudiant";
+import InformationsEmployeur from "../formulaire/InformationsEmployeur";
+import InformationsProfesseur from "../formulaire/InformationsProfesseur";
 import {useTranslation} from "react-i18next";
 import '../../../styles/LogInSignIn.css';
 import Swal from 'sweetalert2';

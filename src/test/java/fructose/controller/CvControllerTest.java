@@ -198,7 +198,7 @@ public class CvControllerTest {
 		Long cvId = 1L;
 		
 		when(utilisateurService.validationToken(token)).thenReturn(true);
-		byte[] fileContent = new byte[] {1, 2, 3};
+		byte[] fileContent = new byte[]{1, 2, 3};
 		when(cvService.getCvFileContentById(cvId)).thenReturn(fileContent);
 		
 		ResponseEntity<byte[]> response = cvController.getCVContenuFile(token, cvId);
@@ -347,5 +347,59 @@ public class CvControllerTest {
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 		assertEquals("Erreur lors du refus du CV.", response.getBody());
 		verify(cvService, times(1)).refuserCv(cvId, commentaireRefus);
+	}
+	
+	@Test
+	void testAccepterOffreStage_Success() {
+		Long cvId = 1L;
+		
+		doNothing().when(cvService).accepterCv(cvId);
+		
+		ResponseEntity<?> response = cvController.accepterOffreStage(cvId);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		verify(cvService, times(1)).accepterCv(cvId);
+	}
+	
+	@Test
+	void testAccepterOffreStage_Failure() {
+		Long cvId = 1L;
+		
+		doThrow(new RuntimeException("Unexpected error")).when(cvService).accepterCv(cvId);
+		
+		ResponseEntity<?> response = cvController.accepterOffreStage(cvId);
+		
+		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+		assertEquals("Erreur lors du refus de l'offre de stage.", response.getBody());
+		verify(cvService, times(1)).accepterCv(cvId);
+	}
+	
+	@Test
+	void testGetCVFile_Unauthorized() {
+		String token = "invalidToken";
+		Long cvId = 1L;
+		
+		when(utilisateurService.validationToken(token)).thenReturn(false);
+		
+		ResponseEntity<CvDTO> response = cvController.getCVFile(token, cvId);
+		
+		assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+		verify(utilisateurService, times(1)).validationToken(token);
+		verify(cvService, never()).getCvById(cvId);
+	}
+	
+	@Test
+	void testGetCVFile_NotFound() {
+		String token = "validToken";
+		Long cvId = 1L;
+		
+		when(utilisateurService.validationToken(token)).thenReturn(true);
+		when(cvService.getCvById(cvId)).thenReturn(null);
+		
+		ResponseEntity<CvDTO> response = cvController.getCVFile(token, cvId);
+		
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+		verify(utilisateurService, times(1)).validationToken(token);
+		verify(cvService, times(1)).getCvById(cvId);
 	}
 }

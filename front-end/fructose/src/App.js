@@ -2,13 +2,13 @@ import React from 'react';
 import './App.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import HomePage from './components/pages/home/HomePage';
-import CreerUtilisateur from "./components/pages/login-signup/CreerUtilisateur";
-import CreerOffreStage from "./components/pages/offre_stage/CreerOffreStage";
-import ConnexionUtilisateur from "./components/pages/login-signup/ConnexionUtilisateur";
+import CreerUtilisateur from "./components/auth/login-signup/CreerUtilisateur";
+import CreerOffreStage from "./components/pages/offre-stage/CreerOffreStage";
+import ConnexionUtilisateur from "./components/auth/login-signup/ConnexionUtilisateur";
 import Dashboard from "./components/pages/dashboard/Dashboard";
-import {AuthProvider} from "./providers/AuthProvider";
-import {PrivateRoute} from "./components/routing/PrivateRoute";
-import {RoleRoute} from "./components/routing/RoleRoute";
+import {AuthProvider} from "./components/providers/AuthProvider";
+import {PrivateRoute} from "./utilities/routing/PrivateRoute";
+import {RoleRoute} from "./utilities/routing/RoleRoute";
 
 function App() {
 

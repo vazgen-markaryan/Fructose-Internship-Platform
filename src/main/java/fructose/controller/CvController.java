@@ -25,11 +25,11 @@ public class CvController {
 		this.utilisateurService = utilisateurService;
 	}
 	
-	@PostMapping ("/deposer-cv")
-	public ResponseEntity<String> enregistrerCV(@RequestHeader ("Authorization") String token, @RequestParam ("file") MultipartFile file) {
+	@PostMapping("/deposer-cv")
+	public ResponseEntity<String> enregistrerCV(@RequestHeader("Authorization") String token, @RequestParam("file") MultipartFile file) {
 		if (file.getSize() > MAX_FILE_SIZE_B) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body("Le fichier doit faire moins de 1024 Kb.");
+					.body("Le fichier doit faire moins de 1024 Kb.");
 		}
 		if (file.isEmpty()) {
 			return new ResponseEntity<>("Le fichier est vide. Veuillez télécharger un fichier PDF valide.", HttpStatus.BAD_REQUEST);
@@ -54,8 +54,8 @@ public class CvController {
 		}
 	}
 	
-	@GetMapping ("/cvs")
-	public ResponseEntity<?> getCVs(@RequestHeader ("Authorization") String token) {
+	@GetMapping("/cvs")
+	public ResponseEntity<?> getCVs(@RequestHeader("Authorization") String token) {
 		if (!utilisateurService.validationToken(token)) {
 			System.out.println("Token reçu : " + token);
 			return new ResponseEntity<>("Le Token est invalid", HttpStatus.BAD_REQUEST);
@@ -104,8 +104,8 @@ public class CvController {
 		}
 	}
 	
-	@DeleteMapping ("/cvs/{id}")
-	public ResponseEntity<String> deleteCv(@RequestHeader ("Authorization") String token, @PathVariable Long id) {
+	@DeleteMapping("/cvs/{id}")
+	public ResponseEntity<String> deleteCv(@RequestHeader("Authorization") String token, @PathVariable Long id) {
 		if (!utilisateurService.validationToken(token)) {
 			return new ResponseEntity<>("Le Token est invalide", HttpStatus.UNAUTHORIZED);
 		}
@@ -123,7 +123,7 @@ public class CvController {
 		}
 	}
 	
-	@PostMapping ("/refuser-cv/{id}")
+	@PostMapping("/refuser-cv/{id}")
 	public ResponseEntity<String> refuserCv(@PathVariable Long id, @RequestBody String commentaireRefus) {
 		try {
 			cvService.refuserCv(id, commentaireRefus);
@@ -132,8 +132,9 @@ public class CvController {
 			return new ResponseEntity<>("Erreur lors du refus du CV.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
 	@PostMapping("/accepter-cv/{id}")
-	public ResponseEntity<?> accepterOffreStage(@PathVariable Long id){
+	public ResponseEntity<?> accepterOffreStage(@PathVariable Long id) {
 		try {
 			cvService.accepterCv(id);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -141,13 +142,13 @@ public class CvController {
 			return new ResponseEntity<>("Erreur lors du refus de l'offre de stage.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	@GetMapping(value = "/cvs/{id}")
 	public ResponseEntity<CvDTO> getCVFile(@RequestHeader("Authorization") String token, @PathVariable Long id) {
 		if (!utilisateurService.validationToken(token)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-
+		
 		try {
 			CvDTO cvDTO = cvService.getCvById(id);
 			if (cvDTO == null) {
@@ -158,5 +159,4 @@ public class CvController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
 }

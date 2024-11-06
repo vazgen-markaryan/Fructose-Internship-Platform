@@ -20,12 +20,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith (MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 class CvServiceTest {
 	
 	@Mock
@@ -52,10 +51,10 @@ class CvServiceTest {
 	@Test
 	void testAddCv_Success() throws IOException {
 		MockMultipartFile mockFile = new MockMultipartFile(
-			"cv",
-			"testCv.pdf",
-			"application/pdf",
-			"Dummy PDF Content".getBytes()
+				"cv",
+				"testCv.pdf",
+				"application/pdf",
+				"Dummy PDF Content".getBytes()
 		);
 		
 		cvService.addCv(mockFile, utilisateurDTO, false, false);
@@ -66,10 +65,10 @@ class CvServiceTest {
 	@Test
 	void testAddCv_Failure_DatabaseError() throws IOException {
 		MockMultipartFile mockFile = new MockMultipartFile(
-			"cv",
-			"testCv.pdf",
-			"application/pdf",
-			"Dummy PDF Content".getBytes()
+				"cv",
+				"testCv.pdf",
+				"application/pdf",
+				"Dummy PDF Content".getBytes()
 		);
 		
 		doThrow(new RuntimeException("Database error")).when(cvRepository).save(any(Cv.class));
@@ -222,9 +221,70 @@ class CvServiceTest {
 		when(cvRepository.findById(cvId)).thenReturn(Optional.empty());
 		
 		assertThrows(RuntimeException.class, () -> cvService.refuserCv(cvId, commentaireRefus),
-			"Une erreur est survenue lors de la suppression du CV.");
+				"Une erreur est survenue lors de la suppression du CV.");
 		
 		verify(cvRepository, times(1)).findById(cvId);
 		verify(cvRepository, never()).save(any(Cv.class));
+	}
+	
+	@Test
+	void testAccepterCv_Success() {
+		Long cvId = 1L;
+		Cv cv = new Cv();
+		cv.setId(cvId);
+		
+		when(cvRepository.findById(cvId)).thenReturn(Optional.of(cv));
+		
+		cvService.accepterCv(cvId);
+		
+		verify(cvRepository, times(1)).findById(cvId);
+		verify(cvRepository, times(1)).save(cv);
+		assertTrue(cv.getIsApproved());
+	}
+	
+	@Test
+	void testAccepterCv_CvNotFound() {
+		Long cvId = 1L;
+		
+		when(cvRepository.findById(cvId)).thenReturn(Optional.empty());
+		
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			cvService.accepterCv(cvId);
+		});
+		
+		assertEquals("Une erreur est survenue lors de la suppression du CV.", exception.getMessage());
+		verify(cvRepository, times(1)).findById(cvId);
+		verify(cvRepository, never()).save(any(Cv.class));
+	}
+	
+	@Test
+	void testGetCvById_Success() {
+		Long cvId = 1L;
+		Cv cv = new Cv();
+		cv.setId(cvId);
+		
+		Utilisateur utilisateur = new Utilisateur();
+		utilisateur.setId(1L);
+		cv.setUtilisateur(utilisateur);
+		
+		when(cvRepository.findById(cvId)).thenReturn(Optional.of(cv));
+		
+		CvDTO result = cvService.getCvById(cvId);
+		
+		assertNotNull(result);
+		assertEquals(cvId, result.getId());
+		verify(cvRepository, times(1)).findById(cvId);
+	}
+	
+	@Test
+	void testGetCvById_NotFound() {
+		Long cvId = 1L;
+		
+		when(cvRepository.findById(cvId)).thenReturn(Optional.empty());
+		
+		CvDTO result = cvService.getCvById(cvId);
+		
+		assertNull(result);
+		verify(cvRepository, times(1)).findById(cvId);
 	}
 }

@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import Icon from "@mdi/react";
-import {AuthContext} from "../../../providers/AuthProvider";
+import {AuthContext} from "../../providers/AuthProvider";
 import {mdiChevronRight} from "@mdi/js";
 import {useTranslation} from "react-i18next";
 import Swal from 'sweetalert2';

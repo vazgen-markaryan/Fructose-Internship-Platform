@@ -11,10 +11,10 @@ import {
 	mdiFileUploadOutline
 } from "@mdi/js";
 import Icon from "@mdi/react";
-import {AuthContext} from "../../../../providers/AuthProvider";
+import {AuthContext} from "../../providers/AuthProvider";
 import {Link} from "react-router-dom";
-import PdfPreview from "../../../content/PdfPreview";
-import {CvContext} from "../../../../providers/CvProvider";
+import PdfPreview from "../../../utilities/pdf/PdfPreview";
+import {CvContext} from "../../providers/CvProvider";
 import {useTranslation} from "react-i18next";
 
 const ManageCVs = () => {

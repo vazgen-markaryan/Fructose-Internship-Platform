@@ -1,13 +1,13 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import Icon from "@mdi/react";
 import {mdiBriefcasePlusOutline} from "@mdi/js";
-import OfferPreview from "./offre-stage/OfferPreview";
-import PdfPreview from "../../content/PdfPreview";
+import OfferPreview from "../offre-stage/OfferPreview";
+import PdfPreview from "../../../utilities/pdf/PdfPreview";
 import {useTranslation} from "react-i18next";
-import {CvContext} from "../../../providers/CvProvider";
-import {AuthContext} from "../../../providers/AuthProvider";
-import {OffreStageContext} from "../../../providers/OffreStageProvider";
-import {Modal} from "@react-pdf-viewer/core";
+import {CvContext} from "../../providers/CvProvider";
+import {AuthContext} from "../../providers/AuthProvider";
+import {OffreStageContext} from "../../providers/OffreStageProvider";
+import Modal from "../../../utilities/modal/Modal";
 
 const DashboardHome = ({}) => {
     const {t} = useTranslation();
@@ -117,7 +117,6 @@ const DashboardHome = ({}) => {
         }
     };
 
-
     function handleValidateOffer(id) {
         fetch(`/accepter-offre-stage/` + id, {
             method: "POST",
@@ -205,17 +204,6 @@ const DashboardHome = ({}) => {
         setCurrentPageCv(currentPageCv - 1);
     }
 
-    function Modal({ children, onClose }) {
-        return (
-            <div className="modal-overlay">
-                <div className="modal-content" style={{ pointerEvents: "auto" }}>
-                    {children}
-                    <button onClick={onClose}>{t("modal.close")}</button>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <section>
             <div className="toolbar-items">
@@ -278,7 +266,7 @@ const DashboardHome = ({}) => {
                         </div>
                     </div>
                 )}
-                <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
+                <div style={{display: "flex", justifyContent: "center", gap: "5px", marginTop: "20px"}}>
                     {Array.from({length: totalPages}, (_, index) => (
                         <button
                             key={index}
@@ -349,14 +337,14 @@ const DashboardHome = ({}) => {
                                 ))}
                             </div>
                             {currentCv && (
-                                <div  style={{
+                                <div style={{
                                     flex: 2,
                                     padding: "10px",
                                     backgroundColor: "#fff",
                                     borderRadius: "5px",
                                     boxShadow: "0 0 10px rgba(0,0,0,0.1)"
                                 }}>
-                                    <PdfPreview file={currentCv.fileUrl} />
+                                    <PdfPreview file={currentCv.fileUrl}/>
 
                                     <div>
                                         <p style={{textAlign: "center", margin: "10px 0", fontWeight: "bold"}}>
@@ -393,20 +381,17 @@ const DashboardHome = ({}) => {
                     ))}
                 </div>
                 {isRejectModalOpenCv && (
-                    <Modal onClose={() => setRejectModalOpenCv(false)}>
+                    <Modal onClose={() => setRejectModalOpenCv(false)} onSend={() => {
+                        handleRejectCv(currentCv.id, textareaRef.current.value);
+                        textareaRef.current.value = "";
+                        setRejectModalOpenCv(false);
+                    }}>
                         <h4>{t("modal.reject_reason")}</h4>
                         <textarea
                             ref={textareaRef}
                             placeholder={t("modal.reject_reason_placeholder")}
-                            style={{ width: "100%", height: "100px" }}
+                            style={{width: "100%", height: "100px"}}
                         />
-                        <button onClick={() => {
-                            handleRejectCv(currentCv.id, textareaRef.current.value);
-                            textareaRef.current.value = "";
-                            setRejectModalOpenCv(false);
-                        }} className="btn-filled">
-                            {t("modal.send")}
-                        </button>
                     </Modal>
                 )}
             </div>

@@ -1,9 +1,9 @@
 import React, {useContext, useEffect, useState} from "react";
 import Icon from "@mdi/react";
-import {AuthContext} from "../../../../providers/AuthProvider";
+import {AuthContext} from "../../providers/AuthProvider";
 import {Link, useLocation} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {OffreStageContext} from "../../../../providers/OffreStageProvider";
+import {OffreStageContext} from "../../providers/OffreStageProvider";
 import OfferPreview from "./OfferPreview";
 import {
 	mdiAlertCircleOutline,

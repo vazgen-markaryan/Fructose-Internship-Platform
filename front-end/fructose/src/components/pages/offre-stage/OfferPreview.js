@@ -12,7 +12,8 @@ import {
 import {differenceInMonths, endOfMonth, format} from "date-fns";
 import {useNavigate} from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AuthContext } from "../../../../providers/AuthProvider";
+import { AuthContext } from "../../providers/AuthProvider";
+import Modal from "../../../utilities/modal/Modal"
 
 const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, handlerefused}) => {
 	const {t} = useTranslation();
@@ -28,17 +29,6 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 		// Ajoute 1 jour à la date de début pour l'afficher correctement
 		dateDebut.setDate(dateDebut.getDate() + 1);
 		dateFin.setDate(dateFin.getDate() + 1);
-
-		function Modal({children, onClose}) {
-			return (
-				<div className="modal-overlay">
-					<div className="modal-content" style={{pointerEvents: "auto"}}>
-						{children}
-						<button onClick={onClose}>{t("modal.close")}</button>
-					</div>
-				</div>
-			);
-		}
 
 		const formattedDateDebut = format(dateDebut, 'dd-MM-yyyy');
 		const formattedDateFin = format(endOfMonth(dateFin), 'dd-MM-yyyy');
@@ -215,20 +205,17 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 					</div>
 				</div>
 				{isRejectModalOpen && (
-					<Modal onClose={() => setRejectModalOpen(false)}>
+					<Modal onClose={() => setRejectModalOpen(false)} onSend={() => {
+						handlerefused(currentOffer.id, textareaRef.current.value);
+						textareaRef.current.value = "";
+						setRejectModalOpen(false);
+					}}>
 						<h4>{t("modal.reject_reason")}</h4>
 						<textarea
 							ref={textareaRef}
 							placeholder={t("modal.reject_reason_placeholder")}
-							style={{width: "100%", height: "100px"}}
+							style={{ width: "100%", height: "100px" }}
 						/>
-						<button onClick={() => {
-							handlerefused(currentOffer.id, textareaRef.current.value);
-							textareaRef.current.value = "";
-							setRejectModalOpen(false);
-						}} className="btn-filled">
-							{t("modal.send")}
-						</button>
 					</Modal>
 				)}
 			</>

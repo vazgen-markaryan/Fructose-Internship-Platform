@@ -1,9 +1,9 @@
 import React, {useContext, useEffect, useState} from "react";
 import {mdiArrowLeft, mdiBriefcasePlusOutline, mdiCheck, mdiClockOutline, mdiClose} from "@mdi/js";
 import Icon from "@mdi/react";
-import {AuthContext} from "../../../../providers/AuthProvider";
+import {AuthContext} from "../../providers/AuthProvider";
 import {Link} from "react-router-dom";
-import {OffreStageContext} from "../../../../providers/OffreStageProvider";
+import {OffreStageContext} from "../../providers/OffreStageProvider";
 import {useTranslation} from "react-i18next";
 
 const ManageOffresStage = () => {
@@ -83,8 +83,7 @@ const ManageOffresStage = () => {
 						<div className="m-0 toolbar-spacer"></div>
 						<Link to="../creer-offre-stage">
 							<button className="btn-filled">{t('manage_offre_stage.buttons.add')}
-								<Icon
-									path={mdiBriefcasePlusOutline} size={1}/>
+								<Icon path={mdiBriefcasePlusOutline} size={1}/>
 							</button>
 						</Link>
 					</div>
@@ -118,8 +117,7 @@ const ManageOffresStage = () => {
 							<h6 style={{margin: "8px 0 14px 0"}}>{t('manage_offre_stage.messages.no_offre_stages')}</h6>
 							<Link to="../creer-offre-stage">
 								<button className="btn-filled">{t('manage_offre_stage.buttons.add')}
-									<Icon
-										path={mdiBriefcasePlusOutline} size={1}/>
+									<Icon path={mdiBriefcasePlusOutline} size={1}/>
 								</button>
 							</Link>
 						</div>
