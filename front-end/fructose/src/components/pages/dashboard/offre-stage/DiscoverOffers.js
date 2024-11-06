@@ -189,7 +189,6 @@ const DiscoverOffers = () => {
 	useEffect(() => {
 		if (offerId && offers.length > 0) {
 			const selectedOffer = offers.find((offer) => offer.id === parseInt(offerId));
-			console.log("selectedOffer", selectedOffer);
 			setCurrentOffer(selectedOffer);
 		}
 	}, [location.search, offerId, offers]);

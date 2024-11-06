@@ -44,7 +44,7 @@ const DashboardHome = () => {
 						console.log("error" + error);
 					}
 				}
-				if (currentUser.role === "EMPLOYEUR" || currentUser.role === "ETUDIANT") {
+				if (currentUser.role === "EMPLOYEUR" || currentUser.role === "ETUDIANT" || currentUser.role === "PROFESSEUR") {
 					try {
 						const response = await fetchOffresStage();
 						setOffresStage(response);
@@ -62,7 +62,6 @@ const DashboardHome = () => {
 			if (response.ok) {
 				setOffresStage((prevOffreStages) => prevOffreStages.filter((offreStage) => offreStage.id !== offreStageId));
 				setCurrentOffer(null);
-				console.log("Offre stage deleted successfully");
 			} else {
 				console.error("Error deleting offre stage:", response.statusText);
 			}
@@ -154,7 +153,7 @@ const DashboardHome = () => {
 						</section>
 					);
 				}
-			} else if (currentUser.role === "EMPLOYEUR") {
+			} else if (currentUser.role === "EMPLOYEUR" || currentUser.role === "PROFESSEUR") {
 				const startIndex = (currentPage - 1) * itemsPerPage;
 				const selectedOffresStage = offresStage.slice(startIndex, startIndex + itemsPerPage);
 

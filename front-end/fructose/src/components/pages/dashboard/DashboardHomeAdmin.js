@@ -128,7 +128,6 @@ const DashboardHome = ({}) => {
         })
             .then(response => {
                 if (response.ok) {
-                    console.log("Offre de stage acceptée avec succès");
                     setOffresStage((prevOffreStages) => {
                         const updatedOffres = prevOffreStages.filter((offreStage) => offreStage.id !== id);
                         if (updatedOffres.length === 0) {

@@ -57,7 +57,6 @@ const ManageCVs = () => {
         try {
             const response = await getCvById(cvId);
             setCurrentCv(response);
-            console.log(response);
         } catch (error) {
             console.error("Erreur lors de la récupération du CV:", error);
         }

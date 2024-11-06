@@ -23,7 +23,6 @@ const ModifierOffreStage = () => {
 					try {
 						const response = await fetchOffreStage(id);
 						await setOffreStage(response);
-						await console.log("offreStage", response);
 					} catch (error) {
 						console.log("error" + error);
 					}
@@ -111,8 +110,7 @@ const ModifierOffreStage = () => {
 					offreStage.departementDTO = departement;
 				}
 				
-				const response = await updateOffreStage(offreStage);
-				console.log("Successfully updated offreStage:", response);
+				await updateOffreStage(offreStage);
 				
 				navigate(-1);
 				
