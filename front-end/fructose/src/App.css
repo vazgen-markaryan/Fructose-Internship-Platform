@@ -95,6 +95,11 @@ label{
     color: #f44336;
 }
 
+.bg-red {
+    background-color: #f44336 !important;
+    color: white;
+}
+
 .text-green {
     color: #4caf50;
 }
@@ -125,7 +130,12 @@ button.btn-filled {
     color: white;
 }
 
-button.btn-filled:hover {
+button.btn-filled:disabled {
+    background-color: rgba(128, 128, 128, 0.2);
+    color: grey;
+}
+
+button.btn-filled:hover:not(.btn-filled:disabled) {
     background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
     color: white;
 }
@@ -839,4 +849,21 @@ tr {
     box-sizing: border-box;
     gap: 10px;
     border-top: 1px solid #d1d1d1;
+}
+
+
+
+.banner{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: grey;
+    color: white;
+    border-radius: var(--border-radius);
+    margin: 10px 0;
+    gap: 5px;
+}
+
+.banner > p{
+    margin: 0;
 }
