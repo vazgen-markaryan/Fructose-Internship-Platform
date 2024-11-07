@@ -1,17 +1,17 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
-    mdiAccountOutline,
-    mdiAccountQuestion,
-    mdiAccountSchoolOutline,
-    mdiAccountTieOutline,
-    mdiArrowLeft,
-    mdiBriefcaseClockOutline,
-    mdiCheck,
-    mdiClockOutline,
-    mdiClose,
-    mdiFileClockOutline,
-    mdiFolderAccountOutline,
-    mdiHumanMaleBoard,
+	mdiAccountOutline,
+	mdiAccountQuestion,
+	mdiAccountSchoolOutline,
+	mdiAccountTieOutline,
+	mdiArrowLeft,
+	mdiBriefcaseClockOutline,
+	mdiCheck,
+	mdiClockOutline,
+	mdiClose,
+	mdiFileClockOutline,
+	mdiFolderAccountOutline,
+	mdiHumanMaleBoard,
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../providers/AuthProvider";
@@ -44,10 +44,10 @@ const ManageUsers = () => {
 	
 	const ApproveUserById = async (id) => {
 		await ApproveUser(id).then(response => {
-			if (response.ok) {
-				DeleteCurrentUserFromMemory()
-			}
-		})
+				if (response.ok) {
+					DeleteCurrentUserFromMemory()
+				}
+			})
 			.catch((error) => {
 				console.log(error)
 			});
@@ -55,10 +55,10 @@ const ManageUsers = () => {
 	
 	const RejectUserById = async (id) => {
 		await RejectUser(id).then(response => {
-			if (response.ok) {
-				DeleteCurrentUserFromMemory()
-			}
-		})
+				if (response.ok) {
+					DeleteCurrentUserFromMemory()
+				}
+			})
 			.catch((error) => {
 				console.log(error)
 			});

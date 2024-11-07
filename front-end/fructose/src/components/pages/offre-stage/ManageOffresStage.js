@@ -13,7 +13,7 @@ const ManageOffresStage = () => {
 	const [offreStages, setOffreStages] = useState([]);
 	const [setOffreStage] = useState([]);
 	const [currentOffreStage, setCurrentOffreStage] = useState(null);
-
+	
 	useEffect(() => {
 		if (currentUser) {
 			(async function () {
@@ -28,7 +28,7 @@ const ManageOffresStage = () => {
 			})();
 		}
 	}, [currentUser, fetchOffresStage]);
-
+	
 	const getOffreStageById = async (id) => {
 		try {
 			const data = await fetchOffreStage(id);
@@ -37,7 +37,7 @@ const ManageOffresStage = () => {
 			console.error("Error fetching offer:", error);
 		}
 	};
-
+	
 	const handleOffreStageSelection = (offreStage) => {
 		if (currentOffreStage && offreStage.id === currentOffreStage.id) {
 			setCurrentOffreStage(null);
@@ -46,7 +46,7 @@ const ManageOffresStage = () => {
 			getOffreStageById(offreStage.id);
 		}
 	};
-
+	
 	const getStatutElement = (offreStage) => {
 		if (offreStage) {
 			if (!offreStage.isApproved && !offreStage.isRefused) {
@@ -74,7 +74,7 @@ const ManageOffresStage = () => {
 		}
 		return null;
 	};
-
+	
 	const getOffreStageList = () => {
 		if (offreStages.length > 0) {
 			return (
@@ -106,7 +106,7 @@ const ManageOffresStage = () => {
 			);
 		}
 	};
-
+	
 	const getOffreStageListSection = () => {
 		if (offreStages.length === 0) {
 			return (
@@ -134,7 +134,7 @@ const ManageOffresStage = () => {
 			);
 		}
 	};
-
+	
 	return (
 		<>
 			<div className="dashboard-card-toolbar">

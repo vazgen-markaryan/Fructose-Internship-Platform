@@ -171,7 +171,7 @@ const DiscoverOffers = () => {
 			value: session
 		});
 	});
-
+	
 	useEffect(() => {
 		if (isUserInit) {
 			(async function () {
@@ -185,7 +185,7 @@ const DiscoverOffers = () => {
 			})();
 		}
 	}, [isUserInit, fetchOffresStage, filters]);
-
+	
 	useEffect(() => {
 		if (offerId && offers.length > 0) {
 			const selectedOffer = offers.find((offer) => offer.id === parseInt(offerId));
