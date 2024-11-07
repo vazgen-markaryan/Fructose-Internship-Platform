@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+GitScripts/project_impact.json
