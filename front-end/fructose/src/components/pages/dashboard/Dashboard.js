@@ -27,33 +27,24 @@ const Dashboard = () => {
 					<CvProvider>
 						<OffreStageProvider>
 							<Routes>
-								<Route path="/manage-cvs" element={<RoleRoute element={
-									<ManageCVs/>} roles={['ETUDIANT']}/>}/>
-								<Route path="/upload-cv" element={<RoleRoute element={
-									<UploadCV/>} roles={['ETUDIANT']}/>}/>
-								<Route path="/view-cv" element={<RoleRoute element={
-									<ViewCV/>} roles={['ETUDIANT']}/>}/>
-								<Route path="/manage-offres-stage" element={
-									<RoleRoute element={
-										<ManageOffresStage/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
-								<Route path="/modifier-offre-stage/:id" element={
-									<RoleRoute element={
-										<ModifierOffreStage/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
-								<Route path="/discover-offers/" element={
-									<RoleRoute element={
-										<DiscoverOffers/>} roles={['ETUDIANT']}/>}/>
+								<Route path="/manage-cvs" element={<RoleRoute element={<ManageCVs/>} roles={['ETUDIANT']}/>}/>
+								<Route path="/upload-cv" element={<RoleRoute element={<UploadCV/>} roles={['ETUDIANT']}/>}/>
+								<Route path="/view-cv" element={<RoleRoute element={<ViewCV/>} roles={['ETUDIANT']}/>}/>
+								<Route path="/manage-offres-stage" element={<RoleRoute element={<ManageOffresStage/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
+								<Route path="/modifier-offre-stage/:id" element={<RoleRoute element={<ModifierOffreStage/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
+								<Route path="/discover-offers/" element={<RoleRoute element={<DiscoverOffers/>} roles={['ETUDIANT']}/>}/>
 								<Route path="/" element={<DashboardHome/>}/>
 							</Routes>
 						</OffreStageProvider>
 					</CvProvider>
+					
 					<Routes>
 						<Route path="/creer-offre-stage" element={<CreerOffreStage/>}/>
 					</Routes>
 					
 					<AdminProvider>
 						<Routes>
-							<Route path="/admin/manage-users" element={<RoleRoute element={
-								<ManageUsers/>} roles={['ADMIN']}/>}/>
+							<Route path="/admin/manage-users" element={<RoleRoute element={<ManageUsers/>} roles={['ADMIN']}/>}/>
 						</Routes>
 					</AdminProvider>
 				</div>
