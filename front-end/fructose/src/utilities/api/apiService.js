@@ -30,3 +30,21 @@ export const getDepartement = async (departementName) => {
 		return null
 	}
 }
+
+export const getEmployeur = async (id, token) => {
+	try {
+		console.log(id, token)
+		const response = await fetch(`/employeur/${id}`, {
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": `${token}`,
+			},
+		});
+		console.log(response);
+		const data = await response.json();
+		return data.owner;
+	} catch (error) {
+		console.error("une erreur est survenu " + error);
+		return null
+	}
+}

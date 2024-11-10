@@ -56,7 +56,11 @@ public class OffreStageService {
 		if (offreStageDTO == null) {
 			throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
 		}
-		offreStageDTO.setOwnerDTO(utilisateurDTO);
+		System.out.println("ownerDTO: " + offreStageDTO.getOwnerDTO());
+		if (offreStageDTO.getOwnerDTO() == null) {
+			offreStageDTO.setOwnerDTO(utilisateurDTO);
+		}
+		System.out.println("ownerDTO: " + offreStageDTO.getOwnerDTO());
 		validateOffreStage(offreStageDTO);
 		OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
 		offreStageRepository.save(offreStage);
@@ -73,7 +77,7 @@ public class OffreStageService {
 		OffreStage existingOffreStage = offreStageRepository.findById(offreStageDTO.getId()).orElseThrow(() -> new IllegalArgumentException("OffreStage not found"));
 		
 		Departement departement = departementRepository.findById(offreStageDTO.getDepartementDTO().getId()).orElseThrow(() -> new IllegalArgumentException("Le département ne peut pas être nul"));
-		
+
 		Utilisateur owner = employeurRepository.findById(offreStageDTO.getOwnerDTO().getId()).orElseThrow(() -> new IllegalArgumentException("Owner not found"));
 		
 		existingOffreStage.setNom(offreStageDTO.getNom());

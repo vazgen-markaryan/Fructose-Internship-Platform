@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {mdiArrowLeft} from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../providers/AuthProvider";
-import {getDepartement} from "../../../utilities/api/apiService";
+import {getDepartement, getEmployeur} from "../../../utilities/api/apiService";
 
 const CreerOffreStage = () => {
     const [offreStage, setOffreStage] = useState({
@@ -22,18 +22,42 @@ const CreerOffreStage = () => {
         nombreHeuresSemaine: 1,
         nombrePostes: 1,
         dateLimiteCandidature: new Date(),
+        ownerDTO: { id: '', fullName: '' }
     });
 
     const {currentToken} = useContext(AuthContext);
+    const {currentUser} = useContext(AuthContext);
     const {t} = useTranslation();
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
+    const [employeurs, setEmployeurs] = useState([]);
+
+    const fetchEmployeurs = async () => {
+        try {
+            const response = await fetch('/employeurs', {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': currentToken
+                },
+            });
+            if (response.ok) {
+                return await response.json();
+            }
+            return [];
+        } catch (error) {
+            return [];
+        }
+    }
 
     const handleInputChange = (event) => {
         const {name, value} = event.target;
 
         if (name === 'dateDebut' || name === 'dateFin' || name === 'dateLimiteCandidature') {
             setOffreStage({...offreStage, [name]: new Date(value)});
+        } else if (name === 'employeur') {
+            const selectedEmployeur = employeurs.find(employeur => employeur.id === Number(value));
+            setOffreStage({...offreStage, ownerDTO: selectedEmployeur});
         } else {
             setOffreStage({...offreStage, [name]: value});
         }
@@ -88,7 +112,7 @@ const CreerOffreStage = () => {
         return errors;
     }
 
-    useEffect(() => {
+    useEffect( () => {
         setErrors((prevErrors) => {
             const updatedErrors = {...prevErrors};
 
@@ -128,7 +152,15 @@ const CreerOffreStage = () => {
 
             return updatedErrors;
         });
-    }, [t]);
+        const fetchData = async () => {
+            if (currentUser && currentUser.role === 'ADMIN') {
+                await fetchEmployeurs().then((employeurs) => {
+                    setEmployeurs(employeurs);
+                });
+            }
+        }
+        fetchData();
+    }, [t, currentUser]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -142,6 +174,11 @@ const CreerOffreStage = () => {
             const departement = await getDepartement(offreStage.departementDTO);
             if (departement) {
                 offreStage.departementDTO = departement;
+            }
+
+            const employeur = await getEmployeur(offreStage.ownerDTO.id, currentToken);
+            if (employeur) {
+                offreStage.ownerDTO = employeur;
             }
             fetch('/creer-offre-stage', {
                 method: 'POST',
@@ -326,6 +363,20 @@ const CreerOffreStage = () => {
                             }}
                         />
                         <p className={"field-invalid-text"}>{errors.dateFin}</p>
+
+                        {currentUser && currentUser.role === 'ADMIN' &&
+                            <>
+                                <label>{t("creer_offre_stage_page.employeur")}</label>
+                                <select name="employeur" onChange={handleInputChange}
+                                        value={offreStage.ownerDTO ? offreStage.ownerDTO.id : ''}
+                                        required>
+                                    <option value="">{t("creer_offre_stage_page.employeur_select")}</option>
+                                    {employeurs.map((employeur) => (
+                                        <option key={employeur.id} value={employeur.id}>{employeur.fullName}</option>
+                                    ))}
+                                </select>
+                            </>
+                        }
                         <br/>
                         <br/>
                         <button type="submit">{t("creer_offre_stage_page.creer_offre_stage")}</button>

@@ -34,8 +34,10 @@ public class OffreStageController {
 	
 	@PostMapping ("/creer-offre-stage")
 	public ResponseEntity<?> creerOffreStage(@RequestHeader ("Authorization") String token, @RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
-		UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
-		offreStageDTO.setOwnerDTO(utilisateurDTO);
+		if (offreStageDTO.getOwnerDTO() == null) {
+			UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
+			offreStageDTO.setOwnerDTO(utilisateurDTO);
+		}
 		if (result.hasErrors()) {
 			String errorMessages = result.getFieldErrors().stream()
 				.map(DefaultMessageSourceResolvable::getDefaultMessage)
