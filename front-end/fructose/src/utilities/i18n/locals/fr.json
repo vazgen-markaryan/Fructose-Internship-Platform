@@ -220,7 +220,18 @@
 		"user_management": "Gestion des utilisateurs",
 		"not_approved_users": "Utilisateurs non approuvés",
 		"limited_places": "Places limitées",
-		"modalFermer": "Fermer"
+		"modalFermer": "Fermer",
+		"my_applications": "Liste de vos applications aux Offres de Stage",
+		"no_applications": "Vous n'avez pas encore postulé à une Offre de Stage",
+		"at": "chez",
+		"sweetalert": {
+			"congratulations": "Félicitations!",
+			"approved_message": "Votre candidature a été approuvée.",
+			"pending": "En attente",
+			"pending_message": "Votre candidature est en attente. Veuillez patienter.",
+			"refused": "Refusée",
+			"refused_message": "Votre candidature a été refusée avec le commentaire suivant :"
+		}
 	},
 	"pdf_view_page": {
 		"error": "Une erreur inconnue est survenue"

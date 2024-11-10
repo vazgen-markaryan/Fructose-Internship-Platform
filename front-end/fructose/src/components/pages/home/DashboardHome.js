@@ -3,21 +3,23 @@ import {AuthContext} from "../../providers/AuthProvider";
 import {Link} from "react-router-dom";
 import Icon from "@mdi/react";
 import {
-    mdiAlertCircleOutline,
-    mdiBriefcasePlusOutline,
-    mdiBriefcaseRemoveOutline,
-    mdiCheck,
-    mdiChevronRight,
-    mdiClockOutline,
-    mdiClose,
-    mdiFileDocumentOutline,
-    mdiPlus
+	mdiAlertCircleOutline,
+	mdiBriefcasePlusOutline,
+	mdiBriefcaseRemoveOutline,
+	mdiCheck,
+	mdiChevronRight,
+	mdiClockOutline,
+	mdiClose,
+	mdiFileDocumentOutline,
+	mdiPlus
 } from "@mdi/js";
 import {OffreStageContext} from "../../providers/OffreStageProvider";
 import {CvContext} from "../../providers/CvProvider";
 import {useTranslation} from "react-i18next";
 import DashboardHomeAdmin from "../admin/DashboardAdmin";
 import OfferPreview from "../offre-stage/OfferPreview";
+import {CandidatureContext} from "../../providers/CandidatureProvider";
+import Swal from "sweetalert2";
 
 const DashboardHome = () => {
 	
@@ -31,6 +33,8 @@ const DashboardHome = () => {
 	const {deleteOffreStage} = useContext(OffreStageContext);
 	const [currentPage, setCurrentPage] = useState(1);
 	const itemsPerPage = 10;
+	const {candidatures, fetchCandidaturesById} = useContext(CandidatureContext);
+	
 	
 	useEffect(() => {
 		if (currentUser) {
@@ -38,12 +42,14 @@ const DashboardHome = () => {
 				if (currentUser.role === "ETUDIANT") {
 					try {
 						const response = await GetCvs();
-						const data = await response.text();
-						setCvs(JSON.parse(data));
+						const data = await response.json();
+						setCvs(data);
 					} catch (error) {
-						console.log("error" + error);
+						console.log("Erreur lors de la récupération des CVs : " + error);
 					}
+					fetchCandidaturesById(currentUser.id);
 				}
+				
 				if (currentUser.role === "EMPLOYEUR" || currentUser.role === "ETUDIANT" || currentUser.role === "PROFESSEUR") {
 					try {
 						const response = await fetchOffresStage();
@@ -54,6 +60,8 @@ const DashboardHome = () => {
 				}
 			})();
 		}
+		// TODO: Ici il donne WARNING: React Hook useEffect has a missing dependency: 'fetchCandidaturesById'.
+		// Mais si le faire il va envoyer 9999 requêtes dans Inspect -> Network
 	}, [currentUser, GetCvs, fetchOffresStage]);
 	
 	const handleDeleteOffreStage = async (offreStageId) => {
@@ -347,6 +355,86 @@ const DashboardHome = () => {
 		}
 	}
 	
+	const handleCandidatureClick = (candidature) => {
+		if (candidature.etat === "APPROUVEE") {
+			Swal.fire({
+				icon: 'success',
+				title: t('dashboard_home_page.sweetalert.congratulations'),
+				text: t('dashboard_home_page.sweetalert.approved_message'),
+			});
+		} else if (candidature.etat === "EN_ATTENTE") {
+			Swal.fire({
+				icon: 'info',
+				title: t('dashboard_home_page.sweetalert.pending'),
+				text: t('dashboard_home_page.sweetalert.pending_message'),
+			});
+		} else if (candidature.etat === "REFUSEE") {
+			Swal.fire({
+				icon: 'error',
+				title: t('dashboard_home_page.sweetalert.refused'),
+				html: `${t('dashboard_home_page.sweetalert.refused_message')}<br><br>${candidature.commentaireRefus}`,
+			});
+		}
+	};
+	
+	const GetCandidaturesSection = () => {
+		if (currentUser && currentUser.role === "ETUDIANT") {
+			const sortedCandidatures = [...candidatures].sort((a, b) => {
+				const statusOrder = {
+					"APPROUVEE": 1,
+					"EN_ATTENTE": 2,
+					"REFUSEE": 3
+				};
+				return statusOrder[a.etat] - statusOrder[b.etat];
+			});
+			
+			return (
+				<section>
+					<h4>{t("dashboard_home_page.my_applications")}</h4>
+					<div>
+						{sortedCandidatures.length !== 0 ? (
+							<div style={{
+								display: "flex",
+								flexDirection: "column",
+								gap: "5px"
+							}}>
+								{sortedCandidatures.map((candidature, index) => (
+									<div key={index} style={{
+										width: "400px",
+										display: "flex",
+										flexDirection: "column",
+										backgroundColor: "#eee",
+										borderRadius: "5px",
+										padding: "10px",
+										marginBottom: "5px",
+										cursor: "pointer"
+									}} onClick={() => handleCandidatureClick(candidature)}>
+										<p style={{
+											margin: "0",
+											display: "flex",
+											alignItems: "center"
+										}}>
+											<b><em>{candidature.nomOffre}</em></b>&nbsp;{t("dashboard_home_page.at")}&nbsp;{candidature.compagnie}
+											{candidature.etat === "APPROUVEE" &&
+												<Icon path={mdiCheck} size={1} color="green" style={{marginLeft: "5px"}}/>}
+											{candidature.etat === "REFUSEE" &&
+												<Icon path={mdiClose} size={1} color="red" style={{marginLeft: "5px"}}/>}
+											{candidature.etat === "EN_ATTENTE" &&
+												<Icon path={mdiClockOutline} size={1} color="orange" style={{marginLeft: "5px"}}/>}
+										</p>
+									</div>
+								))}
+							</div>
+						) : (
+							<p>{t("dashboard_home_page.no_applications")}</p>
+						)}
+					</div>
+				</section>
+			);
+		}
+		return null;
+	};
+	
 	return (
 		<>
 			<div className="dashboard-card-titlebar">
@@ -359,6 +447,7 @@ const DashboardHome = () => {
 				<div style={{"width": "70%"}}>
 					<div className="dashboard-card">
 						{GetOffreStageSection()}
+						{GetCandidaturesSection()}
 						{GetPortfolioSection()}
 						{GetUserManagementSection()}
 						<div style={{"height": "520px"}}>

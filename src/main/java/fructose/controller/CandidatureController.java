@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping ("/candidatures")
 @RequiredArgsConstructor
@@ -48,5 +51,10 @@ public class CandidatureController {
 			logger.error("Erreur lors du refus de la candidature avec ID: {}", candidatureId, e);
 			throw new RuntimeException("Une erreur est survenue lors du refus de la candidature.");
 		}
+	}
+	
+	@GetMapping ("/etudiant/{etudiantId}")
+	public List<Map<String, Object>> getOffreStageDetailsByEtudiantId(@PathVariable Long etudiantId) {
+		return candidatureService.getOffreStageDetailsByEtudiantId(etudiantId);
 	}
 }
