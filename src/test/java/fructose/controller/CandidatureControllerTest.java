@@ -3,15 +3,20 @@ package fructose.controller;
 import fructose.model.Etudiant;
 import fructose.model.OffreStage;
 import fructose.service.CandidatureService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class CandidatureControllerTest {
 	
@@ -101,5 +106,25 @@ class CandidatureControllerTest {
 		}
 		
 		verify(candidatureService).refuserCandidature(candidatureId, commentaireRefus);
+	}
+	
+	@Test
+	void testGetOffreStageDetailsByEtudiantId() {
+		Long etudiantId = 1L;
+		
+		List<Map<String, Object>> mockOffreStageDetails = new ArrayList<>();
+		Map<String, Object> offreStageDetail = new HashMap<>();
+		offreStageDetail.put("id", 1L);
+		offreStageDetail.put("titre", "Développeur Java");
+		offreStageDetail.put("description", "Stage de développement Java pour étudiant.");
+		mockOffreStageDetails.add(offreStageDetail);
+		
+		when(candidatureService.getOffreStageDetailsByEtudiantId(etudiantId)).thenReturn(mockOffreStageDetails);
+		
+		List<Map<String, Object>> result = candidatureController.getOffreStageDetailsByEtudiantId(etudiantId);
+		
+		verify(candidatureService).getOffreStageDetailsByEtudiantId(etudiantId);
+		
+		Assertions.assertEquals(mockOffreStageDetails, result);
 	}
 }

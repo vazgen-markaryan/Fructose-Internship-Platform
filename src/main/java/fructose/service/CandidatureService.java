@@ -23,9 +23,13 @@ public class CandidatureService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CandidatureService.class);
 	private final CandidatureRepository candidatureRepository;
-	
-	@Autowired //NE PAS TOUCHER CETTE LIGNE
 	private OffreStageRepository offreStageRepository;
+	
+	@Autowired
+	public CandidatureService(CandidatureRepository candidatureRepository, OffreStageRepository offreStageRepository) {
+		this.candidatureRepository = candidatureRepository;
+		this.offreStageRepository = offreStageRepository;
+	}
 	
 	public void postuler(Etudiant etudiant, OffreStage offreStage) {
 		try {
