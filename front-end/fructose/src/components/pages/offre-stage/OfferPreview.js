@@ -5,11 +5,10 @@ import {
 	mdiCalendarOutline,
 	mdiCashMultiple,
 	mdiCheck,
-	mdiClockOutline,
-	mdiClose,
 	mdiDeleteOutline,
 	mdiDomain,
-	mdiMapMarkerOutline
+	mdiMapMarkerOutline,
+	mdiCheckCircleOutline
 } from "@mdi/js";
 import {differenceInMonths, endOfMonth, format} from "date-fns";
 import {useNavigate} from "react-router-dom";
@@ -17,7 +16,7 @@ import {useTranslation} from "react-i18next";
 import {AuthContext} from "../../providers/AuthProvider";
 import Modal from "../../../utilities/modal/Modal"
 
-const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, handlerefused}) => {
+const OfferPreview = ({currentOffer, handleDeleteOffreStage, handlerefused, handleApply}) => {
 	const {t} = useTranslation();
 	const {currentUser} = useContext(AuthContext);
 	const navigate = useNavigate();
@@ -59,47 +58,18 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 								<p className="text-dark m-0">{currentOffer.ownerDTO.companyName}</p>
 							</div>
 							<div className="toolbar-spacer"></div>
-							{currentUser.role === "ETUDIANT" ? (
-								<button className="btn-filled">{t("discover_offers_page.apply")}</button>
-							) : currentUser.role === "ADMIN" ? (
-								<div style={{
-									display: "flex",
-									justifyContent: "center",
-									gap: "10px"
-								}}>
-									<button className="btn-filled" onClick={() => handleValidate(currentOffer.id)}>
-										{t("modal.validate")}
-									</button>
-									<button className="btn-outline" onClick={() => setRejectModalOpen(true)}>
-										{t("modal.reject")}
-									</button>
-								</div>
-							) : null}
-							{(currentUser && (currentUser.role === "EMPLOYEUR" || currentUser.role === "ADMIN")) ?
-								<div style={{
-									display: "flex",
-									alignItems: "center",
-									gap: "2px"
-								}}>
-									{currentOffer.isApproved ? (
-										<>
-											<Icon path={mdiCheck} size={1} className="text-green"/>
-											<p className="text-green m-0">{t("discover_offers_page.approved")}</p>
-										</>
-									) : currentOffer.isRefused ? (
-										<>
-											<Icon path={mdiClose} size={1} className="text-red"/>
-											<p className="text-red m-0">{t("discover_offers_page.refused")}</p>
-										</>
-									) : (
-										<>
-											<Icon path={mdiClockOutline} size={1} className="text-orange"/>
-											<p className="text-orange m-0">{t("discover_offers_page.pending")}</p>
-										</>
-									)}
-								</div>
-								: null
-							}
+							<div style={{display: (currentUser.role === "ETUDIANT") ? "block" : "none"}}>
+								{
+									(currentOffer.hasCandidature)
+										?
+										<div className="toolbar-items">
+											<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
+											<h6 className="m-0 text-green">Postulé</h6>
+										</div>
+										:
+										<button className="btn-filled" onClick={() => handleApply()}>{t("discover_offers_page.apply")}</button>
+								}
+							</div>
 						</div>
 						{currentOffer.isRefused && (
 							<p style={{
