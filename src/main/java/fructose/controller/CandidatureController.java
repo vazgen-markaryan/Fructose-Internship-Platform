@@ -2,7 +2,7 @@ package fructose.controller;
 
 import fructose.service.CandidatureService;
 import fructose.service.UtilisateurService;
-import fructose.service.dto.CvDTO;
+import fructose.service.dto.ApplicationStageDTO;
 import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -14,23 +14,23 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping ("/candidatures")
 @RequiredArgsConstructor
 public class CandidatureController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(CandidatureController.class);
 	private final CandidatureService candidatureService;
 	private final UtilisateurService utilisateurService;
-	
-	@PostMapping ("/postuler/{id}")
+
+	@PostMapping ("/postuler")
 	@ResponseStatus (HttpStatus.CREATED)
-	public void postuler(@RequestHeader ("Authorization") String token, @PathVariable Long id, @RequestBody CvDTO cvDTO) {
+	public void postuler(@RequestHeader ("Authorization") String token, @RequestBody ApplicationStageDTO applicationStageDTO) {
 		UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
 		try {
-			candidatureService.postuler(utilisateurDTO, id, cvDTO);
+			candidatureService.postuler(utilisateurDTO, applicationStageDTO.getOffreStageId(), applicationStageDTO.getCvId());
 		} catch (RuntimeException e) {
 			logger.error("Erreur lors de la soumission de la candidature", e);
 			throw new RuntimeException("Une erreur est survenue lors de la soumission de la candidature.");
 		}
 	}
-	
+
 	@PutMapping ("/approuver/{candidatureId}")
 	@ResponseStatus (HttpStatus.OK)
 	public void approuverCandidature(@PathVariable Long candidatureId) {
@@ -41,7 +41,7 @@ public class CandidatureController {
 			throw new RuntimeException("Une erreur est survenue lors de l'approbation de la candidature.");
 		}
 	}
-	
+
 	@PutMapping ("/refuser/{candidatureId}")
 	@ResponseStatus (HttpStatus.OK)
 	public void refuserCandidature(@PathVariable Long candidatureId, @RequestParam String commentaireRefus) {

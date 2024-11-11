@@ -15,6 +15,7 @@ import ModifierOffreStage from "../offre_stage/ModifierOffreStage";
 import ManageOffresStage from "./offre-stage/ManageOffresStage";
 import DiscoverOffers from "./offre-stage/DiscoverOffers";
 import {ApplyOffreWindow} from "./offre-stage/ApplyOffreWindow";
+import {CandidatureProvider} from "../../../providers/CandidatureProvider";
 
 const Dashboard = () => {
 	return (
@@ -33,7 +34,7 @@ const Dashboard = () => {
 								<Route path="/view-cv" element={<RoleRoute element={<ViewCV/>} roles={['ETUDIANT']}/>}/>
 								<Route path="/manage-offres-stage" element={<RoleRoute element={<ManageOffresStage/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
 								<Route path="/modifier-offre-stage/:id" element={<RoleRoute element={<ModifierOffreStage/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
-								<Route path="/discover-offers/" element={<RoleRoute element={<ApplyOffreWindow><DiscoverOffers/></ApplyOffreWindow>} roles={['ETUDIANT']}/>}/>
+								<Route path="/discover-offers/" element={<RoleRoute element={<CandidatureProvider><ApplyOffreWindow><DiscoverOffers/></ApplyOffreWindow></CandidatureProvider>} roles={['ETUDIANT']}/>}/>
 								<Route path="/" element={<DashboardHome/>}/>
 							</Routes>
 						</OffreStageProvider>

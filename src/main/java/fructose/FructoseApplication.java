@@ -138,11 +138,11 @@ public class FructoseApplication implements CommandLineRunner {
 		System.out.println(); // Ajouter une ligne vide pour la lisibilité
 		createAndPersistCandidature("vazgen@gmail.com", 10L, 20L, 30L);
 		
-		System.out.println(); // Ajouter une ligne vide pour la lisibilité
+		/*System.out.println(); // Ajouter une ligne vide pour la lisibilité
 		candidatureService.approuverCandidature(1L);
 		
 		System.out.println(); // Ajouter une ligne vide pour la lisibilité
-		candidatureService.refuserCandidature(2L, "Pas assez d'expérience");
+		candidatureService.refuserCandidature(2L, "Pas assez d'expérience");*/
 	}
 	
 	
@@ -199,10 +199,10 @@ public class FructoseApplication implements CommandLineRunner {
 			Etudiant etudiant = (Etudiant) EtudiantDTO.toEntity(utilisateurService.getUtilisateurByEmail(email));
 			
 			// Postuler pour chaque offre de stage
-			for (Long offreStageId : offreStageIds) {
+			/*for (Long offreStageId : offreStageIds) {
 				OffreStageDTO offreStageDTO = offreStageService.getOffreStageById(offreStageId);
 				candidatureService.postuler(etudiant, OffreStageDTO.toEntity(offreStageDTO));
-			}
+			}*/
 		} catch (Exception e) {
 			logger.error("Erreur lors de la soumission de la candidature", e);
 		}

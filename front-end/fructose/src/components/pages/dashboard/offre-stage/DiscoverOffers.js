@@ -18,6 +18,7 @@ import {
 	mdiSchoolOutline
 } from "@mdi/js";
 import {ApplyOffreWindowContext, ApplyOffreWindow} from "./ApplyOffreWindow";
+import {CandidatureContext} from "../../../../providers/CandidatureProvider";
 
 
 const DiscoverOffers = () => {
@@ -37,7 +38,7 @@ const DiscoverOffers = () => {
 	const handleApplyStage = async () => {
 		const isConfirmed = await openCandidatureWindow(currentOffer);
 		if (isConfirmed) {
-			alert("OK")
+
 		}
 	};
 	
@@ -198,7 +199,6 @@ const DiscoverOffers = () => {
 	useEffect(() => {
 		if (offerId && offers.length > 0) {
 			const selectedOffer = offers.find((offer) => offer.id === parseInt(offerId));
-			console.log("selectedOffer", selectedOffer);
 			setCurrentOffer(selectedOffer);
 		}
 	}, [location.search, offerId, offers]);

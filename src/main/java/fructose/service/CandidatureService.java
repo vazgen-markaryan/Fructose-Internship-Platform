@@ -8,7 +8,6 @@ import fructose.model.enumerator.EtatCandidature;
 import fructose.repository.CandidatureRepository;
 import fructose.repository.CvRepository;
 import fructose.repository.OffreStageRepository;
-import fructose.service.dto.CvDTO;
 import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -24,11 +23,11 @@ public class CandidatureService {
 	private final OffreStageRepository offreStageRepository;
 	private final CvRepository cvRepository;
 	
-	public void postuler(UtilisateurDTO etudiantDTO, Long offreStageId, CvDTO cvDTO) {
+	public void postuler(UtilisateurDTO etudiantDTO, Long offreStageId, Long cvDTOId) {
 		try {
 			OffreStage offreStage = offreStageRepository.getById(offreStageId);
 			Utilisateur etudiant = UtilisateurDTO.toEntity(etudiantDTO);
-			Cv cv = cvRepository.getById(cvDTO.getId());
+			Cv cv = cvRepository.getById(cvDTOId);
 
 			Candidature candidature = new Candidature();
 			candidature.setEtudiant(etudiant);

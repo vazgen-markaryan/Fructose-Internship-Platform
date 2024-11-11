@@ -8,20 +8,17 @@ const CandidatureProvider = ({children}) => {
     const {currentToken} = useContext(AuthContext);
 
     const ApplyOffreStage = async (id, cvId) => {
-        try {
-            const response = await fetch(`/postuler/${id}`, {
+            return await fetch(`/postuler`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': currentToken
                 },
+                body: {
+                    offreStageId: id,
+                    cvId: cvId
+                }
             });
-            if (response.ok) {
-                return await response.json();
-            }
-        } catch (error) {
-            console.error("Erreur: ", error);
-        }
     };
 
 
