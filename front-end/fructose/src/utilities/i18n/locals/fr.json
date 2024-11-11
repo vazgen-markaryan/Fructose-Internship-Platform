@@ -188,13 +188,13 @@
 			"type_emploi_select": "Le type d'emploi doit être sélectionné"
 		}
 	},
-	"modal" : {
+	"modal": {
 		"validate": "Accepter",
 		"reject": "Rejeter",
-		"reject_reason" : "Raison du refus",
-		"reject_reason_placeholder" : "Entrez le commentaire du refus ici",
-		"send" : "Envoyer",
-		"close" : "Fermer"
+		"reject_reason": "Raison du refus",
+		"reject_reason_placeholder": "Entrez le commentaire du refus ici",
+		"send": "Envoyer",
+		"close": "Fermer"
 	},
 	"dashboard_home_page": {
 		"home": "Accueil",
@@ -343,7 +343,7 @@
 		"poste": "Poste",
 		"description": "Description",
 		"compagnie": "Compagnie",
-		"address": "Adresse",
+		"adresse": "Adresse",
 		"taux_horaire": "Taux horaire",
 		"nombre_heures_semaine": "Nombre d'heures par semaine",
 		"nombre_postes": "Nombre de postes",
