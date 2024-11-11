@@ -38,7 +38,7 @@ const DiscoverOffers = () => {
 	const handleApplyStage = async () => {
 		const isConfirmed = await openCandidatureWindow(currentOffer);
 		if (isConfirmed) {
-
+			setCurrentOffer({...currentOffer, hasCandidature: true})
 		}
 	};
 	

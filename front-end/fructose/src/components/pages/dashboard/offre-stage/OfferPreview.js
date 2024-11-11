@@ -4,7 +4,7 @@ import {
 	mdiBriefcaseOutline,
 	mdiCalendarOutline,
 	mdiCashMultiple,
-	mdiCheck,
+	mdiCheck, mdiCheckCircleOutline,
 	mdiDeleteOutline,
 	mdiDomain,
 	mdiMapMarkerOutline
@@ -56,7 +56,16 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleApply}) => {
 							</div>
 							<div className="toolbar-spacer"></div>
 							<div style={{display: (currentUser.role === "ETUDIANT") ? "block" : "none"}}>
-								<button className="btn-filled" onClick={() => handleApply()}>{t("discover_offers_page.apply")}</button>
+								{
+									(currentOffer.hasCandidature)
+										?
+										<div className="toolbar-items">
+											<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
+											<h6 className="m-0 text-green">Postulé</h6>
+										</div>
+										:
+										<button className="btn-filled" onClick={() => handleApply()}>{t("discover_offers_page.apply")}</button>
+								}
 							</div>
 						</div>
 					</section>

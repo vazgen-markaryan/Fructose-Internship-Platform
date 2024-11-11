@@ -17,9 +17,12 @@ const ApplyOffreWindow = ({children}) => {
     const [approvedCvs, setApprovedCvs] = useState(null)
     const [currentCv, setCurrentCv] = useState(null)
 
+    const [enChargement, setEnChargement] = useState(false);
+
     const openCandidatureWindow = useCallback((offreStage) => {
         if (isUserInit) {
             (async function () {
+                setEnChargement(true)
                 const response = await GetCvs();
                 const data = await response.text();
                 let cvs = JSON.parse(data);
@@ -31,11 +34,10 @@ const ApplyOffreWindow = ({children}) => {
                     }
                 }
                 setApprovedCvs(approvedCvsList.reverse())
-                setTimeout(()=>{
-                    if(approvedCvsList.length > 0){
-                        setCurrentCv(approvedCvsList[0])
-                    }
-                }, 100)
+                if(approvedCvsList.length > 0){
+                    setCurrentCv(approvedCvsList[0])
+                }
+                setEnChargement(false)
             })();
             return new Promise((resolve) => {
                 setDialogState({
@@ -58,6 +60,7 @@ const ApplyOffreWindow = ({children}) => {
 
     const handleCompleteSubmission = async () => {
         if (currentCv !== null) {
+            setEnChargement(true)
             try {
                 const response = await ApplyOffreStage(dialogState.offre.id, currentCv.id)
                 if(response.ok){
@@ -66,6 +69,7 @@ const ApplyOffreWindow = ({children}) => {
             } catch (error) {
                 console.log(error)
             }
+            setEnChargement(false)
         }
     }
 
@@ -85,53 +89,60 @@ const ApplyOffreWindow = ({children}) => {
                                 <button className="btn-icon" onClick={dialogState.onClose}><Icon path={mdiClose} size={1}/></button>
                             </div>
                             <div className="window-content">
-                                <section className="nospace">
-                                    <div className="toolbar-items" style={{gap: "8px"}}>
-                                        <div className="user-profile-section-profile-picture" style={{
-                                            "background": "url('/assets/offers/default-company.png') center / cover",
-                                            width: "52px",
-                                            height: "52px",
-                                            borderRadius: "5px",
-                                            margin: 0
-                                        }}></div>
-                                        <div>
-                                            <h4 className="m-0">{dialogState.offre.nom}</h4>
-                                            <h6 className="m-0 text-dark">{dialogState.offre.compagnie}</h6>
+                                {(enChargement)?
+                                <div className="loader-container">
+                                    <div className="loader"></div>
+                                </div>
+                                :
+                                <>
+                                    <section className="nospace">
+                                        <div className="toolbar-items" style={{gap: "8px"}}>
+                                            <div className="user-profile-section-profile-picture" style={{
+                                                "background": "url('/assets/offers/default-company.png') center / cover",
+                                                width: "52px",
+                                                height: "52px",
+                                                borderRadius: "5px",
+                                                margin: 0
+                                            }}></div>
+                                            <div>
+                                                <h4 className="m-0">{dialogState.offre.nom}</h4>
+                                                <h6 className="m-0 text-dark">{dialogState.offre.compagnie}</h6>
+                                            </div>
                                         </div>
-                                    </div>
-                                </section>
-                                <section className="nospace">
-                                    <h5></h5>
-                                    <div className="list-bullet">
-                                        <Icon path={mdiMapMarkerOutline} size={1}/>
-                                        <div style={{padding: "4px 0"}}>
-                                            <h6 className="m-0" style={{marginBottom: "5px"}}>{dialogState.offre.adresse}</h6>
+                                    </section>
+                                    <section className="nospace">
+                                        <h5></h5>
+                                        <div className="list-bullet">
+                                            <Icon path={mdiMapMarkerOutline} size={1}/>
+                                            <div style={{padding: "4px 0"}}>
+                                                <h6 className="m-0" style={{marginBottom: "5px"}}>{dialogState.offre.adresse}</h6>
+                                            </div>
                                         </div>
-                                    </div>
-                                </section>
-                                <section className="nospace">
-                                    <br/>
-                                    <h6 className="m-0">Curriculum Vitae à envoyer</h6>
-                                    {
-                                        (approvedCvs !== null)?
-                                            (approvedCvs.length !== 0)?
-                                                (currentCv !== null)?
-                                                    <>
-                                                        <select name="cv" value={currentCv.value} onChange={(e)=>{handleCvChange(e.target.value)}}>
-                                                            {approvedCvs.map((item, index) => (
-                                                                <option key={index} value={item.id}>{item.filename}</option>
-                                                            ))}
-                                                        </select>
-                                                        <p className="text-dark">Note: Seuls les CV approuvés apparaîtront dans la liste.</p>
-                                                    </>
-                                                    :null
+                                    </section>
+                                    <section className="nospace">
+                                        <br/>
+                                        <h6 className="m-0">Curriculum Vitae à envoyer</h6>
+                                        {
+                                            (approvedCvs !== null)?
+                                                (approvedCvs.length !== 0)?
+                                                    (currentCv !== null)?
+                                                        <>
+                                                            <select name="cv" value={currentCv.value} onChange={(e)=>{handleCvChange(e.target.value)}}>
+                                                                {approvedCvs.map((item, index) => (
+                                                                    <option key={index} value={item.id}>{item.filename}</option>
+                                                                ))}
+                                                            </select>
+                                                            <p className="text-dark">Note: Seuls les CV approuvés apparaîtront dans la liste.</p>
+                                                        </>
+                                                        :null
+                                                    :
+                                                    <div className="banner"><Icon path={mdiAlert} size={1} /><p>Aucun CV approuvé dans votre dossier. Vous ne pourrez postuler sans un CV approuvé. <Link to="/dashboard/manage-cvs">Voir mes CVs <Icon path={mdiOpenInNew} size={0.5} /></Link></p></div>
                                                 :
-                                                <div className="banner"><Icon path={mdiAlert} size={1} /><p>Aucun CV approuvé dans votre dossier. Vous ne pourrez postuler sans un CV approuvé. <Link to="/dashboard/manage-cvs">Voir mes CVs <Icon path={mdiOpenInNew} size={0.5} /></Link></p></div>
-                                            :
-                                            <div className="loader"></div>
-                                    }
+                                                <div className="loader"></div>
+                                        }
 
-                                </section>
+                                    </section>
+                                </>}
                             </div>
                             <div className="window-options">
                                 <div className="toolbar-spacer"></div>
