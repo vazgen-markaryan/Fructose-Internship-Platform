@@ -5,8 +5,6 @@ import {
 	mdiAccountSchoolOutline,
 	mdiAccountTieOutline,
 	mdiArrowLeft,
-	mdiCheck,
-	mdiClockOutline,
 	mdiClose,
 	mdiHumanMaleBoard,
 } from "@mdi/js";
