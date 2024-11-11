@@ -52,6 +52,7 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 						     style={{"backgroundImage": "url('/assets/offers/default-company.png')"}}>
 						</div>
 					</div>
+					
 					<section>
 						<div className="toolbar-items" style={{padding: "0 10px"}}>
 							<div>
@@ -59,47 +60,49 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 								<p className="text-dark m-0">{currentOffer.ownerDTO.companyName}</p>
 							</div>
 							<div className="toolbar-spacer"></div>
+							
 							{currentUser.role === "ETUDIANT" ? (
 								<button className="btn-filled">{t("discover_offers_page.apply")}</button>
-							) : currentUser.role === "ADMIN" ? (
-								<div style={{
-									display: "flex",
-									justifyContent: "center",
-									gap: "10px"
-								}}>
-									<button className="btn-filled" onClick={() => handleValidate(currentOffer.id)}>
-										{t("modal.validate")}
-									</button>
-									<button className="btn-outline" onClick={() => setRejectModalOpen(true)}>
-										{t("modal.reject")}
-									</button>
-								</div>
 							) : null}
-							{(currentUser && (currentUser.role === "EMPLOYEUR" || currentUser.role === "ADMIN")) ?
-								<div style={{
-									display: "flex",
-									alignItems: "center",
-									gap: "2px"
-								}}>
-									{currentOffer.isApproved ? (
-										<>
-											<Icon path={mdiCheck} size={1} className="text-green"/>
-											<p className="text-green m-0">{t("discover_offers_page.approved")}</p>
-										</>
-									) : currentOffer.isRefused ? (
-										<>
-											<Icon path={mdiClose} size={1} className="text-red"/>
-											<p className="text-red m-0">{t("discover_offers_page.refused")}</p>
-										</>
-									) : (
-										<>
-											<Icon path={mdiClockOutline} size={1} className="text-orange"/>
-											<p className="text-orange m-0">{t("discover_offers_page.pending")}</p>
-										</>
-									)}
+							
+							<br/>
+							{(currentUser && (currentUser.role === "EMPLOYEUR" || currentUser.role === "ADMIN")) && (
+								<div>
+									<div
+										style={{
+											display: "flex",
+											alignItems: "center",
+											justifyContent: "center",
+											backgroundColor: currentOffer.isApproved ? "green" : currentOffer.isRefused ? "red" : "orange",
+											color: "white",
+											padding: "8px 12px",
+											borderRadius: "5px",
+											fontSize: "16px",
+											fontWeight: "bold",
+											gap: "5px",
+											width: "fit-content",
+											cursor: "default"
+										}}
+									>
+										{currentOffer.isApproved ? (
+											<>
+												<Icon path={mdiCheck} size={1} className="text-white"/>
+												<p className="m-0">{t("discover_offers_page.approved")}</p>
+											</>
+										) : currentOffer.isRefused ? (
+											<>
+												<Icon path={mdiClose} size={1} className="text-white"/>
+												<p className="m-0">{t("discover_offers_page.refused")}</p>
+											</>
+										) : (
+											<>
+												<Icon path={mdiClockOutline} size={1} className="text-white"/>
+												<p className="m-0">{t("discover_offers_page.pending")}</p>
+											</>
+										)}
+									</div>
 								</div>
-								: null
-							}
+							)}
 						</div>
 						{currentOffer.isRefused && (
 							<p style={{
@@ -109,8 +112,35 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 							}}>{t("discover_offers_page.refusal_reason")}{currentOffer.commentaireRefus}</p>
 						)}
 					</section>
+					
 					<hr/>
+					
 					<div style={{overflowY: "auto"}}>
+						{currentUser.role === "ADMIN" ? (
+							<>
+								<section className="nospace">
+									<h5>{t("discover_offers_page.actions")}</h5>
+									
+									<div style={{
+										gap: "10px"
+									}}
+									     className="toolbar-items">
+										<button
+											className="btn-filled toolbar-spacer bg-green"
+											onClick={() => handleValidate(currentOffer.id)}
+										>
+											{t("modal.validate")}
+										</button>
+										<button
+											className="btn-filled toolbar-spacer bg-red"
+											onClick={() => setRejectModalOpen(true)}>
+											{t("modal.reject")}
+										</button>
+									</div>
+								</section>
+								<hr/>
+							</>
+						) : null}
 						<section className="nospace">
 							<h5>{t("discover_offers_page.particularities")}</h5>
 							<div className="list-bullet">
@@ -218,22 +248,25 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 						)}
 					</div>
 				</div>
-				{isRejectModalOpen && (
-					<Modal onClose={() => setRejectModalOpen(false)} onSend={() => {
-						handlerefused(currentOffer.id, textareaRef.current.value);
-						textareaRef.current.value = "";
-						setRejectModalOpen(false);
-					}}>
-						<h4>{t("modal.reject_reason")}</h4>
-						<textarea
-							ref={textareaRef}
-							placeholder={t("modal.reject_reason_placeholder")}
-							style={{width: "100%", height: "100px"}}
-						/>
-					</Modal>
-				)}
+				{
+					isRejectModalOpen && (
+						<Modal onClose={() => setRejectModalOpen(false)} onSend={() => {
+							handlerefused(currentOffer.id, textareaRef.current.value);
+							textareaRef.current.value = "";
+							setRejectModalOpen(false);
+						}}>
+							<h4>{t("modal.reject_reason")}</h4>
+							<textarea
+								ref={textareaRef}
+								placeholder={t("modal.reject_reason_placeholder")}
+								style={{width: "100%", height: "100px"}}
+							/>
+						</Modal>
+					)
+				}
 			</>
-		);
+		)
+			;
 	}
 	return null;
 };

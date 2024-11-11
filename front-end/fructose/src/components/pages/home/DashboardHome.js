@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../providers/AuthProvider";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Icon from "@mdi/react";
 import {
 	mdiAlertCircleOutline,
@@ -34,7 +34,11 @@ const DashboardHome = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const itemsPerPage = 10;
 	const {candidatures, fetchCandidaturesById} = useContext(CandidatureContext);
+	const navigate = useNavigate();
 	
+	const handleCvClick = (cv) => {
+		navigate("/dashboard/manage-cvs", {state: {selectedCv: cv}});
+	};
 	
 	useEffect(() => {
 		if (currentUser) {
@@ -330,20 +334,36 @@ const DashboardHome = () => {
 								</div>
 							) : (
 								<div style={{
-									"width": "400px",
-									"backgroundColor": "#eee",
-									"borderRadius": "5px",
-									"padding": "10px"
+									"display": "flex",
+									"flexDirection": "column",
+									"gap": "5px"
 								}}>
 									{cvs.map((cv, index) => (
-										<div key={index}
-										     style={{
-											     "display": "flex",
-											     "alignItems": "center",
-											     "gap": "5px"
-										     }}>
-											<Icon path={mdiFileDocumentOutline} size={1}/>
-											<p className="m-0">{cv.filename}</p>
+										<div key={index} style={{
+											"width": "400px",
+											"display": "flex",
+											"alignItems": "center",
+											"backgroundColor": "#eee",
+											"borderRadius": "5px",
+											"padding": "10px",
+											"marginBottom": "5px",
+											"cursor": "pointer"
+										}} onClick={() => handleCvClick(cv)}>
+											<p style={{
+												"margin": "0",
+												"display": "flex",
+												"alignItems": "center",
+												"flexGrow": 1
+											}}>
+												<Icon path={mdiFileDocumentOutline} size={1}/>
+												{cv.filename}
+											</p>
+											{cv.isApproved &&
+												<Icon path={mdiCheck} size={1} color="green" style={{marginLeft: "5px"}}/>}
+											{cv.isRefused &&
+												<Icon path={mdiClose} size={1} color="red" style={{marginLeft: "5px"}}/>}
+											{!cv.isApproved && !cv.isRefused &&
+												<Icon path={mdiClockOutline} size={1} color="orange" style={{marginLeft: "5px"}}/>}
 										</div>
 									))}
 								</div>
@@ -402,7 +422,7 @@ const DashboardHome = () => {
 									<div key={index} style={{
 										width: "400px",
 										display: "flex",
-										flexDirection: "column",
+										alignItems: "center",
 										backgroundColor: "#eee",
 										borderRadius: "5px",
 										padding: "10px",
@@ -412,27 +432,28 @@ const DashboardHome = () => {
 										<p style={{
 											margin: "0",
 											display: "flex",
-											alignItems: "center"
+											alignItems: "center",
+											flexGrow: 1
 										}}>
 											<b><em>{candidature.nomOffre}</em></b>&nbsp;{t("dashboard_home_page.at")}&nbsp;{candidature.compagnie}
-											{candidature.etat === "APPROUVEE" &&
-												<Icon path={mdiCheck} size={1} color="green" style={{marginLeft: "5px"}}/>}
-											{candidature.etat === "REFUSEE" &&
-												<Icon path={mdiClose} size={1} color="red" style={{marginLeft: "5px"}}/>}
-											{candidature.etat === "EN_ATTENTE" &&
-												<Icon path={mdiClockOutline} size={1} color="orange" style={{marginLeft: "5px"}}/>}
 										</p>
+										{candidature.etat === "APPROUVEE" &&
+											<Icon path={mdiCheck} size={1} color="green" style={{marginLeft: "5px"}}/>}
+										{candidature.etat === "REFUSEE" &&
+											<Icon path={mdiClose} size={1} color="red" style={{marginLeft: "5px"}}/>}
+										{candidature.etat === "EN_ATTENTE" &&
+											<Icon path={mdiClockOutline} size={1} color="orange" style={{marginLeft: "5px"}}/>}
 									</div>
 								))}
 							</div>
 						) : <div style={{
-							"width": "400px",
-							"display": "flex",
-							"alignItems": "center",
-							"backgroundColor": "#eee",
-							"borderRadius": "5px",
-							"gap": "5px",
-							"padding": "10px"
+							width: "400px",
+							display: "flex",
+							alignItems: "center",
+							backgroundColor: "#eee",
+							borderRadius: "5px",
+							gap: "5px",
+							padding: "10px"
 						}}>
 							<Icon path={mdiFileDocumentOutline} size={1}/>
 							<p className="m-0">{t("dashboard_home_page.no_applications")}</p>

@@ -1,8 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
 	mdiArrowLeft,
-	mdiCheck,
-	mdiClockOutline,
 	mdiClose,
 	mdiDeleteOutline,
 	mdiDownloadOutline,
@@ -12,10 +10,11 @@ import {
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../providers/AuthProvider";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import PdfPreview from "../../../utilities/pdf/PdfPreview";
 import {CvContext} from "../../providers/CvProvider";
 import {useTranslation} from "react-i18next";
+import StatusElement from "../../fragments/cv/StatusElement";
 
 const ManageCVs = () => {
 	const {t} = useTranslation();
@@ -24,6 +23,7 @@ const ManageCVs = () => {
 	const [cvs, setCvs] = useState([]);
 	const [currentContenueCv, setCurrentContenueCv] = useState(null);
 	const [currentCv, setCurrentCv] = useState(null);
+	const location = useLocation();
 	
 	useEffect(() => {
 		if (isUserInit) {
@@ -39,6 +39,13 @@ const ManageCVs = () => {
 		}
 	}, [isUserInit, GetCvs, t]);
 	
+	// TODO ici il dit aussi Warning Missing dependency. Ignore car ça crée plus de Warnings
+	useEffect(() => {
+		if (location.state && location.state.selectedCv) {
+			handleCvSelection(location.state.selectedCv);
+		}
+	}, [location.state]);
+	
 	const fetchCvContenuById = async (cvId) => {
 		try {
 			const response = await getCvContenuById(cvId);
@@ -50,7 +57,6 @@ const ManageCVs = () => {
 			console.error("Erreur lors de la récupération du CV:", error);
 		}
 	};
-	
 	
 	const fetchCvById = async (cvId) => {
 		try {
@@ -86,26 +92,11 @@ const ManageCVs = () => {
 	const getStatutElement = (cv) => {
 		if (cv) {
 			if (!cv.isApproved && !cv.isRefused) {
-				return (
-					<div style={{display: "flex"}}>
-						<p className="m-0 text-orange">{t('manage_cv.status.pending')}</p>
-						<Icon path={mdiClockOutline} size={0.8} className="text-orange"/>
-					</div>
-				);
+				return <StatusElement status="pending" text={t("manage_cv.status.pending")}/>;
 			} else if (cv.isApproved) {
-				return (
-					<div style={{display: "flex"}}>
-						<p className="m-0 text-green">{t('manage_cv.status.approved')}</p>
-						<Icon path={mdiCheck} size={0.8} className="text-green"/>
-					</div>
-				);
+				return <StatusElement status="approved" text={t("manage_cv.status.approved")}/>;
 			} else if (cv.isRefused) {
-				return (
-					<div style={{display: "flex"}}>
-						<p className="m-0 text-red">{t('manage_cv.status.rejected')}</p>
-						<Icon path={mdiClose} size={0.8} className="text-red"/>
-					</div>
-				);
+				return <StatusElement status="rejected" text={t("manage_cv.status.rejected")}/>;
 			}
 		}
 		return null;
@@ -120,8 +111,7 @@ const ManageCVs = () => {
 						<div className="m-0 toolbar-spacer"></div>
 						<Link to="../upload-cv">
 							<button className="btn-filled">{t('manage_cv.buttons.add')}
-								<Icon
-									path={mdiFileUploadOutline} size={1}/></button>
+								<Icon path={mdiFileUploadOutline} size={1}/></button>
 						</Link>
 					</div>
 					<br/>
@@ -193,15 +183,13 @@ const ManageCVs = () => {
 								<h4 className="m-0">{currentContenueCv.filename}</h4>
 								<p className="text-dark m-0">{(currentContenueCv.fileSize / DIVISER_KB).toFixed(2)} kb</p>
 							</div>
-							<div className="toolbar-spacer"></div>
-							{getStatutElement(currentContenueCv)}
 						</div>
 						<br/>
 						{currentContenueCv.isRefused && currentCv && (
 							<p style={{
 								color: "red",
 								textAlign: "center"
-							}}>{currentCv.commentaireRefus}</p>
+							}}>{t('manage_cv.messages.reject_reason')}"{currentCv.commentaireRefus}"</p>
 						)}
 						<a href={currentContenueCv.fileUrl} download={currentContenueCv.filename} className="btn-option">
 							<Icon path={mdiDownloadOutline} size={1}/>{t('manage_cv.buttons.download')}
@@ -226,8 +214,7 @@ const ManageCVs = () => {
 							<h6 style={{margin: "8px 0 14px 0"}}>{t('manage_cv.messages.no_cvs')}</h6>
 							<Link to="../upload-cv">
 								<button className="btn-filled">{t('manage_cv.buttons.add')}
-									<Icon
-										path={mdiFileUploadOutline} size={1}/>
+									<Icon path={mdiFileUploadOutline} size={1}/>
 								</button>
 							</Link>
 						</div>

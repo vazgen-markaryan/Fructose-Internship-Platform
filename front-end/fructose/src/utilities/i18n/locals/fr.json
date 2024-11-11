@@ -253,9 +253,6 @@
 	},
 	"manage_users_page": {
 		"not_approved_users": "Utilisateurs non approuvés",
-		"not_approved_cvs": "CVs non approuvés",
-		"not_approved_stage": "Offres de stage non approuvées",
-		"related_options": "Options associées",
 		"no_users_to_approve": "Aucun utilisateur à approuver",
 		"when_created": "Lorsqu'un utilisateur est créé, il apparaîtra ici",
 		"approve": "Approuver",
@@ -263,12 +260,11 @@
 		"delete": "Supprimer",
 		"user_details": "Détails de l'utilisateur",
 		"details": "Détails",
-		"in_probation": "En attente d'approbation",
+		"in_probation": "En attente",
 		"role": "Rôle",
 		"department": "Département",
 		"matricule": "Matricule",
 		"company": "Entreprise",
-		"global_view": "Vue globale",
 		"actions": "Actions"
 	},
 	"manage_cv": {
@@ -286,7 +282,8 @@
 			"delete": "Supprimer"
 		},
 		"messages": {
-			"no_cvs": "Aucun CV dans votre dossier"
+			"no_cvs": "Aucun CV dans votre dossier",
+			"reject_reason": "Raison: "
 		},
 		"titles": {
 			"cvs": "Mes CVs",
@@ -393,8 +390,8 @@
 		"particularities": "Particularités",
 		"salary": "Salaire",
 		"internship_type": "Type de stage",
-		"approved": "Approuver",
-		"refused": "Refuser",
+		"approved": "Approuvé",
+		"refused": "Refusé",
 		"pending": "En attente",
 		"refusal_reason": "Raison du refus : ",
 		"hours_one": "{{count}} Heure",
@@ -442,6 +439,7 @@
 			}
 		},
 		"reset": "Réinitialiser",
-		"search": "Rechercher"
+		"search": "Rechercher",
+		"actions": "Actions"
 	}
 }
