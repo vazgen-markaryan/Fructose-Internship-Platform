@@ -425,9 +425,18 @@ const DashboardHome = () => {
 									</div>
 								))}
 							</div>
-						) : (
-							<p>{t("dashboard_home_page.no_applications")}</p>
-						)}
+						) : <div style={{
+							"width": "400px",
+							"display": "flex",
+							"alignItems": "center",
+							"backgroundColor": "#eee",
+							"borderRadius": "5px",
+							"gap": "5px",
+							"padding": "10px"
+						}}>
+							<Icon path={mdiFileDocumentOutline} size={1}/>
+							<p className="m-0">{t("dashboard_home_page.no_applications")}</p>
+						</div>}
 					</div>
 				</section>
 			);
