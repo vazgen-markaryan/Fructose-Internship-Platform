@@ -279,11 +279,11 @@
 			"rejected": "Refusé"
 		},
 		"buttons": {
+			"add": "Ajouter",
 			"accept": "Accepter",
 			"reject": "Refuser",
 			"download": "Télécharger",
-			"delete": "Supprimer",
-			"add": "Ajouter"
+			"delete": "Supprimer"
 		},
 		"messages": {
 			"no_cvs": "Aucun CV dans votre dossier"
