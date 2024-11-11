@@ -27,6 +27,7 @@ public class Cv {
 	// Stocke données binaires volumineuses (PDF)
 	@Lob
 	@Column(name = "file_content")
+	@Basic(fetch = FetchType.LAZY)
 	@Nullable
 	private byte[] fileContent;
 	

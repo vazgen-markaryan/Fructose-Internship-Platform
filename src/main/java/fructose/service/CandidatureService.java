@@ -24,11 +24,14 @@ public class CandidatureService {
 	private final CvRepository cvRepository;
 	
 	public void postuler(UtilisateurDTO etudiantDTO, Long offreStageId, Long cvDTOId) {
-		try {
-			OffreStage offreStage = offreStageRepository.getById(offreStageId);
-			Utilisateur etudiant = UtilisateurDTO.toEntity(etudiantDTO);
-			Cv cv = cvRepository.getById(cvDTOId);
+		OffreStage offreStage = offreStageRepository.getById(offreStageId);
+		Utilisateur etudiant = UtilisateurDTO.toEntity(etudiantDTO);
+		Cv cv = cvRepository.getById(cvDTOId);
 
+		// Verifier si la condidature n'est pas dupliquée
+		Long candidatureCount = candidatureRepository.getCandidatureNumbers(etudiant.getId(), offreStageId);
+
+		if(candidatureCount == 0){
 			Candidature candidature = new Candidature();
 			candidature.setEtudiant(etudiant);
 			candidature.setOffreStage(offreStage);
@@ -36,9 +39,8 @@ public class CandidatureService {
 			candidature.setEtat(EtatCandidature.EN_ATTENTE);
 			candidatureRepository.save(candidature);
 			System.out.println("ETUDIANT: avec email " + etudiant.getEmail() + " a postulé pour l'offre de stage: " + offreStage.getNom() + " chez " + offreStage.getCompagnie());
-		} catch (Exception e) {
-			logger.error("Erreur lors de la soumission de la candidature", e);
-			throw new RuntimeException("Une erreur est survenue lors de la soumission de la candidature.", e);
+		} else {
+			throw new IllegalArgumentException("L'utilisateur a déjà soumis une candidature pour ce poste");
 		}
 	}
 	

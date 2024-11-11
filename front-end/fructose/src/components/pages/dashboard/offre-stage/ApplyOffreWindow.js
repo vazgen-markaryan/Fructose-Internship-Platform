@@ -19,6 +19,8 @@ const ApplyOffreWindow = ({children}) => {
 
     const [enChargement, setEnChargement] = useState(false);
 
+    const [error, setError] = useState("")
+
     const openCandidatureWindow = useCallback((offreStage) => {
         if (isUserInit) {
             (async function () {
@@ -60,14 +62,18 @@ const ApplyOffreWindow = ({children}) => {
 
     const handleCompleteSubmission = async () => {
         if (currentCv !== null) {
+            setError("")
             setEnChargement(true)
             try {
                 const response = await ApplyOffreStage(dialogState.offre.id, currentCv.id)
                 if(response.ok){
                     dialogState.onConfirm(currentCv.id)
+                } else {
+                    let text = await response.text()
+                    setError(text)
                 }
             } catch (error) {
-                console.log(error)
+                setError(error)
             }
             setEnChargement(false)
         }
@@ -133,6 +139,8 @@ const ApplyOffreWindow = ({children}) => {
                                                                 ))}
                                                             </select>
                                                             <p className="text-dark">Note: Seuls les CV approuvés apparaîtront dans la liste.</p>
+                                                            <p className="text-red">{error}</p>
+
                                                         </>
                                                         :null
                                                     :

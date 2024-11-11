@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,13 +22,16 @@ public class CandidatureController {
 
 	@PostMapping ("/postuler")
 	@ResponseStatus (HttpStatus.CREATED)
-	public void postuler(@RequestHeader ("Authorization") String token, @RequestBody ApplicationStageDTO applicationStageDTO) {
+	public ResponseEntity<?> postuler(@RequestHeader ("Authorization") String token, @RequestBody ApplicationStageDTO applicationStageDTO) {
 		UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
 		try {
 			candidatureService.postuler(utilisateurDTO, applicationStageDTO.getOffreStageId(), applicationStageDTO.getCvId());
+			return new ResponseEntity<>("Success", HttpStatus.OK);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (RuntimeException e) {
 			logger.error("Erreur lors de la soumission de la candidature", e);
-			throw new RuntimeException("Une erreur est survenue lors de la soumission de la candidature.");
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
