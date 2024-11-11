@@ -40,4 +40,12 @@ public class Candidature {
 	
 	@Column (name = "commentaire")
 	private String commentaireRefus;
+	
+	public Candidature(Long id, Utilisateur etudiant, OffreStage offreStage, EtatCandidature etat, String commentaireRefus) {
+		this.id = id;
+		this.etudiant = etudiant;
+		this.offreStage = offreStage;
+		this.etat = etat;
+		this.commentaireRefus = commentaireRefus;
+	}
 }

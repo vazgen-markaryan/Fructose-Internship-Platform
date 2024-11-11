@@ -95,11 +95,6 @@ label {
 	color: #f44336;
 }
 
-.bg-red {
-	background-color: #f44336 !important;
-	color: white;
-}
-
 .text-green {
 	color: #4caf50;
 }
@@ -110,6 +105,16 @@ label {
 
 .text-orange {
 	color: #ff9800;
+}
+
+.bg-red {
+	background-color: #dc3545 !important;
+        color: white;
+}
+
+.bg-green {
+    background-color: #28a745 !important;
+    color: white;
 }
 
 /*Boutons*/

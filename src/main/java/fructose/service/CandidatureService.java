@@ -14,6 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class CandidatureService {
@@ -27,18 +32,17 @@ public class CandidatureService {
 		OffreStage offreStage = offreStageRepository.getReferenceById(offreStageId);
 		Utilisateur etudiant = UtilisateurDTO.toEntity(etudiantDTO);
 		Cv cv = cvRepository.getReferenceById(cvDTOId);
-
+		
 		// Verifier si la condidature n'est pas dupliquée
 		Long candidatureCount = candidatureRepository.getCandidatureNumbers(etudiant.getId(), offreStageId);
-
-		if(candidatureCount == 0){
+		
+		if (candidatureCount == 0) {
 			Candidature candidature = new Candidature();
 			candidature.setEtudiant(etudiant);
 			candidature.setOffreStage(offreStage);
 			candidature.setCv(cv);
 			candidature.setEtat(EtatCandidature.EN_ATTENTE);
 			candidatureRepository.save(candidature);
-//			System.out.println("ETUDIANT: avec email " + etudiant.getEmail() + " a postulé pour l'offre de stage: " + offreStage.getNom() + " chez " + offreStage.getCompagnie());
 		} else {
 			throw new IllegalArgumentException("L'utilisateur a déjà soumis une candidature pour ce poste");
 		}
@@ -67,5 +71,31 @@ public class CandidatureService {
 			logger.error("Erreur lors de l'approbation de la candidature avec ID: {}", candidatureId, e);
 			throw new RuntimeException("Une erreur est survenue lors de l'approbation de la candidature.", e);
 		}
+	}
+	
+	public List<Map<String, Object>> getOffreStageDetailsByEtudiantId(Long etudiantId) {
+		List<Map<String, Object>> result = new ArrayList<>();
+		
+		List<Candidature> candidatures = candidatureRepository.findByEtudiantIdWithoutCv(etudiantId);
+		
+		for (Candidature candidature : candidatures) {
+			Map<String, Object> candidatureData = new HashMap<>();
+			
+			// Ajouter les informations de la candidature
+			candidatureData.put("id", candidature.getId());
+			candidatureData.put("etat", candidature.getEtat());
+			candidatureData.put("commentaireRefus", candidature.getCommentaireRefus());
+			
+			// Ajouter les informations de l'offre de stage
+			OffreStage offreStage = offreStageRepository.findById(candidature.getOffreStage().getId()).orElse(null);
+			if (offreStage != null) {
+				candidatureData.put("nomOffre", offreStage.getNom());
+				candidatureData.put("compagnie", offreStage.getCompagnie());
+			}
+			
+			result.add(candidatureData);
+		}
+		
+		return result;
 	}
 }

@@ -46,7 +46,6 @@ const DashboardHome = () => {
 		}
 	}, [currentUser, GetCvs, fetchOffresStage, GetAllCvs, isUserInit]);
 	
-	
 	const handleValidateCv = (cvId) => {
 		fetch(`/accepter-cv/` + cvId, {
 			method: "POST",
@@ -183,12 +182,10 @@ const DashboardHome = () => {
 		setCurrentPageCv(pageNumber);
 	};
 	
-	
 	const startIndex = (currentPage - 1) * itemsPerPage;
 	const endIndex = startIndex + itemsPerPage;
 	
-	let selectedOffresStage = offresStage.filter(offre => !offre.isApproved && !offre.isRefused)
-		.slice(startIndex, endIndex);
+	let selectedOffresStage = offresStage.filter(offre => !offre.isApproved && !offre.isRefused).slice(startIndex, endIndex);
 	
 	const totalPages = Math.ceil(offresStage.filter(offre => !offre.isApproved && !offre.isRefused).length / itemsPerPage);
 	
@@ -258,8 +255,7 @@ const DashboardHome = () => {
 								))}
 							</div>
 							{currentOffer &&
-								<OfferPreview currentOffer={currentOffer} handleValidate={handleValidateOffer}
-								              handlerefused={handleRejectOffer} style={{
+								<OfferPreview currentOffer={currentOffer} handleValidate={handleValidateOffer} handlerefused={handleRejectOffer} style={{
 									flex: 2,
 									padding: "10px",
 									backgroundColor: "#fff",
@@ -365,17 +361,21 @@ const DashboardHome = () => {
 										}}>
 											{currentCv.filename}
 										</p>
-										
 										<div style={{
 											display: "flex",
 											justifyContent: "center",
 											gap: "10px"
 										}}>
-											<button className="btn-filled"
-											        onClick={() => handleValidateCv(currentCv.id)}>
+											<button
+												className="btn-filled, bg-green"
+												onClick={() => handleValidateCv(currentCv.id)}
+											>
 												{t("modal.validate")}
 											</button>
-											<button className="btn-outline" onClick={() => setRejectModalOpenCv(true)}>
+											<button
+												className="btn-filled bg-red"
+												onClick={() => setRejectModalOpenCv(true)}
+											>
 												{t("modal.reject")}
 											</button>
 										</div>

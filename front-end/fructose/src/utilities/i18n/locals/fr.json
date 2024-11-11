@@ -188,13 +188,13 @@
 			"type_emploi_select": "Le type d'emploi doit être sélectionné"
 		}
 	},
-	"modal" : {
+	"modal": {
 		"validate": "Accepter",
 		"reject": "Rejeter",
-		"reject_reason" : "Raison du refus",
-		"reject_reason_placeholder" : "Entrez le commentaire du refus ici",
-		"send" : "Envoyer",
-		"close" : "Fermer"
+		"reject_reason": "Raison du refus",
+		"reject_reason_placeholder": "Entrez le commentaire du refus ici",
+		"send": "Envoyer",
+		"close": "Fermer"
 	},
 	"dashboard_home_page": {
 		"home": "Accueil",
@@ -220,7 +220,18 @@
 		"user_management": "Gestion des utilisateurs",
 		"not_approved_users": "Utilisateurs non approuvés",
 		"limited_places": "Places limitées",
-		"modalFermer": "Fermer"
+		"modalFermer": "Fermer",
+		"my_applications": "Liste de vos applications aux Offres de Stage",
+		"no_applications": "Vous n'avez pas encore postulé à une Offre de Stage",
+		"at": "chez",
+		"sweetalert": {
+			"congratulations": "Félicitations!",
+			"approved_message": "Votre candidature a été approuvée.",
+			"pending": "En attente",
+			"pending_message": "Votre candidature est en attente. Veuillez patienter.",
+			"refused": "Refusée",
+			"refused_message": "Votre candidature a été refusée avec le commentaire suivant :"
+		}
 	},
 	"pdf_view_page": {
 		"error": "Une erreur inconnue est survenue"
@@ -242,9 +253,6 @@
 	},
 	"manage_users_page": {
 		"not_approved_users": "Utilisateurs non approuvés",
-		"not_approved_cvs": "CVs non approuvés",
-		"not_approved_stage": "Offres de stage non approuvées",
-		"related_options": "Options associées",
 		"no_users_to_approve": "Aucun utilisateur à approuver",
 		"when_created": "Lorsqu'un utilisateur est créé, il apparaîtra ici",
 		"approve": "Approuver",
@@ -252,12 +260,11 @@
 		"delete": "Supprimer",
 		"user_details": "Détails de l'utilisateur",
 		"details": "Détails",
-		"in_probation": "En attente d'approbation",
+		"in_probation": "En attente",
 		"role": "Rôle",
 		"department": "Département",
 		"matricule": "Matricule",
 		"company": "Entreprise",
-		"global_view": "Vue globale",
 		"actions": "Actions"
 	},
 	"manage_cv": {
@@ -268,14 +275,15 @@
 			"rejected": "Refusé"
 		},
 		"buttons": {
+			"add": "Ajouter",
 			"accept": "Accepter",
 			"reject": "Refuser",
 			"download": "Télécharger",
-			"delete": "Supprimer",
-			"add": "Ajouter"
+			"delete": "Supprimer"
 		},
 		"messages": {
-			"no_cvs": "Aucun CV dans votre dossier"
+			"no_cvs": "Aucun CV dans votre dossier",
+			"reject_reason": "Raison: "
 		},
 		"titles": {
 			"cvs": "Mes CVs",
@@ -332,7 +340,7 @@
 		"poste": "Poste",
 		"description": "Description",
 		"compagnie": "Compagnie",
-		"address": "Adresse",
+		"adresse": "Adresse",
 		"taux_horaire": "Taux horaire",
 		"nombre_heures_semaine": "Nombre d'heures par semaine",
 		"nombre_postes": "Nombre de postes",
@@ -382,8 +390,8 @@
 		"particularities": "Particularités",
 		"salary": "Salaire",
 		"internship_type": "Type de stage",
-		"approved": "Approuver",
-		"refused": "Refuser",
+		"approved": "Approuvé",
+		"refused": "Refusé",
 		"pending": "En attente",
 		"refusal_reason": "Raison du refus : ",
 		"hours_one": "{{count}} Heure",
@@ -431,6 +439,7 @@
 			}
 		},
 		"reset": "Réinitialiser",
-		"search": "Rechercher"
+		"search": "Rechercher",
+		"actions": "Actions"
 	}
 }

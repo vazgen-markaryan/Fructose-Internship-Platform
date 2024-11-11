@@ -5,10 +5,10 @@ import {
 	mdiCalendarOutline,
 	mdiCashMultiple,
 	mdiCheck,
+	mdiCheckCircleOutline,
 	mdiDeleteOutline,
 	mdiDomain,
-	mdiMapMarkerOutline,
-	mdiCheckCircleOutline
+	mdiMapMarkerOutline
 } from "@mdi/js";
 import {differenceInMonths, endOfMonth, format} from "date-fns";
 import {useNavigate} from "react-router-dom";
@@ -16,7 +16,7 @@ import {useTranslation} from "react-i18next";
 import {AuthContext} from "../../providers/AuthProvider";
 import Modal from "../../../utilities/modal/Modal"
 
-const OfferPreview = ({currentOffer, handleDeleteOffreStage, handlerefused, handleApply}) => {
+const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, handleApply, handlerefused}) => {
 	const {t} = useTranslation();
 	const {currentUser} = useContext(AuthContext);
 	const navigate = useNavigate();
@@ -51,6 +51,7 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handlerefused, hand
 						     style={{"backgroundImage": "url('/assets/offers/default-company.png')"}}>
 						</div>
 					</div>
+					
 					<section>
 						<div className="toolbar-items" style={{padding: "0 10px"}}>
 							<div>
@@ -79,8 +80,35 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handlerefused, hand
 							}}>{t("discover_offers_page.refusal_reason")}{currentOffer.commentaireRefus}</p>
 						)}
 					</section>
+					
 					<hr/>
+					
 					<div style={{overflowY: "auto"}}>
+						{currentUser.role === "ADMIN" ? (
+							<>
+								<section className="nospace">
+									<h5>{t("discover_offers_page.actions")}</h5>
+									
+									<div style={{
+										gap: "10px"
+									}}
+									     className="toolbar-items">
+										<button
+											className="btn-filled toolbar-spacer bg-green"
+											onClick={() => handleValidate(currentOffer.id)}
+										>
+											{t("modal.validate")}
+										</button>
+										<button
+											className="btn-filled toolbar-spacer bg-red"
+											onClick={() => setRejectModalOpen(true)}>
+											{t("modal.reject")}
+										</button>
+									</div>
+								</section>
+								<hr/>
+							</>
+						) : null}
 						<section className="nospace">
 							<h5>{t("discover_offers_page.particularities")}</h5>
 							<div className="list-bullet">
@@ -188,22 +216,25 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handlerefused, hand
 						)}
 					</div>
 				</div>
-				{isRejectModalOpen && (
-					<Modal onClose={() => setRejectModalOpen(false)} onSend={() => {
-						handlerefused(currentOffer.id, textareaRef.current.value);
-						textareaRef.current.value = "";
-						setRejectModalOpen(false);
-					}}>
-						<h4>{t("modal.reject_reason")}</h4>
-						<textarea
-							ref={textareaRef}
-							placeholder={t("modal.reject_reason_placeholder")}
-							style={{width: "100%", height: "100px"}}
-						/>
-					</Modal>
-				)}
+				{
+					isRejectModalOpen && (
+						<Modal onClose={() => setRejectModalOpen(false)} onSend={() => {
+							handlerefused(currentOffer.id, textareaRef.current.value);
+							textareaRef.current.value = "";
+							setRejectModalOpen(false);
+						}}>
+							<h4>{t("modal.reject_reason")}</h4>
+							<textarea
+								ref={textareaRef}
+								placeholder={t("modal.reject_reason_placeholder")}
+								style={{width: "100%", height: "100px"}}
+							/>
+						</Modal>
+					)
+				}
 			</>
-		);
+		)
+			;
 	}
 	return null;
 };

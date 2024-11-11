@@ -20,7 +20,7 @@ public class Cv {
 	@Column(name = "id", nullable = false)
 	private Long id;
 	
-	@Column(name = "filename", nullable = false, length = 255)
+	@Column(name = "filename", nullable = false)
 	@Nullable
 	private String filename;
 	
@@ -28,6 +28,7 @@ public class Cv {
 	@Lob
 	@Column(name = "file_content")
 	@Nullable
+	@Basic(fetch = FetchType.LAZY)
 	private byte[] fileContent;
 	
 	@ManyToOne

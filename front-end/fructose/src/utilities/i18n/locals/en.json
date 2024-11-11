@@ -200,10 +200,10 @@
 		"home": "Home",
 		"offer": "Internship Offers",
 		"explore": "Explore",
-		"manage_offers": "Manage Internship Offers",
-		"manage_cv": "Manage Curiculums Vitae",
 		"no_offers": "No offers to display at the moment",
 		"my_offers": "My Internship Offers",
+		"manage_offers": "Manage Internship Offers",
+		"manage_cv": "Manage Curiculums Vitae",
 		"add_offer": "New offer",
 		"offers": "Internship Offers",
 		"hello": "Hello",
@@ -219,7 +219,19 @@
 		"role": "Role",
 		"user_management": "User Management",
 		"not_approved_users": "Not approved users",
-		"limited_places": "Limited places"
+		"limited_places": "Limited places",
+		"modalFermer": "Close",
+		"my_applications": "List of Applications that you have submitted",
+		"no_applications": "You have not applied to any Offers yet",
+		"at": "at",
+		"sweetalert": {
+			"congratulations": "Congratulations!",
+			"approved_message": "Your Application has been approved.",
+			"pending": "Pending",
+			"pending_message": "Your Application is pending. Please wait.",
+			"refused": "Refused",
+			"refused_message": "Your Application has been refused with the following reason: "
+		}
 	},
 	"pdf_view_page": {
 		"error": "An unknown error occurred"
@@ -241,9 +253,6 @@
 	},
 	"manage_users_page": {
 		"not_approved_users": "Not approved users",
-		"not_approved_cvs": "Not approved CVs",
-		"not_approved_stage": "Not approved Stage Offers",
-		"related_options": "Related options",
 		"no_users_to_approve": "No users to approve",
 		"when_created": "When a user is created, they will appear here",
 		"approve": "Approve",
@@ -251,18 +260,17 @@
 		"delete": "Delete",
 		"user_details": "User details",
 		"details": "Details",
-		"in_probation": "Waiting for approval",
+		"in_probation": "Pending",
 		"role": "Role",
 		"department": "Department",
 		"matricule": "Student/Employee ID",
 		"company": "Company",
-		"global_view": "Global view",
 		"actions": "Actions"
 	},
 	"manage_cv": {
 		"upload_error": "Error uploading CV",
 		"status": {
-			"pending": "Pending approval",
+			"pending": "Waiting for approval",
 			"approved": "Approved",
 			"rejected": "Rejected"
 		},
@@ -274,7 +282,8 @@
 			"delete": "Delete"
 		},
 		"messages": {
-			"no_cvs": "No CVs in your folder"
+			"no_cvs": "No CVs in your folder",
+			"reject_reason": "Reason: "
 		},
 		"titles": {
 			"cvs": "My CVs",
@@ -430,6 +439,7 @@
 			}
 		},
 		"reset": "Reset",
-		"search": "Search"
+		"search": "Search",
+		"actions": "Actions"
 	}
 }
