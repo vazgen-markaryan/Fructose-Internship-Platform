@@ -93,30 +93,30 @@ class CandidatureServiceTest {
 		verify(candidatureRepository, times(1)).findById(1L);
 		verify(candidatureRepository, never()).save(any(Candidature.class));
 	}
-	
+
 	@Test
 	void testGetOffreStageDetailsByEtudiantId() {
 		Long etudiantId = 1L;
-		
+
 		List<Candidature> candidatures = Collections.singletonList(candidature);
-		when(candidatureRepository.findByEtudiantId(etudiantId)).thenReturn(candidatures);
-		
+		when(candidatureRepository.findByEtudiantIdWithoutCv(etudiantId)).thenReturn(candidatures);
+
 		when(offreStageRepository.findById(offreStage.getId())).thenReturn(Optional.of(offreStage));
-		
+
 		List<Map<String, Object>> result = candidatureService.getOffreStageDetailsByEtudiantId(etudiantId);
-		
-		verify(candidatureRepository, times(1)).findByEtudiantId(etudiantId);
+
+		verify(candidatureRepository, times(1)).findByEtudiantIdWithoutCv(etudiantId);
 		verify(offreStageRepository, times(1)).findById(offreStage.getId());
-		
+
 		Map<String, Object> expectedData = new HashMap<>();
 		expectedData.put("id", candidature.getId());
 		expectedData.put("etat", candidature.getEtat());
 		expectedData.put("commentaireRefus", candidature.getCommentaireRefus());
 		expectedData.put("nomOffre", offreStage.getNom());
 		expectedData.put("compagnie", offreStage.getCompagnie());
-		
+
 		List<Map<String, Object>> expected = Collections.singletonList(expectedData);
-		
+
 		assertEquals(expected, result);
 	}
 	@Test
