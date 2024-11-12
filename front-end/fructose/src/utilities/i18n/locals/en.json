@@ -440,6 +440,15 @@
 		},
 		"reset": "Reset",
 		"search": "Search",
-		"actions": "Actions"
+		"actions": "Actions",
+		"applied": "Applied"
+	},
+	"apply_offre_window": {
+		"send_my_candidature": "Send my application",
+		"cv_to_send": "Curriculum Vitae to send",
+		"note": "Note: Only approved CVs will appear in the list.",
+		"no_cv": "No approved CV in your folder. You will not be able to apply without an approved CV.",
+		"cancel": "Cancel",
+		"send": "Apply"
 	}
 }

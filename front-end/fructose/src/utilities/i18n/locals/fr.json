@@ -440,6 +440,15 @@
 		},
 		"reset": "Réinitialiser",
 		"search": "Rechercher",
-		"actions": "Actions"
+		"actions": "Actions",
+		"applied": "Postulé"
+	},
+	"apply_offre_window": {
+		"send_my_candidature": "Envoyer ma candidature",
+		"cv_to_send": "Curriculum Vitae à envoyer",
+		"note": "Note: Seuls les CV approuvés apparaîtront dans la liste.",
+		"no_cv": "Aucun CV approuvé dans votre dossier. Vous ne pourrez postuler sans un CV approuvé.",
+		"cancel": "Annuler",
+		"send": "Postuler"
 	}
 }
