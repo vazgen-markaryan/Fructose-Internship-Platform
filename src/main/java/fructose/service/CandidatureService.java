@@ -98,4 +98,31 @@ public class CandidatureService {
 		
 		return result;
 	}
+
+	public List<Map<String, Object>> getCandidaturesByOffreStageId(Long offreStageId) {
+		List<Map<String, Object>> result = new ArrayList<>();
+
+		List<Candidature> candidatures = candidatureRepository.findByOffreStageId(offreStageId);
+
+		for (Candidature candidature : candidatures) {
+			Map<String, Object> candidatureData = new HashMap<>();
+
+			candidatureData.put("id", candidature.getId());
+			candidatureData.put("etat", candidature.getEtat());
+			candidatureData.put("commentaireRefus", candidature.getCommentaireRefus());
+
+			Utilisateur etudiant = candidature.getEtudiant();
+			candidatureData.put("etudiantNom", etudiant.getFullName());
+			candidatureData.put("etudiantEmail", etudiant.getEmail());
+
+			Cv cv = candidature.getCv();
+			candidatureData.put("cvId", cv.getId());
+
+			result.add(candidatureData);
+		}
+
+		return result;
+	}
+
+
 }

@@ -64,4 +64,16 @@ public class CandidatureController {
 	public List<Map<String, Object>> getOffreStageDetailsByEtudiantId(@PathVariable Long etudiantId) {
 		return candidatureService.getOffreStageDetailsByEtudiantId(etudiantId);
 	}
+
+	@GetMapping("/offre/{offreStageId}")
+	public ResponseEntity<List<Map<String, Object>>> getCandidaturesByOffreStageId(@PathVariable Long offreStageId) {
+		try {
+			List<Map<String, Object>> candidatures = candidatureService.getCandidaturesByOffreStageId(offreStageId);
+			return new ResponseEntity<>(candidatures, HttpStatus.OK);
+		} catch (RuntimeException e) {
+			logger.error("Erreur lors de la récupération des candidatures pour l'offre de stage ID: {}", offreStageId, e);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }

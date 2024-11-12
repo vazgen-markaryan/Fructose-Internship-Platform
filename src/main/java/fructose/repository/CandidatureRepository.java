@@ -19,5 +19,7 @@ public interface CandidatureRepository extends JpaRepository<Candidature, Long> 
 	
 	@Query ("SELECT c FROM Candidature c WHERE c.etudiant.id = :etudiantId")
 	List<Candidature> findByEtudiantId(@Param ("etudiantId") Long etudiantId);
-	
+
+	@Query ("SELECT c FROM Candidature c WHERE c.offreStage.id = :offreStageId")
+	List<Candidature> findByOffreStageId(Long offreStageId);
 }

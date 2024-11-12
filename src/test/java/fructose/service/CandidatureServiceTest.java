@@ -1,10 +1,9 @@
 package fructose.service;
 
-import fructose.model.Candidature;
-import fructose.model.Etudiant;
-import fructose.model.OffreStage;
+import fructose.model.*;
 import fructose.model.auth.Credentials;
 import fructose.model.enumerator.EtatCandidature;
+import fructose.model.enumerator.Role;
 import fructose.repository.CandidatureRepository;
 import fructose.repository.OffreStageRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -120,5 +118,61 @@ class CandidatureServiceTest {
 		List<Map<String, Object>> expected = Collections.singletonList(expectedData);
 		
 		assertEquals(expected, result);
+	}
+	@Test
+	void testGetCandidaturesByOffreStageIdSuccess() {
+		Long offreStageId = 1L;
+
+		List<Candidature> candidatures = new ArrayList<>();
+		Candidature candidature = new Candidature();
+		candidature.setId(1L);
+		candidature.setEtat(EtatCandidature.EN_ATTENTE);
+		candidature.setCommentaireRefus("N/A");
+
+		Utilisateur etudiant = new Utilisateur();
+		etudiant.setFullName("John Doe");
+		etudiant.setCredentials(Credentials.builder().email("Mike@gmail.com").password("GG").role(Role.EMPLOYEUR).build());
+		candidature.setEtudiant(etudiant);
+
+		Cv cv = new Cv();
+		cv.setId(1L);
+		candidature.setCv(cv);
+
+		candidatures.add(candidature);
+
+		when(candidatureRepository.findByOffreStageId(offreStageId)).thenReturn(candidatures);
+
+		List<Map<String, Object>> result = candidatureService.getCandidaturesByOffreStageId(offreStageId);
+
+		verify(candidatureRepository, times(1)).findByOffreStageId(offreStageId);
+
+		Map<String, Object> expectedData = new HashMap<>();
+		expectedData.put("id", candidature.getId());
+		expectedData.put("etat", candidature.getEtat());
+		expectedData.put("commentaireRefus", candidature.getCommentaireRefus());
+		expectedData.put("etudiantNom", etudiant.getFullName());
+		expectedData.put("etudiantEmail", etudiant.getEmail());
+		expectedData.put("cvId", cv.getId());
+
+		List<Map<String, Object>> expected = Collections.singletonList(expectedData);
+
+		assertEquals(expected, result);
+	}
+
+	@Test
+	void testGetCandidaturesByOffreStageIdNoCandidatures() {
+		Long offreStageId = 1L;
+
+		// Mock an empty list
+		when(candidatureRepository.findByOffreStageId(offreStageId)).thenReturn(Collections.emptyList());
+
+		// Execute service method
+		List<Map<String, Object>> result = candidatureService.getCandidaturesByOffreStageId(offreStageId);
+
+		// Verify repository interaction
+		verify(candidatureRepository, times(1)).findByOffreStageId(offreStageId);
+
+		// Assert the result is an empty list
+		assertTrue(result.isEmpty());
 	}
 }

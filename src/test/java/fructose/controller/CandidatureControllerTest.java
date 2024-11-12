@@ -3,18 +3,24 @@ package fructose.controller;
 import fructose.model.Etudiant;
 import fructose.model.OffreStage;
 import fructose.service.CandidatureService;
+import fructose.service.UtilisateurService;
+import fructose.service.dto.ApplicationStageDTO;
+import fructose.service.dto.UtilisateurDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class CandidatureControllerTest {
@@ -24,6 +30,9 @@ class CandidatureControllerTest {
 	
 	@Mock
 	private CandidatureService candidatureService;
+
+	@Mock
+	private UtilisateurService utilisateurService;
 	
 	private Etudiant etudiant;
 	private OffreStage offreStage;
@@ -103,6 +112,100 @@ class CandidatureControllerTest {
 		
 		verify(candidatureService).getOffreStageDetailsByEtudiantId(etudiantId);
 		
-		Assertions.assertEquals(mockOffreStageDetails, result);
+		assertEquals(mockOffreStageDetails, result);
 	}
+
+	@Test
+	void testPostulerSuccess() {
+		String token = "valid-token";
+		ApplicationStageDTO applicationStageDTO = new ApplicationStageDTO();
+		applicationStageDTO.setOffreStageId(1L);
+		applicationStageDTO.setCvId(1L);
+
+		UtilisateurDTO mockUtilisateur = new UtilisateurDTO();
+		when(utilisateurService.getUtilisateurByToken(token)).thenReturn(mockUtilisateur);
+
+		ResponseEntity<?> response = candidatureController.postuler(token, applicationStageDTO);
+
+		verify(candidatureService).postuler(mockUtilisateur, applicationStageDTO.getOffreStageId(), applicationStageDTO.getCvId());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals("Success", response.getBody());
+	}
+
+	@Test
+	void testPostulerDuplicateCandidature() {
+		String token = "valid-token";
+		ApplicationStageDTO applicationStageDTO = new ApplicationStageDTO();
+		applicationStageDTO.setOffreStageId(1L);
+		applicationStageDTO.setCvId(1L);
+
+		UtilisateurDTO mockUtilisateur = new UtilisateurDTO();
+		when(utilisateurService.getUtilisateurByToken(token)).thenReturn(mockUtilisateur);
+
+		doThrow(new IllegalArgumentException("L'utilisateur a déjà soumis une candidature pour ce poste"))
+				.when(candidatureService).postuler(mockUtilisateur, applicationStageDTO.getOffreStageId(), applicationStageDTO.getCvId());
+
+		ResponseEntity<?> response = candidatureController.postuler(token, applicationStageDTO);
+
+		verify(candidatureService).postuler(mockUtilisateur, applicationStageDTO.getOffreStageId(), applicationStageDTO.getCvId());
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals("L'utilisateur a déjà soumis une candidature pour ce poste", response.getBody());
+	}
+
+	@Test
+	void testPostulerRuntimeException() {
+		String token = "valid-token";
+		ApplicationStageDTO applicationStageDTO = new ApplicationStageDTO();
+		applicationStageDTO.setOffreStageId(1L);
+		applicationStageDTO.setCvId(1L);
+
+		UtilisateurDTO mockUtilisateur = new UtilisateurDTO();
+		when(utilisateurService.getUtilisateurByToken(token)).thenReturn(mockUtilisateur);
+
+		doThrow(new RuntimeException("Erreur lors de la soumission de la candidature"))
+				.when(candidatureService).postuler(mockUtilisateur, applicationStageDTO.getOffreStageId(), applicationStageDTO.getCvId());
+
+		ResponseEntity<?> response = candidatureController.postuler(token, applicationStageDTO);
+
+		verify(candidatureService).postuler(mockUtilisateur, applicationStageDTO.getOffreStageId(), applicationStageDTO.getCvId());
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals("Erreur lors de la soumission de la candidature", response.getBody());
+	}
+
+	@Test
+	void testGetCandidaturesByOffreStageIdSuccess() {
+		Long offreStageId = 1L;
+
+		List<Map<String, Object>> mockCandidatures = new ArrayList<>();
+		Map<String, Object> candidatureData = new HashMap<>();
+		candidatureData.put("id", 1L);
+		candidatureData.put("etat", "Approuvé");
+		candidatureData.put("commentaireRefus", "Pas de compétences requises");
+		mockCandidatures.add(candidatureData);
+
+		when(candidatureService.getCandidaturesByOffreStageId(offreStageId)).thenReturn(mockCandidatures);
+
+		ResponseEntity<List<Map<String, Object>>> response = candidatureController.getCandidaturesByOffreStageId(offreStageId);
+
+		verify(candidatureService, times(1)).getCandidaturesByOffreStageId(offreStageId);
+
+		Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+		Assertions.assertEquals(mockCandidatures, response.getBody());
+	}
+
+	@Test
+	void testGetCandidaturesByOffreStageIdException() {
+		Long offreStageId = 1L;
+
+		when(candidatureService.getCandidaturesByOffreStageId(offreStageId))
+				.thenThrow(new RuntimeException("Database error"));
+
+		ResponseEntity<List<Map<String, Object>>> response = candidatureController.getCandidaturesByOffreStageId(offreStageId);
+
+		verify(candidatureService, times(1)).getCandidaturesByOffreStageId(offreStageId);
+
+		Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+		Assertions.assertNull(response.getBody());
+	}
+
 }
