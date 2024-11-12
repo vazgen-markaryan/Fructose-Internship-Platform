@@ -449,6 +449,7 @@
 		"note": "Note: Only approved CVs will appear in the list.",
 		"no_cv": "No approved CV in your folder. You will not be able to apply without an approved CV.",
 		"cancel": "Cancel",
-		"send": "Apply"
+		"send": "Apply",
+		"see_cv": "See my CVs"
 	}
 }

@@ -149,7 +149,7 @@ const ApplyOffreWindow = ({children}) => {
 													<div className="banner">
 														<Icon path={mdiAlert} size={1}/>
 														<p>{t("apply_offre_window.no_cv")}
-															<Link to="/dashboard/manage-cvs">Voir mes CVs <Icon path={mdiOpenInNew} size={0.5}/></Link>
+															<Link to="/dashboard/manage-cvs">{t("apply_offre_window.see_cv")}<Icon path={mdiOpenInNew} size={0.5}/></Link>
 														</p>
 													</div>
 												:
