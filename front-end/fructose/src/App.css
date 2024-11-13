@@ -205,6 +205,11 @@ button.btn-option:hover {
 	background-color: rgba(128, 128, 128, 0.2);
 }
 
+button.btn-option.btn-selected{
+	color: var(--color-primay);
+	background-color: rgba(255, 0, 106, 0.1);
+}
+
 /*Design du input*/
 
 input[type="text"], input[type="password"], input[type="email"], input[type="date"], input[type="number"], textarea, select {
