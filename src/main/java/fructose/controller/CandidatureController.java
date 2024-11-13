@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -38,11 +39,12 @@ public class CandidatureController {
 		}
 	}
 	
-	@PutMapping ("/approuver/{candidatureId}")
-	@ResponseStatus (HttpStatus.OK)
-	public void approuverCandidature(@PathVariable Long candidatureId) {
+	@PutMapping("/approuver/{candidatureId}")
+	@ResponseStatus(HttpStatus.OK)
+	public void approuverCandidature(@PathVariable Long candidatureId, @RequestBody Map<String, String> request) {
 		try {
-			candidatureService.approuverCandidature(candidatureId);
+			LocalDate dateEntrevue = LocalDate.parse(request.get("dateEntrevue"));
+			candidatureService.approuverCandidature(candidatureId, dateEntrevue);
 		} catch (RuntimeException e) {
 			logger.error("Erreur lors de l'approbation de la candidature avec ID: {}", candidatureId, e);
 			throw new RuntimeException("Une erreur est survenue lors de l'approbation de la candidature.");

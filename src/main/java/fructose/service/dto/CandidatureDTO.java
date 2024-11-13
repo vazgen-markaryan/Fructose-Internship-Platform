@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -17,7 +17,7 @@ public class CandidatureDTO {
 	private OffreStageDTO offreStageDTO;
 	private EtatCandidature etat;
 	private String commentaireRefus;
-	private LocalDateTime dateEtrevue;
+	private LocalDate dateEntrevue;
 	private boolean acceptedByEtudiant = false;
 	
 	public static CandidatureDTO toDTO(Candidature candidature) {
@@ -27,7 +27,7 @@ public class CandidatureDTO {
 		candidatureDTO.setOffreStageDTO(OffreStageDTO.toDTO(candidature.getOffreStage()));
 		candidatureDTO.setEtat(candidature.getEtat());
 		candidatureDTO.setCommentaireRefus(candidature.getCommentaireRefus());
-		candidatureDTO.setDateEtrevue(candidature.getDateEtrevue());
+		candidatureDTO.setDateEntrevue(candidature.getDateEntrevue());
 		candidatureDTO.setAcceptedByEtudiant(candidature.isAcceptedByEtudiant());
 		return candidatureDTO;
 	}
@@ -39,7 +39,7 @@ public class CandidatureDTO {
 		candidature.setOffreStage(OffreStageDTO.toEntity(candidatureDTO.getOffreStageDTO()));
 		candidature.setEtat(candidatureDTO.getEtat());
 		candidature.setCommentaireRefus(candidatureDTO.getCommentaireRefus());
-		candidature.setDateEtrevue(candidatureDTO.getDateEtrevue());
+		candidature.setDateEntrevue(candidatureDTO.getDateEntrevue());
 		candidature.setAcceptedByEtudiant(candidatureDTO.isAcceptedByEtudiant());
 		return candidature;
 	}

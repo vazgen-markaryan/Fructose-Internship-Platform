@@ -6,7 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -42,17 +42,17 @@ public class Candidature {
 	
 	private String commentaireRefus;
 	
-	private LocalDateTime dateEtrevue;
+	private LocalDate dateEntrevue;
 	
 	private boolean acceptedByEtudiant = false;
 	
-	public Candidature(Long id, Utilisateur etudiant, OffreStage offreStage, EtatCandidature etat, String commentaireRefus, LocalDateTime dateEtrevue, boolean acceptedByEtudiant) {
+	public Candidature(Long id, Utilisateur etudiant, OffreStage offreStage, EtatCandidature etat, String commentaireRefus, LocalDate dateEtrevue, boolean acceptedByEtudiant) {
 		this.id = id;
 		this.etudiant = etudiant;
 		this.offreStage = offreStage;
 		this.etat = etat;
 		this.commentaireRefus = commentaireRefus;
-		this.dateEtrevue = dateEtrevue;
+		this.dateEntrevue = dateEtrevue;
 		this.acceptedByEtudiant = acceptedByEtudiant;
 	}
 }

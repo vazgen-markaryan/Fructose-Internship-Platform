@@ -443,5 +443,8 @@
 		"reset": "Reset",
 		"search": "Search",
 		"actions": "Actions"
+	},
+	"view_candidatures_page" : {
+		"interview_date": "Select desired interview date"
 	}
 }
