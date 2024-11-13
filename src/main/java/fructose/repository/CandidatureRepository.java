@@ -16,12 +16,11 @@ public interface CandidatureRepository extends JpaRepository<Candidature, Long> 
 	@Query ("SELECT new fructose.model.Candidature(c.id, c.etudiant, c.offreStage, c.etat, c.commentaireRefus, c.dateEtrevue, c.acceptedByEtudiant) " +
 		"FROM Candidature c WHERE c.etudiant.id = :etudiantId")
 	List<Candidature> findByEtudiantIdWithoutCv(@Param ("etudiantId") Long etudiantId);
-
+	
 	@Query ("SELECT c FROM Candidature c WHERE c.offreStage.owner.id = :ownerId")
 	List<Candidature> findByCandidatureByOwner(Long ownerId);
 	
-	@Query("SELECT new fructose.model.Candidature(c.id, c.etudiant, c.offreStage, c.etat, c.commentaireRefus, c.dateEtrevue, c.acceptedByEtudiant) " +
+	@Query ("SELECT new fructose.model.Candidature(c.id, c.etudiant, c.offreStage, c.etat, c.commentaireRefus, c.dateEtrevue, c.acceptedByEtudiant) " +
 		"FROM Candidature c WHERE c.offreStage.owner.id = :ownerId")
-	List<Candidature> findByCandidatureByOwnerWithoutCv(@Param("ownerId") Long ownerId);
-	
+	List<Candidature> findByCandidatureByOwnerWithoutCv(@Param ("ownerId") Long ownerId);
 }
