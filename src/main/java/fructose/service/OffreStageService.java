@@ -3,6 +3,7 @@ package fructose.service;
 import fructose.model.Departement;
 import fructose.model.OffreStage;
 import fructose.model.Utilisateur;
+import fructose.model.enumerator.Role;
 import fructose.repository.DepartementRepository;
 import fructose.repository.EmployeurRepository;
 import fructose.repository.OffreStageRepository;
@@ -59,6 +60,8 @@ public class OffreStageService {
 		System.out.println("ownerDTO: " + offreStageDTO.getOwnerDTO());
 		if (offreStageDTO.getOwnerDTO() == null) {
 			offreStageDTO.setOwnerDTO(utilisateurDTO);
+		}else if (utilisateurDTO.getRole() == Role.ADMIN){
+			offreStageDTO.setIsApproved(true);
 		}
 		System.out.println("ownerDTO: " + offreStageDTO.getOwnerDTO());
 		validateOffreStage(offreStageDTO);
