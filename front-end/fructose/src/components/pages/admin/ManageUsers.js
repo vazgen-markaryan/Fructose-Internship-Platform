@@ -189,14 +189,18 @@ const ManageUsers = () => {
 									<td>{t("manage_users_page.role")}</td>
 									<td style={{textAlign: "right"}}>{t(`bd_role_traduction.${users[currentUserIndex].role}`)}</td>
 								</tr>
-								<tr>
-									<td>{t("manage_users_page.department")}</td>
-									<td style={{textAlign: "right"}}>{t("programme." + users[currentUserIndex].departementDTO.nom)}</td>
-								</tr>
-								<tr>
-									<td>{t("manage_users_page.matricule")}</td>
-									<td style={{textAlign: "right"}}>{users[currentUserIndex].matricule}</td>
-								</tr>
+								{users[currentUserIndex].departementDTO &&
+									<tr>
+										<td>{t("manage_users_page.department")}</td>
+										<td style={{textAlign: "right"}}>{t("programme." + users[currentUserIndex].departementDTO.nom)}</td>
+									</tr>
+								}
+								{users[currentUserIndex].matricule &&
+									<tr>
+										<td>{t("manage_users_page.matricule")}</td>
+										<td style={{textAlign: "right"}}>{users[currentUserIndex].matricule}</td>
+									</tr>
+								}
 								<tr>
 									<td>{t("manage_users_page.company")}</td>
 									<td style={{textAlign: "right"}}>{users[currentUserIndex].companyName}</td>
