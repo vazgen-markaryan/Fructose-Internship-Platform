@@ -189,17 +189,17 @@ class CandidatureServiceTest {
 
         candidatures.add(candidature);
 
-        when(candidatureRepository.findByOffreStageId(offreStageId)).thenReturn(candidatures);
+        when(candidatureRepository.findByCandidatureByOwner(offreStageId)).thenReturn(candidatures);
 
-        List<Map<String, Object>> result = candidatureService.getCandidaturesByOffreStageId(offreStageId);
+        List<Map<String, Object>> result = candidatureService.findByCandidatureByOwner(offreStageId);
 
-        verify(candidatureRepository, times(1)).findByOffreStageId(offreStageId);
+        verify(candidatureRepository, times(1)).findByCandidatureByOwner(offreStageId);
 
         Map<String, Object> expectedData = new HashMap<>();
         expectedData.put("candidature", CandidatureDTO.toDTO(candidature));
         expectedData.put("etudiant", EtudiantDTO.toDTO(etudiant));
         expectedData.put("cv", CvDTO.toDTO(cv));
-        expectedData.put("offreStage", OffreStageDTO.toDTO(offreStage));
+        expectedData.put("idOffreStage", offreStage.getId());
 
         List<Map<String, Object>> expected = new ArrayList<>();
         expected.add(expectedData);
@@ -213,13 +213,13 @@ class CandidatureServiceTest {
         Long offreStageId = 1L;
 
         // Mock an empty list
-        when(candidatureRepository.findByOffreStageId(offreStageId)).thenReturn(Collections.emptyList());
+        when(candidatureRepository.findByCandidatureByOwner(offreStageId)).thenReturn(Collections.emptyList());
 
         // Execute service method
-        List<Map<String, Object>> result = candidatureService.getCandidaturesByOffreStageId(offreStageId);
+        List<Map<String, Object>> result = candidatureService.findByCandidatureByOwner(offreStageId);
 
         // Verify repository interaction
-        verify(candidatureRepository, times(1)).findByOffreStageId(offreStageId);
+        verify(candidatureRepository, times(1)).findByCandidatureByOwner(offreStageId);
 
         // Assert the result is an empty list
         assertTrue(result.isEmpty());
@@ -289,26 +289,6 @@ class CandidatureServiceTest {
         verify(candidatureRepository, times(1)).save(any(Candidature.class));
     }
 
-    /*
-    * public void postuler(UtilisateurDTO etudiantDTO, Long offreStageId, Long cvDTOId) {
-		OffreStage offreStage = offreStageRepository.getReferenceById(offreStageId);
-		Utilisateur etudiant = UtilisateurDTO.toEntity(etudiantDTO);
-		Cv cv = cvRepository.getReferenceById(cvDTOId);
-
-		// Verifier si la condidature n'est pas dupliquée
-		Long candidatureCount = candidatureRepository.getCandidatureNumbers(etudiant.getId(), offreStageId);
-
-		if (candidatureCount == 0) {
-			Candidature candidature = new Candidature();
-			candidature.setEtudiant(etudiant);
-			candidature.setOffreStage(offreStage);
-			candidature.setCv(cv);
-			candidature.setEtat(EtatCandidature.EN_ATTENTE);
-			candidatureRepository.save(candidature);
-		} else {
-			throw new IllegalArgumentException("L'utilisateur a déjà soumis une candidature pour ce poste");
-		}
-	}*/
     @Test
     void testPostulerCandidatureDejaSoumise() {
         Credentials credentials = Credentials.builder().email("Mike@gmail.com").password("GG").role(Role.ETUDIANT).build();

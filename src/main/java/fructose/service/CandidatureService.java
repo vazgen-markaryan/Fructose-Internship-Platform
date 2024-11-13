@@ -99,10 +99,10 @@ public class CandidatureService {
 		return result;
 	}
 
-	public List<Map<String, Object>> getCandidaturesByOffreStageId(Long offreStageId) {
+	public List<Map<String, Object>> findByCandidatureByOwner(Long employeurId) {
 		List<Map<String, Object>> result = new ArrayList<>();
 
-		List<Candidature> candidatures = candidatureRepository.findByOffreStageId(offreStageId);
+		List<Candidature> candidatures = candidatureRepository.findByCandidatureByOwner(employeurId);
 
 		for (Candidature candidature : candidatures) {
 			Map<String, Object> candidatureData = new HashMap<>();
@@ -113,7 +113,7 @@ public class CandidatureService {
 			Cv cv = candidature.getCv();
 			candidatureData.put("cv", CvDTO.toDTO(cv));
 			OffreStage offreStage = candidature.getOffreStage();
-			candidatureData.put("offreStage", OffreStageDTO.toDTO(offreStage));
+			candidatureData.put("idOffreStage", offreStage.getId());
 
 			result.add(candidatureData);
 		}

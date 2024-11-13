@@ -174,7 +174,7 @@ class CandidatureControllerTest {
 
 	@Test
 	void testGetCandidaturesByOffreStageIdSuccess() {
-		Long offreStageId = 1L;
+		String token = "valid-token";
 
 		List<Map<String, Object>> mockCandidatures = new ArrayList<>();
 		Map<String, Object> candidatureData = new HashMap<>();
@@ -183,11 +183,17 @@ class CandidatureControllerTest {
 		candidatureData.put("commentaireRefus", "Pas de compétences requises");
 		mockCandidatures.add(candidatureData);
 
-		when(candidatureService.getCandidaturesByOffreStageId(offreStageId)).thenReturn(mockCandidatures);
+		when(utilisateurService.validationToken(token)).thenReturn(true);
+		UtilisateurDTO mockUtilisateur = new UtilisateurDTO();
+		mockUtilisateur.setId(1L);
+		when(utilisateurService.getUtilisateurByToken(token)).thenReturn(mockUtilisateur);
+		when(candidatureService.findByCandidatureByOwner(mockUtilisateur.getId())).thenReturn(mockCandidatures);
 
-		ResponseEntity<List<Map<String, Object>>> response = candidatureController.getCandidaturesByOffreStageId(offreStageId);
+		ResponseEntity<List<Map<String, Object>>> response = candidatureController.findByCandidatureByOwner(token);
 
-		verify(candidatureService, times(1)).getCandidaturesByOffreStageId(offreStageId);
+		verify(utilisateurService, times(1)).validationToken(token);
+		verify(utilisateurService, times(1)).getUtilisateurByToken(token);
+		verify(candidatureService, times(1)).findByCandidatureByOwner(mockUtilisateur.getId());
 
 		Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 		Assertions.assertEquals(mockCandidatures, response.getBody());
@@ -195,17 +201,22 @@ class CandidatureControllerTest {
 
 	@Test
 	void testGetCandidaturesByOffreStageIdException() {
-		Long offreStageId = 1L;
+		String token = "valid-token";
 
-		when(candidatureService.getCandidaturesByOffreStageId(offreStageId))
+		when(utilisateurService.validationToken(token)).thenReturn(true);
+		UtilisateurDTO mockUtilisateur = new UtilisateurDTO();
+		mockUtilisateur.setId(1L);
+		when(utilisateurService.getUtilisateurByToken(token)).thenReturn(mockUtilisateur);
+		when(candidatureService.findByCandidatureByOwner(mockUtilisateur.getId()))
 				.thenThrow(new RuntimeException("Database error"));
 
-		ResponseEntity<List<Map<String, Object>>> response = candidatureController.getCandidaturesByOffreStageId(offreStageId);
+		ResponseEntity<List<Map<String, Object>>> response = candidatureController.findByCandidatureByOwner(token);
 
-		verify(candidatureService, times(1)).getCandidaturesByOffreStageId(offreStageId);
+		verify(utilisateurService, times(1)).validationToken(token);
+		verify(utilisateurService, times(1)).getUtilisateurByToken(token);
+		verify(candidatureService, times(1)).findByCandidatureByOwner(mockUtilisateur.getId());
 
 		Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 		Assertions.assertNull(response.getBody());
 	}
-
 }

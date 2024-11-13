@@ -65,13 +65,18 @@ public class CandidatureController {
 		return candidatureService.getOffreStageDetailsByEtudiantId(etudiantId);
 	}
 
-	@GetMapping("/offre/{offreStageId}")
-	public ResponseEntity<List<Map<String, Object>>> getCandidaturesByOffreStageId(@PathVariable Long offreStageId) {
+	@GetMapping("/candiatruesEmployeur")
+	public ResponseEntity<List<Map<String, Object>>> findByCandidatureByOwner(@RequestHeader("Authorization") String token) {
+		if (!utilisateurService.validationToken(token)) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
+
 		try {
-			List<Map<String, Object>> candidatures = candidatureService.getCandidaturesByOffreStageId(offreStageId);
+			List<Map<String, Object>> candidatures = candidatureService.findByCandidatureByOwner(utilisateurDTO.getId());
 			return new ResponseEntity<>(candidatures, HttpStatus.OK);
 		} catch (RuntimeException e) {
-			logger.error("Erreur lors de la récupération des candidatures pour l'offre de stage ID: {}", offreStageId, e);
+			logger.error("Erreur lors de la récupération des candidatures pour l'offre de stage ID: {}", utilisateurDTO.getId(), e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
