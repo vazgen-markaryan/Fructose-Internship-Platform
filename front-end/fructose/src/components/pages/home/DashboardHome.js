@@ -480,6 +480,19 @@ const DashboardHome = () => {
 						{GetCandidaturesSection()}
 						{GetPortfolioSection()}
 						{GetUserManagementSection()}
+						{
+							// TODO ALLOOOOOOOOOOOOOOOOOOOO
+						}
+
+						<div className={"toolbar-items"}>
+							<h4 className={"m-0 toolbar-spacer"}>Candidatures</h4>
+							<Link to="/dashboard/view-candidatures">
+								<button>Voir
+									<Icon path={mdiChevronRight} size={1}/>
+								</button>
+							</Link>
+						</div>
+
 						<div style={{"height": "520px"}}>
 						</div>
 					</div>

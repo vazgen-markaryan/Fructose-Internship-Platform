@@ -819,6 +819,22 @@ tr {
 	z-index: 51;
 	display: flex;
 	flex-direction: column;
+
+	animation-name: "window-appear";
+	animation-fill-mode: forwards;
+	animation-timing-function: cubic-bezier(.7,.8,.23,.94);
+	animation-duration: 0.3s;
+}
+
+@keyframes window-appear {
+	0%{
+		opacity: 0;
+		transform: scale(0.7) translateY(200px);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1) translateY(0px);
+	}
 }
 
 .window-content {
@@ -915,4 +931,9 @@ tr {
 	border-radius: 5px;
 	width: 400px;
 	max-width: 90%;
+
+	animation-name: "window-appear";
+	animation-fill-mode: forwards;
+	animation-timing-function: cubic-bezier(.7,.8,.23,.94);
+	animation-duration: 0.3s;
 }
