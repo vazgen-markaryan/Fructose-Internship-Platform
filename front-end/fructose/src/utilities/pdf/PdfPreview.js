@@ -1,7 +1,14 @@
 import React, {useState} from "react";
 import {Document, Page, pdfjs} from "react-pdf";
 import Icon from "@mdi/react";
-import {mdiChevronLeft, mdiChevronRight, mdiFileAlertOutline, mdiFullscreen, mdiFullscreenExit} from "@mdi/js";
+import {
+	mdiChevronLeft,
+	mdiChevronRight,
+	mdiDownloadOutline,
+	mdiFileAlertOutline,
+	mdiFullscreen,
+	mdiFullscreenExit
+} from "@mdi/js";
 import {useTranslation} from "react-i18next";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -9,7 +16,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 	import.meta.url,
 ).toString();
 
-const PdfPreview = ({file, height = 500}) => {
+const PdfPreview = ({file, height = 500, filename = 'file.pdf'}) => {
 	
 	const {t} = useTranslation();
 	const [numPages, setNumPages] = useState(null);
@@ -49,10 +56,13 @@ const PdfPreview = ({file, height = 500}) => {
 			overflow: 'hidden',
 			overflowX: 'hidden'
 		}}>
-			<button onClick={toggleFullScreen} className="fullscreen-toggle"
+			<button onClick={toggleFullScreen} className="btn-icon"
 			        style={{position: 'absolute', top: '10px', right: '10px', zIndex: 10}}>
 				<Icon path={isFullScreen ? mdiFullscreenExit : mdiFullscreen} size={1}/>
 			</button>
+			<a href={file} download={filename} className="button btn-icon" style={{position: 'absolute', top: '50px', right: '10px', zIndex: 10}}>
+				<Icon path={mdiDownloadOutline} size={1}/>
+			</a>
 			
 			<div style={{
 				height: isFullScreen ? 'calc(100% - 40px)' : '100%',
