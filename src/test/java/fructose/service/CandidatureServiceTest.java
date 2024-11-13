@@ -101,13 +101,13 @@ class CandidatureServiceTest {
 		Long etudiantId = 1L;
 		
 		List<Candidature> candidatures = Collections.singletonList(candidature);
-		when(candidatureRepository.findByEtudiantId(etudiantId)).thenReturn(candidatures);
+		when(candidatureRepository.findByEtudiantIdWithoutCv(etudiantId)).thenReturn(candidatures);
 		
 		when(offreStageRepository.findById(offreStage.getId())).thenReturn(Optional.of(offreStage));
 		
 		List<Map<String, Object>> result = candidatureService.getOffreStageDetailsByEtudiantId(etudiantId);
-		
-		verify(candidatureRepository, times(1)).findByEtudiantId(etudiantId);
+
+		verify(candidatureRepository, times(1)).findByEtudiantIdWithoutCv(etudiantId);
 		verify(offreStageRepository, times(1)).findById(offreStage.getId());
 		
 		Map<String, Object> expectedData = new HashMap<>();
