@@ -8,7 +8,7 @@ import fructose.model.enumerator.EtatCandidature;
 import fructose.repository.CandidatureRepository;
 import fructose.repository.CvRepository;
 import fructose.repository.OffreStageRepository;
-import fructose.service.dto.UtilisateurDTO;
+import fructose.service.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,16 +107,13 @@ public class CandidatureService {
 		for (Candidature candidature : candidatures) {
 			Map<String, Object> candidatureData = new HashMap<>();
 
-			candidatureData.put("id", candidature.getId());
-			candidatureData.put("etat", candidature.getEtat());
-			candidatureData.put("commentaireRefus", candidature.getCommentaireRefus());
-
+			candidatureData.put("candidature", CandidatureDTO.toDTO(candidature));
 			Utilisateur etudiant = candidature.getEtudiant();
-			candidatureData.put("etudiantNom", etudiant.getFullName());
-			candidatureData.put("etudiantEmail", etudiant.getEmail());
-
+			candidatureData.put("etudiant", EtudiantDTO.toDTO(etudiant));
 			Cv cv = candidature.getCv();
-			candidatureData.put("cvId", cv.getId());
+			candidatureData.put("cv", CvDTO.toDTO(cv));
+			OffreStage offreStage = candidature.getOffreStage();
+			candidatureData.put("offreStage", OffreStageDTO.toDTO(offreStage));
 
 			result.add(candidatureData);
 		}
