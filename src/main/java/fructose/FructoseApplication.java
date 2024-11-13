@@ -12,7 +12,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class FructoseApplication implements CommandLineRunner {
 	}
 	
 	@Override
-	public void run(String... args) throws IOException {
+	public void run(String... args) {
 		
 		//DATES
 		LocalDate dateDebut = LocalDate.of(2025, 1, 20);
@@ -106,7 +105,7 @@ public class FructoseApplication implements CommandLineRunner {
 		createAndPersistOffreStage("Ingénieur en machine learning", "Développer des modèles ML", "Ingénieur en ML", "Ubisoft Incorporé", departementInformatique, 35.0, "hybride", "Sunnyvale, Californie, États-Unis", "temps_partiel", dateDebut, dateFin, 20, 6, dateLimiteCandidature, "ubisoft@gmail.com");
 		createAndPersistOffreStage("Développeur Go", "Développer des applications Go", "Développeur Go", "Ubisoft Incorporé", departementInformatique, 28.0, "presentiel", "Calgary, Alberta, Canada", "temps_plein", dateDebut, dateFin, 19, 8, dateLimiteCandidature, "ubisoft@gmail.com");
 		createAndPersistOffreStage("Ingénieur en cloud", "Gérer les infrastructures cloud", "Ingénieur Cloud", "Ubisoft Incorporé", departementInformatique, 34.0, "virtuel", "Seattle, Washington, États-Unis", "temps_partiel", dateDebut, dateFin, 18, 9, dateLimiteCandidature, "ubisoft@gmail.com");
-
+		
 		createAndPersistOffreStage("Développeur Backend", "Développer la logique serveur", "Développeur Backend", "Google LLC", departementInformatique, 24.0, "hybride", "Seattle, Washington, États-Unis", "temps_partiel", dateDebutCYBERPUNK, dateFinCYBERPUNK, 20, 6, dateLimiteCandidatureCYBERPUNK, "google@gmail.com");
 		createAndPersistOffreStage("Ingénieur DevOps", "Gérer l'infrastructure", "Ingénieur DevOps", "Google LLC", departementInformatique, 26.0, "presentiel", "Armonk, New York, États-Unis", "temps_plein", dateDebutWARHAMMER, dateFinWARHAMMER, 15, 7, dateLimiteCandidatureWARHAMMER, "google@gmail.com");
 		createAndPersistOffreStage("Analyste de données", "Analyser les données", "Analyste de données", "Google LLC", departementInformatique, 27.0, "virtuel", "Redwood City, Californie, États-Unis", "temps_partiel", dateDebut, dateFin, 18, 9, dateLimiteCandidature, "google@gmail.com");
@@ -116,7 +115,7 @@ public class FructoseApplication implements CommandLineRunner {
 		createAndPersistOffreStage("Développeur Swift", "Développer des applications iOS", "Développeur Swift", "Google LLC", departementInformatique, 33.0, "virtuel", "Cupertino, Californie, États-Unis", "temps_plein", dateDebut, dateFin, 20, 6, dateLimiteCandidature, "google@gmail.com");
 		createAndPersistOffreStage("Ingénieur QA", "Assurer la qualité des logiciels", "Ingénieur QA", "Google LLC", departementInformatique, 29.0, "hybride", "San Francisco, Californie, États-Unis", "temps_partiel", dateDebut, dateFin, 25, 10, dateLimiteCandidature, "google@gmail.com");
 		createAndPersistOffreStage("Consultant en IT", "Conseiller les entreprises sur les technologies", "Consultant IT", "Google LLC", departementInformatique, 32.0, "presentiel", "New York, New York, États-Unis", "temps_plein", dateDebut, dateFin, 22, 9, dateLimiteCandidature, "google@gmail.com");
-	
+		
 		createAndPersistOffreStage("Développeur en réalité virtuelle", "Créer des applications VR", "Développeur VR", "Activision Publishing, Inc", departementInformatique, 29.0, "hybride", "Menlo Park, Californie, États-Unis", "temps_plein", dateDebutCYBERPUNK, dateFinCYBERPUNK, 17, 6, dateLimiteCandidatureCYBERPUNK, "activision@gmail.com");
 		createAndPersistOffreStage("Analyste en cybersécurité", "Protéger les données", "Analyste Cyber", "Activision Publishing, Inc", departementInformatique, 37.0, "presentiel", "Santa Clara, Californie, États-Unis", "temps_partiel", dateDebutWARHAMMER, dateFinWARHAMMER, 16, 8, dateLimiteCandidatureWARHAMMER, "activision@gmail.com");
 		createAndPersistOffreStage("Développeur en blockchain", "Développer des solutions blockchain", "Développeur Blockchain", "Activision Publishing, Inc", departementInformatique, 38.0, "virtuel", "San Francisco, Californie, États-Unis", "temps_plein", dateDebut, dateFin, 18, 7, dateLimiteCandidature, "activision@gmail.com");
@@ -126,7 +125,7 @@ public class FructoseApplication implements CommandLineRunner {
 		createAndPersistOffreStage("Ingénieur en sécurité", "Sécuriser les systèmes", "Ingénieur en sécurité", "Activision Publishing, Inc", departementInformatique, 32.0, "hybride", "Santa Clara, Californie, États-Unis", "temps_partiel", dateDebut, dateFin, 30, 12, dateLimiteCandidature, "activision@gmail.com");
 		createAndPersistOffreStage("Administrateur système", "Gérer les systèmes informatiques", "Administrateur système", "Activision Publishing, Inc", departementInformatique, 22.0, "presentiel", "Santa Clara, Californie, États-Unis", "temps_plein", dateDebut, dateFin, 15, 6, dateLimiteCandidature, "activision@gmail.com");
 		createAndPersistOffreStage("Développeur PHP", "Développer des applications PHP", "Développeur PHP", "Activision Publishing, Inc", departementInformatique, 24.0, "virtuel", "Raleigh, Caroline du Nord, États-Unis", "temps_partiel", dateDebut, dateFin, 20, 8, dateLimiteCandidature, "activision@gmail.com");
-	
+		
 		// APPROUVER OFFRES DE STAGE
 		System.out.println(); // Ajouter une ligne vide pour la lisibilité
 		approuverOffresStage(1L, 2L, 3L, 10L, 11L, 12L, 19L, 20L, 21L);
@@ -199,7 +198,7 @@ public class FructoseApplication implements CommandLineRunner {
 		for (Long offreStageId : offreIds) {
 			try {
 				offreStageService.refuserOffreStage(offreStageId, "Commentaire de refus par défaut");
-				System.out.println("OFFRE STAGE avec le nom \"" + offreStageService.getOffreStageById(offreStageId).getNom() + "\" refusée avec le commentaire : \""  + offreStageService.getOffreStageById(offreStageId).getCommentaireRefus() + "\"");
+				System.out.println("OFFRE STAGE avec le nom \"" + offreStageService.getOffreStageById(offreStageId).getNom() + "\" refusée avec le commentaire : \"" + offreStageService.getOffreStageById(offreStageId).getCommentaireRefus() + "\"");
 			} catch (Exception e) {
 				logger.error("Erreur lors du refus de l'offre de stage avec ID {}", offreStageId, e);
 			}
