@@ -189,7 +189,7 @@ class CandidatureControllerTest {
 		when(utilisateurService.getUtilisateurByToken(token)).thenReturn(mockUtilisateur);
 		when(candidatureService.findByCandidatureByOwner(mockUtilisateur.getId())).thenReturn(mockCandidatures);
 
-		ResponseEntity<List<Map<String, Object>>> response = candidatureController.findByCandidatureByOwner(token);
+		ResponseEntity<?> response = candidatureController.findByCandidatureByOwner(token);
 
 		verify(utilisateurService, times(1)).validationToken(token);
 		verify(utilisateurService, times(1)).getUtilisateurByToken(token);
@@ -210,13 +210,13 @@ class CandidatureControllerTest {
 		when(candidatureService.findByCandidatureByOwner(mockUtilisateur.getId()))
 				.thenThrow(new RuntimeException("Database error"));
 
-		ResponseEntity<List<Map<String, Object>>> response = candidatureController.findByCandidatureByOwner(token);
+		ResponseEntity<?> response = candidatureController.findByCandidatureByOwner(token);
 
 		verify(utilisateurService, times(1)).validationToken(token);
 		verify(utilisateurService, times(1)).getUtilisateurByToken(token);
 		verify(candidatureService, times(1)).findByCandidatureByOwner(mockUtilisateur.getId());
 
 		Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-		Assertions.assertNull(response.getBody());
+		Assertions.assertEquals(response.getBody(), "Internal server error");
 	}
 }

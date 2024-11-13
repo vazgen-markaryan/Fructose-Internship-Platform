@@ -132,34 +132,40 @@ class CandidatureServiceTest {
 
     @Test
     void testGetCandidaturesByOffreStageIdSuccess() {
-        Long offreStageId = 1L;
+        Long employeurId = 1L;
 
-        List<Candidature> candidatures = new ArrayList<>();
+        // Setting up Candidature, CV, Etudiant, and related objects
         Candidature candidature = new Candidature();
         candidature.setId(1L);
         candidature.setEtat(EtatCandidature.EN_ATTENTE);
         candidature.setCommentaireRefus("N/A");
 
-        Credentials credentials = Credentials.builder().email("Mike@gmail.com").password("GG").role(Role.ETUDIANT).build();
+        Credentials studentCredentials = Credentials.builder()
+                .email("Mike@gmail.com")
+                .password("GG")
+                .role(Role.ETUDIANT)
+                .build();
         Utilisateur etudiant = new Utilisateur();
         etudiant.setFullName("John Doe");
-        etudiant.setCredentials(credentials);
+        etudiant.setCredentials(studentCredentials);
+        candidature.setEtudiant(etudiant);
 
-        Credentials credentials2 = Credentials.builder().email("Blabla@gmail.com").password("GG").role(Role.EMPLOYEUR).build();
+        Credentials employerCredentials = Credentials.builder()
+                .email("Blabla@gmail.com")
+                .password("GG")
+                .role(Role.EMPLOYEUR)
+                .build();
         Utilisateur employeur = new Utilisateur();
-        employeur.setFullName("John Doe");
-        employeur.setCredentials(credentials2);
-
+        employeur.setFullName("John Employer");
+        employeur.setCredentials(employerCredentials);
 
         Departement departement = new Departement();
         departement.setId(1L);
         etudiant.setDepartement(departement);
-        candidature.setEtudiant(etudiant);
 
-        Departement departements = new Departement();
-        departements.setId(2L);
-        employeur.setDepartement(departement);
-
+        Departement departement2 = new Departement();
+        departement.setId(2L);
+        employeur.setDepartement(departement2);
 
         Cv cv = new Cv();
         cv.setId(1L);
@@ -167,6 +173,7 @@ class CandidatureServiceTest {
         cv.setCommentaireRefus("Refusé par Defaut");
         candidature.setCv(cv);
 
+        // Setting up OffreStage and linking to Employeur
         OffreStage offreStage = new OffreStage();
         offreStage.setId(1L);
         offreStage.setNom("Stage en Développement");
@@ -187,39 +194,48 @@ class CandidatureServiceTest {
         offreStage.setCommentaireRefus("Commentaire par défaut");
         candidature.setOffreStage(offreStage);
 
-        candidatures.add(candidature);
+        List<Candidature> candidatures = List.of(candidature);
 
-        when(candidatureRepository.findByCandidatureByOwner(offreStageId)).thenReturn(candidatures);
+        // Mocking repository methods
+        when(candidatureRepository.findByCandidatureByOwnerWithoutCv(employeurId)).thenReturn(candidatures);
+        when(candidatureRepository.getCvId(candidature.getId())).thenReturn(cv.getId()); // Mock getCvId
+        when(cvRepository.getAllById(cv.getId())).thenReturn(cv); // Mock getAllById
 
-        List<Map<String, Object>> result = candidatureService.findByCandidatureByOwner(offreStageId);
+        // Calling the service method
+        List<Map<String, Object>> result = candidatureService.findByCandidatureByOwner(employeurId);
 
-        verify(candidatureRepository, times(1)).findByCandidatureByOwner(offreStageId);
+        // Verifying repository calls
+        verify(candidatureRepository, times(1)).findByCandidatureByOwnerWithoutCv(employeurId);
+        verify(candidatureRepository, times(1)).getCvId(candidature.getId()); // Verify getCvId call
+        verify(cvRepository, times(1)).getAllById(cv.getId()); // Verify getAllById call
 
+        // Expected output structure
         Map<String, Object> expectedData = new HashMap<>();
         expectedData.put("candidature", CandidatureDTO.toDTO(candidature));
         expectedData.put("etudiant", EtudiantDTO.toDTO(etudiant));
-        expectedData.put("cv", CvDTO.toDTO(cv));
         expectedData.put("idOffreStage", offreStage.getId());
+        expectedData.put("cvId", cv.getId());
 
-        List<Map<String, Object>> expected = new ArrayList<>();
-        expected.add(expectedData);
+        List<Map<String, Object>> expected = List.of(expectedData);
 
+        // Asserting results
         Assertions.assertThat(result).usingRecursiveComparison().isEqualTo(expected);
-
     }
+
+
 
     @Test
     void testGetCandidaturesByOffreStageIdNoCandidatures() {
-        Long offreStageId = 1L;
+        Long employeurId = 1L;
 
         // Mock an empty list
-        when(candidatureRepository.findByCandidatureByOwner(offreStageId)).thenReturn(Collections.emptyList());
+        when(candidatureRepository.findByCandidatureByOwnerWithoutCv(employeurId)).thenReturn(Collections.emptyList());
 
         // Execute service method
-        List<Map<String, Object>> result = candidatureService.findByCandidatureByOwner(offreStageId);
+        List<Map<String, Object>> result = candidatureService.findByCandidatureByOwner(employeurId);
 
         // Verify repository interaction
-        verify(candidatureRepository, times(1)).findByCandidatureByOwner(offreStageId);
+        verify(candidatureRepository, times(1)).findByCandidatureByOwnerWithoutCv(employeurId);
 
         // Assert the result is an empty list
         assertTrue(result.isEmpty());

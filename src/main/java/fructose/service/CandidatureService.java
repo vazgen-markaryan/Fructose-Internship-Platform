@@ -114,7 +114,8 @@ public class CandidatureService {
 			candidatureData.put("etudiant", EtudiantDTO.toDTO(etudiant));
 			OffreStage offreStage = candidature.getOffreStage();
 			candidatureData.put("idOffreStage", offreStage.getId());
-			
+			Cv cv = cvRepository.getAllById(candidatureRepository.getCvId(candidature.getId()));
+			candidatureData.put("cvId", cv.getId());
 			result.add(candidatureData);
 		}
 		

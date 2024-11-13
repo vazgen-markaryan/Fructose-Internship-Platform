@@ -1,26 +1,19 @@
 import {Link} from "react-router-dom";
 import Icon from "@mdi/react";
-import {
-    mdiAccountSchoolOutline,
-    mdiArrowLeft,
-    mdiBriefcaseCheckOutline,
-    mdiBriefcaseRemoveOutline,
-    mdiClose,
-    mdiDownloadOutline,
-    mdiFileSign,
-    mdiPresentation,
-    mdiTooltipPlusOutline
-} from "@mdi/js";
+import {mdiAccountSchoolOutline, mdiArrowLeft, mdiClose, mdiDownloadOutline} from "@mdi/js";
 import React, {useContext, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import PdfPreview from "../../../utilities/pdf/PdfPreview";
 import {AuthContext} from "../../providers/AuthProvider";
+import {CvContext} from "../../providers/CvProvider";
 
 const ViewCandidatures = () => {
     const {t} = useTranslation();
     const [currentCandidature, setCurrentCandidature] = useState({});
     const [candidatures, setCandidatures] = useState([]);
     const {currentToken} = useContext(AuthContext);
+    const {getCvContenuById} = useContext(CvContext)
+    const [currentCV, setCurrentCV] = useState({});
 
     useEffect(() => {
         fetch("/candidatures/candidaturesEmployeur", {
@@ -40,14 +33,29 @@ const ViewCandidatures = () => {
                 console.log("Fetched candidatures:", data);
                 if (data.length > 0) {
                     setCurrentCandidature(data[0].candidature);
+                    fetchCvById(data[0].cvId);
                 }
                 setCandidatures(data);
             })
             .catch(error => console.error("Error fetching candidatures", error));
     }, [currentToken]);
 
-    const handleCandidatureClick = (candidature) => {
+    const fetchCvById = async (cvId) => {
+        try {
+            const response = await getCvContenuById(cvId);
+            const pdfBlob = await response.blob();
+            const fileUrl = URL.createObjectURL(pdfBlob);
+            const fileSize = pdfBlob.size;
+            setCurrentCV((prev) => ({...prev, fileUrl, fileSize}));
+
+        } catch (error) {
+            console.error("Erreur lors de la récupération du CV:", error);
+        }
+    };
+
+    const handleCandidatureClick = (candidature, idCv) => {
         setCurrentCandidature(candidature);
+        fetchCvById(idCv);
     };
 
     const handleApprove = () => {
@@ -101,34 +109,10 @@ const ViewCandidatures = () => {
                         <Icon path={mdiArrowLeft} size={1.4}/>
                     </button>
                 </Link>
-                <h1>Gestion des Candidatures</h1>
+                <h1>Vos Candidatures</h1>
             </div>
             <div style={{display: "flex", gap: "20px"}}>
-                <div className="dashboard-card" style={{width: "30%"}}>
-                    <section>
-                        <button className="btn-option btn-selected">
-                            <Icon path={mdiTooltipPlusOutline} size={1}/>
-                            Nouvelles candidatures
-                        </button>
-                        <button className="btn-option">
-                            <Icon path={mdiPresentation} size={1}/>
-                            En Entrevue
-                        </button>
-                        <button className="btn-option">
-                            <Icon path={mdiFileSign} size={1}/>
-                            En signature Contrat
-                        </button>
-                        <button className="btn-option">
-                            <Icon path={mdiBriefcaseCheckOutline} size={1}/>
-                            Poste Accepté
-                        </button>
-                        <button className="btn-option">
-                            <Icon path={mdiBriefcaseRemoveOutline} size={1}/>
-                            Candidatures rejetées
-                        </button>
-                    </section>
-                </div>
-                <div className="dashboard-card" style={{width: "40%"}}>
+                <div className="dashboard-card" style={{width: "60%"}}>
                     <section>
                         <h5>Vos Candidatures</h5>
                         <div className="menu-list">
@@ -148,7 +132,7 @@ const ViewCandidatures = () => {
                         </div>
                     </section>
                 </div>
-                <div className="dashboard-card" style={{width: "30%"}}>
+                <div className="dashboard-card" style={{width: "40%"}}>
                     <div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
                         <span className="toolbar-spacer"></span>
                         <button className="btn-icon" onClick={() => setCurrentCandidature({})}>
@@ -175,7 +159,14 @@ const ViewCandidatures = () => {
                     <hr/>
                     <section className="nospace">
                         <h5>Profil de l'applicant</h5>
-                        <PdfPreview height={300} file={null}/>
+                        {
+                            (currentCV !== null
+                                    ?
+                                    <PdfPreview height={300} file={currentCV.fileUrl}/>
+                                    :
+                                    null
+                            )
+                        }
                         <br/>
                         <button className="btn-option">
                             <Icon path={mdiDownloadOutline} size={1}/>{t('manage_cv.buttons.download')}

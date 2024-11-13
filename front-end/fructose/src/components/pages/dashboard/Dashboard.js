@@ -39,13 +39,14 @@ const Dashboard = () => {
 								<Route path="/" element={<DashboardHome/>}/>
 							</Routes>
 						</OffreStageProvider>
+						<CandidatureProvider>
+							<Routes>
+								<Route path="/view-candidatures" element={<RoleRoute element={<ViewCandidatures/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
+							</Routes>
+						</CandidatureProvider>
 					</CvProvider>
 
-					<CandidatureProvider>
-						<Routes>
-							<Route path="/view-candidatures" element={<RoleRoute element={<ViewCandidatures/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
-						</Routes>
-					</CandidatureProvider>
+
 					
 					<Routes>
 						<Route path="/creer-offre-stage" element={<CreerOffreStage/>}/>

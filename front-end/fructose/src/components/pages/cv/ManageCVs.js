@@ -163,7 +163,7 @@ const ManageCVs = () => {
 			);
 		}
 	};
-	
+
 	const DIVISER_KB = 1000;
 	const getAppercu = () => {
 		if (currentContenueCv) {
@@ -176,7 +176,14 @@ const ManageCVs = () => {
 							<Icon path={mdiClose} size={1}/>
 						</button>
 					</div>
-					<PdfPreview height={300} file={currentContenueCv.fileUrl}/>
+					{
+						(currentContenueCv !== null
+								?
+								<PdfPreview height={300} file={currentContenueCv.fileUrl}/>
+								:
+								null
+						)
+					}
 					<section>
 						<div className="toolbar-items" style={{padding: "0 10px"}}>
 							<div>
