@@ -162,6 +162,8 @@
 		"date_fin": "End date",
 		"creer_offre_stage": "Create the internship offer",
 		"retour": "Return to home",
+		"employeurs" : "Employees",
+		"employeur_select" : "Select an employer",
 		"types_emploi": {
 			"select": "Select a type of employment",
 			"temps_partiel": "Part-time",

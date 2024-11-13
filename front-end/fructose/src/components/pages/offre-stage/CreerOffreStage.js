@@ -112,46 +112,38 @@ const CreerOffreStage = () => {
         return errors;
     }
 
-    useEffect( () => {
+    const getTranslatedErrors = (prevErrors) => {
+        const updatedErrors = { ...prevErrors };
+
+        if (prevErrors.nom) updatedErrors.nom = t("creer_offre_stage_page.errors.nom");
+        if (prevErrors.poste) updatedErrors.poste = t("creer_offre_stage_page.errors.poste");
+        if (prevErrors.description) updatedErrors.description = t("creer_offre_stage_page.errors.description");
+        if (prevErrors.compagnie) updatedErrors.compagnie = t("creer_offre_stage_page.errors.compagnie");
+        if (prevErrors.tauxHoraire) updatedErrors.tauxHoraire = t("creer_offre_stage_page.errors.taux_horaire");
+        if (prevErrors.adresse) updatedErrors.adresse = t("creer_offre_stage_page.errors.address");
+        if (prevErrors.nombreHeuresSemaine) updatedErrors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_inferieur");
+        if (prevErrors.nombrePostes) updatedErrors.nombrePostes = t("creer_offre_stage_page.errors.nombre_postes");
+        if (prevErrors.departementDTO) updatedErrors.departementDTO = t("creer_offre_stage_page.errors.programme_etudes_select");
+        if (prevErrors.typeEmploi) updatedErrors.typeEmploi = t("creer_offre_stage_page.errors.type_emploi_select");
+        if (prevErrors.modaliteTravail) updatedErrors.modaliteTravail = t("creer_offre_stage_page.errors.modalite_travail_select");
+
+        return updatedErrors;
+    };
+
+// Call `getTranslatedErrors` directly where you need to update errors, instead of inside `useEffect`.
+    const updateErrors = () => {
         setErrors((prevErrors) => {
-            const updatedErrors = {...prevErrors};
-
-            if (prevErrors.nom) {
-                updatedErrors.nom = t("creer_offre_stage_page.errors.nom");
-            }
-            if (prevErrors.poste) {
-                updatedErrors.poste = t("creer_offre_stage_page.errors.poste");
-            }
-            if (prevErrors.description) {
-                updatedErrors.description = t("creer_offre_stage_page.errors.description");
-            }
-            if (prevErrors.compagnie) {
-                updatedErrors.compagnie = t("creer_offre_stage_page.errors.compagnie");
-            }
-            if (prevErrors.tauxHoraire) {
-                updatedErrors.tauxHoraire = t("creer_offre_stage_page.errors.taux_horaire");
-            }
-            if (prevErrors.adresse) {
-                updatedErrors.adresse = t("creer_offre_stage_page.errors.address");
-            }
-            if (prevErrors.nombreHeuresSemaine) {
-                updatedErrors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_inferieur");
-            }
-            if (prevErrors.nombrePostes) {
-                updatedErrors.nombrePostes = t("creer_offre_stage_page.errors.nombre_postes");
-            }
-            if (prevErrors.departementDTO) {
-                updatedErrors.departementDTO = t("creer_offre_stage_page.errors.programme_etudes_select");
-            }
-            if (prevErrors.typeEmploi) {
-                updatedErrors.typeEmploi = t("creer_offre_stage_page.errors.type_emploi_select");
-            }
-            if (prevErrors.modaliteTravail) {
-                updatedErrors.modaliteTravail = t("creer_offre_stage_page.errors.modalite_travail_select");
-            }
-
-            return updatedErrors;
+            const translatedErrors = getTranslatedErrors(prevErrors);
+            // Only update if errors actually change to avoid re-renders
+            return JSON.stringify(prevErrors) !== JSON.stringify(translatedErrors) ? translatedErrors : prevErrors;
         });
+    };
+
+    useEffect( () => {
+        updateErrors();
+    }, [t]);
+
+    useEffect(() => {
         const fetchData = async () => {
             if (currentUser && currentUser.role === 'ADMIN') {
                 await fetchEmployeurs().then((employeurs) => {
@@ -160,7 +152,7 @@ const CreerOffreStage = () => {
             }
         }
         fetchData();
-    }, [t, currentUser]);
+    }, [currentUser]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -366,7 +358,7 @@ const CreerOffreStage = () => {
 
                         {currentUser && currentUser.role === 'ADMIN' &&
                             <>
-                                <label>{t("creer_offre_stage_page.employeur")}</label>
+                                <label>{t("creer_offre_stage_page.employeurs")}</label>
                                 <select name="employeur" onChange={handleInputChange}
                                         value={offreStage.ownerDTO ? offreStage.ownerDTO.id : ''}
                                         required>
