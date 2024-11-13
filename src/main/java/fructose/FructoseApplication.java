@@ -82,13 +82,13 @@ public class FructoseApplication implements CommandLineRunner {
 		System.out.println();
 		
 		// EMPLOYEURS
-		createAndPersistUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, departementInformatique, "Ubisoft Incorporé", true);
-		createAndPersistUtilisateur("Employeur", "Sundar Pichai", "google@gmail.com", "Google123!", null, departementInformatique, "Google LLC", true);
-		createAndPersistUtilisateur("Employeur", "Bobby Kotick", "activision@gmail.com", "Activision123!", null, departementInformatique, "Activision Publishing Incorporé", true);
+		createAndPersistUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, null, "Ubisoft Incorporé", true);
+		createAndPersistUtilisateur("Employeur", "Sundar Pichai", "google@gmail.com", "Google123!", null, null, "Google LLC", true);
+		createAndPersistUtilisateur("Employeur", "Bobby Kotick", "activision@gmail.com", "Activision123!", null, null, "Activision Publishing Incorporé", true);
 		
 		// EMPLOYEUR NON APPROUVÉS
-		createAndPersistUtilisateur("Employeur", "Andrew Wilson", "electronicarts@gmail.com", "Electronicarts123!", null, departementInformatique, "Electronic Arts Inc", false);
-		createAndPersistUtilisateur("Employeur", "Satya Nadella", "microsoft@gmail.com", "Microsoft123!", null, departementInformatique, "Microsoft Corporation", false);
+		createAndPersistUtilisateur("Employeur", "Andrew Wilson", "electronicarts@gmail.com", "Electronicarts123!", null, null, "Electronic Arts Inc", false);
+		createAndPersistUtilisateur("Employeur", "Satya Nadella", "microsoft@gmail.com", "Microsoft123!", null, null, "Microsoft Corporation", false);
 		System.out.println();
 		
 		// ADMINS
