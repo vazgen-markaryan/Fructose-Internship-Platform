@@ -26,9 +26,62 @@ const ViewCandidatures = () => {
 				}
 				return response.json();
 			})
-			.then(data => setCandidatures(data))
+			.then(data => {
+				console.log("Fetched candidatures:", data);
+				if (data.length > 0) {
+					setCurrentCandidature(data[0].candidature);
+				}
+				setCandidatures(data);
+			})
 			.catch(error => console.error("Error fetching candidatures", error));
 	}, [currentToken]);
+	
+	const handleCandidatureClick = (candidature) => {
+		setCurrentCandidature(candidature);
+	};
+	
+	const handleApprove = () => {
+		fetch(`/candidatures/approuver/${currentCandidature.id}`, {
+			method: 'PUT',
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": currentToken
+			}
+		})
+			.then(response => {
+				if (response.ok) {
+					console.log("Candidature approved successfully");
+				} else {
+					console.error("Error approving candidature");
+				}
+			})
+			.catch(error => {
+				console.error("Error approving candidature", error);
+			});
+	};
+	
+	const handleRefuse = () => {
+		const commentaireRefus = prompt("Please enter the refusal comment:");
+		if (commentaireRefus) {
+			fetch(`/candidatures/refuser/${currentCandidature.id}?commentaireRefus=${encodeURIComponent(commentaireRefus)}`, {
+				method: 'PUT',
+				headers: {
+					"Content-Type": "application/json",
+					"Authorization": currentToken
+				}
+			})
+				.then(response => {
+					if (response.ok) {
+						console.log("Candidature refused successfully");
+					} else {
+						console.error("Error refusing candidature");
+					}
+				})
+				.catch(error => {
+					console.error("Error refusing candidature", error);
+				});
+		}
+	};
 	
 	return (
 		<>
@@ -49,13 +102,13 @@ const ViewCandidatures = () => {
 								<div
 									key={candidature.candidature.id}
 									className={`menu-list-item ${currentCandidature.id === candidature.candidature.id ? 'menu-list-item-selected' : ''}`}
-									onClick={() => setCurrentCandidature(candidature.candidature)}
+									onClick={() => handleCandidatureClick(candidature.candidature)}
 								>
 									<Icon path={mdiAccountSchoolOutline} size={1}/>
 									<div>
 										<p className="m-0">{candidature.etudiant.fullName}</p>
 										<p className="m-0">{candidature.etudiant.matricule}</p>
-										</div>
+									</div>
 								</div>
 							))}
 						</div>
@@ -64,7 +117,7 @@ const ViewCandidatures = () => {
 				<div className="dashboard-card" style={{width: "40%"}}>
 					<div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
 						<span className="toolbar-spacer"></span>
-						<button className="btn-icon" onClick={() => setCurrentCandidature(null)}>
+						<button className="btn-icon" onClick={() => setCurrentCandidature({})}>
 							<Icon path={mdiClose} size={1}/>
 						</button>
 					</div>
@@ -79,8 +132,8 @@ const ViewCandidatures = () => {
 								margin: 0
 							}}></div>
 							<div className="toolbar-spacer">
-								<h4 className="m-0">{currentCandidature.nom}</h4>
-								<h6 className="m-0 text-dark">{currentCandidature.compagnie}</h6>
+								<h4 className="m-0">{currentCandidature.offreStageDTO ? currentCandidature.offreStageDTO.nom : "Loading"}</h4>
+								<h6 className="m-0 text-dark">{currentCandidature.offreStageDTO ? currentCandidature.offreStageDTO.compagnie : "Loading"}</h6>
 							</div>
 							<button className="btn-outline">Voir Offre</button>
 						</div>
@@ -97,58 +150,16 @@ const ViewCandidatures = () => {
 					<hr/>
 					<section className="nospace">
 						<h5>Actions</h5>
-						<div style={{
-							gap: "10px"
-						}}
-						     className="toolbar-items">
+						<div style={{gap: "10px"}} className="toolbar-items">
 							<button
 								className="btn-filled toolbar-spacer bg-green"
-								onClick={() => {
-									fetch(`/candidatures/approuver/${currentCandidature.id}`, {
-										method: 'PUT',
-										headers: {
-											"Content-Type": "application/json",
-											"Authorization": currentToken
-										}
-									})
-										.then(response => {
-											if (response.ok) {
-												console.log("Candidature approved successfully");
-											} else {
-												console.error("Error approving candidature");
-											}
-										})
-										.catch(error => {
-											console.error("Error approving candidature", error);
-										});
-								}}
+								onClick={handleApprove}
 							>
 								{t("manage_users_page.approve")}
 							</button>
 							<button
 								className="btn-filled toolbar-spacer bg-red"
-								onClick={() => {
-									const commentaireRefus = prompt("Please enter the refusal comment:");
-									if (commentaireRefus) {
-										fetch(`/candidatures/refuser/${currentCandidature.id}?commentaireRefus=${encodeURIComponent(commentaireRefus)}`, {
-											method: 'PUT',
-											headers: {
-												"Content-Type": "application/json",
-												"Authorization": currentToken
-											}
-										})
-											.then(response => {
-												if (response.ok) {
-													console.log("Candidature refused successfully");
-												} else {
-													console.error("Error refusing candidature");
-												}
-											})
-											.catch(error => {
-												console.error("Error refusing candidature", error);
-											});
-									}
-								}}
+								onClick={handleRefuse}
 							>
 								Refuser
 							</button>
@@ -164,8 +175,7 @@ const ViewCandidatures = () => {
 								margin: 0
 							}}></div>
 							<div>
-								<h6 className="m-0">{currentCandidature.nom}</h6>
-								<p className="m-0 text-dark">{currentCandidature.id}</p>
+								<h6 className="m-0">{currentCandidature.etudiantDTO ? currentCandidature.etudiantDTO.fullName : "Loading"}</h6>
 							</div>
 							
 							<div className="toolbar-spacer"></div>
