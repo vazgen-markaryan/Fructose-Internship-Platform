@@ -1,9 +1,6 @@
 package fructose.service;
 
-import fructose.model.Departement;
-import fructose.model.Employeur;
-import fructose.model.OffreStage;
-import fructose.model.Utilisateur;
+import fructose.model.*;
 import fructose.model.auth.Credentials;
 import fructose.model.enumerator.Role;
 import fructose.repository.DepartementRepository;
@@ -12,6 +9,7 @@ import fructose.repository.OffreStageRepository;
 import fructose.service.dto.DepartementDTO;
 import fructose.service.dto.EmployeurDTO;
 import fructose.service.dto.OffreStageDTO;
+import fructose.service.dto.UtilisateurDTO;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,6 +93,17 @@ public class OffreStageServiceTest {
 		offreStageService.addOffreStage(offreStageDTO);
 		
 		verify(offreStageRepository, times(1)).save(any(OffreStage.class));
+	}
+
+	@Test
+	void testAddOffreStageOwnerDTONull() {
+		offreStageDTO.setOwnerDTO(null);
+		UtilisateurDTO utilisateurDTO = UtilisateurDTO.toDTO(offreStageService.getUtilisateurEnCours());
+
+		offreStageService.addOffreStage(offreStageDTO, utilisateurDTO);
+
+		assertNotNull(offreStageDTO.getOwnerDTO());
+		assertEquals(utilisateurDTO, offreStageDTO.getOwnerDTO());
 	}
 	
 	@Test
@@ -471,6 +480,8 @@ public class OffreStageServiceTest {
 		
 		assertEquals("OffreStageDTO ne peut pas être nul", exception.getMessage());
 	}
+
+
 	
 	@Test
 	void testDeleteOffreStageSuccess() {
@@ -661,6 +672,23 @@ public class OffreStageServiceTest {
 		
 		assertEquals("Aucune offre de stage trouvée pour l'étudiant dans le département: " + utilisateur.getDepartement(), exception.getMessage());
 	}
+
+	@Test
+	void testGetOffresStageSuccessForProfesseur() {
+		List<OffreStageDTO> offresStage = List.of(offreStageDTO);
+		List<OffreStage> offreStages = offresStage.stream()
+				.map(OffreStageDTO::toEntity)
+				.toList();
+		Utilisateur utilisateur = new Professeur();
+		utilisateur.setDepartement(new Departement());
+		utilisateur.setCredentials(Credentials.builder().email("Mike").password("GG").role(Role.PROFESSEUR).build());
+		when(employeurRepository.findByEmail("Mike")).thenReturn(utilisateur);
+		when(offreStageRepository.findByUserDepartementAndIsApproved(utilisateur.getDepartement().getId())).thenReturn(offreStages);
+
+		offreStageService.getOffresStage();
+
+		verify(offreStageRepository, times(1)).findByUserDepartementAndIsApproved(utilisateur.getDepartement().getId());
+	}
 	
 	@Test
 	void testGetOffresStageNull() {
@@ -736,6 +764,44 @@ public class OffreStageServiceTest {
 			offreStageService.refuserOffreStage(offreId, commentaireRefus);
 		});
 		
+		verify(offreStageRepository, never()).save(any(OffreStage.class));
+	}
+
+	@Test
+	void testAccepterOffreStageSuccess() {
+		Long offreId = 1L;
+		OffreStage offreStage = new OffreStage();
+		when(offreStageRepository.findById(offreId)).thenReturn(Optional.of(offreStage));
+
+		offreStageService.accepterOffreStage(offreId);
+
+		verify(offreStageRepository, times(1)).save(offreStage);
+		assertTrue(offreStage.getIsApproved());
+	}
+
+	@Test
+	void testAccepterOffreStageNotFound() {
+		Long offreId = 1L;
+		when(offreStageRepository.findById(offreId)).thenReturn(Optional.empty());
+
+		Exception exception = assertThrows(RuntimeException.class, () -> {
+			offreStageService.accepterOffreStage(offreId);
+		});
+
+		assertEquals("Une erreur est survenue lors du refus de l'offre de stage.", exception.getMessage());
+		verify(offreStageRepository, never()).save(any(OffreStage.class));
+	}
+
+	@Test
+	void testAccepterOffreStageException() {
+		Long offreId = 1L;
+		when(offreStageRepository.findById(offreId)).thenThrow(new RuntimeException("Database error"));
+
+		Exception exception = assertThrows(RuntimeException.class, () -> {
+			offreStageService.accepterOffreStage(offreId);
+		});
+
+		assertEquals("Une erreur est survenue lors du refus de l'offre de stage.", exception.getMessage());
 		verify(offreStageRepository, never()).save(any(OffreStage.class));
 	}
 }

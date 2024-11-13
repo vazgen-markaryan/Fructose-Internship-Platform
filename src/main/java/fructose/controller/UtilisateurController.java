@@ -140,7 +140,7 @@ public class UtilisateurController {
 	@PutMapping ("/approve-user/{id}")
 	public ResponseEntity<?> approveUser(@RequestHeader ("Authorization") String token, @PathVariable Long id) {
 		if (!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("403 Unauthorized");
 		}
 		
 		try {
