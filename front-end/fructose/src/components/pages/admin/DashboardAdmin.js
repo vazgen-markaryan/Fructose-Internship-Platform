@@ -203,7 +203,7 @@ const DashboardHome = () => {
 	}
 
 	return (
-		<section>
+        <section>
             <div className="toolbar-items">
                 <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.manage_offers")}</h4>
                 <Link to="/dashboard/creer-offre-stage">
@@ -213,223 +213,224 @@ const DashboardHome = () => {
                     </button>
                 </Link>
             </div>
-			<div style={{padding: "10px 0"}}>
-				{selectedOffresStage.length === 0 ? (
-					<div style={{
-						width: "400px",
-						display: "flex",
-						alignItems: "center",
-						backgroundColor: "#eee",
-						borderRadius: "5px",
-						gap: "5px",
-						padding: "10px"
-					}}>
-						<Icon path={mdiBriefcasePlusOutline} size={1}/>
-						<p className="m-0">{t("dashboard_home_page.no_offers")}</p>
-					</div>
-				) : (
-					<div style={{
-						width: "auto",
-						backgroundColor: "#eee",
-						borderRadius: "5px",
-						padding: "10px"
-					}}>
-						<div style={{
-							display: "flex",
-							gap: "20px"
-						}}>
-							<div className="menu-list" style={{
-								flex: 1,
-								backgroundColor: "#f9f9f9",
-								borderRadius: "5px",
-								padding: "10px"
-							}}>
-								{selectedOffresStage.map((offreStage, index) => (
-									<div key={index}
-									     style={{
-										     display: "flex",
-										     alignItems: "center",
-										     gap: "10px",
-										     padding: "5px",
-										     borderBottom: "1px solid #ddd",
-										     cursor: "pointer",
-										     backgroundColor: currentOffer && currentOffer.id === offreStage.id ? "#e0e0e0" : "transparent"
-									     }}
-									     onClick={() => setCurrentOffer(currentOffer && currentOffer.id === offreStage.id ? null : offreStage)}>
-										<Icon path={mdiBriefcasePlusOutline} size={1}/>
-										<p className="m-0">{offreStage.nom}</p>
-									</div>
-								))}
-							</div>
-							{currentOffer &&
-								<OfferPreview currentOffer={currentOffer} handleValidate={handleValidateOffer} handlerefused={handleRejectOffer} style={{
-									flex: 2,
-									padding: "10px",
-									backgroundColor: "#fff",
-									borderRadius: "5px",
-									boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-								}}/>}
-						</div>
-					</div>
-				)}
-				<div style={{
-					display: "flex",
-					justifyContent: "center",
-					gap: "5px",
-					marginTop: "20px"
-				}}>
-					{Array.from({length: totalPages}, (_, index) => (
-						<button
-							key={index}
-							className={(currentPage === index + 1) ? "btn-filled" : ""}
-							onClick={() => {
-								handlePageChange(index + 1);
-								setCurrentOffer(null);
-							}}
-						>
-							{index + 1}
-						</button>
-					))}
-				</div>
-			</div>
-			<div className="toolbar-items">
-				<h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.manage_cv")}</h4>
-			</div>
-			<div style={{padding: "10px 0"}}>
-				{selectedCvs.length === 0 ? (
-					<div style={{
-						alignItems: "center",
-						width: "400px",
-						display: "flex",
-						backgroundColor: "#eee",
-						borderRadius: "5px",
-						gap: "5px",
-						padding: "10px"
-					}}>
-						<Icon path={mdiBriefcasePlusOutline} size={1}/>
-						<p className="m-0">{t("dashboard_home_page.no_cv")}</p>
-					</div>
-				) : (
-					<div style={{
-						width: "auto",
-						backgroundColor: "#eee",
-						borderRadius: "5px",
-						padding: "10px"
-					}}>
-						<div style={{
-							display: "flex",
-							gap: "20px"
-						}}>
-							<div className="menu-list" style={{
-								flex: 1,
-								backgroundColor: "#f9f9f9",
-								borderRadius: "5px",
-								padding: "10px"
-							}}>
-								{selectedCvs.map((cv, index) => (
-									<div key={index}
-									     style={{
-										     display: "flex",
-										     alignItems: "center",
-										     gap: "10px",
-										     padding: "5px",
-										     borderBottom: "1px solid #ddd",
-										     cursor: "pointer",
-										     backgroundColor: currentCv && currentCv.id === cv.id ? "#e0e0e0" : "transparent"
-									     }}
-									     onClick={() => {
-										     if (currentCv && currentCv.id === cv.id) {
-											     setCurrentCV(null);
-										     } else {
-											     setCurrentCV(cv);
-											     fetchCvById(cv.id);
-										     }
-									     }}>
-										<Icon path={mdiBriefcasePlusOutline} size={1}/>
-										<p className="m-0">{cv.filename}</p>
-									</div>
-								))}
-							</div>
-							{currentCv && (
-								<div style={{
-									flex: 2,
-									padding: "10px",
-									backgroundColor: "#fff",
-									borderRadius: "5px",
-									boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-								}}>
-									<PdfPreview file={currentCv.fileUrl}/>
+            <div style={{padding: "10px 0"}}>
+                {selectedOffresStage.length === 0 ? (
+                    <div style={{
+                        width: "400px",
+                        display: "flex",
+                        alignItems: "center",
+                        backgroundColor: "#eee",
+                        borderRadius: "5px",
+                        gap: "5px",
+                        padding: "10px"
+                    }}>
+                        <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                        <p className="m-0">{t("dashboard_home_page.no_offers")}</p>
+                    </div>
+                ) : (
+                    <div style={{
+                        width: "auto",
+                        backgroundColor: "#eee",
+                        borderRadius: "5px",
+                        padding: "10px"
+                    }}>
+                        <div style={{
+                            display: "flex",
+                            gap: "20px"
+                        }}>
+                            <div className="menu-list" style={{
+                                flex: 1,
+                                backgroundColor: "#f9f9f9",
+                                borderRadius: "5px",
+                                padding: "10px"
+                            }}>
+                                {selectedOffresStage.map((offreStage, index) => (
+                                    <div key={index}
+                                         style={{
+                                             display: "flex",
+                                             alignItems: "center",
+                                             gap: "10px",
+                                             padding: "5px",
+                                             borderBottom: "1px solid #ddd",
+                                             cursor: "pointer",
+                                             backgroundColor: currentOffer && currentOffer.id === offreStage.id ? "#e0e0e0" : "transparent"
+                                         }}
+                                         onClick={() => setCurrentOffer(currentOffer && currentOffer.id === offreStage.id ? null : offreStage)}>
+                                        <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                                        <p className="m-0">{offreStage.nom}</p>
+                                    </div>
+                                ))}
+                            </div>
+                            {currentOffer &&
+                                <OfferPreview currentOffer={currentOffer} handleValidate={handleValidateOffer}
+                                              handlerefused={handleRejectOffer} style={{
+                                    flex: 2,
+                                    padding: "10px",
+                                    backgroundColor: "#fff",
+                                    borderRadius: "5px",
+                                    boxShadow: "0 0 10px rgba(0,0,0,0.1)"
+                                }}/>}
+                        </div>
+                    </div>
+                )}
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: "5px",
+                    marginTop: "20px"
+                }}>
+                    {Array.from({length: totalPages}, (_, index) => (
+                        <button
+                            key={index}
+                            className={(currentPage === index + 1) ? "btn-filled" : ""}
+                            onClick={() => {
+                                handlePageChange(index + 1);
+                                setCurrentOffer(null);
+                            }}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
+            </div>
+            <div className="toolbar-items">
+                <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.manage_cv")}</h4>
+            </div>
+            <div style={{padding: "10px 0"}}>
+                {selectedCvs.length === 0 ? (
+                    <div style={{
+                        alignItems: "center",
+                        width: "400px",
+                        display: "flex",
+                        backgroundColor: "#eee",
+                        borderRadius: "5px",
+                        gap: "5px",
+                        padding: "10px"
+                    }}>
+                        <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                        <p className="m-0">{t("dashboard_home_page.no_cv")}</p>
+                    </div>
+                ) : (
+                    <div style={{
+                        width: "auto",
+                        backgroundColor: "#eee",
+                        borderRadius: "5px",
+                        padding: "10px"
+                    }}>
+                        <div style={{
+                            display: "flex",
+                            gap: "20px"
+                        }}>
+                            <div className="menu-list" style={{
+                                flex: 1,
+                                backgroundColor: "#f9f9f9",
+                                borderRadius: "5px",
+                                padding: "10px"
+                            }}>
+                                {selectedCvs.map((cv, index) => (
+                                    <div key={index}
+                                         style={{
+                                             display: "flex",
+                                             alignItems: "center",
+                                             gap: "10px",
+                                             padding: "5px",
+                                             borderBottom: "1px solid #ddd",
+                                             cursor: "pointer",
+                                             backgroundColor: currentCv && currentCv.id === cv.id ? "#e0e0e0" : "transparent"
+                                         }}
+                                         onClick={() => {
+                                             if (currentCv && currentCv.id === cv.id) {
+                                                 setCurrentCV(null);
+                                             } else {
+                                                 setCurrentCV(cv);
+                                                 fetchCvById(cv.id);
+                                             }
+                                         }}>
+                                        <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                                        <p className="m-0">{cv.filename}</p>
+                                    </div>
+                                ))}
+                            </div>
+                            {currentCv && (
+                                <div style={{
+                                    flex: 2,
+                                    padding: "10px",
+                                    backgroundColor: "#fff",
+                                    borderRadius: "5px",
+                                    boxShadow: "0 0 10px rgba(0,0,0,0.1)"
+                                }}>
+                                    <PdfPreview file={currentCv.fileUrl}/>
 
-									<div>
-										<p style={{
-											textAlign: "center",
-											margin: "10px 0",
-											fontWeight: "bold"
-										}}>
-											{currentCv.filename}
-										</p>
-										<div style={{
-											display: "flex",
-											justifyContent: "center",
-											gap: "10px"
-										}}>
-											<button
-												className="btn-filled, bg-green"
-												onClick={() => handleValidateCv(currentCv.id)}
-											>
-												{t("modal.validate")}
-											</button>
-											<button
-												className="btn-filled bg-red"
-												onClick={() => setRejectModalOpenCv(true)}
-											>
-												{t("modal.reject")}
-											</button>
-										</div>
-									</div>
-								</div>
-							)}
-						</div>
-					</div>
-				)}
-				<div style={{
-					display: "flex",
-					justifyContent: "center",
-					marginTop: "20px"
-				}}>
-					{Array.from({length: totalPagesCv}, (_, index) => (
-						<button
-							key={index}
-							className={(currentPageCv === index + 1) ? "btn-filled" : ""}
-							onClick={() => {
-								handlePageChangeCv(index + 1);
-								setCurrentCV(null);
-							}}
-						>
-							{index + 1}
-						</button>
-					))}
-				</div>
-				{isRejectModalOpenCv && (
-					<Modal onClose={() => setRejectModalOpenCv(false)} onSend={() => {
-						handleRejectCv(currentCv.id, textareaRef.current.value);
-						textareaRef.current.value = "";
-						setRejectModalOpenCv(false);
-					}}>
-						<h4>{t("modal.reject_reason")}</h4>
-						<textarea
-							ref={textareaRef}
-							placeholder={t("modal.reject_reason_placeholder")}
-							style={{
-								width: "100%",
-								height: "100px"
-							}}
-						/>
-					</Modal>
-				)}
-			</div>
-		</section>
-	);
+                                    <div>
+                                        <p style={{
+                                            textAlign: "center",
+                                            margin: "10px 0",
+                                            fontWeight: "bold"
+                                        }}>
+                                            {currentCv.filename}
+                                        </p>
+                                        <div style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            gap: "10px"
+                                        }}>
+                                            <button
+                                                className="btn-filled, bg-green"
+                                                onClick={() => handleValidateCv(currentCv.id)}
+                                            >
+                                                {t("modal.validate")}
+                                            </button>
+                                            <button
+                                                className="btn-filled bg-red"
+                                                onClick={() => setRejectModalOpenCv(true)}
+                                            >
+                                                {t("modal.reject")}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px"
+                }}>
+                    {Array.from({length: totalPagesCv}, (_, index) => (
+                        <button
+                            key={index}
+                            className={(currentPageCv === index + 1) ? "btn-filled" : ""}
+                            onClick={() => {
+                                handlePageChangeCv(index + 1);
+                                setCurrentCV(null);
+                            }}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
+                {isRejectModalOpenCv && (
+                    <Modal onClose={() => setRejectModalOpenCv(false)} onSend={() => {
+                        handleRejectCv(currentCv.id, textareaRef.current.value);
+                        textareaRef.current.value = "";
+                        setRejectModalOpenCv(false);
+                    }}>
+                        <h4>{t("modal.reject_reason")}</h4>
+                        <textarea
+                            ref={textareaRef}
+                            placeholder={t("modal.reject_reason_placeholder")}
+                            style={{
+                                width: "100%",
+                                height: "100px"
+                            }}
+                        />
+                    </Modal>
+                )}
+            </div>
+        </section>
+    );
 };
 
 export default DashboardHome;
