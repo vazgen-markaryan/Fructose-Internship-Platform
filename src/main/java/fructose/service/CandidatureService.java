@@ -8,7 +8,9 @@ import fructose.model.enumerator.EtatCandidature;
 import fructose.repository.CandidatureRepository;
 import fructose.repository.CvRepository;
 import fructose.repository.OffreStageRepository;
-import fructose.service.dto.*;
+import fructose.service.dto.CandidatureDTO;
+import fructose.service.dto.EtudiantDTO;
+import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,28 +100,26 @@ public class CandidatureService {
 		
 		return result;
 	}
-
+	
 	public List<Map<String, Object>> findByCandidatureByOwner(Long employeurId) {
 		List<Map<String, Object>> result = new ArrayList<>();
-
-		List<Candidature> candidatures = candidatureRepository.findByCandidatureByOwner(employeurId);
-
+		
+		List<Candidature> candidatures = candidatureRepository.findByCandidatureByOwnerWithoutCv(employeurId);
+		
 		for (Candidature candidature : candidatures) {
 			Map<String, Object> candidatureData = new HashMap<>();
-
+			
 			candidatureData.put("candidature", CandidatureDTO.toDTO(candidature));
 			Utilisateur etudiant = candidature.getEtudiant();
 			candidatureData.put("etudiant", EtudiantDTO.toDTO(etudiant));
-			Cv cv = candidature.getCv();
-			candidatureData.put("cv", CvDTO.toDTO(cv));
 			OffreStage offreStage = candidature.getOffreStage();
 			candidatureData.put("idOffreStage", offreStage.getId());
-
+			
 			result.add(candidatureData);
 		}
-
+		
 		return result;
 	}
-
-
+	
+	
 }

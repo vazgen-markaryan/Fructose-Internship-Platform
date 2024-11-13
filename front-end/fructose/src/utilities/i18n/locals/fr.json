@@ -230,7 +230,9 @@
 			"pending": "En attente",
 			"pending_message": "Votre candidature est en attente. Veuillez patienter.",
 			"refused": "Refusée",
-			"refused_message": "Votre candidature a été refusée avec le commentaire suivant :"
+			"refused_message": "Votre candidature a été refusée avec le commentaire suivant :",
+			"entrevue": "Votre entrevue a été planifiée",
+			"entrevue_message": "La date de votre entrevue est le: "
 		}
 	},
 	"pdf_view_page": {

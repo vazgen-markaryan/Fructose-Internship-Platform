@@ -394,6 +394,13 @@ const DashboardHome = () => {
 				title: t('dashboard_home_page.sweetalert.refused'),
 				html: `${t('dashboard_home_page.sweetalert.refused_message')}<br><br>${candidature.commentaireRefus}`,
 			});
+		} else if (candidature.etat === "ATTEND_ENTREVUE") {
+			Swal.fire({
+				icon: 'info',
+				title: t('dashboard_home_page.sweetalert.entrevue'),
+				// TODO changer la variable
+				html: `${t('dashboard_home_page.sweetalert.entrevue_message')}<br><br>${candidature.commentaireRefus}`,
+			});
 		}
 	};
 	

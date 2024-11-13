@@ -50,12 +50,9 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.GET, "/get-offre-stage/**").permitAll()
 				.requestMatchers(HttpMethod.DELETE, "/delete-offre-stage/**").permitAll()
 				.requestMatchers(HttpMethod.PUT, "/modifier-offre-stage").permitAll()
-				.requestMatchers(HttpMethod.POST, "/candidatures/postuler").authenticated()
-				.requestMatchers(HttpMethod.PUT, "/candidatures/approuver/**").authenticated()
-				.requestMatchers(HttpMethod.PUT, "/candidatures/refuser/**").authenticated()
 				.requestMatchers(HttpMethod.PUT, "/refuser-offre-stage/**").authenticated()
 				.requestMatchers(HttpMethod.PUT, "/approuver-offre-stage/**").authenticated()
-				.requestMatchers(HttpMethod.GET, "/candidatures/etudiant/**").authenticated()
+				.requestMatchers(HttpMethod.GET, "/candidatures/**").authenticated()
 				.anyRequest().authenticated()
 			).addFilterBefore(new JwtAuthentificationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
 		return http.build();

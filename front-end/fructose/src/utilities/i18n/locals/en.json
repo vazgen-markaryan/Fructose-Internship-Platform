@@ -230,7 +230,9 @@
 			"pending": "Pending",
 			"pending_message": "Your Application is pending. Please wait.",
 			"refused": "Refused",
-			"refused_message": "Your Application has been refused with the following reason: "
+			"refused_message": "Your Application has been refused with the following reason: ",
+			"entrevue": "Your Entrevue has been set!",
+			"entrevue_message": "The date of your Entrevue is :"
 		}
 	},
 	"pdf_view_page": {

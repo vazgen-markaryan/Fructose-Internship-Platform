@@ -3,5 +3,6 @@ package fructose.model.enumerator;
 public enum EtatCandidature {
 	EN_ATTENTE,
 	APPROUVEE,
-	REFUSEE
+	REFUSEE,
+	ATTEND_ENTREVUE
 }
