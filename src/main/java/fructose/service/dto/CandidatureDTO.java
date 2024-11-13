@@ -19,7 +19,7 @@ public class CandidatureDTO {
 	public static CandidatureDTO toDTO(Candidature candidature) {
 		CandidatureDTO candidatureDTO = new CandidatureDTO();
 		candidatureDTO.setId(candidature.getId());
-		candidatureDTO.setEtudiantDTO(EtudiantDTO.toDTO(candidature.getEtudiant()));
+		candidatureDTO.setEtudiantDTO((EtudiantDTO) EtudiantDTO.toDTO(candidature.getEtudiant()));
 		candidatureDTO.setOffreStageDTO(OffreStageDTO.toDTO(candidature.getOffreStage()));
 		candidatureDTO.setEtat(candidature.getEtat());
 		candidatureDTO.setCommentaireRefus(candidature.getCommentaireRefus());

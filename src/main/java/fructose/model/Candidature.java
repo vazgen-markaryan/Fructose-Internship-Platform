@@ -23,16 +23,29 @@ public class Candidature {
 	@ManyToOne
 	@JoinColumn (name = "etudiant_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Etudiant etudiant;
+	private Utilisateur etudiant;
 	
 	@ManyToOne
 	@JoinColumn (name = "offre_stage_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private OffreStage offreStage;
+
+	@ManyToOne
+	@JoinColumn (name = "cv_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Cv cv;
 	
 	@Enumerated (EnumType.STRING)
 	private EtatCandidature etat;
 	
 	@Column (name = "commentaire")
 	private String commentaireRefus;
+	
+	public Candidature(Long id, Utilisateur etudiant, OffreStage offreStage, EtatCandidature etat, String commentaireRefus) {
+		this.id = id;
+		this.etudiant = etudiant;
+		this.offreStage = offreStage;
+		this.etat = etat;
+		this.commentaireRefus = commentaireRefus;
+	}
 }

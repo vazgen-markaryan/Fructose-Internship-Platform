@@ -9,24 +9,27 @@ import Dashboard from "./components/pages/dashboard/Dashboard";
 import {AuthProvider} from "./components/providers/AuthProvider";
 import {PrivateRoute} from "./utilities/routing/PrivateRoute";
 import {RoleRoute} from "./utilities/routing/RoleRoute";
+import {CandidatureProvider} from "./components/providers/CandidatureProvider";
 
 function App() {
-
-    return (
-        <BrowserRouter>
-            <div style={{minHeight: '100vh', position: 'relative'}}>
-                <AuthProvider>
-                    <Routes>
-                        <Route path="/" element={<HomePage/>}/>
-                        <Route path="/creer-utilisateur" element={<CreerUtilisateur/>}/>
-                        <Route path="/connexion" element={<ConnexionUtilisateur/>}/>
-                        <Route path="/dashboard/*" element={<PrivateRoute element={<Dashboard/>}/>}/>
-                        <Route path="/creer-offre-stage" element={<RoleRoute element={<CreerOffreStage/>} roles={['ADMIN', 'EMPLOYEUR']}/>}/>
-                    </Routes>
-                </AuthProvider>
-            </div>
-        </BrowserRouter>
-    );
+	
+	return (
+		<BrowserRouter>
+			<div style={{minHeight: '100vh', position: 'relative'}}>
+				<AuthProvider>
+					<CandidatureProvider>
+						<Routes>
+							<Route path="/" element={<HomePage/>}/>
+							<Route path="/creer-utilisateur" element={<CreerUtilisateur/>}/>
+							<Route path="/connexion" element={<ConnexionUtilisateur/>}/>
+							<Route path="/dashboard/*" element={<PrivateRoute element={<Dashboard/>}/>}/>
+							<Route path="/creer-offre-stage" element={<RoleRoute element={<CreerOffreStage/>} roles={['ADMIN', 'EMPLOYEUR']}/>}/>
+						</Routes>
+					</CandidatureProvider>
+				</AuthProvider>
+			</div>
+		</BrowserRouter>
+	);
 }
 
 export default App;

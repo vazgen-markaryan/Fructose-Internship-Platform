@@ -6,14 +6,16 @@ import fructose.model.OffreStage;
 import fructose.model.auth.Credentials;
 import fructose.model.enumerator.EtatCandidature;
 import fructose.repository.CandidatureRepository;
+import fructose.repository.OffreStageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Optional;
+import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -25,6 +27,9 @@ class CandidatureServiceTest {
 	
 	@Mock
 	private CandidatureRepository candidatureRepository;
+	
+	@Mock
+	private OffreStageRepository offreStageRepository;
 	
 	private Etudiant etudiant;
 	private OffreStage offreStage;
@@ -49,24 +54,6 @@ class CandidatureServiceTest {
 		candidature.setEtudiant(etudiant);
 		candidature.setOffreStage(offreStage);
 		candidature.setEtat(EtatCandidature.EN_ATTENTE);
-	}
-	
-	@Test
-	void testPostulerSuccess() {
-		when(candidatureRepository.save(any(Candidature.class))).thenReturn(candidature);
-		
-		candidatureService.postuler(etudiant, offreStage);
-		
-		verify(candidatureRepository, times(1)).save(any(Candidature.class));
-	}
-	
-	@Test
-	void testPostulerException() {
-		when(candidatureRepository.save(any(Candidature.class))).thenThrow(new RuntimeException("Database error"));
-		
-		assertThrows(RuntimeException.class, () -> candidatureService.postuler(etudiant, offreStage));
-		
-		verify(candidatureRepository, times(1)).save(any(Candidature.class));
 	}
 	
 	@Test
@@ -107,5 +94,31 @@ class CandidatureServiceTest {
 		
 		verify(candidatureRepository, times(1)).findById(1L);
 		verify(candidatureRepository, never()).save(any(Candidature.class));
+	}
+	
+	@Test
+	void testGetOffreStageDetailsByEtudiantId() {
+		Long etudiantId = 1L;
+		
+		List<Candidature> candidatures = Collections.singletonList(candidature);
+		when(candidatureRepository.findByEtudiantId(etudiantId)).thenReturn(candidatures);
+		
+		when(offreStageRepository.findById(offreStage.getId())).thenReturn(Optional.of(offreStage));
+		
+		List<Map<String, Object>> result = candidatureService.getOffreStageDetailsByEtudiantId(etudiantId);
+		
+		verify(candidatureRepository, times(1)).findByEtudiantId(etudiantId);
+		verify(offreStageRepository, times(1)).findById(offreStage.getId());
+		
+		Map<String, Object> expectedData = new HashMap<>();
+		expectedData.put("id", candidature.getId());
+		expectedData.put("etat", candidature.getEtat());
+		expectedData.put("commentaireRefus", candidature.getCommentaireRefus());
+		expectedData.put("nomOffre", offreStage.getNom());
+		expectedData.put("compagnie", offreStage.getCompagnie());
+		
+		List<Map<String, Object>> expected = Collections.singletonList(expectedData);
+		
+		assertEquals(expected, result);
 	}
 }
