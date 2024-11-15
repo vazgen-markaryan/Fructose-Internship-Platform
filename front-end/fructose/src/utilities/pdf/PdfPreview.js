@@ -47,7 +47,7 @@ const PdfPreview = ({file, height = 500, filename = 'file.pdf'}) => {
 
     return (
         <div className={`pdf-file-preview-zone ${isFullScreen ? 'fullscreen' : ''}`} style={{
-            height: isFullScreen ? '80vh' : height + 'px',
+            height: isFullScreen ? 'auto' : height + 'px',
             width: 'auto',
             overflow: 'hidden',
             overflowX: 'hidden'
