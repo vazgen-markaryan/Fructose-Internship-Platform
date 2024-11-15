@@ -5,10 +5,10 @@ import {
 	mdiAccountSchoolOutline,
 	mdiArrowLeft,
 	mdiBriefcaseCheckOutline,
-	mdiBriefcaseRemoveOutline,
-	mdiClose,
+	mdiBriefcaseRemoveOutline, mdiCheckCircleOutline, mdiClockOutline,
+	mdiClose, mdiCloseCircleOutline,
 	mdiDownloadOutline,
-	mdiFileSign,
+	mdiFileSign, mdiHelpCircleOutline,
 	mdiPresentation,
 	mdiTooltipPlusOutline
 } from "@mdi/js";
@@ -99,6 +99,7 @@ const ViewCandidatures = () => {
 					}
 					break
 				case "en_signature":
+					// TODO: Determiner si cet etat est valide et en ajouter plus si requis
 					if (candidature.candidature.etat === "ATTEND_SIGNATURE"){
 						newFilteredCandidatures.push(i)
 					}
@@ -109,7 +110,7 @@ const ViewCandidatures = () => {
 					}
 					break
 				case "rejete_total":
-					if (candidature.candidature.etat === "REFUSE"){
+					if (candidature.candidature.etat === "REFUSEE"){
 						newFilteredCandidatures.push(i)
 					}
 					break
@@ -138,7 +139,10 @@ const ViewCandidatures = () => {
 			.then(response => {
 				if (response.ok) {
 					console.log("Candidature approved successfully");
-					setCandidatures(prevCandidatures => prevCandidatures.filter(c => c.candidature.id !== currentCandidature.id));
+
+					const updatedItems = candidatures.map(item => item.candidature.id === currentCandidature.id ? { ...item, candidature: {...item.candidature, etat: "ATTEND_ENTREVUE", dateEntrevue: interviewDate} } : item );
+					console.log(updatedItems)
+					setCandidatures(updatedItems)
 					setCurrentCandidature(null);
 					setApproveModalOpen(false);
 				} else {
@@ -172,7 +176,7 @@ const ViewCandidatures = () => {
 				});
 		}
 	};
-	
+
 	return (
 		<>
 			<div className="dashboard-card-toolbar">
@@ -186,59 +190,89 @@ const ViewCandidatures = () => {
 			<div style={{display: "flex", gap: "20px"}}>
 				<div className="dashboard-card" style={{width: "30%"}}>
 					<section>
-						<button onClick={()=>{handleCategoryChange("nouvelles_candidatures")}} className={"btn-option " + ((candidatureCategory === "nouvelles_candidatures")?"btn-selected":"")}>
+						<button onClick={() => {
+							handleCategoryChange("nouvelles_candidatures")
+						}}
+								className={"btn-option " + ((candidatureCategory === "nouvelles_candidatures") ? "btn-selected" : "")}>
 							<Icon path={mdiTooltipPlusOutline} size={1}/>
 							Nouvelles candidatures
 						</button>
-						<button onClick={()=>{handleCategoryChange("en_entrevue")}} className={"btn-option " + ((candidatureCategory === "en_entrevue")?"btn-selected":"")}>
+						<button onClick={() => {
+							handleCategoryChange("en_entrevue")
+						}} className={"btn-option " + ((candidatureCategory === "en_entrevue") ? "btn-selected" : "")}>
 							<Icon path={mdiPresentation} size={1}/>
 							En Entrevue
 						</button>
-						<button onClick={()=>{handleCategoryChange("en_signature")}} className={"btn-option " + ((candidatureCategory === "en_signature")?"btn-selected":"")}>
+						<button onClick={() => {
+							handleCategoryChange("en_signature")
+						}} className={"btn-option " + ((candidatureCategory === "en_signature") ? "btn-selected" : "")}>
 							<Icon path={mdiFileSign} size={1}/>
 							En signature Contrat
 						</button>
-						<button onClick={()=>{handleCategoryChange("accepte_total")}} className={"btn-option " + ((candidatureCategory === "accepte_total")?"btn-selected":"")}>
+						<button onClick={() => {
+							handleCategoryChange("accepte_total")
+						}}
+								className={"btn-option " + ((candidatureCategory === "accepte_total") ? "btn-selected" : "")}>
 							<Icon path={mdiBriefcaseCheckOutline} size={1}/>
 							Poste Accepté
 						</button>
-						<button onClick={()=>{handleCategoryChange("rejete_total")}} className={"btn-option " + ((candidatureCategory === "rejete_total")?"btn-selected":"")}>
+						<button onClick={() => {
+							handleCategoryChange("rejete_total")
+						}} className={"btn-option " + ((candidatureCategory === "rejete_total") ? "btn-selected" : "")}>
 							<Icon path={mdiBriefcaseRemoveOutline} size={1}/>
 							Candidatures rejetées
 						</button>
 					</section>
 				</div>
-				<div className="dashboard-card" style={{width: "70%", minHeight: "70vh", maxHeight:"700px", overflowY:"auto"}}>
+				<div className="dashboard-card"
+					 style={{width: "70%", maxHeight: "550px", overflowY: "auto", height: "80vh"}}>
 					<section>
 						<h5>Vos Candidatures</h5>
 						<div className="menu-list">
-							{filteredCandidaturesIndexes.map(index => (
-								<div
-									key={candidatures[index].candidature.id}
-									className={`menu-list-item`}
-									onClick={() => handleCandidatureClick(candidatures[index].candidature, candidatures[index].cvId)}
-								>
-									<Icon path={mdiAccountSchoolOutline} size={1}/>
-									<div>
-										<p className="m-0">{candidatures[index].etudiant.fullName}</p>
-										<p className="m-0">{candidatures[index].etudiant.matricule}</p>
-									</div>
-								</div>
-							))}
+							{
+								(filteredCandidaturesIndexes.length > 0)?
+									filteredCandidaturesIndexes.map(index => (
+											<div
+												key={candidatures[index].candidature.id}
+												className={`menu-list-item`}
+												onClick={() => handleCandidatureClick(candidatures[index].candidature, candidatures[index].cvId)}
+											>
+												<Icon path={mdiAccountSchoolOutline} size={1}/>
+												<div>
+													<p className="m-0">{candidatures[index].etudiant.fullName}</p>
+													<p className="m-0 text-dark">{candidatures[index].candidature.offreStageDTO.nom}</p>
+												</div>
+											</div>
+										))
+									:
+									<>
+										<div className="dashboard-placeholder-card" style={{backgroundColor: "transparent"}}>
+											<div>
+												<Icon path={mdiBriefcaseRemoveOutline} size={2}/>
+												<h4>Aucun résultat</h4>
+												<p className="text-dark">Les futures candidatures qui répondent à ce critère apparaîtront ici</p>
+											</div>
+										</div>
+									</>
+							}
 						</div>
 					</section>
 				</div>
 			</div>
 			{
-				(currentCandidature !== null)?
+				(currentCandidature !== null) ?
 					<div className="window-frame">
 						<div className="window">
-							<div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
+							<div className="window-titlebar">
+								<h5>Candidature</h5>
 								<span className="toolbar-spacer"></span>
 								<button className="btn-icon" onClick={() => setCurrentCandidature(null)}>
 									<Icon path={mdiClose} size={1}/>
 								</button>
 							</div>
+							<div className="window-content">
+
+
 
 							<section className="nospace">
 								<div className="toolbar-items" style={{gap: "8px"}}>
@@ -267,27 +301,6 @@ const ViewCandidatures = () => {
 											null
 									)
 								}
-							</section>
-							<hr/>
-							<section className="nospace">
-								<h5>Actions</h5>
-								<div style={{gap: "10px"}} className="toolbar-items">
-									<button
-										className="btn-filled toolbar-spacer bg-green"
-										onClick={handleApprove}
-									>
-										{t("manage_users_page.approve")}
-									</button>
-									<button
-										className="btn-filled toolbar-spacer bg-red"
-										onClick={handleRefuse}
-									>
-										Refuser
-									</button>
-								</div>
-							</section>
-							<hr/>
-							<section className="nospace">
 								<div className="list-bullet">
 									<div className="user-profile-section-profile-picture" style={{
 										"background": "url('/assets/auth/default-profile.jpg') center / cover",
@@ -297,6 +310,7 @@ const ViewCandidatures = () => {
 									}}></div>
 									<div>
 										<h6 className="m-0">{currentCandidature.etudiantDTO ? currentCandidature.etudiantDTO.fullName : "Loading"}</h6>
+										<p className="m-0 text-dark">{currentCandidature.etudiantDTO.matricule}</p>
 									</div>
 
 									<div className="toolbar-spacer"></div>
@@ -305,6 +319,72 @@ const ViewCandidatures = () => {
 									</a>
 								</div>
 							</section>
+							<hr/>
+							<section className="nospace">
+								<h5>Candidature initiale</h5>
+								{
+									(currentCandidature.etat === "EN_ATTENTE")
+										?
+										<div style={{gap: "10px"}} className="toolbar-items">
+											<button
+												className="btn-filled toolbar-spacer bg-green"
+												onClick={handleApprove}
+											>
+												{t("manage_users_page.approve")}
+											</button>
+											<button
+												className="btn-filled toolbar-spacer bg-red"
+												onClick={handleRefuse}
+											>
+												Refuser
+											</button>
+										</div>
+										:
+										(currentCandidature.etat === "ATTEND_ENTREVUE")
+											?
+											<div className="toolbar-items">
+												<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
+												<p className="text-green m-0">Approuvé</p>
+											</div>
+											:
+											<div className="toolbar-items">
+												<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
+												<p className="text-red m-0">Refusé</p>
+											</div>
+								}
+
+							</section>
+							<hr/>
+							<section className="nospace">
+								<h5>Entrevue</h5>
+								{
+									// TODO: Ajouter plus d'etats selon ce qui sera fait dans les autres storys
+									(currentCandidature.etat === "ATTEND_ENTREVUE")?
+										<>
+											<div className="toolbar-items">
+												<Icon path={mdiClockOutline} size={1} className="text-orange"/>
+												<p className="text-orange m-0">En attente de l'entrevue</p>
+											</div>
+											<br/>
+											<p>Date de l'entrevue: {currentCandidature.dateEntrevue}</p>
+										</>
+										:
+										<div className="toolbar-items">
+											<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+											<p className="text-dark m-0">En attente de la candidature initiale</p>
+										</div>
+								}
+							</section>
+							<hr/>
+							<section className="nospace">
+								<h5>Contrat</h5>
+								<div className="toolbar-items">
+									<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+									<p className="text-dark m-0">En attente de l'entrevue</p>
+								</div>
+								<br/>
+							</section>
+							</div>
 						</div>
 					</div>
 					:
@@ -320,7 +400,7 @@ const ViewCandidatures = () => {
 				</Modal>
 			)}
 		</>
-	)
+	);
 }
 
 export {ViewCandidatures};

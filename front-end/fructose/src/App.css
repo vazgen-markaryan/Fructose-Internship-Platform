@@ -844,9 +844,8 @@ tr {
 
 .window-content {
 	flex-grow: 1;
-	max-height: 90vh;
+	max-height: 80vh;
 	overflow-y: auto;
-	padding: 10px;
 	box-sizing: border-box;
 }
 
@@ -922,6 +921,7 @@ tr {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	z-index: 50;
 }
 
 .modal-content {
