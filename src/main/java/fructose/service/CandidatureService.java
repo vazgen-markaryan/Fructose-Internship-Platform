@@ -57,7 +57,6 @@ public class CandidatureService {
 			candidature.setEtat(EtatCandidature.REFUSEE);
 			candidature.setCommentaireRefus(commentaireRefus);
 			candidatureRepository.save(candidature);
-			System.out.println("ETUDIANT avec email " + candidature.getEtudiant().getEmail() + " a été refusé pour l'offre de stage " + candidature.getOffreStage().getNom() + " chez " + candidature.getOffreStage().getCompagnie() + " avec le commentaire \"" + candidature.getCommentaireRefus() + "\"");
 		} catch (Exception e) {
 			logger.error("Erreur lors du refus de la candidature avec ID: {}", candidatureId, e);
 			throw new RuntimeException("Une erreur est survenue lors du refus de la candidature.", e);
@@ -76,10 +75,9 @@ public class CandidatureService {
 		try {
 			Candidature candidature = candidatureRepository.findById(candidatureId)
 				.orElseThrow(() -> new IllegalArgumentException("Candidature avec ID: " + candidatureId + " n'existe pas"));
-			candidature.setEtat(EtatCandidature.ATTEND_ENTREVUE);
+			candidature.setEtat(EtatCandidature.ENTREVUE_PROPOSE);
 			candidature.setDateEntrevue(dateEntrevue);
 			candidatureRepository.save(candidature);
-			System.out.println("ETUDIANT: avec email " + candidature.getEtudiant().getEmail() + " a été convoqué pour un RV le " + candidature.getDateEntrevue() + " pour l'offre de stage " + candidature.getOffreStage().getNom() + " chez " + candidature.getOffreStage().getCompagnie());
 		} catch (Exception e) {
 			logger.error("Erreur lors de l'approbation de la candidature avec ID: {}", candidatureId, e);
 			throw new RuntimeException("Une erreur est survenue lors de l'approbation de la candidature.", e);
@@ -133,6 +131,4 @@ public class CandidatureService {
 		
 		return result;
 	}
-	
-	
 }

@@ -395,7 +395,7 @@ const DashboardHome = () => {
 				title: t('dashboard_home_page.sweetalert.refused'),
 				html: `${t('dashboard_home_page.sweetalert.refused_message')}<br><br>${candidature.commentaireRefus}`,
 			});
-		} else if (candidature.etat === "ATTEND_ENTREVUE") {
+		} else if (candidature.etat === "ENTREVUE_PROPOSE") {
 			Swal.fire({
 				icon: 'info',
 				title: t('dashboard_home_page.sweetalert.entrevue'),
@@ -413,7 +413,7 @@ const DashboardHome = () => {
 			const sortedCandidatures = [...candidatures].sort((a, b) => {
 				const statusOrder = {
 					"APPROUVEE": 1,
-					"ATTEND_ENTREVUE": 2,
+					"ENTREVUE_PROPOSE": 2,
 					"EN_ATTENTE": 3,
 					"REFUSEE": 4
 				};
@@ -451,7 +451,7 @@ const DashboardHome = () => {
 										</p>
 										{candidature.etat === "APPROUVEE" &&
 											<Icon path={mdiCheck} size={1} color="green" style={{marginLeft: "5px"}}/>}
-										{candidature.etat === "ATTEND_ENTREVUE" &&
+										{candidature.etat === "ENTREVUE_PROPOSE" &&
 											<Icon path={mdiBellOutline} size={1} color="blue" style={{marginLeft: "5px"}}/>}
 										{candidature.etat === "REFUSEE" &&
 											<Icon path={mdiClose} size={1} color="red" style={{marginLeft: "5px"}}/>}

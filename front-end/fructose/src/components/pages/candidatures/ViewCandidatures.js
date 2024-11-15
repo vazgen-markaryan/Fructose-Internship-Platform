@@ -99,7 +99,7 @@ const ViewCandidatures = () => {
 					}
 					break
 				case "en_entrevue":
-					if (candidature.candidature.etat === "ATTEND_ENTREVUE") {
+					if (candidature.candidature.etat === "ENTREVUE_PROPOSE") {
 						newFilteredCandidatures.push(i)
 					}
 					break
@@ -148,7 +148,7 @@ const ViewCandidatures = () => {
 			},
 			body: JSON.stringify({
 				dateEntrevue: interviewDate,
-				etat: "ATTEND_ENTREVUE"
+				etat: "ENTREVUE_PROPOSE"
 			})
 		})
 			.then(response => {
@@ -165,7 +165,7 @@ const ViewCandidatures = () => {
 						...item,
 						candidature: {
 							...item.candidature,
-							etat: "ATTEND_ENTREVUE",
+							etat: "ENTREVUE_PROPOSE",
 							dateEntrevue: interviewDate
 						}
 					} : item);
@@ -390,7 +390,7 @@ const ViewCandidatures = () => {
 												</button>
 											</div>
 											:
-											(currentCandidature.etat === "ATTEND_ENTREVUE")
+											(currentCandidature.etat === "ENTREVUE_PROPOSE")
 												?
 												<div className="toolbar-items">
 													<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
@@ -409,7 +409,7 @@ const ViewCandidatures = () => {
 									<h5>Entrevue</h5>
 									{
 										// TODO: Ajouter plus d'etats selon ce qui sera fait dans les autres storys
-										(currentCandidature.etat === "ATTEND_ENTREVUE") ?
+										(currentCandidature.etat === "ENTREVUE_PROPOSE") ?
 											<>
 												<div className="toolbar-items">
 													<Icon path={mdiClockOutline} size={1} className="text-orange"/>
