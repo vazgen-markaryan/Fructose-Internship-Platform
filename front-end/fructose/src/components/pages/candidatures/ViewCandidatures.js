@@ -73,9 +73,9 @@ const ViewCandidatures = () => {
 		}
 	};
 	
-	const handleCandidatureClick = (candidature, idCv) => {
+	const handleCandidatureClick = async (candidature, idCv) => {
+		await fetchCvById(idCv);
 		setCurrentCandidature(candidature);
-		fetchCvById(idCv);
 	};
 
 	const handleCategoryChange = (newCategory) => {
@@ -267,10 +267,6 @@ const ViewCandidatures = () => {
 											null
 									)
 								}
-								<br/>
-								<button className="btn-option">
-									<Icon path={mdiDownloadOutline} size={1}/>{t('manage_cv.buttons.download')}
-								</button>
 							</section>
 							<hr/>
 							<section className="nospace">

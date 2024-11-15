@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Document, Page, pdfjs} from "react-pdf";
+import {Document, Page} from "react-pdf";
 import Icon from "@mdi/react";
 import {
     mdiChevronLeft,
@@ -10,11 +10,6 @@ import {
     mdiFullscreenExit
 } from "@mdi/js";
 import {useTranslation} from "react-i18next";
-
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.mjs',
-    import.meta.url,
-).toString();
 
 
 const PdfPreview = ({file, height = 500, filename = 'file.pdf'}) => {
