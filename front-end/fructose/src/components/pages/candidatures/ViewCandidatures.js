@@ -21,11 +21,11 @@ import {CvContext} from "../../providers/CvProvider";
 const ViewCandidatures = () => {
 	
 	const {t} = useTranslation();
-	const [currentCandidature, setCurrentCandidature] = useState({});
+	const [currentCandidature, setCurrentCandidature] = useState(null);
 	const [candidatures, setCandidatures] = useState([]);
 	const {currentToken} = useContext(AuthContext);
 	const {getCvContenuById} = useContext(CvContext)
-	const [currentCV, setCurrentCV] = useState({});
+	const [currentCV, setCurrentCV] = useState(null);
 	const [isApproveModalOpen, setApproveModalOpen] = useState(false);
 	const interviewDateRef = useRef(null);
 	
@@ -49,10 +49,6 @@ const ViewCandidatures = () => {
 			})
 			.then(data => {
 				const filteredData = data.filter(c => c.candidature.etat !== "ATTEND_ENTREVUE");
-				if (filteredData.length > 0) {
-					setCurrentCandidature(filteredData[0].candidature);
-					fetchCvById(data[0].cvId);
-				}
 				setCandidatures(filteredData);
 			})
 			.catch(error => console.error("Error fetching candidatures", error));
@@ -64,7 +60,7 @@ const ViewCandidatures = () => {
 			const pdfBlob = await response.blob();
 			const fileUrl = URL.createObjectURL(pdfBlob);
 			const fileSize = pdfBlob.size;
-			setCurrentCV((prev) => ({...prev, fileUrl, fileSize}));
+			setCurrentCV({fileUrl: fileUrl, fileSize: fileSize});
 			
 		} catch (error) {
 			console.error("Erreur lors de la récupération du CV:", error);
@@ -97,7 +93,7 @@ const ViewCandidatures = () => {
 				if (response.ok) {
 					console.log("Candidature approved successfully");
 					setCandidatures(prevCandidatures => prevCandidatures.filter(c => c.candidature.id !== currentCandidature.id));
-					setCurrentCandidature({});
+					setCurrentCandidature(null);
 					setApproveModalOpen(false);
 				} else {
 					console.error("Error approving candidature");
@@ -166,14 +162,14 @@ const ViewCandidatures = () => {
 						</button>
 					</section>
 				</div>
-				<div className="dashboard-card" style={{width: "40%"}}>
+				<div className="dashboard-card" style={{width: "70%", minHeight: "70vh", maxHeight:"700px", overflowY:"auto"}}>
 					<section>
 						<h5>Vos Candidatures</h5>
 						<div className="menu-list">
 							{candidatures.map(candidature => (
 								<div
 									key={candidature.candidature.id}
-									className={`menu-list-item ${currentCandidature.id === candidature.candidature.id ? 'menu-list-item-selected' : ''}`}
+									className={`menu-list-item`}
 									onClick={() => handleCandidatureClick(candidature.candidature, candidature.cvId)}
 								>
 									<Icon path={mdiAccountSchoolOutline} size={1}/>
@@ -186,85 +182,92 @@ const ViewCandidatures = () => {
 						</div>
 					</section>
 				</div>
-				<div className="dashboard-card" style={{width: "30%"}}>
-					<div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
-						<span className="toolbar-spacer"></span>
-						<button className="btn-icon" onClick={() => setCurrentCandidature({})}>
-							<Icon path={mdiClose} size={1}/>
-						</button>
-					</div>
-					
-					<section className="nospace">
-						<div className="toolbar-items" style={{gap: "8px"}}>
-							<div className="user-profile-section-profile-picture" style={{
-								"background": "url('/assets/offers/default-company.png') center / cover",
-								width: "52px",
-								height: "52px",
-								borderRadius: "5px",
-								margin: 0
-							}}></div>
-							<div className="toolbar-spacer">
-								<h4 className="m-0">{currentCandidature.offreStageDTO ? currentCandidature.offreStageDTO.nom : "Loading"}</h4>
-								<h6 className="m-0 text-dark">{currentCandidature.offreStageDTO ? currentCandidature.offreStageDTO.compagnie : "Loading"}</h6>
-							</div>
-							<button className="btn-outline">Voir Offre</button>
-						</div>
-					</section>
-					<hr/>
-					<section className="nospace">
-						<h5>Profil de l'applicant</h5>
-						{
-							(currentCV !== null
-									?
-									<PdfPreview height={300} file={currentCV.fileUrl}/>
-									:
-									null
-							)
-						}
-						<br/>
-						<button className="btn-option">
-							<Icon path={mdiDownloadOutline} size={1}/>{t('manage_cv.buttons.download')}
-						</button>
-					</section>
-					<hr/>
-					<section className="nospace">
-						<h5>Actions</h5>
-						<div style={{gap: "10px"}} className="toolbar-items">
-							<button
-								className="btn-filled toolbar-spacer bg-green"
-								onClick={handleApprove}
-							>
-								{t("manage_users_page.approve")}
-							</button>
-							<button
-								className="btn-filled toolbar-spacer bg-red"
-								onClick={handleRefuse}
-							>
-								Refuser
-							</button>
-						</div>
-					</section>
-					<hr/>
-					<section className="nospace">
-						<div className="list-bullet">
-							<div className="user-profile-section-profile-picture" style={{
-								"background": "url('/assets/auth/default-profile.jpg') center / cover",
-								width: "36px",
-								height: "36px",
-								margin: 0
-							}}></div>
-							<div>
-								<h6 className="m-0">{currentCandidature.etudiantDTO ? currentCandidature.etudiantDTO.fullName : "Loading"}</h6>
-							</div>
-							
-							<div className="toolbar-spacer"></div>
-							<a href={"mailto:"}>
-								<button>{t("discover_offers_page.contact")}</button>
-							</a>
-						</div>
-					</section>
-				</div>
 			</div>
+			{
+				(currentCandidature !== null)?
+					<div className="window-frame">
+						<div className="window">
+							<div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
+								<span className="toolbar-spacer"></span>
+								<button className="btn-icon" onClick={() => setCurrentCandidature(null)}>
+									<Icon path={mdiClose} size={1}/>
+								</button>
+							</div>
+
+							<section className="nospace">
+								<div className="toolbar-items" style={{gap: "8px"}}>
+									<div className="user-profile-section-profile-picture" style={{
+										"background": "url('/assets/offers/default-company.png') center / cover",
+										width: "52px",
+										height: "52px",
+										borderRadius: "5px",
+										margin: 0
+									}}></div>
+									<div className="toolbar-spacer">
+										<h4 className="m-0">{currentCandidature.offreStageDTO ? currentCandidature.offreStageDTO.nom : "Loading"}</h4>
+										<h6 className="m-0 text-dark">{currentCandidature.offreStageDTO ? currentCandidature.offreStageDTO.compagnie : "Loading"}</h6>
+									</div>
+									<button className="btn-outline">Voir Offre</button>
+								</div>
+							</section>
+							<hr/>
+							<section className="nospace">
+								<h5>Profil de l'applicant</h5>
+								{
+									(currentCV !== null && currentCV.fileUrl !== null
+											?
+											<PdfPreview height={300} file={currentCV.fileUrl}/>
+											:
+											null
+									)
+								}
+								<br/>
+								<button className="btn-option">
+									<Icon path={mdiDownloadOutline} size={1}/>{t('manage_cv.buttons.download')}
+								</button>
+							</section>
+							<hr/>
+							<section className="nospace">
+								<h5>Actions</h5>
+								<div style={{gap: "10px"}} className="toolbar-items">
+									<button
+										className="btn-filled toolbar-spacer bg-green"
+										onClick={handleApprove}
+									>
+										{t("manage_users_page.approve")}
+									</button>
+									<button
+										className="btn-filled toolbar-spacer bg-red"
+										onClick={handleRefuse}
+									>
+										Refuser
+									</button>
+								</div>
+							</section>
+							<hr/>
+							<section className="nospace">
+								<div className="list-bullet">
+									<div className="user-profile-section-profile-picture" style={{
+										"background": "url('/assets/auth/default-profile.jpg') center / cover",
+										width: "36px",
+										height: "36px",
+										margin: 0
+									}}></div>
+									<div>
+										<h6 className="m-0">{currentCandidature.etudiantDTO ? currentCandidature.etudiantDTO.fullName : "Loading"}</h6>
+									</div>
+
+									<div className="toolbar-spacer"></div>
+									<a href={"mailto:"}>
+										<button>{t("discover_offers_page.contact")}</button>
+									</a>
+								</div>
+							</section>
+						</div>
+					</div>
+					:
+					null
+			}
 			{isApproveModalOpen && (
 				<Modal onClose={() => setApproveModalOpen(false)} onSend={handleApproveSubmit}>
 					<h4>{t("view_candidatures_page.interview_date")}</h4>
