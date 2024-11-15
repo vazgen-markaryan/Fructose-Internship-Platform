@@ -4,6 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import Icon from "@mdi/react";
 import {
 	mdiAlertCircleOutline,
+	mdiBellOutline,
 	mdiBriefcasePlusOutline,
 	mdiBriefcaseRemoveOutline,
 	mdiCheck,
@@ -398,8 +399,11 @@ const DashboardHome = () => {
 			Swal.fire({
 				icon: 'info',
 				title: t('dashboard_home_page.sweetalert.entrevue'),
-				// TODO changer la variable
-				html: `${t('dashboard_home_page.sweetalert.entrevue_message')}<br><br>${candidature.commentaireRefus}`,
+				html: `${t('dashboard_home_page.sweetalert.entrevue_message')}<br><br>${new Date(candidature.dateEntrevue).toLocaleDateString('fr-FR', {
+					day: '2-digit',
+					month: '2-digit',
+					year: 'numeric'
+				})}`,
 			});
 		}
 	};
@@ -409,8 +413,9 @@ const DashboardHome = () => {
 			const sortedCandidatures = [...candidatures].sort((a, b) => {
 				const statusOrder = {
 					"APPROUVEE": 1,
-					"EN_ATTENTE": 2,
-					"REFUSEE": 3
+					"ATTEND_ENTREVUE": 2,
+					"EN_ATTENTE": 3,
+					"REFUSEE": 4
 				};
 				return statusOrder[a.etat] - statusOrder[b.etat];
 			});
@@ -446,6 +451,8 @@ const DashboardHome = () => {
 										</p>
 										{candidature.etat === "APPROUVEE" &&
 											<Icon path={mdiCheck} size={1} color="green" style={{marginLeft: "5px"}}/>}
+										{candidature.etat === "ATTEND_ENTREVUE" &&
+											<Icon path={mdiBellOutline} size={1} color="blue" style={{marginLeft: "5px"}}/>}
 										{candidature.etat === "REFUSEE" &&
 											<Icon path={mdiClose} size={1} color="red" style={{marginLeft: "5px"}}/>}
 										{candidature.etat === "EN_ATTENTE" &&
@@ -490,7 +497,7 @@ const DashboardHome = () => {
 						{
 							// TODO ALLOOOOOOOOOOOOOOOOOOOO
 						}
-
+						
 						<div className={"toolbar-items"}>
 							<h4 className={"m-0 toolbar-spacer"}>Candidatures</h4>
 							<Link to="/dashboard/view-candidatures">
@@ -499,7 +506,7 @@ const DashboardHome = () => {
 								</button>
 							</Link>
 						</div>
-
+						
 						<div style={{"height": "520px"}}>
 						</div>
 					</div>

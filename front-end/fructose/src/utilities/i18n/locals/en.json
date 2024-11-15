@@ -444,7 +444,16 @@
 		"search": "Search",
 		"actions": "Actions"
 	},
-	"view_candidatures_page" : {
-		"interview_date": "Select desired interview date"
+	"view_candidatures_page": {
+		"interview_date": "Select desired interview date",
+		"sweetalert": {
+			"success": "Success",
+			"approved": "Candidature has been approved",
+			"success_message": "The interview date has been set successfully",
+			"refused": "Candidature has been refused",
+			"error": "Error",
+			"error_commentaire_refus": "Please enter a reason for refusal",
+			"error_date_entrevue": "Please select an interview date"
+		}
 	}
 }

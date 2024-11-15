@@ -443,5 +443,17 @@
 		"reset": "Réinitialiser",
 		"search": "Rechercher",
 		"actions": "Actions"
+	},
+	"view_candidatures_page": {
+		"interview_date": "Sélectionner une date pour l'entrevue",
+		"sweetalert": {
+			"success": "Succès",
+			"approved": "La candidature a été approuvée",
+			"success_message": "La date de l'entrevue a été planifiée avec succès",
+			"refused": "La candidature a été refusée",
+			"error": "Erreur",
+			"error_commentaire_refus": "Veuillez entrer un commentaire pour le refus",
+			"error_date_entrevue": "Veuillez entrer une date pour l'entrevue"
+		}
 	}
 }

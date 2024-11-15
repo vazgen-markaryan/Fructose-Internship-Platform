@@ -45,7 +45,6 @@ const CandidatureProvider = ({children}) => {
 	
 	return (
 		<CandidatureContext.Provider value={{candidatures, fetchCandidaturesById, ApplyOffreStage}}>
-			
 			{children}
 		</CandidatureContext.Provider>
 	);

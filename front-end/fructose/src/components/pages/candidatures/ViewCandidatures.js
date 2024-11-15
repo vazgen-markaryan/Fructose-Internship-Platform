@@ -5,10 +5,13 @@ import {
 	mdiAccountSchoolOutline,
 	mdiArrowLeft,
 	mdiBriefcaseCheckOutline,
-	mdiBriefcaseRemoveOutline, mdiCheckCircleOutline, mdiClockOutline,
-	mdiClose, mdiCloseCircleOutline,
-	mdiDownloadOutline,
-	mdiFileSign, mdiHelpCircleOutline,
+	mdiBriefcaseRemoveOutline,
+	mdiCheckCircleOutline,
+	mdiClockOutline,
+	mdiClose,
+	mdiCloseCircleOutline,
+	mdiFileSign,
+	mdiHelpCircleOutline,
 	mdiPresentation,
 	mdiTooltipPlusOutline
 } from "@mdi/js";
@@ -17,6 +20,7 @@ import PdfPreview from "../../../utilities/pdf/PdfPreview";
 import {AuthContext} from "../../providers/AuthProvider";
 import Modal from "../../../utilities/modal/Modal";
 import {CvContext} from "../../providers/CvProvider";
+import Swal from "sweetalert2";
 
 const ViewCandidatures = () => {
 	
@@ -29,8 +33,9 @@ const ViewCandidatures = () => {
 	const [currentCV, setCurrentCV] = useState(null);
 	const [isApproveModalOpen, setApproveModalOpen] = useState(false);
 	const interviewDateRef = useRef(null);
-
 	const [candidatureCategory, setCandidatureCategory] = useState("nouvelles_candidatures")
+	const [isRejectModalOpen, setRejectModalOpen] = useState(false);
+	const textareaRef = useRef(null);
 	
 	const today = new Date();
 	const minDate = new Date(today.setDate(today.getDate() + 3)).toISOString().split('T')[0];
@@ -55,7 +60,7 @@ const ViewCandidatures = () => {
 			})
 			.catch(error => console.error("Error fetching candidatures", error));
 	}, [currentToken]);
-
+	
 	useEffect(() => {
 		loadFilteredCategories(candidatureCategory);
 	}, [candidatures, candidatureCategory]);
@@ -77,40 +82,40 @@ const ViewCandidatures = () => {
 		await fetchCvById(idCv);
 		setCurrentCandidature(candidature);
 	};
-
+	
 	const handleCategoryChange = (newCategory) => {
 		setCandidatureCategory(newCategory)
 		loadFilteredCategories(newCategory)
 	}
-
+	
 	const loadFilteredCategories = (category) => {
 		let newFilteredCandidatures = []
-		for (let i = 0; i < candidatures.length; i++){
+		for (let i = 0; i < candidatures.length; i++) {
 			let candidature = candidatures[i]
-			switch (category){
+			switch (category) {
 				case "nouvelles_candidatures":
-					if (candidature.candidature.etat === "EN_ATTENTE"){
+					if (candidature.candidature.etat === "EN_ATTENTE") {
 						newFilteredCandidatures.push(i)
 					}
 					break
 				case "en_entrevue":
-					if (candidature.candidature.etat === "ATTEND_ENTREVUE"){
+					if (candidature.candidature.etat === "ATTEND_ENTREVUE") {
 						newFilteredCandidatures.push(i)
 					}
 					break
 				case "en_signature":
 					// TODO: Determiner si cet etat est valide et en ajouter plus si requis
-					if (candidature.candidature.etat === "ATTEND_SIGNATURE"){
+					if (candidature.candidature.etat === "ATTEND_SIGNATURE") {
 						newFilteredCandidatures.push(i)
 					}
 					break
 				case "accepte_total":
-					if (candidature.candidature.etat === "ACCEPTE"){
+					if (candidature.candidature.etat === "ACCEPTE") {
 						newFilteredCandidatures.push(i)
 					}
 					break
 				case "rejete_total":
-					if (candidature.candidature.etat === "REFUSEE"){
+					if (candidature.candidature.etat === "REFUSEE") {
 						newFilteredCandidatures.push(i)
 					}
 					break
@@ -125,6 +130,16 @@ const ViewCandidatures = () => {
 	
 	const handleApproveSubmit = () => {
 		const interviewDate = interviewDateRef.current.value;
+		
+		if (!interviewDate) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: t("view_candidatures_page.sweetalert.error_date_entrevue"),
+			});
+			return;
+		}
+		
 		fetch(`/candidatures/approuver/${currentCandidature.id}`, {
 			method: 'PUT',
 			headers: {
@@ -138,15 +153,25 @@ const ViewCandidatures = () => {
 		})
 			.then(response => {
 				if (response.ok) {
-					console.log("Candidature approved successfully");
-
-					const updatedItems = candidatures.map(item => item.candidature.id === currentCandidature.id ? { ...item, candidature: {...item.candidature, etat: "ATTEND_ENTREVUE", dateEntrevue: interviewDate} } : item );
-					console.log(updatedItems)
+					Swal.fire({
+						icon: 'success',
+						title: t("view_candidatures_page.sweetalert.approved"),
+						text: t("view_candidatures_page.sweetalert.success_message"),
+						showConfirmButton: false,
+						timer: 2000
+					});
+					
+					const updatedItems = candidatures.map(item => item.candidature.id === currentCandidature.id ? {
+						...item,
+						candidature: {
+							...item.candidature,
+							etat: "ATTEND_ENTREVUE",
+							dateEntrevue: interviewDate
+						}
+					} : item);
 					setCandidatures(updatedItems)
 					setCurrentCandidature(null);
 					setApproveModalOpen(false);
-				} else {
-					console.error("Error approving candidature");
 				}
 			})
 			.catch(error => {
@@ -155,28 +180,57 @@ const ViewCandidatures = () => {
 	};
 	
 	const handleRefuse = () => {
-		const commentaireRefus = prompt("Please enter the refusal comment:");
-		if (commentaireRefus) {
-			fetch(`/candidatures/refuser/${currentCandidature.id}?commentaireRefus=${encodeURIComponent(commentaireRefus)}`, {
-				method: 'PUT',
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": currentToken
+		setRejectModalOpen(true);
+	};
+	
+	const handleRejectSubmit = () => {
+		const commentaireRefus = textareaRef.current.value.trim();
+		if (!commentaireRefus) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: t("view_candidatures_page.sweetalert.error_commentaire_refus"),
+			});
+			return;
+		}
+		
+		fetch(`/candidatures/refuser/${currentCandidature.id}?commentaireRefus=${encodeURIComponent(commentaireRefus)}`, {
+			method: 'PUT',
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": currentToken
+			}
+		})
+			.then(response => {
+				if (response.ok) {
+					setRejectModalOpen(false);
+					setCurrentCandidature(null);
+					
+					Swal.fire({
+						icon: 'success',
+						title: t("view_candidatures_page.sweetalert.refused"),
+						showConfirmButton: false,
+						timer: 2000
+					});
+					
+					const updatedItems = candidatures.map(item => item.candidature.id === currentCandidature.id ? {
+						...item,
+						candidature: {
+							...item.candidature,
+							etat: "REFUSEE",
+							commentaireRefus: commentaireRefus
+						}
+					} : item);
+					setCandidatures(updatedItems)
+					setCurrentCandidature(null);
+					setRejectModalOpen(false);
 				}
 			})
-				.then(response => {
-					if (response.ok) {
-						console.log("Candidature refused successfully");
-					} else {
-						console.error("Error refusing candidature");
-					}
-				})
-				.catch(error => {
-					console.error("Error refusing candidature", error);
-				});
-		}
+			.catch(error => {
+				console.error("Error refusing candidature", error);
+			});
 	};
-
+	
 	return (
 		<>
 			<div className="dashboard-card-toolbar">
@@ -193,7 +247,7 @@ const ViewCandidatures = () => {
 						<button onClick={() => {
 							handleCategoryChange("nouvelles_candidatures")
 						}}
-								className={"btn-option " + ((candidatureCategory === "nouvelles_candidatures") ? "btn-selected" : "")}>
+						        className={"btn-option " + ((candidatureCategory === "nouvelles_candidatures") ? "btn-selected" : "")}>
 							<Icon path={mdiTooltipPlusOutline} size={1}/>
 							Nouvelles candidatures
 						</button>
@@ -212,7 +266,7 @@ const ViewCandidatures = () => {
 						<button onClick={() => {
 							handleCategoryChange("accepte_total")
 						}}
-								className={"btn-option " + ((candidatureCategory === "accepte_total") ? "btn-selected" : "")}>
+						        className={"btn-option " + ((candidatureCategory === "accepte_total") ? "btn-selected" : "")}>
 							<Icon path={mdiBriefcaseCheckOutline} size={1}/>
 							Poste Accepté
 						</button>
@@ -225,25 +279,25 @@ const ViewCandidatures = () => {
 					</section>
 				</div>
 				<div className="dashboard-card"
-					 style={{width: "70%", maxHeight: "550px", overflowY: "auto", height: "80vh"}}>
+				     style={{width: "70%", maxHeight: "550px", overflowY: "auto", height: "80vh"}}>
 					<section>
 						<h5>Vos Candidatures</h5>
 						<div className="menu-list">
 							{
-								(filteredCandidaturesIndexes.length > 0)?
+								(filteredCandidaturesIndexes.length > 0) ?
 									filteredCandidaturesIndexes.map(index => (
-											<div
-												key={candidatures[index].candidature.id}
-												className={`menu-list-item`}
-												onClick={() => handleCandidatureClick(candidatures[index].candidature, candidatures[index].cvId)}
-											>
-												<Icon path={mdiAccountSchoolOutline} size={1}/>
-												<div>
-													<p className="m-0">{candidatures[index].etudiant.fullName}</p>
-													<p className="m-0 text-dark">{candidatures[index].candidature.offreStageDTO.nom}</p>
-												</div>
+										<div
+											key={candidatures[index].candidature.id}
+											className={`menu-list-item`}
+											onClick={() => handleCandidatureClick(candidatures[index].candidature, candidatures[index].cvId)}
+										>
+											<Icon path={mdiAccountSchoolOutline} size={1}/>
+											<div>
+												<p className="m-0">{candidatures[index].etudiant.fullName}</p>
+												<p className="m-0 text-dark">{candidatures[index].candidature.offreStageDTO.nom}</p>
 											</div>
-										))
+										</div>
+									))
 									:
 									<>
 										<div className="dashboard-placeholder-card" style={{backgroundColor: "transparent"}}>
@@ -271,124 +325,119 @@ const ViewCandidatures = () => {
 								</button>
 							</div>
 							<div className="window-content">
-
-
-
-							<section className="nospace">
-								<div className="toolbar-items" style={{gap: "8px"}}>
-									<div className="user-profile-section-profile-picture" style={{
-										"background": "url('/assets/offers/default-company.png') center / cover",
-										width: "52px",
-										height: "52px",
-										borderRadius: "5px",
-										margin: 0
-									}}></div>
-									<div className="toolbar-spacer">
-										<h4 className="m-0">{currentCandidature.offreStageDTO ? currentCandidature.offreStageDTO.nom : "Loading"}</h4>
-										<h6 className="m-0 text-dark">{currentCandidature.offreStageDTO ? currentCandidature.offreStageDTO.compagnie : "Loading"}</h6>
-									</div>
-									<button className="btn-outline">Voir Offre</button>
-								</div>
-							</section>
-							<hr/>
-							<section className="nospace">
-								<h5>Profil de l'applicant</h5>
-								{
-									(currentCV !== null && currentCV.fileUrl !== null
-											?
-											<PdfPreview height={300} file={currentCV.fileUrl}/>
-											:
-											null
-									)
-								}
-								<div className="list-bullet">
-									<div className="user-profile-section-profile-picture" style={{
-										"background": "url('/assets/auth/default-profile.jpg') center / cover",
-										width: "36px",
-										height: "36px",
-										margin: 0
-									}}></div>
-									<div>
-										<h6 className="m-0">{currentCandidature.etudiantDTO ? currentCandidature.etudiantDTO.fullName : "Loading"}</h6>
-										<p className="m-0 text-dark">{currentCandidature.etudiantDTO.matricule}</p>
-									</div>
-
-									<div className="toolbar-spacer"></div>
-									<a href={"mailto:"}>
-										<button>{t("discover_offers_page.contact")}</button>
-									</a>
-								</div>
-							</section>
-							<hr/>
-							<section className="nospace">
-								<h5>Candidature initiale</h5>
-								{
-									(currentCandidature.etat === "EN_ATTENTE")
-										?
-										<div style={{gap: "10px"}} className="toolbar-items">
-											<button
-												className="btn-filled toolbar-spacer bg-green"
-												onClick={handleApprove}
-											>
-												{t("manage_users_page.approve")}
-											</button>
-											<button
-												className="btn-filled toolbar-spacer bg-red"
-												onClick={handleRefuse}
-											>
-												Refuser
-											</button>
+								
+								
+								<section className="nospace">
+									<div className="toolbar-items" style={{gap: "8px"}}>
+										<div className="user-profile-section-profile-picture" style={{
+											"background": "url('/assets/offers/default-company.png') center / cover",
+											width: "52px",
+											height: "52px",
+											borderRadius: "5px",
+											margin: 0
+										}}></div>
+										<div className="toolbar-spacer">
+											<h4 className="m-0">{currentCandidature.offreStageDTO ? currentCandidature.offreStageDTO.nom : "Loading"}</h4>
+											<h6 className="m-0 text-dark">{currentCandidature.offreStageDTO ? currentCandidature.offreStageDTO.compagnie : "Loading"}</h6>
 										</div>
-										:
-										(currentCandidature.etat === "ATTEND_ENTREVUE")
+										<button className="btn-outline">Voir Offre</button>
+									</div>
+								</section>
+								<hr/>
+								<section className="nospace">
+									<h5>Profil de l'applicant</h5>
+									{
+										(currentCV !== null && currentCV.fileUrl !== null ?
+												<PdfPreview height={300} file={currentCV.fileUrl}/> : null
+										)
+									}
+									<div className="list-bullet">
+										<div className="user-profile-section-profile-picture" style={{
+											"background": "url('/assets/auth/default-profile.jpg') center / cover",
+											width: "36px",
+											height: "36px",
+											margin: 0
+										}}></div>
+										<div>
+											<h6 className="m-0">{currentCandidature.etudiantDTO ? currentCandidature.etudiantDTO.fullName : "Loading"}</h6>
+											<p className="m-0 text-dark">{currentCandidature.etudiantDTO.matricule}</p>
+										</div>
+										
+										<div className="toolbar-spacer"></div>
+										<a href={"mailto:"}>
+											<button>{t("discover_offers_page.contact")}</button>
+										</a>
+									</div>
+								</section>
+								<hr/>
+								<section className="nospace">
+									<h5>Candidature initiale</h5>
+									{
+										(currentCandidature.etat === "EN_ATTENTE")
 											?
-											<div className="toolbar-items">
-												<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
-												<p className="text-green m-0">Approuvé</p>
+											<div style={{gap: "10px"}} className="toolbar-items">
+												<button
+													className="btn-filled toolbar-spacer bg-green"
+													onClick={handleApprove}
+												>
+													{t("manage_users_page.approve")}
+												</button>
+												<button
+													className="btn-filled toolbar-spacer bg-red"
+													onClick={handleRefuse}
+												>
+													Refuser
+												</button>
 											</div>
 											:
+											(currentCandidature.etat === "ATTEND_ENTREVUE")
+												?
+												<div className="toolbar-items">
+													<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
+													<p className="text-green m-0">Approuvé</p>
+												</div>
+												:
+												<div className="toolbar-items">
+													<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
+													<p className="text-red m-0">Refusé</p>
+												</div>
+									}
+								
+								</section>
+								<hr/>
+								<section className="nospace">
+									<h5>Entrevue</h5>
+									{
+										// TODO: Ajouter plus d'etats selon ce qui sera fait dans les autres storys
+										(currentCandidature.etat === "ATTEND_ENTREVUE") ?
+											<>
+												<div className="toolbar-items">
+													<Icon path={mdiClockOutline} size={1} className="text-orange"/>
+													<p className="text-orange m-0">En attente de l'entrevue</p>
+												</div>
+												<br/>
+												<p>Date de l'entrevue: {currentCandidature.dateEntrevue}</p>
+											</>
+											:
 											<div className="toolbar-items">
-												<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
-												<p className="text-red m-0">Refusé</p>
+												<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+												<p className="text-dark m-0">En attente de la candidature initiale</p>
 											</div>
-								}
-
-							</section>
-							<hr/>
-							<section className="nospace">
-								<h5>Entrevue</h5>
-								{
-									// TODO: Ajouter plus d'etats selon ce qui sera fait dans les autres storys
-									(currentCandidature.etat === "ATTEND_ENTREVUE")?
-										<>
-											<div className="toolbar-items">
-												<Icon path={mdiClockOutline} size={1} className="text-orange"/>
-												<p className="text-orange m-0">En attente de l'entrevue</p>
-											</div>
-											<br/>
-											<p>Date de l'entrevue: {currentCandidature.dateEntrevue}</p>
-										</>
-										:
-										<div className="toolbar-items">
-											<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
-											<p className="text-dark m-0">En attente de la candidature initiale</p>
-										</div>
-								}
-							</section>
-							<hr/>
-							<section className="nospace">
-								<h5>Contrat</h5>
-								<div className="toolbar-items">
-									<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
-									<p className="text-dark m-0">En attente de l'entrevue</p>
-								</div>
-								<br/>
-							</section>
+									}
+								</section>
+								<hr/>
+								<section className="nospace">
+									<h5>Contrat</h5>
+									<div className="toolbar-items">
+										<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+										<p className="text-dark m-0">En attente de l'entrevue</p>
+									</div>
+									<br/>
+								</section>
 							</div>
 						</div>
 					</div>
-					:
-					null
+					: null
 			}
 			{isApproveModalOpen && (
 				<Modal onClose={() => setApproveModalOpen(false)} onSend={handleApproveSubmit}>
@@ -397,6 +446,20 @@ const ViewCandidatures = () => {
 						width: "100%",
 						height: "30px"
 					}}/>
+				</Modal>
+			)}
+			
+			{isRejectModalOpen && (
+				<Modal onClose={() => setRejectModalOpen(false)} onSend={handleRejectSubmit}>
+					<h4>{t("modal.reject_reason")}</h4>
+					<textarea
+						ref={textareaRef}
+						placeholder={t("modal.reject_reason_placeholder")}
+						style={{
+							width: "100%",
+							height: "100px"
+						}}
+					/>
 				</Modal>
 			)}
 		</>
