@@ -23,11 +23,14 @@ const ViewCandidatures = () => {
 	const {t} = useTranslation();
 	const [currentCandidature, setCurrentCandidature] = useState(null);
 	const [candidatures, setCandidatures] = useState([]);
+	const [filteredCandidaturesIndexes, setFilteredCandidaturesIndexes] = useState([]);
 	const {currentToken} = useContext(AuthContext);
 	const {getCvContenuById} = useContext(CvContext)
 	const [currentCV, setCurrentCV] = useState(null);
 	const [isApproveModalOpen, setApproveModalOpen] = useState(false);
 	const interviewDateRef = useRef(null);
+
+	const [candidatureCategory, setCandidatureCategory] = useState("nouvelles_candidatures")
 	
 	const today = new Date();
 	const minDate = new Date(today.setDate(today.getDate() + 3)).toISOString().split('T')[0];
@@ -48,11 +51,14 @@ const ViewCandidatures = () => {
 				return response.json();
 			})
 			.then(data => {
-				const filteredData = data.filter(c => c.candidature.etat !== "ATTEND_ENTREVUE");
-				setCandidatures(filteredData);
+				setCandidatures(data);
 			})
 			.catch(error => console.error("Error fetching candidatures", error));
 	}, [currentToken]);
+
+	useEffect(() => {
+		loadFilteredCategories(candidatureCategory);
+	}, [candidatures, candidatureCategory]);
 	
 	const fetchCvById = async (cvId) => {
 		try {
@@ -71,6 +77,46 @@ const ViewCandidatures = () => {
 		setCurrentCandidature(candidature);
 		fetchCvById(idCv);
 	};
+
+	const handleCategoryChange = (newCategory) => {
+		setCandidatureCategory(newCategory)
+		loadFilteredCategories(newCategory)
+	}
+
+	const loadFilteredCategories = (category) => {
+		let newFilteredCandidatures = []
+		for (let i = 0; i < candidatures.length; i++){
+			let candidature = candidatures[i]
+			switch (category){
+				case "nouvelles_candidatures":
+					if (candidature.candidature.etat === "EN_ATTENTE"){
+						newFilteredCandidatures.push(i)
+					}
+					break
+				case "en_entrevue":
+					if (candidature.candidature.etat === "ATTEND_ENTREVUE"){
+						newFilteredCandidatures.push(i)
+					}
+					break
+				case "en_signature":
+					if (candidature.candidature.etat === "ATTEND_SIGNATURE"){
+						newFilteredCandidatures.push(i)
+					}
+					break
+				case "accepte_total":
+					if (candidature.candidature.etat === "ACCEPTE"){
+						newFilteredCandidatures.push(i)
+					}
+					break
+				case "rejete_total":
+					if (candidature.candidature.etat === "REFUSE"){
+						newFilteredCandidatures.push(i)
+					}
+					break
+			}
+		}
+		setFilteredCandidaturesIndexes(newFilteredCandidatures)
+	}
 	
 	const handleApprove = () => {
 		setApproveModalOpen(true);
@@ -140,23 +186,23 @@ const ViewCandidatures = () => {
 			<div style={{display: "flex", gap: "20px"}}>
 				<div className="dashboard-card" style={{width: "30%"}}>
 					<section>
-						<button className="btn-option btn-selected">
+						<button onClick={()=>{handleCategoryChange("nouvelles_candidatures")}} className={"btn-option " + ((candidatureCategory === "nouvelles_candidatures")?"btn-selected":"")}>
 							<Icon path={mdiTooltipPlusOutline} size={1}/>
 							Nouvelles candidatures
 						</button>
-						<button className="btn-option">
+						<button onClick={()=>{handleCategoryChange("en_entrevue")}} className={"btn-option " + ((candidatureCategory === "en_entrevue")?"btn-selected":"")}>
 							<Icon path={mdiPresentation} size={1}/>
 							En Entrevue
 						</button>
-						<button className="btn-option">
+						<button onClick={()=>{handleCategoryChange("en_signature")}} className={"btn-option " + ((candidatureCategory === "en_signature")?"btn-selected":"")}>
 							<Icon path={mdiFileSign} size={1}/>
 							En signature Contrat
 						</button>
-						<button className="btn-option">
+						<button onClick={()=>{handleCategoryChange("accepte_total")}} className={"btn-option " + ((candidatureCategory === "accepte_total")?"btn-selected":"")}>
 							<Icon path={mdiBriefcaseCheckOutline} size={1}/>
 							Poste Accepté
 						</button>
-						<button className="btn-option">
+						<button onClick={()=>{handleCategoryChange("rejete_total")}} className={"btn-option " + ((candidatureCategory === "rejete_total")?"btn-selected":"")}>
 							<Icon path={mdiBriefcaseRemoveOutline} size={1}/>
 							Candidatures rejetées
 						</button>
@@ -166,16 +212,16 @@ const ViewCandidatures = () => {
 					<section>
 						<h5>Vos Candidatures</h5>
 						<div className="menu-list">
-							{candidatures.map(candidature => (
+							{filteredCandidaturesIndexes.map(index => (
 								<div
-									key={candidature.candidature.id}
+									key={candidatures[index].candidature.id}
 									className={`menu-list-item`}
-									onClick={() => handleCandidatureClick(candidature.candidature, candidature.cvId)}
+									onClick={() => handleCandidatureClick(candidatures[index].candidature, candidatures[index].cvId)}
 								>
 									<Icon path={mdiAccountSchoolOutline} size={1}/>
 									<div>
-										<p className="m-0">{candidature.etudiant.fullName}</p>
-										<p className="m-0">{candidature.etudiant.matricule}</p>
+										<p className="m-0">{candidatures[index].etudiant.fullName}</p>
+										<p className="m-0">{candidatures[index].etudiant.matricule}</p>
 									</div>
 								</div>
 							))}
