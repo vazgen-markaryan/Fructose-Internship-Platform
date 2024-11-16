@@ -48,7 +48,7 @@ const DashboardHome = () => {
 	const handleAcceptInterview = async () => {
 		Swal.fire({
 			title: 'Êtes-vous sûr?',
-			html: `La date de votre entrevue proposée par Employeur est:<br><strong>${new Date(currentCandidature.dateEntrevue).toLocaleDateString('fr-FR', {
+			html: `La date de votre entrevue proposée par Employeur est le :<br><strong>${new Date(currentCandidature.dateEntrevue).toLocaleDateString('fr-FR', {
 				day: '2-digit',
 				month: '2-digit',
 				year: 'numeric'
@@ -573,14 +573,10 @@ const DashboardHome = () => {
 													</div>
 													:
 													// SI CANDIDATURE A ÉTÉ REFUSÉE PAR EMPLOYEUR
-													<>
-														<div className="toolbar-items">
-															<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
-															<p className="text-red m-0">Refusé</p>
-														</div>
-														<br/>
-														<p>Commentaire: {currentCandidature.commentaireRefus}</p>
-													</>
+													<div className="toolbar-items">
+														<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
+														<p className="text-red m-0">Refusé avec le commentaire : {currentCandidature.commentaireRefus}</p>
+													</div>
 								}
 							</section>
 							
@@ -613,7 +609,7 @@ const DashboardHome = () => {
 										(currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT") ?
 											<div className="toolbar-items">
 												<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
-												<p className="text-green m-0">Entrevue acceptée</p>
+												<p className="text-green m-0">Entrevue a été acceptée</p>
 											</div>
 											:
 											// SI ENTREVUE A ÉTÉ REFUSÉE PAR L'ÉTUDIANT

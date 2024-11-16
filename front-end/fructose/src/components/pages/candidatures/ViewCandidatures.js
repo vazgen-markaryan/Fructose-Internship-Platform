@@ -394,22 +394,20 @@ const ViewCandidatures = () => {
 											</div>
 											:
 											// SI ENTREVUE A ÉTÉ PROPOSÉE
-											(currentCandidature.etat === "ENTREVUE_PROPOSE")
-												?
+											(currentCandidature.etat === "ENTREVUE_PROPOSE") ?
 												<div className="toolbar-items">
 													<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
 													<p className="text-green m-0">Approuvé</p>
 												</div>
 												:
-												// SI CANDIDATURE A ÉTÉ REFUSÉE
+												// SI CANDIDATURE A ÉTÉ REFUSÉE PAR EMPLOYEUR
 												<div className="toolbar-items">
 													<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
-													<p className="text-red m-0">Refusé</p>
+													<p className="text-red m-0">Refusé avec le commentaire : {currentCandidature.commentaireRefus}</p>
 												</div>
 									}
-								
 								</section>
-								
+								{/*//TODO CONTINUER AVEC EN SIGNATURE CONTRAT!*/}
 								<hr/>
 								
 								<section className="nospace">
