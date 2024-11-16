@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.LocalDate;
 
 
 @Data
@@ -26,11 +27,17 @@ public class ContratDTO {
     @NotBlank
     private String signatureGestionnaire;
 
+    private LocalDate dateSignatureGestionnaire;
+
     @NotBlank
     private String signatureEmployeur;
 
+    private LocalDate dateSignatureEmployeur;
+
     @NotBlank
     private String signatureEtudiant;
+
+    private LocalDate dateSignatureEtudiant;
 
     public static ContratDTO toDTO(Contrat contrat) {
         ContratDTO contratDTO = new ContratDTO();
@@ -40,8 +47,11 @@ public class ContratDTO {
         contratDTO.setEtudiant(EtudiantDTO.toDTO(contrat.getEtudiant()));
         contratDTO.setOffreStage(OffreStageDTO.toDTO(contrat.getOffreStage()));
         contratDTO.setSignatureGestionnaire(contrat.getSignatureGestionnaire());
+        contratDTO.setDateSignatureGestionnaire(contrat.getDateSignatureGestionnaire());
         contratDTO.setSignatureEmployeur(contrat.getSignatureEmployeur());
+        contratDTO.setDateSignatureEmployeur(contrat.getDateSignatureEmployeur());
         contratDTO.setSignatureEtudiant(contrat.getSignatureEtudiant());
+        contratDTO.setDateSignatureEtudiant(contrat.getDateSignatureEtudiant());
         return contratDTO;
     }
 
@@ -53,8 +63,11 @@ public class ContratDTO {
         contrat.setEtudiant(EtudiantDTO.toEntity(contratDTO.getEtudiant()));
         contrat.setOffreStage(OffreStageDTO.toEntity(contratDTO.getOffreStage()));
         contrat.setSignatureGestionnaire(contratDTO.getSignatureGestionnaire());
+        contrat.setDateSignatureGestionnaire(contratDTO.getDateSignatureGestionnaire());
         contrat.setSignatureEmployeur(contratDTO.getSignatureEmployeur());
+        contrat.setDateSignatureEmployeur(contratDTO.getDateSignatureEmployeur());
         contrat.setSignatureEtudiant(contratDTO.getSignatureEtudiant());
+        contrat.setDateSignatureEtudiant(contratDTO.getDateSignatureEtudiant());
         return contrat;
     }
 }
