@@ -4,6 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDate;
+
 @Entity
 @Setter
 @Getter
@@ -41,9 +43,18 @@ public class Contrat {
     @Column(name = "signature_gestionnaire", nullable = false)
     private String signatureGestionnaire;
 
+    @Column(name = "date_signature_gestionnaire", nullable = false)
+    private LocalDate dateSignatureGestionnaire;
+
     @Column(name = "signature_employeur", nullable = false)
     private String signatureEmployeur;
 
+    @Column(name = "date_signature_employeur", nullable = false)
+    private LocalDate dateSignatureEmployeur;
+
     @Column(name = "signature_etudiant", nullable = false)
     private String signatureEtudiant;
+
+    @Column(name = "date_signature_etudiant", nullable = false)
+    private LocalDate dateSignatureEtudiant;
 }
