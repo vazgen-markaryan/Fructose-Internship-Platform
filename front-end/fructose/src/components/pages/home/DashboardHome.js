@@ -452,7 +452,7 @@ const DashboardHome = () => {
 											<p className="text-orange m-0">En attente de la réponse de l'employeur</p>
 										</div>
 										:
-										(currentCandidature.etat === "ATTEND_ENTREVUE")
+										(currentCandidature.etat === "ENTREVUE_PROPOSE")
 											?
 											<div className="toolbar-items">
 												<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
@@ -475,7 +475,7 @@ const DashboardHome = () => {
 								<h5>Entrevue</h5>
 								{
 									// TODO: Ajouter plus d'etats selon ce qui sera fait dans les autres storys
-									(currentCandidature.etat === "ATTEND_ENTREVUE") ?
+									(currentCandidature.etat === "ENTREVUE_PROPOSE") ?
 										<>
 											<div className="toolbar-items">
 												<Icon path={mdiClockOutline} size={1} className="text-orange"/>
