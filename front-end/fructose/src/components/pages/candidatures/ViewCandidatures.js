@@ -157,6 +157,7 @@ const ViewCandidatures = () => {
 				if (response.ok) {
 					Swal.fire({
 						icon: 'success',
+						// TODO CHANGER LE TEXTE POUR ENTREVUE A ETE PLANIFIE
 						title: t("view_candidatures_page.sweetalert.approved"),
 						showConfirmButton: false,
 						timer: 1500
@@ -407,7 +408,7 @@ const ViewCandidatures = () => {
 												</div>
 									}
 								</section>
-								{/*//TODO CONTINUER AVEC EN SIGNATURE CONTRAT!*/}
+								{/*TODO CONTINUER AVEC VUE REFUSE ET ACCEPTE PAR ETUDIANT*/}
 								<hr/>
 								
 								<section className="nospace">
@@ -458,7 +459,7 @@ const ViewCandidatures = () => {
 											// TOMBE EN DEFAULT ÉTAT INITIALE
 											<div className="toolbar-items">
 												<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
-												<p className="text-dark m-0">En attente de l'entrevue</p>
+												<p className="text-dark m-0">En attente des résultats de l'entrevue</p>
 											</div>
 									}
 									<br></br>

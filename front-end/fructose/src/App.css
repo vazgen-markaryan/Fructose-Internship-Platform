@@ -91,6 +91,10 @@ label {
 	color: grey;
 }
 
+.text-blue {
+	color: blue;
+}
+
 .text-red {
 	color: #f44336;
 }

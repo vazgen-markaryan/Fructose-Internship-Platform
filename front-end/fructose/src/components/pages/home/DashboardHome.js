@@ -590,8 +590,8 @@ const DashboardHome = () => {
 									(currentCandidature.etat === "ENTREVUE_PROPOSE") ?
 										<>
 											<div className="toolbar-items">
-												<Icon path={mdiClockOutline} size={1} className="text-orange"/>
-												<p className="text-orange m-0">En attente de l'entrevue</p>
+												<Icon path={mdiClockOutline} size={1} className="text-blue"/>
+												<p className="text-blue m-0">En attente d'acceptation de la date de l'entrevue</p>
 											</div>
 											<br/>
 											<p>Date de l'entrevue: {currentCandidature.dateEntrevue}</p>
@@ -662,7 +662,7 @@ const DashboardHome = () => {
 												:
 												<div className="toolbar-items">
 													<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
-													<p className="text-dark m-0">En attente d'approbation de la date d'entrevue</p>
+													<p className="text-dark m-0">En attente des résultats de l'entrevue</p>
 												</div>
 								}
 								<br/>
