@@ -438,7 +438,7 @@
 		"interview_date": "Select desired interview date",
 		"sweetalert": {
 			"success": "Success",
-			"approved": "Candidature has been approved",
+			"approved": "The interview date has been proposed",
 			"refused": "Candidature has been refused",
 			"error": "Error",
 			"error_commentaire_refus": "Please enter a reason for refusal",

@@ -427,6 +427,25 @@ const DashboardHome = () => {
 		}
 	}
 	
+	const GetCandidatureManagementSection = () => {
+		if (currentUser != null) {
+			if (currentUser.role !== "PROFESSEUR") {
+				return (
+					<section>
+						<div className={"toolbar-items"}>
+							<h4 className={"m-0 toolbar-spacer"}>Candidatures</h4>
+							<Link to="/dashboard/view-candidatures">
+								<button>Voir
+									<Icon path={mdiChevronRight} size={1}/>
+								</button>
+							</Link>
+						</div>
+					</section>
+				);
+			}
+		}
+	};
+	
 	const GetPortfolioSection = () => {
 		if (currentUser != null) {
 			if (currentUser.role === "ETUDIANT") {
@@ -762,6 +781,7 @@ const DashboardHome = () => {
 					<div className={"loading-placeholder"}></div>}
 				</h5>
 			</div>
+			
 			<div style={{"display": "flex", "gap": "20px"}}>
 				<div style={{"width": "70%"}}>
 					<div className="dashboard-card">
@@ -770,15 +790,7 @@ const DashboardHome = () => {
 						{GetCandidaturesWindow()}
 						{GetPortfolioSection()}
 						{GetUserManagementSection()}
-						
-						<div className={"toolbar-items"}>
-							<h4 className={"m-0 toolbar-spacer"}>Candidatures</h4>
-							<Link to="/dashboard/view-candidatures">
-								<button>Voir
-									<Icon path={mdiChevronRight} size={1}/>
-								</button>
-							</Link>
-						</div>
+						{GetCandidatureManagementSection()}
 						
 						<div style={{"height": "520px"}}>
 						</div>
@@ -820,7 +832,8 @@ const DashboardHome = () => {
 				</div>
 			</div>
 		</>
-	);
+	)
+		;
 }
 
 export default DashboardHome;

@@ -438,7 +438,7 @@
 		"interview_date": "Sélectionner une date pour l'entrevue",
 		"sweetalert": {
 			"success": "Succès",
-			"approved": "La candidature a été approuvée",
+			"approved": "L'entrevue a été proposée",
 			"refused": "La candidature a été refusée",
 			"error": "Erreur",
 			"error_commentaire_refus": "Veuillez entrer un commentaire pour le refus",

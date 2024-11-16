@@ -104,8 +104,7 @@ const ViewCandidatures = () => {
 					}
 					break
 				case "en_signature":
-					// TODO: Determiner si cet etat est valide et en ajouter plus si requis
-					if (candidature.candidature.etat === "ATTEND_SIGNATURE") {
+					if (candidature.candidature.etat === "CONTRAT_SIGNE_EMPLOYEUR") {
 						newFilteredCandidatures.push(i)
 					}
 					break
@@ -157,7 +156,6 @@ const ViewCandidatures = () => {
 				if (response.ok) {
 					Swal.fire({
 						icon: 'success',
-						// TODO CHANGER LE TEXTE POUR ENTREVUE A ETE PLANIFIE
 						title: t("view_candidatures_page.sweetalert.approved"),
 						showConfirmButton: false,
 						timer: 1500
@@ -348,7 +346,8 @@ const ViewCandidatures = () => {
 									<h5>Profil de l'applicant</h5>
 									{
 										(currentCV !== null && currentCV.fileUrl !== null ?
-												<PdfPreview height={300} file={currentCV.fileUrl}/> : null
+												<PdfPreview height={300} file={currentCV.fileUrl}/>
+												: null
 										)
 									}
 									<div className="list-bullet">
