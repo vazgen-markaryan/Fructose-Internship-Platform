@@ -1,6 +1,7 @@
 package fructose.service;
 
 import fructose.model.Contrat;
+import fructose.model.ContratPdf;
 import fructose.model.Utilisateur;
 import fructose.model.enumerator.Role;
 import fructose.repository.ContratRepository;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import com.itextpdf.layout.Document;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,5 +93,11 @@ public class ContratService {
         }
         contrat = contratRepository.save(contrat);
         return ContratDTO.toDTO(contrat);
+    }
+
+    public Document returnPdf(Long id) {
+        Contrat contrat = contratRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Contrat with ID: " + id + " does not exist"));
+        return new ContratPdf(contrat).returnPdf();
     }
 }
