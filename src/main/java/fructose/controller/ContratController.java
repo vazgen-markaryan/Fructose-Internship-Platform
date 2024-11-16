@@ -1,12 +1,16 @@
 package fructose.controller;
 
+import com.itextpdf.layout.Document;
 import fructose.service.ContratService;
 import fructose.service.dto.ContratDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.util.List;
 
@@ -46,5 +50,21 @@ public class ContratController {
     public ResponseEntity<ContratDTO> signContrat(@PathVariable Long id, @RequestParam String signature) {
         ContratDTO signedContrat = contratService.signContrat(id, signature);
         return ResponseEntity.ok(signedContrat);
+    }
+
+    @GetMapping("/{id}/pdf")
+    public ResponseEntity<byte[]> getContratPDF(@PathVariable Long id) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        Document pdfDocument = contratService.getContratPDFById(id);
+        pdfDocument.close();
+        byte[] pdfBytes = byteArrayOutputStream.toByteArray();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "contrat_" + id + ".pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 }

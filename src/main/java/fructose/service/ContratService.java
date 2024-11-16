@@ -95,9 +95,10 @@ public class ContratService {
         return ContratDTO.toDTO(contrat);
     }
 
-    public Document returnPdf(Long id) {
+    public Document getContratPDFById(Long id) {
         Contrat contrat = contratRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Contrat with ID: " + id + " does not exist"));
-        return new ContratPdf(contrat).returnPdf();
+        ContratPdf contratPdf = new ContratPdf(contrat);
+        return contratPdf.returnPdf();
     }
 }
