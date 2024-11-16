@@ -44,15 +44,12 @@ public class Candidature {
 	
 	private LocalDate dateEntrevue;
 	
-	private boolean acceptedByEtudiant = false;
-	
-	public Candidature(Long id, Utilisateur etudiant, OffreStage offreStage, EtatCandidature etat, String commentaireRefus, LocalDate dateEtrevue, boolean acceptedByEtudiant) {
+	public Candidature(Long id, Utilisateur etudiant, OffreStage offreStage, EtatCandidature etat, String commentaireRefus, LocalDate dateEtrevue) {
 		this.id = id;
 		this.etudiant = etudiant;
 		this.offreStage = offreStage;
 		this.etat = etat;
 		this.commentaireRefus = commentaireRefus;
 		this.dateEntrevue = dateEtrevue;
-		this.acceptedByEtudiant = acceptedByEtudiant;
 	}
 }

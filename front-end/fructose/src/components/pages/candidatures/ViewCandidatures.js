@@ -119,6 +119,8 @@ const ViewCandidatures = () => {
 						newFilteredCandidatures.push(i)
 					}
 					break
+				default:
+					break
 			}
 		}
 		setFilteredCandidaturesIndexes(newFilteredCandidatures)
@@ -156,9 +158,8 @@ const ViewCandidatures = () => {
 					Swal.fire({
 						icon: 'success',
 						title: t("view_candidatures_page.sweetalert.approved"),
-						text: t("view_candidatures_page.sweetalert.success_message"),
 						showConfirmButton: false,
-						timer: 2000
+						timer: 1500
 					});
 					
 					const updatedItems = candidatures.map(item => item.candidature.id === currentCandidature.id ? {
@@ -210,7 +211,7 @@ const ViewCandidatures = () => {
 						icon: 'success',
 						title: t("view_candidatures_page.sweetalert.refused"),
 						showConfirmButton: false,
-						timer: 2000
+						timer: 1500
 					});
 					
 					const updatedItems = candidatures.map(item => item.candidature.id === currentCandidature.id ? {
@@ -325,8 +326,6 @@ const ViewCandidatures = () => {
 								</button>
 							</div>
 							<div className="window-content">
-								
-								
 								<section className="nospace">
 									<div className="toolbar-items" style={{gap: "8px"}}>
 										<div className="user-profile-section-profile-picture" style={{
@@ -369,10 +368,14 @@ const ViewCandidatures = () => {
 										</a>
 									</div>
 								</section>
+								
 								<hr/>
+								
 								<section className="nospace">
+									{/*SECTION CANDIDATURE INITIALE VUE EMPLOYEUR*/}
 									<h5>Candidature initiale</h5>
 									{
+										// ÉTAT INITIALE
 										(currentCandidature.etat === "EN_ATTENTE")
 											?
 											<div style={{gap: "10px"}} className="toolbar-items">
@@ -390,6 +393,7 @@ const ViewCandidatures = () => {
 												</button>
 											</div>
 											:
+											// SI ENTREVUE A ÉTÉ PROPOSÉE
 											(currentCandidature.etat === "ENTREVUE_PROPOSE")
 												?
 												<div className="toolbar-items">
@@ -397,6 +401,7 @@ const ViewCandidatures = () => {
 													<p className="text-green m-0">Approuvé</p>
 												</div>
 												:
+												// SI CANDIDATURE A ÉTÉ REFUSÉE
 												<div className="toolbar-items">
 													<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
 													<p className="text-red m-0">Refusé</p>
@@ -404,35 +409,61 @@ const ViewCandidatures = () => {
 									}
 								
 								</section>
+								
 								<hr/>
+								
 								<section className="nospace">
+									{/*SECTION ENTREVUE VUE EMPLOYEUR*/}
 									<h5>Entrevue</h5>
 									{
-										// TODO: Ajouter plus d'etats selon ce qui sera fait dans les autres storys
+										// SI ENTREVUE A ÉTÉ PROPOSÉE
 										(currentCandidature.etat === "ENTREVUE_PROPOSE") ?
 											<>
 												<div className="toolbar-items">
 													<Icon path={mdiClockOutline} size={1} className="text-orange"/>
-													<p className="text-orange m-0">En attente de l'entrevue</p>
+													<p className="text-orange m-0">En attente de la confirmation d'étudiant</p>
 												</div>
 												<br/>
-												<p>Date de l'entrevue: {currentCandidature.dateEntrevue}</p>
+												<p>Date de l'entrevue proposé: {currentCandidature.dateEntrevue}</p>
 											</>
 											:
-											<div className="toolbar-items">
-												<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
-												<p className="text-dark m-0">En attente de la candidature initiale</p>
-											</div>
+											// SI CANDIDATURE A ÉTÉ REFUSÉE
+											(currentCandidature.etat === "REFUSEE") ?
+												<div className="toolbar-items">
+													<Icon path={mdiCloseCircleOutline} size={1} className="text-dark"/>
+													<p className="text-dark m-0">L'entrevue ne peut être planifiée pour une candidature refusée</p>
+												</div>
+												:
+												// TOMBE EN DEFAULT ÉTAT INITIALE
+												<div className="toolbar-items">
+													<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+													<p className="text-dark m-0">En attente de la candidature initiale</p>
+												</div>
 									}
 								</section>
+								
 								<hr/>
+								
 								<section className="nospace">
+									{/*SECTION CONTRAT VUE EMPLOYEUR*/}
 									<h5>Contrat</h5>
-									<div className="toolbar-items">
-										<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
-										<p className="text-dark m-0">En attente de l'entrevue</p>
-									</div>
-									<br/>
+									{
+										// SI CANDIDATURE A ÉTÉ REFUSÉE
+										(currentCandidature.etat === "REFUSEE") ?
+											<>
+												<div className={"toolbar-items"}>
+													<Icon path={mdiCloseCircleOutline} size={1} className="text-dark"/>
+													<p className="text-dark m-0">Le contrat ne peut être signé pour une candidature refusée</p>
+												</div>
+											</>
+											:
+											// TOMBE EN DEFAULT ÉTAT INITIALE
+											<div className="toolbar-items">
+												<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+												<p className="text-dark m-0">En attente de l'entrevue</p>
+											</div>
+									}
+									<br></br>
 								</section>
 							</div>
 						</div>

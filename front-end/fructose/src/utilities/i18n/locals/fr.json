@@ -223,17 +223,7 @@
 		"modalFermer": "Fermer",
 		"my_applications": "Liste de vos applications aux Offres de Stage",
 		"no_applications": "Vous n'avez pas encore postulé à une Offre de Stage",
-		"at": "chez",
-		"sweetalert": {
-			"congratulations": "Félicitations!",
-			"approved_message": "Votre candidature a été approuvée.",
-			"pending": "En attente",
-			"pending_message": "Votre candidature est en attente. Veuillez patienter.",
-			"refused": "Refusée",
-			"refused_message": "Votre candidature a été refusée avec le commentaire suivant :",
-			"entrevue": "Votre entrevue a été planifiée",
-			"entrevue_message": "La date de votre entrevue est le: "
-		}
+		"at": "chez"
 	},
 	"pdf_view_page": {
 		"error": "Une erreur inconnue est survenue"
@@ -449,7 +439,6 @@
 		"sweetalert": {
 			"success": "Succès",
 			"approved": "La candidature a été approuvée",
-			"success_message": "La date de l'entrevue a été planifiée avec succès",
 			"refused": "La candidature a été refusée",
 			"error": "Erreur",
 			"error_commentaire_refus": "Veuillez entrer un commentaire pour le refus",

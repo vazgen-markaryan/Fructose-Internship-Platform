@@ -1,5 +1,6 @@
 package fructose.controller;
 
+import fructose.model.enumerator.EtatCandidature;
 import fructose.service.CandidatureService;
 import fructose.service.UtilisateurService;
 import fructose.service.dto.ApplicationStageDTO;
@@ -39,8 +40,8 @@ public class CandidatureController {
 		}
 	}
 	
-	@PutMapping("/approuver/{candidatureId}")
-	@ResponseStatus(HttpStatus.OK)
+	@PutMapping ("/approuver/{candidatureId}")
+	@ResponseStatus (HttpStatus.OK)
 	public void approuverCandidature(@PathVariable Long candidatureId, @RequestBody Map<String, String> request) {
 		try {
 			LocalDate dateEntrevue = LocalDate.parse(request.get("dateEntrevue"));
@@ -80,6 +81,17 @@ public class CandidatureController {
 		} catch (RuntimeException e) {
 			logger.error("Erreur lors de la récupération des candidatures pour l'offre de stage ID: {}", utilisateurDTO.getId(), e);
 			return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping("/modifierEtatCandidature/{candidatureId}")
+	@ResponseStatus(HttpStatus.OK)
+	public void modifierEtatCandidature(@PathVariable Long candidatureId, @RequestParam EtatCandidature nouvelEtat) {
+		try {
+			candidatureService.modifierEtatCandidature(candidatureId, nouvelEtat);
+		} catch (RuntimeException e) {
+			logger.error("Erreur lors de la modification de l'état de la candidature avec ID: {}", candidatureId, e);
+			throw new RuntimeException("Une erreur est survenue lors de la modification de l'état de la candidature.");
 		}
 	}
 }

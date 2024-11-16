@@ -223,17 +223,7 @@
 		"modalFermer": "Close",
 		"my_applications": "List of Applications that you have submitted",
 		"no_applications": "You have not applied to any Offers yet",
-		"at": "at",
-		"sweetalert": {
-			"congratulations": "Congratulations!",
-			"approved_message": "Your Application has been approved.",
-			"pending": "Pending",
-			"pending_message": "Your Application is pending. Please wait.",
-			"refused": "Refused",
-			"refused_message": "Your Application has been refused with the following reason: ",
-			"entrevue": "Your Entrevue has been set!",
-			"entrevue_message": "The date of your Entrevue is :"
-		}
+		"at": "at"
 	},
 	"pdf_view_page": {
 		"error": "An unknown error occurred"
@@ -449,7 +439,6 @@
 		"sweetalert": {
 			"success": "Success",
 			"approved": "Candidature has been approved",
-			"success_message": "The interview date has been set successfully",
 			"refused": "Candidature has been refused",
 			"error": "Error",
 			"error_commentaire_refus": "Please enter a reason for refusal",

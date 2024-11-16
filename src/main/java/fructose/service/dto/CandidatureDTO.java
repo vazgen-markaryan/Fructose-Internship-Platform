@@ -18,7 +18,6 @@ public class CandidatureDTO {
 	private EtatCandidature etat;
 	private String commentaireRefus;
 	private LocalDate dateEntrevue;
-	private boolean acceptedByEtudiant = false;
 	
 	public static CandidatureDTO toDTO(Candidature candidature) {
 		CandidatureDTO candidatureDTO = new CandidatureDTO();
@@ -28,7 +27,6 @@ public class CandidatureDTO {
 		candidatureDTO.setEtat(candidature.getEtat());
 		candidatureDTO.setCommentaireRefus(candidature.getCommentaireRefus());
 		candidatureDTO.setDateEntrevue(candidature.getDateEntrevue());
-		candidatureDTO.setAcceptedByEtudiant(candidature.isAcceptedByEtudiant());
 		return candidatureDTO;
 	}
 	
@@ -40,7 +38,6 @@ public class CandidatureDTO {
 		candidature.setEtat(candidatureDTO.getEtat());
 		candidature.setCommentaireRefus(candidatureDTO.getCommentaireRefus());
 		candidature.setDateEntrevue(candidatureDTO.getDateEntrevue());
-		candidature.setAcceptedByEtudiant(candidatureDTO.isAcceptedByEtudiant());
 		return candidature;
 	}
 }
