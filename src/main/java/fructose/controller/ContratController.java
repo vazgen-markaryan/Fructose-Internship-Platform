@@ -31,8 +31,8 @@ public class ContratController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ContratDTO>> getAllContrats() {
-        List<ContratDTO> contrats = contratService.getAllContrats();
+    public ResponseEntity<List<ContratDTO>> getContrats() {
+        List<ContratDTO> contrats = contratService.getContrats();
         return ResponseEntity.ok(contrats);
     }
 
@@ -42,7 +42,7 @@ public class ContratController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}/sign") // Changed from POST to PATCH for updating
+    @PatchMapping("/{id}/sign")
     public ResponseEntity<ContratDTO> signContrat(@PathVariable Long id, @RequestParam String signature) {
         ContratDTO signedContrat = contratService.signContrat(id, signature);
         return ResponseEntity.ok(signedContrat);
