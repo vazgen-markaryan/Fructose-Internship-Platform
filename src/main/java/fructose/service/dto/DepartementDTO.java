@@ -37,8 +37,4 @@ public class DepartementDTO {
 		departement.setNom(departementDTO.getNom());
 		return departement;
 	}
-	
-	public static List<DepartementDTO> toDTOList(List<Departement> departements) {
-		return departements.stream().map(DepartementDTO::toDTO).toList();
-	}
 }
