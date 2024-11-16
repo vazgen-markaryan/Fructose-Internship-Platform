@@ -21,17 +21,17 @@ public class Contrat {
     @ManyToOne
     @JoinColumn(name = "gestionnaire_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Utilisateur gestionnaire;
+    private Admin gestionnaire;
 
     @ManyToOne
     @JoinColumn(name = "employeur_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Utilisateur employeur;
+    private Employeur employeur;
 
     @ManyToOne
     @JoinColumn(name = "etudiant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Utilisateur etudiant;
+    private Etudiant etudiant;
 
     @ManyToOne
     @JoinColumn(name = "offre_stage_id", nullable = false)
