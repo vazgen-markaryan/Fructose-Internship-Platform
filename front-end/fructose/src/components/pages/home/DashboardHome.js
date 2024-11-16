@@ -7,11 +7,11 @@ import {
 	mdiBellOutline,
 	mdiBriefcasePlusOutline,
 	mdiBriefcaseRemoveOutline,
-	mdiCheck,
+	mdiCheck, mdiCheckCircleOutline,
 	mdiChevronRight,
 	mdiClockOutline,
-	mdiClose,
-	mdiFileDocumentOutline,
+	mdiClose, mdiCloseCircleOutline,
+	mdiFileDocumentOutline, mdiHelpCircleOutline,
 	mdiPlus
 } from "@mdi/js";
 import {OffreStageContext} from "../../providers/OffreStageProvider";
@@ -35,6 +35,7 @@ const DashboardHome = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const itemsPerPage = 10;
 	const {candidatures, fetchCandidaturesById} = useContext(CandidatureContext);
+	const [currentCandidature, setCurrentCandidature] = useState(null);
 	const navigate = useNavigate();
 	
 	const handleCvClick = (cv) => {
@@ -377,7 +378,8 @@ const DashboardHome = () => {
 	}
 	
 	const handleCandidatureClick = (candidature) => {
-		if (candidature.etat === "APPROUVEE") {
+		setCurrentCandidature(candidature)
+		/*if (candidature.etat === "APPROUVEE") {
 			Swal.fire({
 				icon: 'success',
 				title: t('dashboard_home_page.sweetalert.congratulations'),
@@ -405,8 +407,106 @@ const DashboardHome = () => {
 					year: 'numeric'
 				})}`,
 			});
-		}
+		}*/
 	};
+
+	const GetCandidaturesWindow = () => {
+		if(currentCandidature) {
+			return (
+				<div className="window-frame">
+					<div className="window">
+						<div className="window-titlebar">
+							<h5>Candidature</h5>
+							<span className="toolbar-spacer"></span>
+							<button className="btn-icon" onClick={() => setCurrentCandidature(null)}>
+								<Icon path={mdiClose} size={1}/>
+							</button>
+						</div>
+						<div className="window-content">
+
+
+							<section className="nospace">
+								<div className="toolbar-items" style={{gap: "8px"}}>
+									<div className="user-profile-section-profile-picture" style={{
+										"background": "url('/assets/offers/default-company.png') center / cover",
+										width: "52px",
+										height: "52px",
+										borderRadius: "5px",
+										margin: 0
+									}}></div>
+									<div className="toolbar-spacer">
+										<h4 className="m-0">{currentCandidature.nomOffre ? currentCandidature.nomOffre : "N/A"}</h4>
+										<h6 className="m-0 text-dark">{currentCandidature.compagnie ? currentCandidature.compagnie : "N/A"}</h6>
+									</div>
+									<button className="btn-outline">Voir Offre</button>
+								</div>
+							</section>
+							<hr/>
+							<section className="nospace">
+								<h5>Candidature initiale</h5>
+								{
+									(currentCandidature.etat === "EN_ATTENTE")
+										?
+										<div className="toolbar-items">
+											<Icon path={mdiClockOutline} size={1} className="text-orange"/>
+											<p className="text-orange m-0">En attente de la réponse de l'employeur</p>
+										</div>
+										:
+										(currentCandidature.etat === "ATTEND_ENTREVUE")
+											?
+											<div className="toolbar-items">
+												<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
+												<p className="text-green m-0">Approuvé</p>
+											</div>
+											:
+											<>
+												<div className="toolbar-items">
+													<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
+													<p className="text-red m-0">Refusé</p>
+												</div>
+												<br/>
+												<p>Commentaire: {currentCandidature.commentaireRefus}</p>
+											</>
+								}
+
+							</section>
+							<hr/>
+							<section className="nospace">
+								<h5>Entrevue</h5>
+								{
+									// TODO: Ajouter plus d'etats selon ce qui sera fait dans les autres storys
+									(currentCandidature.etat === "ATTEND_ENTREVUE") ?
+										<>
+											<div className="toolbar-items">
+												<Icon path={mdiClockOutline} size={1} className="text-orange"/>
+												<p className="text-orange m-0">En attente de l'entrevue</p>
+											</div>
+											<br/>
+											<p>Date de l'entrevue: {currentCandidature.dateEntrevue}</p>
+										</>
+										:
+										<div className="toolbar-items">
+											<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+											<p className="text-dark m-0">En attente de la candidature initiale</p>
+										</div>
+								}
+							</section>
+							<hr/>
+							<section className="nospace">
+								<h5>Contrat</h5>
+								<div className="toolbar-items">
+									<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+									<p className="text-dark m-0">En attente de l'entrevue</p>
+								</div>
+								<br/>
+							</section>
+						</div>
+					</div>
+				</div>
+
+			)
+		}
+	}
 	
 	const GetCandidaturesSection = () => {
 		if (currentUser && currentUser.role === "ETUDIANT") {
@@ -492,11 +592,11 @@ const DashboardHome = () => {
 					<div className="dashboard-card">
 						{GetOffreStageSection()}
 						{GetCandidaturesSection()}
+						{
+							GetCandidaturesWindow()
+						}
 						{GetPortfolioSection()}
 						{GetUserManagementSection()}
-						{
-							// TODO ALLOOOOOOOOOOOOOOOOOOOO
-						}
 						
 						<div className={"toolbar-items"}>
 							<h4 className={"m-0 toolbar-spacer"}>Candidatures</h4>
