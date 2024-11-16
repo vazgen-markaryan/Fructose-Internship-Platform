@@ -49,10 +49,25 @@ public class ContratService {
         return ContratDTO.toDTO(contrat);
     }
 
-    public List<ContratDTO> getAllContrats() {
-        return contratRepository.findAll().stream()
-                .map(ContratDTO::toDTO)
-                .collect(Collectors.toList());
+    public List<ContratDTO> getContrats() {
+        Utilisateur utilisateur = getUtilisateurEnCours();
+        Role role = utilisateur.getRole();
+
+        return switch (role) {
+            case EMPLOYEUR -> contratRepository.findAllByEmployeur(utilisateur)
+                    .stream()
+                    .map(ContratDTO::toDTO)
+                    .collect(Collectors.toList());
+            case ETUDIANT -> contratRepository.findAllByEtudiant(utilisateur)
+                    .stream()
+                    .map(ContratDTO::toDTO)
+                    .collect(Collectors.toList());
+            case ADMIN -> contratRepository.findAll()
+                    .stream()
+                    .map(ContratDTO::toDTO)
+                    .collect(Collectors.toList());
+            default -> throw new IllegalArgumentException("Role not supported");
+        };
     }
 
     public ContratDTO signContrat(Long id, String signature) {
