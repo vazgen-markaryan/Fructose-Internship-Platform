@@ -7,51 +7,54 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 
 public class ContratPdf {
-    public static void main(String[] args) {
+
+    private final Contrat contrat;
+
+    public ContratPdf(Contrat contrat) {
+        this.contrat = contrat;
+    }
+
+    public Document returnPdf() {
+        OffreStage offreStage = contrat.getOffreStage();
+        Employeur employeur = contrat.getEmployeur();
+        Etudiant etudiant = contrat.getEtudiant();
+        Admin gestionnaire = contrat.getGestionnaire();
+
         try {
-            String dest = "contract_stage.pdf"; // Output file name
+            String dest = "contract_stage.pdf";
             PdfWriter writer = new PdfWriter(dest);
-            // Initialize the PDF document
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
-            // Add title
-            document.add(new Paragraph("CONTRAT DE STAGE").setBold().setFontSize(20));
-            // Add introduction
-            document.add(new Paragraph("ENTENTE DE STAGE INTERVENUE ENTRE LES PARTIES SUIVANTES"));
-            // Add placeholders
-            document.add(new Paragraph("Le gestionnaire de stage: [nom_gestionnaire]"));
-            document.add(new Paragraph("L'employeur: [nom_employeur]"));
-            document.add(new Paragraph("L'étudiant(e): [nom_etudiant]"));
-            // Add internship details in a table
+            document.add(new Paragraph("Le gestionnaire de stage: " + gestionnaire.getFullName()));
+            document.add(new Paragraph("L'employeur: " + employeur.getFullName()));
+            document.add(new Paragraph("L'étudiant(e): " + etudiant.getFullName()));
             Table table = new Table(2);
             table.addCell("ENDROIT DU STAGE");
-            table.addCell("[offre_lieuStage]");
+            table.addCell(contrat.getOffreStage().getAdresse());
             table.addCell("DUREE DU STAGE");
-            table.addCell("Date de début: xx\nDate de fin: xx\nNombre total de semaines: xx");
+            table.addCell("Date de début: " + offreStage.getDateDebut() + "\nDate de fin: " + offreStage.getDateFin() + "\nNombre total de semaines: " + offreStage.getDureeEnSemaines());
             table.addCell("HORAIRE DE TRAVAIL");
-            table.addCell("Horaire de travail: xx\nNombre total d'heures par semaine: xxh");
+            table.addCell("Horaire de travail: " + contrat.getOffreStage() + "\nNombre total d'heures par semaine: " + offreStage.getNombreHeuresSemaine() + "h");
             table.addCell("SALAIRE");
-            table.addCell("Salaire horaire: [offre_tauxHoraire]");
+            table.addCell("Salaire horaire: " + offreStage.getTauxHoraire() + "$");
             document.add(table);
-            // Add description
             document.add(new Paragraph("TACHES ET RESPONSABILITES DU STAGIAIRE"));
-            document.add(new Paragraph("[offre_description]"));
-            // Add responsibilities
+            document.add(new Paragraph(offreStage.getDescription()));
             document.add(new Paragraph("RESPONSABILITES"));
             document.add(new Paragraph("Le Collège s'engage à:\n..."));
             document.add(new Paragraph("L’entreprise s’engage à:\n..."));
             document.add(new Paragraph("L’étudiant s’engage à:\n..."));
-            // Add signature fields
             document.add(new Paragraph("SIGNATURES"));
-            document.add(new Paragraph("L’étudiant(e):\n\n[signature_etudiant]\n[date_signature_etudiant]\n[nom_etudiant]"));
-            document.add(new Paragraph("L’employeur:\n\n[signature_employeur]\n[date_signature_employeur]\n[nom_employeur]"));
-            document.add(new Paragraph("Le gestionnaire de stage:\n\n[signature_gestionnaire]\n[date_signature_gestionnaire]\n[nom_gestionnaire]"));
-            // Close the document
+            document.add(new Paragraph("L’étudiant(e):\n\n" + contrat.getSignatureEtudiant() + "\n" + contrat.getDateSignatureEtudiant() + "\n" + etudiant.getFullName()));
+            document.add(new Paragraph("L’employeur:\n\n" + contrat.getSignatureEmployeur() + "\n" + contrat.getDateSignatureEmployeur() + "\n" + employeur.getFullName()));
+            document.add(new Paragraph("Le gestionnaire de stage:\n\n" + contrat.getSignatureGestionnaire() + "\n" + contrat.getDateSignatureGestionnaire() + "\n" + gestionnaire.getFullName()));
             document.close();
             System.out.println("PDF created successfully!");
+            return document;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        throw new RuntimeException("PDF creation failed");
     }
 }
 
