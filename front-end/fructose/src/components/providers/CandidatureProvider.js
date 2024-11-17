@@ -7,6 +7,7 @@ const CandidatureProvider = ({children}) => {
 	
 	const {currentToken} = useContext(AuthContext);
 	const [candidatures, setCandidatures] = useState([]);
+	const [candidaturesAccepteApresEntrevue, setCandidaturesAccepteApresEntrevue] = useState([]);
 	
 	const ApplyOffreStage = async (id, cvId) => {
 		return await fetch(`/candidatures/postuler`, {
@@ -42,12 +43,34 @@ const CandidatureProvider = ({children}) => {
 		}
 	};
 	
+	const fetchCandidatureByEtatAccepteApresEntrevue = async () => {
+		try {
+			const response = await fetch(`/candidatures/accepteApresEntrevue`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					"Authorization": currentToken
+				},
+			});
+			if (response.ok) {
+				const data = await response.json();
+				setCandidaturesAccepteApresEntrevue(data);
+			} else {
+				throw new Error('Failed to fetch candidatures');
+			}
+		}catch (error) {
+			console.error("Erreur " + error);
+		}
+	}
+	
 	return (
 		<CandidatureContext.Provider value={{
 			candidatures,
 			fetchCandidaturesById,
 			ApplyOffreStage,
-			setCandidatures
+			setCandidatures,
+			fetchCandidatureByEtatAccepteApresEntrevue,
+			candidaturesAccepteApresEntrevue
 		}}>
 			{children}
 		</CandidatureContext.Provider>

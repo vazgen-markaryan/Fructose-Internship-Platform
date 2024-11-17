@@ -143,4 +143,17 @@ public class CandidatureService {
 			throw new RuntimeException("Une erreur est survenue lors de la modification de l'état de la candidature.", e);
 		}
 	}
+	
+	public List<CandidatureDTO> getCandidaturesByEtatAccepteApresEntrevue() {
+		List<Candidature> candidatures = candidatureRepository.findByEtat(EtatCandidature.ACCEPTE_APRES_ENTREVUE);
+		List<CandidatureDTO> candidatureDTOs = new ArrayList<>();
+		System.out.println("hello it's me, the function getCandidatures");
+		
+		for (Candidature candidature : candidatures) {
+			System.out.println(candidature);
+			candidatureDTOs.add(CandidatureDTO.toDTO(candidature));
+		}
+		
+		return candidatureDTOs;
+	}
 }

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ContratContext } from "../../providers/ContratProvider";
 import { AuthContext } from "../../providers/AuthProvider";
 
-const ViewContrat = () => {
+const ViewContrats = () => {
     const { t } = useTranslation();
     const { fetchContrats } = useContext(ContratContext);
     const { currentUser } = useContext(AuthContext);
@@ -25,7 +25,7 @@ const ViewContrat = () => {
 
     return (
         <>
-            <h1>{t('Contrats')}</h1>
+            <h1>{t('contrats')}</h1>
             <ul>
                 {contrats.map((contrat) => (
                     <li key={contrat.id}>
@@ -37,4 +37,4 @@ const ViewContrat = () => {
     );
 };
 
-export default ViewContrat;
+export default ViewContrats;

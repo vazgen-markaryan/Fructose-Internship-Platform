@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import Icon from "@mdi/react";
-import {mdiBriefcasePlusOutline} from "@mdi/js";
+import {mdiBriefcasePlusOutline, mdiChevronRight} from "@mdi/js";
 import OfferPreview from "../offre-stage/OfferPreview";
 import PdfPreview from "../../../utilities/pdf/PdfPreview";
 import {useTranslation} from "react-i18next";
@@ -9,6 +9,8 @@ import {AuthContext} from "../../providers/AuthProvider";
 import {OffreStageContext} from "../../providers/OffreStageProvider";
 import Modal from "../../../utilities/modal/Modal";
 import {Link} from "react-router-dom";
+import ViewContrats from "../contrat/ViewContrats";
+import ListCandidatureEnAttenteContrat from "../candidatures/ListCandidatureEnAttenteContrat";
 
 const DashboardHome = () => {
 	const {t} = useTranslation();
@@ -182,6 +184,23 @@ const DashboardHome = () => {
 	const handlePageChangeCv = (pageNumber) => {
 		setCurrentPageCv(pageNumber);
 	};
+	
+	const GetUserManagementSection = () => {
+		if (currentUser != null) {
+				return (
+					<section>
+						<div className={"toolbar-items"}>
+							<h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.user_management")}</h4>
+							<Link to="./admin/manage-users">
+								<button>{t("dashboard_home_page.not_approved_users")}
+									<Icon path={mdiChevronRight} size={1}/>
+								</button>
+							</Link>
+						</div>
+					</section>
+				)
+		}
+	}
 
 	const startIndex = (currentPage - 1) * itemsPerPage;
 	const endIndex = startIndex + itemsPerPage;
@@ -204,6 +223,7 @@ const DashboardHome = () => {
 
 	return (
         <section>
+	        {GetUserManagementSection()}
             <div className="toolbar-items">
                 <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.manage_offers")}</h4>
                 <Link to="/dashboard/creer-offre-stage">
@@ -411,6 +431,9 @@ const DashboardHome = () => {
                         </button>
                     ))}
                 </div>
+	        <div>
+		       <ListCandidatureEnAttenteContrat/>
+	       </div>
                 {isRejectModalOpenCv && (
                     <Modal onClose={() => setRejectModalOpenCv(false)} onSend={() => {
                         handleRejectCv(currentCv.id, textareaRef.current.value);
