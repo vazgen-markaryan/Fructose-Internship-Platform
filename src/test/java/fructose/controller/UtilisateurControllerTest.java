@@ -283,6 +283,18 @@ class UtilisateurControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(mockUsers, response.getBody());
 	}
+
+	@Test
+	void testGetNonApprovedUsers_Unauthorized() {
+		String token = "Bearer invalidToken";
+
+		when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(false);
+
+		ResponseEntity<List<UtilisateurDTO>> response = utilisateurController.getNonApprovedUsers(token);
+
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertNull(response.getBody());
+	}
 	
 	@Test
 	void testApproveUser_Success() {
@@ -295,6 +307,19 @@ class UtilisateurControllerTest {
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("User approved successfully.", response.getBody());
+	}
+
+	@Test
+	void testApproveUser_Unauthorized() {
+		Long userId = 1L;
+		String token = "Bearer invalidToken";
+
+		when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(false);
+
+		ResponseEntity<?> response = utilisateurController.approveUser(token, userId);
+
+		assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+		assertEquals("403 Unauthorized", response.getBody());
 	}
 	
 	@Test
@@ -322,6 +347,19 @@ class UtilisateurControllerTest {
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("User rejected and deleted successfully.", response.getBody());
+	}
+
+	@Test
+	void testDeleteUtilisateurByID_Unauthorized() {
+		Long userId = 1L;
+		String token = "Bearer invalidToken";
+
+		when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(false);
+
+		ResponseEntity<?> response = utilisateurController.deleteUtilisateurByID(token, userId);
+
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals("403 Unauthorized", response.getBody());
 	}
 	
 	@Test
@@ -355,5 +393,87 @@ class UtilisateurControllerTest {
 		ResponseEntity<Map<String, DepartementDTO>> invalidResponse = utilisateurController.checkDepartement(invalidDepartementName);
 		assertEquals(HttpStatus.NOT_FOUND, invalidResponse.getStatusCode());
 		assertNull(invalidResponse.getBody());
+	}
+
+	@Test
+	void testGetEmployeursApproved_Success() {
+		String token = "Bearer validToken";
+		List<UtilisateurDTO> mockEmployeurs = List.of(new UtilisateurDTO(), new UtilisateurDTO());
+
+		when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(true);
+		when(utilisateurService.getEmployeursApproved()).thenReturn(mockEmployeurs);
+
+		ResponseEntity<List<UtilisateurDTO>> response = utilisateurController.getEmployeursApproved(token);
+
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(mockEmployeurs, response.getBody());
+	}
+
+	@Test
+	void testGetEmployeursApproved_Unauthorized() {
+		String token = "Bearer invalidToken";
+
+		when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(false);
+
+		ResponseEntity<List<UtilisateurDTO>> response = utilisateurController.getEmployeursApproved(token);
+
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertNull(response.getBody());
+	}
+
+	@Test
+	void testGetEmployeur_Success() {
+		String token = "Bearer validToken";
+		Long employeurId = 1L;
+		UtilisateurDTO mockEmployeur = new UtilisateurDTO();
+
+		when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(true);
+		when(utilisateurService.getEmployeurById(employeurId)).thenReturn(mockEmployeur);
+
+		ResponseEntity<?> response = utilisateurController.getEmployeur(token, employeurId);
+
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(mockEmployeur, ((Map<String, UtilisateurDTO>) response.getBody()).get("owner"));
+	}
+
+	@Test
+	void testGetEmployeur_NotFound() {
+		String token = "Bearer validToken";
+		Long employeurId = 1L;
+
+		when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(true);
+		when(utilisateurService.getEmployeurById(employeurId)).thenReturn(null);
+
+		ResponseEntity<?> response = utilisateurController.getEmployeur(token, employeurId);
+
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+		assertEquals("Employeur not found", response.getBody());
+	}
+
+	@Test
+	void testGetEmployeur_Unauthorized() {
+		String token = "Bearer invalidToken";
+		Long employeurId = 1L;
+
+		when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(false);
+
+		ResponseEntity<?> response = utilisateurController.getEmployeur(token, employeurId);
+
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals("403 Unauthorized", response.getBody());
+	}
+
+	@Test
+	void testGetEmployeur_Exception() {
+		String token = "Bearer validToken";
+		Long employeurId = 1L;
+
+		when(utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)).thenReturn(true);
+		when(utilisateurService.getEmployeurById(employeurId)).thenThrow(new RuntimeException("Error retrieving employeur"));
+
+		ResponseEntity<?> response = utilisateurController.getEmployeur(token, employeurId);
+
+		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+		assertEquals("Error retrieving employeur: Error retrieving employeur", response.getBody());
 	}
 }

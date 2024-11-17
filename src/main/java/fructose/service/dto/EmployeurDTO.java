@@ -19,7 +19,6 @@ public class EmployeurDTO extends UtilisateurDTO {
 		employeur_dto.setPassword(employeur.getPassword());
 		employeur_dto.setMatricule(employeur.getMatricule());
 		employeur_dto.setRole(Role.EMPLOYEUR);
-		employeur_dto.setDepartementDTO(DepartementDTO.toDTO(employeur.getDepartement()));
 		employeur_dto.setCompanyName(employeur.getCompanyName());
 		employeur_dto.setIsApproved(employeur.getIsApproved());
 		return employeur_dto;

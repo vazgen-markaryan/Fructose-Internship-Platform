@@ -140,7 +140,7 @@ public class UtilisateurController {
 	@PutMapping ("/approve-user/{id}")
 	public ResponseEntity<?> approveUser(@RequestHeader ("Authorization") String token, @PathVariable Long id) {
 		if (!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("403 Unauthorized");
 		}
 		
 		try {
@@ -162,6 +162,35 @@ public class UtilisateurController {
 			return ResponseEntity.ok("User rejected and deleted successfully.");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error rejecting user: " + e.getMessage());
+		}
+	}
+
+	@GetMapping("/employeurs")
+	public ResponseEntity<List<UtilisateurDTO>> getEmployeursApproved(@RequestHeader("Authorization") String token) {
+		if (!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+
+		List<UtilisateurDTO> employeurs = utilisateurService.getEmployeursApproved();
+		return ResponseEntity.ok(employeurs);
+	}
+
+	@GetMapping("/employeur/{id}")
+	public ResponseEntity<?> getEmployeur(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+		if (!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)) {
+			System.out.println("403 Unauthorized");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
+		}
+		try {
+			UtilisateurDTO employeur = utilisateurService.getEmployeurById(id);
+			if (employeur == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employeur not found");
+			}
+			Map<String, UtilisateurDTO> response = new HashMap<>();
+			response.put("owner", employeur);
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving employeur: " + e.getMessage());
 		}
 	}
 }

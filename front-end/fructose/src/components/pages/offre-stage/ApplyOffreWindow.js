@@ -5,20 +5,20 @@ import {AuthContext} from "../../providers/AuthProvider";
 import {CvContext} from "../../providers/CvProvider";
 import {Link} from "react-router-dom";
 import {CandidatureContext} from "../../providers/CandidatureProvider";
+import {useTranslation} from "react-i18next";
 
 const ApplyOffreWindowContext = createContext(undefined);
 
 const ApplyOffreWindow = ({children}) => {
+	
+	const {t} = useTranslation();
 	const {isUserInit} = useContext(AuthContext);
 	const {GetCvs} = useContext(CvContext);
 	const {ApplyOffreStage} = useContext(CandidatureContext);
-	
 	const [dialogState, setDialogState] = useState({open: false, cvId: null, offre: null, resolved: false});
 	const [approvedCvs, setApprovedCvs] = useState(null)
 	const [currentCv, setCurrentCv] = useState(null)
-	
 	const [enChargement, setEnChargement] = useState(false);
-	
 	const [error, setError] = useState("")
 	
 	const openCandidatureWindow = useCallback((offreStage) => {
@@ -91,7 +91,7 @@ const ApplyOffreWindow = ({children}) => {
 				<div className="window-frame">
 					<div className="window">
 						<div className="window-titlebar">
-							<h5>Envoyer une candidature</h5>
+							<h5>{t("apply_offre_window.send_my_candidature")}</h5>
 							<button className="btn-icon" onClick={dialogState.onClose}>
 								<Icon path={mdiClose} size={1}/></button>
 						</div>
@@ -127,7 +127,7 @@ const ApplyOffreWindow = ({children}) => {
 									</section>
 									<section className="nospace">
 										<br/>
-										<h6 className="m-0">Curriculum Vitae à envoyer</h6>
+										<h6 className="m-0">{t("apply_offre_window.cv_to_send")}</h6>
 										{
 											(approvedCvs !== null) ?
 												(approvedCvs.length !== 0) ?
@@ -140,7 +140,7 @@ const ApplyOffreWindow = ({children}) => {
 																	<option key={index} value={item.id}>{item.filename}</option>
 																))}
 															</select>
-															<p className="text-dark">Note: Seuls les CV approuvés apparaîtront dans la liste.</p>
+															<p className="text-dark">{t("apply_offre_window.note")}</p>
 															<p className="text-red">{error}</p>
 														
 														</>
@@ -148,7 +148,8 @@ const ApplyOffreWindow = ({children}) => {
 													:
 													<div className="banner">
 														<Icon path={mdiAlert} size={1}/>
-														<p>Aucun CV approuvé dans votre dossier. Vous ne pourrez postuler sans un CV approuvé. <Link to="/dashboard/manage-cvs">Voir mes CVs <Icon path={mdiOpenInNew} size={0.5}/></Link>
+														<p>{t("apply_offre_window.no_cv")}
+															<Link to="/dashboard/manage-cvs">{t("apply_offre_window.see_cv")}<Icon path={mdiOpenInNew} size={0.5}/></Link>
 														</p>
 													</div>
 												:
@@ -160,10 +161,10 @@ const ApplyOffreWindow = ({children}) => {
 						</div>
 						<div className="window-options">
 							<div className="toolbar-spacer"></div>
-							<button onClick={dialogState.onClose}>Annuler</button>
+							<button onClick={dialogState.onClose}>{t("apply_offre_window.cancel")}</button>
 							<button className="btn-filled" disabled={(approvedCvs !== null) ? (approvedCvs.length === 0) : true} onClick={() => {
 								handleCompleteSubmission()
-							}}>Postuler
+							}}>{t("apply_offre_window.send")}
 							</button>
 						</div>
 					</div>

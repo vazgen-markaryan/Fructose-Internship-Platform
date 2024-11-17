@@ -65,7 +65,7 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 										?
 										<div className="toolbar-items">
 											<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
-											<h6 className="m-0 text-green">Postulé</h6>
+											<h6 className="m-0 text-green">{t("discover_offers_page.applied")}</h6>
 										</div>
 										:
 										<button className="btn-filled" onClick={() => handleApply()}>{t("discover_offers_page.apply")}</button>

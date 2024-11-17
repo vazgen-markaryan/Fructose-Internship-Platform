@@ -162,6 +162,8 @@
 		"date_fin": "End date",
 		"creer_offre_stage": "Create the internship offer",
 		"retour": "Return to home",
+		"employeurs": "Employees",
+		"employeur_select": "Select an employer",
 		"types_emploi": {
 			"select": "Select a type of employment",
 			"temps_partiel": "Part-time",
@@ -200,10 +202,10 @@
 		"home": "Home",
 		"offer": "Internship Offers",
 		"explore": "Explore",
+		"manage_offers": "Manage Internship Offers in waiting for approval",
+		"manage_cv": "Manage Curiculums Vitae in waiting for approval",
 		"no_offers": "No offers to display at the moment",
 		"my_offers": "My Internship Offers",
-		"manage_offers": "Manage Internship Offers",
-		"manage_cv": "Manage Curiculums Vitae",
 		"add_offer": "New offer",
 		"offers": "Internship Offers",
 		"hello": "Hello",
@@ -217,7 +219,7 @@
 		"studentID": "Student ID",
 		"employeID": "Employee ID",
 		"role": "Role",
-		"user_management": "User Management",
+		"user_management": "User Management in waiting for approval",
 		"not_approved_users": "Not approved users",
 		"limited_places": "Limited places",
 		"modalFermer": "Close",
@@ -432,7 +434,17 @@
 		},
 		"reset": "Reset",
 		"search": "Search",
-		"actions": "Actions"
+		"actions": "Actions",
+		"applied": "Applied"
+	},
+	"apply_offre_window": {
+		"send_my_candidature": "Send my application",
+		"cv_to_send": "Curriculum Vitae to send",
+		"note": "Note: Only approved CVs will appear in the list.",
+		"no_cv": "No approved CV in your folder. You will not be able to apply without an approved CV.",
+		"cancel": "Cancel",
+		"send": "Apply",
+		"see_cv": "See my CVs"
 	},
 	"view_candidatures_page": {
 		"interview_date": "Select desired interview date",
@@ -445,4 +457,3 @@
 			"error_date_entrevue": "Please select an interview date"
 		}
 	}
-}

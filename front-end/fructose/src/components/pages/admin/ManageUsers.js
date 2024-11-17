@@ -176,15 +176,17 @@ const ManageUsers = () => {
 									<td>{t("manage_users_page.role")}</td>
 									<td style={{textAlign: "right"}}>{t(`bd_role_traduction.${users[currentUserIndex].role}`)}</td>
 								</tr>
-								<tr>
-									<td>{t("manage_users_page.department")}</td>
-									<td style={{textAlign: "right"}}>{t("programme." + users[currentUserIndex].departementDTO.nom)}</td>
-								</tr>
 								{(users[currentUserIndex].role === "ETUDIANT" || users[currentUserIndex].role === "PROFESSEUR") && (
-									<tr>
-										<td>{t("manage_users_page.matricule")}</td>
-										<td style={{textAlign: "right"}}>{users[currentUserIndex].matricule}</td>
-									</tr>
+									<>
+										<tr>
+											<td>{t("manage_users_page.department")}</td>
+											<td style={{textAlign: "right"}}>{t("programme." + users[currentUserIndex].departementDTO.nom)}</td>
+										</tr>
+										<tr>
+											<td>{t("manage_users_page.matricule")}</td>
+											<td style={{textAlign: "right"}}>{users[currentUserIndex].matricule}</td>
+										</tr>
+									</>
 								)}
 								{users[currentUserIndex].role === "EMPLOYEUR" && (
 									<tr>
@@ -195,57 +197,9 @@ const ManageUsers = () => {
 							</tbody>
 						</table>
 						<br/>
-						{/*<p>{t("manage_users_page.actions")}</p>*/}
-						
-						{/*<div style={{*/}
-						{/*	width: "400px",*/}
-						{/*	display: "flex",*/}
-						{/*	alignItems: "center",*/}
-						{/*	gap: "5px",*/}
-						{/*	padding: "10px"*/}
-						{/*}}>*/}
-						{/*	<button*/}
-						{/*		className="btn-option"*/}
-						{/*		style={{*/}
-						{/*			backgroundColor: "green",*/}
-						{/*			color: "white",*/}
-						{/*			display: "flex",*/}
-						{/*			alignItems: "center",*/}
-						{/*			justifyContent: "center",*/}
-						{/*			padding: "8px 12px",*/}
-						{/*			borderRadius: "5px",*/}
-						{/*			fontSize: "16px",*/}
-						{/*			cursor: "pointer"*/}
-						{/*		}}*/}
-						{/*		onClick={() => {*/}
-						{/*			ApproveUserById(users[currentUserIndex].id)*/}
-						{/*		}}*/}
-						{/*	>*/}
-						{/*		<Icon path={mdiCheck} size={1}/>{t("manage_users_page.approve")}*/}
-						{/*	</button>*/}
-						{/*	<button*/}
-						{/*		className="btn-option"*/}
-						{/*		style={{*/}
-						{/*			backgroundColor: "red",*/}
-						{/*			color: "white",*/}
-						{/*			display: "flex",*/}
-						{/*			alignItems: "center",*/}
-						{/*			justifyContent: "center",*/}
-						{/*			padding: "8px 12px",*/}
-						{/*			borderRadius: "5px",*/}
-						{/*			fontSize: "16px",*/}
-						{/*			cursor: "pointer"*/}
-						{/*		}}*/}
-						{/*		onClick={() => {*/}
-						{/*			RejectUserById(users[currentUserIndex].id)*/}
-						{/*		}}*/}
-						{/*	>*/}
-						{/*		<Icon path={mdiClose} size={1}/>{t("manage_users_page.delete")}*/}
-						{/*	</button>*/}
-						{/*</div>*/}
-						
+
 						<h5>{t("discover_offers_page.actions")}</h5>
-						
+
 						<div style={{
 							gap: "10px"
 						}}
