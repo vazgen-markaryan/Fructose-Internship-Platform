@@ -8,12 +8,15 @@ import fructose.model.enumerator.EtatCandidature;
 import fructose.repository.CandidatureRepository;
 import fructose.repository.CvRepository;
 import fructose.repository.OffreStageRepository;
+import fructose.service.dto.CandidatureDTO;
+import fructose.service.dto.EtudiantDTO;
 import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,19 +57,27 @@ public class CandidatureService {
 			candidature.setEtat(EtatCandidature.REFUSEE);
 			candidature.setCommentaireRefus(commentaireRefus);
 			candidatureRepository.save(candidature);
-			System.out.println("ETUDIANT avec email " + candidature.getEtudiant().getEmail() + " a été refusé pour l'offre de stage " + candidature.getOffreStage().getNom() + " chez " + candidature.getOffreStage().getCompagnie() + " avec le commentaire \"" + candidature.getCommentaireRefus() + "\"");
 		} catch (Exception e) {
 			logger.error("Erreur lors du refus de la candidature avec ID: {}", candidatureId, e);
 			throw new RuntimeException("Une erreur est survenue lors du refus de la candidature.", e);
 		}
 	}
 	
-	public void approuverCandidature(Long candidatureId) {
+	public void approuverCandidature(Long candidatureId, LocalDate dateEntrevue) {
+		LocalDate today = LocalDate.now();
+		LocalDate minDate = today.plusDays(3);
+		LocalDate maxDate = today.plusMonths(1);
+		
+		if (dateEntrevue.isBefore(minDate) || dateEntrevue.isAfter(maxDate)) {
+			throw new IllegalArgumentException("La date d'entrevue doit être entre 3 jours à partir d'aujourd'hui et dans un mois.");
+		}
+		
 		try {
-			Candidature candidature = candidatureRepository.findById(candidatureId).orElseThrow(() -> new IllegalArgumentException("Candidature avec ID: " + candidatureId + " n'existe pas"));
-			candidature.setEtat(EtatCandidature.APPROUVEE);
+			Candidature candidature = candidatureRepository.findById(candidatureId)
+				.orElseThrow(() -> new IllegalArgumentException("Candidature avec ID: " + candidatureId + " n'existe pas"));
+			candidature.setEtat(EtatCandidature.ENTREVUE_PROPOSE);
+			candidature.setDateEntrevue(dateEntrevue);
 			candidatureRepository.save(candidature);
-			System.out.println("ETUDIANT: avec email " + candidature.getEtudiant().getEmail() + " a été approuvé pour l'offre de stage " + candidature.getOffreStage().getNom() + " chez " + candidature.getOffreStage().getCompagnie());
 		} catch (Exception e) {
 			logger.error("Erreur lors de l'approbation de la candidature avec ID: {}", candidatureId, e);
 			throw new RuntimeException("Une erreur est survenue lors de l'approbation de la candidature.", e);
@@ -85,6 +96,7 @@ public class CandidatureService {
 			candidatureData.put("id", candidature.getId());
 			candidatureData.put("etat", candidature.getEtat());
 			candidatureData.put("commentaireRefus", candidature.getCommentaireRefus());
+			candidatureData.put("dateEntrevue", candidature.getDateEntrevue());
 			
 			// Ajouter les informations de l'offre de stage
 			OffreStage offreStage = offreStageRepository.findById(candidature.getOffreStage().getId()).orElse(null);
@@ -97,5 +109,38 @@ public class CandidatureService {
 		}
 		
 		return result;
+	}
+	
+	public List<Map<String, Object>> findByCandidatureByOwner(Long employeurId) {
+		List<Map<String, Object>> result = new ArrayList<>();
+		
+		List<Candidature> candidatures = candidatureRepository.findByCandidatureByOwnerWithoutCv(employeurId);
+		
+		for (Candidature candidature : candidatures) {
+			Map<String, Object> candidatureData = new HashMap<>();
+			
+			candidatureData.put("candidature", CandidatureDTO.toDTO(candidature));
+			Utilisateur etudiant = candidature.getEtudiant();
+			candidatureData.put("etudiant", EtudiantDTO.toDTO(etudiant));
+			OffreStage offreStage = candidature.getOffreStage();
+			candidatureData.put("idOffreStage", offreStage.getId());
+			Cv cv = cvRepository.getAllById(candidatureRepository.getCvId(candidature.getId()));
+			candidatureData.put("cvId", cv.getId());
+			result.add(candidatureData);
+		}
+		
+		return result;
+	}
+	
+	public void modifierEtatCandidature(Long candidatureId, EtatCandidature nouvelEtat) {
+		try {
+			Candidature candidature = candidatureRepository.findById(candidatureId)
+				.orElseThrow(() -> new IllegalArgumentException("Candidature avec ID: " + candidatureId + " n'existe pas"));
+			candidature.setEtat(nouvelEtat);
+			candidatureRepository.save(candidature);
+		} catch (Exception e) {
+			logger.error("Erreur lors de la modification de l'état de la candidature avec ID: {}", candidatureId, e);
+			throw new RuntimeException("Une erreur est survenue lors de la modification de l'état de la candidature.", e);
+		}
 	}
 }

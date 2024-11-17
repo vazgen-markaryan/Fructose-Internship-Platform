@@ -162,8 +162,8 @@
 		"date_fin": "End date",
 		"creer_offre_stage": "Create the internship offer",
 		"retour": "Return to home",
-		"employeurs" : "Employees",
-		"employeur_select" : "Select an employer",
+		"employeurs": "Employees",
+		"employeur_select": "Select an employer",
 		"types_emploi": {
 			"select": "Select a type of employment",
 			"temps_partiel": "Part-time",
@@ -225,15 +225,7 @@
 		"modalFermer": "Close",
 		"my_applications": "List of Applications that you have submitted",
 		"no_applications": "You have not applied to any Offers yet",
-		"at": "at",
-		"sweetalert": {
-			"congratulations": "Congratulations!",
-			"approved_message": "Your Application has been approved.",
-			"pending": "Pending",
-			"pending_message": "Your Application is pending. Please wait.",
-			"refused": "Refused",
-			"refused_message": "Your Application has been refused with the following reason: "
-		}
+		"at": "at"
 	},
 	"pdf_view_page": {
 		"error": "An unknown error occurred"
@@ -453,5 +445,16 @@
 		"cancel": "Cancel",
 		"send": "Apply",
 		"see_cv": "See my CVs"
+	},
+	"view_candidatures_page": {
+		"interview_date": "Select desired interview date",
+		"sweetalert": {
+			"success": "Success",
+			"approved": "The interview date has been proposed",
+			"refused": "Candidature has been refused",
+			"error": "Error",
+			"error_commentaire_refus": "Please enter a reason for refusal",
+			"error_date_entrevue": "Please select an interview date"
+		}
 	}
 }

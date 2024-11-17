@@ -7,10 +7,13 @@ import {
 	mdiBriefcasePlusOutline,
 	mdiBriefcaseRemoveOutline,
 	mdiCheck,
+	mdiCheckCircleOutline,
 	mdiChevronRight,
 	mdiClockOutline,
 	mdiClose,
+	mdiCloseCircleOutline,
 	mdiFileDocumentOutline,
+	mdiHelpCircleOutline,
 	mdiPlus
 } from "@mdi/js";
 import {OffreStageContext} from "../../providers/OffreStageProvider";
@@ -33,11 +36,244 @@ const DashboardHome = () => {
 	const {deleteOffreStage} = useContext(OffreStageContext);
 	const [currentPage, setCurrentPage] = useState(1);
 	const itemsPerPage = 10;
-	const {candidatures, fetchCandidaturesById} = useContext(CandidatureContext);
+	const {candidatures, fetchCandidaturesById, setCandidatures} = useContext(CandidatureContext);
+	const [currentCandidature, setCurrentCandidature] = useState(null);
 	const navigate = useNavigate();
+	const {currentToken} = useContext(AuthContext)
 	
 	const handleCvClick = (cv) => {
 		navigate("/dashboard/manage-cvs", {state: {selectedCv: cv}});
+	};
+	
+	const handleAcceptInterview = async () => {
+		Swal.fire({
+			title: 'Êtes-vous sûr?',
+			html: `La date de votre entrevue proposée par Employeur est le :<br><strong>${new Date(currentCandidature.dateEntrevue).toLocaleDateString('fr-FR', {
+				day: '2-digit',
+				month: '2-digit',
+				year: 'numeric'
+			})}<br></strong> L'acceptation est irréversible et vous engage à participer à l'entrevue à cette date.`,
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Oui, accepter!',
+			cancelButtonText: 'Annuler'
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				try {
+					const response = await fetch(`/candidatures/modifierEtatCandidature/${currentCandidature.id}?nouvelEtat=ENTREVUE_ACCEPTE_ETUDIANT`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': currentToken
+						}
+					});
+					if (response.ok) {
+						setCurrentCandidature({
+							...currentCandidature,
+							etat: 'ENTREVUE_ACCEPTE_ETUDIANT'
+						});
+						setCandidatures(prevCandidatures => prevCandidatures.map(candidature =>
+							candidature.id === currentCandidature.id ? {
+								...candidature,
+								etat: 'ENTREVUE_ACCEPTE_ETUDIANT'
+							} : candidature
+						));
+						Swal.fire({
+							title: 'Accepté!',
+							text: "L'entrevue a été acceptée.",
+							icon: 'success',
+							showConfirmButton: false,
+							timer: 1500
+						})
+					} else {
+						Swal.fire({
+							title: 'Erreur!',
+							text: "Échec de l'acceptation de l'entrevue.",
+							icon: 'error'
+						});
+					}
+				} catch (error) {
+					Swal.fire({
+						title: 'Erreur!',
+						text: "Une erreur s'est produite lors de l'acceptation de l'entrevue.",
+						icon: 'error'
+					});
+				}
+			}
+		});
+	};
+	
+	const handleRefuseInterview = async () => {
+		Swal.fire({
+			title: 'Êtes-vous sûr?',
+			text: "Vous êtes sur le point de refuser l'entrevue. Cette action est irréversible. Votre candidature pour cet Offre de Stage sera refusée.",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Oui, refuser!',
+			cancelButtonText: 'Annuler'
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				try {
+					const response = await fetch(`/candidatures/modifierEtatCandidature/${currentCandidature.id}?nouvelEtat=ENTREVUE_REFUSE_ETUDIANT`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': currentToken
+						}
+					});
+					if (response.ok) {
+						setCurrentCandidature({
+							...currentCandidature,
+							etat: 'ENTREVUE_REFUSE_ETUDIANT'
+						});
+						setCandidatures(prevCandidatures => prevCandidatures.map(candidature =>
+							candidature.id === currentCandidature.id ? {
+								...candidature,
+								etat: 'ENTREVUE_REFUSE_ETUDIANT'
+							} : candidature
+						));
+						await Swal.fire({
+							title: 'Refusé!',
+							text: "L'entrevue a été refusée.",
+							icon: 'error',
+							showConfirmButton: false,
+							timer: 1500
+						})
+					} else {
+						await Swal.fire({
+							title: 'Erreur!',
+							text: "Échec du refus de l'entrevue.",
+							icon: 'error'
+						});
+					}
+				} catch (error) {
+					console.error("Error refusing interview:", error);
+					Swal.fire({
+						title: 'Erreur!',
+						text: "Une erreur s'est produite lors du refus de l'entrevue.",
+						icon: 'error'
+					});
+				}
+			}
+		});
+	};
+	
+	// TODO : ATTACHER SIGNATURE DU CONTRAT ICI CAR C'EST LE BUTTON DE SIGNER LE CONTRAT
+	// Principalement dans if(response.ok) { ... } AVANT SWAL.FIRE
+	const handleSignerContrat = async () => {
+		Swal.fire({
+			title: 'Êtes-vous sûr?',
+			text: "Vous seriez invité à signer le contrat. Cette action est irréversible. Votre candidature pour cet Offre de Stage sera approuvé.",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Oui, signer le contrat!',
+			cancelButtonText: 'Reviser ma décision'
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				try {
+					const response = await fetch(`/candidatures/modifierEtatCandidature/${currentCandidature.id}?nouvelEtat=CONTRAT_SIGNE_ETUDIANT`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': currentToken
+						}
+					});
+					if (response.ok) {
+						setCurrentCandidature({
+							...currentCandidature,
+							etat: 'CONTRAT_SIGNE_ETUDIANT'
+						});
+						setCandidatures(prevCandidatures => prevCandidatures.map(candidature =>
+							candidature.id === currentCandidature.id ? {
+								...candidature,
+								etat: 'CONTRAT_SIGNE_ETUDIANT'
+							} : candidature
+						));
+						await Swal.fire({
+							title: 'Accepté!',
+							text: "Le contrat a été signé avec succès.",
+							icon: 'success',
+							showConfirmButton: false,
+							timer: 1500
+						});
+					} else {
+						await Swal.fire({
+							title: 'Erreur!',
+							text: "Échec de la signature du contrat.",
+							icon: 'error'
+						});
+					}
+				} catch (error) {
+					await Swal.fire({
+						title: 'Erreur!',
+						text: "Une erreur s'est produite lors de la signature du contrat.",
+						icon: 'error'
+					});
+				}
+			}
+		});
+	};
+	
+	const handleRefuserContrat = async () => {
+		Swal.fire({
+			title: 'Êtes-vous sûr?',
+			text: "Vous êtes sur le point de refuser la signature du contrat. Cette action est irréversible. Votre candidature pour cet Offre de Stage sera refusée.",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Oui, refuser la signature!',
+			cancelButtonText: 'Reviser ma décision'
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				try {
+					const response = await fetch(`/candidatures/modifierEtatCandidature/${currentCandidature.id}?nouvelEtat=CONTRAT_REFUSE_ETUDIANT`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': currentToken
+						}
+					});
+					if (response.ok) {
+						setCurrentCandidature({
+							...currentCandidature,
+							etat: 'CONTRAT_REFUSE_ETUDIANT'
+						});
+						setCandidatures(prevCandidatures => prevCandidatures.map(candidature =>
+							candidature.id === currentCandidature.id ? {
+								...candidature,
+								etat: 'CONTRAT_REFUSE_ETUDIANT'
+							} : candidature
+						));
+						await Swal.fire({
+							title: 'Refusé!',
+							text: "La signature du contrat a été refusé.",
+							icon: 'error',
+							showConfirmButton: false,
+							timer: 2000
+						});
+					} else {
+						await Swal.fire({
+							title: 'Erreur!',
+							text: "Échec du refus de la signature du contrat.",
+							icon: 'error'
+						});
+					}
+				} catch (error) {
+					await Swal.fire({
+						title: 'Erreur!',
+						text: "Une erreur s'est produite lors du refus du contrat.",
+						icon: 'error'
+					});
+				}
+			}
+		});
 	};
 	
 	useEffect(() => {
@@ -107,8 +343,10 @@ const DashboardHome = () => {
 								width: "100%"
 							}}>
 								{offresStage.reverse().slice(0, 3).map((item, index) => (
-									<Link to={`/dashboard/discover-offers?offer=${item.id}`} key={index}
-									      style={{textDecoration: "none", flex: 1}}>
+									<Link to={`/dashboard/discover-offers?offer=${item.id}`} key={index} style={{
+										textDecoration: "none",
+										flex: 1
+									}}>
 										<div className="card">
 											<div className="card-image">
 												<h5>{item.poste}</h5>
@@ -125,7 +363,10 @@ const DashboardHome = () => {
 													(item.nombrePostes <= 5) ?
 														<span className="badge text-mini"><Icon
 															path={mdiAlertCircleOutline}
-															size={0.5}/>{t("dashboard_home_page.limited_places")}</span> : <></>
+															size={0.5}/>{t("dashboard_home_page.limited_places")}
+														</span>
+														:
+														<></>
 												}
 											</div>
 										</div>
@@ -300,6 +541,25 @@ const DashboardHome = () => {
 		}
 	}
 	
+	const GetCandidatureManagementSection = () => {
+		if (currentUser != null) {
+			if (currentUser.role !== "PROFESSEUR" && currentUser.role !== "ADMIN") {
+				return (
+					<section>
+						<div className={"toolbar-items"}>
+							<h4 className={"m-0 toolbar-spacer"}>Candidatures</h4>
+							<Link to="/dashboard/view-candidatures">
+								<button>Voir
+									<Icon path={mdiChevronRight} size={1}/>
+								</button>
+							</Link>
+						</div>
+					</section>
+				);
+			}
+		}
+	};
+	
 	const GetPortfolioSection = () => {
 		if (currentUser != null) {
 			if (currentUser.role === "ETUDIANT") {
@@ -376,34 +636,273 @@ const DashboardHome = () => {
 	}
 	
 	const handleCandidatureClick = (candidature) => {
-		if (candidature.etat === "APPROUVEE") {
-			Swal.fire({
-				icon: 'success',
-				title: t('dashboard_home_page.sweetalert.congratulations'),
-				text: t('dashboard_home_page.sweetalert.approved_message'),
-			});
-		} else if (candidature.etat === "EN_ATTENTE") {
-			Swal.fire({
-				icon: 'info',
-				title: t('dashboard_home_page.sweetalert.pending'),
-				text: t('dashboard_home_page.sweetalert.pending_message'),
-			});
-		} else if (candidature.etat === "REFUSEE") {
-			Swal.fire({
-				icon: 'error',
-				title: t('dashboard_home_page.sweetalert.refused'),
-				html: `${t('dashboard_home_page.sweetalert.refused_message')}<br><br>${candidature.commentaireRefus}`,
-			});
-		}
+		setCurrentCandidature(candidature)
 	};
+	
+	const GetCandidaturesWindow = () => {
+		if (currentCandidature) {
+			return (
+				<div className="window-frame">
+					<div className="window">
+						<div className="window-titlebar">
+							<h5>Candidature</h5>
+							<span className="toolbar-spacer"></span>
+							<button className="btn-icon" onClick={() => setCurrentCandidature(null)}>
+								<Icon path={mdiClose} size={1}/>
+							</button>
+						</div>
+						<div className="window-content">
+							<section className="nospace">
+								<div className="toolbar-items" style={{gap: "8px"}}>
+									<div className="user-profile-section-profile-picture" style={{
+										"background": "url('/assets/offers/default-company.png') center / cover",
+										width: "52px",
+										height: "52px",
+										borderRadius: "5px",
+										margin: 0
+									}}></div>
+									<div className="toolbar-spacer">
+										<h4 className="m-0">{currentCandidature.nomOffre ? currentCandidature.nomOffre : "N/A"}</h4>
+										<h6 className="m-0 text-dark">{currentCandidature.compagnie ? currentCandidature.compagnie : "N/A"}</h6>
+									</div>
+									<button className="btn-outline">Voir Offre</button>
+								</div>
+							</section>
+							
+							<hr/>
+							
+							<section className="nospace">
+								{/*SECTION CANDIDATURE INITIALE VUE ETUDIANT*/}
+								<h5>Candidature initiale</h5>
+								{
+									// ÉTAT INITIALE
+									(currentCandidature.etat === "EN_ATTENTE")
+										?
+										<div className="toolbar-items">
+											<Icon path={mdiClockOutline} size={1} className="text-orange"/>
+											<p className="text-orange m-0">En attente de la réponse de l'employeur</p>
+										</div>
+										:
+										// SI ENTREVUE A ÉTÉ PROPOSÉE PAR EMPLOYEUR
+										// SI ENTREVUE A ÉTÉ ACCEPTÉE PAR L'ÉTUDIANT
+										// SI ENTREVUE A ÉTÉ REFUSÉE PAR L'ÉTUDIANT
+										// SI CONTRAT A ÉTÉ SIGNÉ PAR L'EMPLOYEUR
+										// SI CONTRAT A ÉTÉ REFUSÉ PAR L'ÉTUDIANT
+										// SI CONTRAT A ÉTÉ SIGNÉ PAR L'ÉTUDIANT
+										// SI CONTRAT SIGNÉ PAR TOUS
+										// SI REFUSÉ APRÈS ENTREVUE
+										// SI ETUDIANT ACCEPTE_APRES_ENTREVUE
+										(currentCandidature.etat === "ENTREVUE_PROPOSE" ||
+											currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" ||
+											currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT" ||
+											currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ||
+											currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ||
+											currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT" ||
+											currentCandidature.etat === "CONTRAT_SIGNE_TOUS" ||
+											currentCandidature.etat === "REFUSEE_APRES_ENTREVUE" ||
+											currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
+											<div className="toolbar-items">
+												<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
+												<p className="text-green m-0">Approuvé</p>
+											</div>
+											:
+											// SI CANDIDATURE A ÉTÉ REFUSÉE PAR EMPLOYEUR
+											<div className="toolbar-items">
+												<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
+												<p className="text-red m-0">Refusé avec le commentaire : {currentCandidature.commentaireRefus}</p>
+											</div>
+								}
+							</section>
+							
+							<hr/>
+							
+							<section className="nospace">
+								{/*SECTION ENTREVUE VUE ETUDIANT*/}
+								<h5>Entrevue</h5>
+								{
+									// SI ENTREVUE A ÉTÉ PROPOSÉE PAR EMPLOYEUR
+									(currentCandidature.etat === "ENTREVUE_PROPOSE") ?
+										<>
+											<div className="toolbar-items">
+												<Icon path={mdiClockOutline} size={1} className="text-blue"/>
+												<p className="text-blue m-0">En attente d'acceptation de la date de l'entrevue</p>
+											</div>
+											<br/>
+											<p>Date de l'entrevue: {currentCandidature.dateEntrevue}</p>
+											<div className="toolbar-items" style={{gap: "10px"}}>
+												<button className="btn-filled bg-green" onClick={handleAcceptInterview}>
+													Accepter
+												</button>
+												<button className="btn-filled bg-red" onClick={handleRefuseInterview}>
+													Refuser
+												</button>
+											</div>
+										</>
+										:
+										// SI ENTREVUE ACCEPTÉE PAR L'ÉTUDIANT
+										// SI CONTRAT SIGNÉ PAR L'EMPLOYEUR
+										// SI CONTRAT REFUSÉ PAR L'ÉTUDIANT
+										// SI CONTRAT SIGNÉ PAR L'ÉTUDIANT
+										// SI CONTRAT SIGNÉ PAR TOUS
+										// SI REFUSÉ APRÈS ENTREVUE
+										// SI ETUDIANT ACCEPTE_APRES_ENTREVUE
+										(currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" ||
+											currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ||
+											currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ||
+											currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT" ||
+											currentCandidature.etat === "CONTRAT_SIGNE_TOUS" ||
+											currentCandidature.etat === "REFUSEE_APRES_ENTREVUE" ||
+											currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
+											<>
+												<div className="toolbar-items">
+													<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
+													<p className="text-green m-0">Entrevue a été acceptée par l'étudiant</p>
+												</div>
+												<br/>
+												<p>Date de l'entrevue proposé: {currentCandidature.dateEntrevue}</p>
+											</>
+											:
+											// SI ENTREVUE A ÉTÉ REFUSÉE PAR L'ÉTUDIANT
+											(currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT") ?
+												<div className="toolbar-items">
+													<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
+													<p className="text-red m-0">L'entrevue a été refusée par l'étudiant</p>
+												</div>
+												:
+												// SI CANDIDATURE A ÉTÉ REFUSÉE PAR EMPLOYEUR
+												(currentCandidature.etat === "REFUSEE") ?
+													<div className="toolbar-items">
+														<Icon path={mdiCloseCircleOutline} size={1} className="text-dark"/>
+														<p className="text-dark m-0">L'entrevue ne peut être planifiée pour une candidature refusée</p>
+													</div>
+													:
+													// TOMBE EN DEFAULT ÉTAT INITIALE
+													<div className="toolbar-items">
+														<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+														<p className="text-dark m-0">En attente de la candidature initiale</p>
+													</div>
+								}
+							</section>
+							
+							<hr/>
+							
+							<section className="nospace">
+								{/*SECTION CONTRAT  VUE ETUDIANT*/}
+								<h5>Contrat</h5>
+								{
+									// SI CANDIDATURE A ÉTÉ REFUSÉE
+									(currentCandidature.etat === "REFUSEE") ?
+										<div className="toolbar-items">
+											<Icon path={mdiCloseCircleOutline} size={1} className="text-dark"/>
+											<p className="text-dark m-0">L'entrevue ne peut être planifiée pour une candidature refusée</p>
+										</div>
+										:
+										// SI ENTREVUE A ÉTÉ ACCEPTÉE
+										(currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT") ?
+											<div className="toolbar-items">
+												<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
+												<p className="text-orange m-0">En attente des résultats de l'entrevue</p>
+											</div>
+											:
+											// SI ENTREVUE A ÉTÉ REFUSÉE PAR L'ÉTUDIANT
+											(currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT") ?
+												<div className="toolbar-items">
+													<Icon path={mdiCloseCircleOutline} size={1} className="text-dark"/>
+													<p className="text-dark m-0">Le contrat ne peut être proposé pour une entrevue refusée par étudiant</p>
+												</div>
+												:
+												// SI CONTRAT A ÉTÉ SIGNÉ PAR L'EMPLOYEUR
+												(currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR") ?
+													<>
+														<div className="toolbar-items">
+															<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
+															<p className="text-green m-0">Contrat signé par l'employeur</p>
+														</div>
+														<br></br>
+														<div className="toolbar-items" style={{gap: "10px"}}>
+															<button className="btn-filled bg-green" onClick={handleSignerContrat}>
+																Signer
+															</button>
+															<button className="btn-filled bg-red" onClick={handleRefuserContrat}>
+																Refuser
+															</button>
+														</div>
+													</>
+													:
+													// SI CONTRAT A ÉTÉ SIGNÉ PAR L'ÉTUDIANT
+													(currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT") ?
+														<>
+															<div className="toolbar-items">
+																<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
+																<p className="text-green m-0">Contrat a été bien signé par l'étudiant</p>
+															</div>
+															<div className="toolbar-items">
+																<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
+																<p className="text-orange m-0">En attente de la signature du Gestionnaire de Stage</p>
+															</div>
+														</>
+														:
+														// SI CONTRAT A ÉTÉ REFUSÉ PAR L'ÉTUDIANT
+														(currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT") ?
+															<div className="toolbar-items">
+																<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
+																<p className="text-red m-0">La signature du contrat a été refusée par l'étudiant. La candidature a été refusée.</p>
+															</div>
+															:
+															// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS
+															(currentCandidature.etat === "CONTRAT_SIGNE_TOUS") ?
+																<div className="toolbar-items">
+																	<Icon path={mdiCloseCircleOutline} size={1} className="text-green"/>
+																	<p className="text-green m-0">Tout le monde a signé le contrat. BRAVO! Votre candidature a été acceptée</p>
+																</div>
+																:
+																// SI ETUDIANT ACCEPTE_APRES_ENTREVUE
+																(currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
+																	<>
+																		<div className={"toolbar-items"}>
+																			<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
+																			<p className="text-orange m-0">En attente de la génération du Contrat par Gestionnaire</p>
+																		</div>
+																	</>
+																	:
+																	// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS
+																	(currentCandidature.etat === "REFUSEE_APRES_ENTREVUE") ?
+																		<div className="toolbar-items">
+																			<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
+																			<p className="text-red m-0">La candidature a été refusée après l'entrevue</p>
+																		</div>
+																		:
+																		// TOMBE EN DEFAULT ÉTAT INITIALE
+																		<div className="toolbar-items">
+																			<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+																			<p className="text-dark m-0">En attente des résultats de l'entrevue</p>
+																		</div>
+								}
+								<br/>
+							</section>
+						</div>
+					</div>
+				</div>
+			
+			)
+		}
+	}
 	
 	const GetCandidaturesSection = () => {
 		if (currentUser && currentUser.role === "ETUDIANT") {
 			const sortedCandidatures = [...candidatures].sort((a, b) => {
 				const statusOrder = {
-					"APPROUVEE": 1,
-					"EN_ATTENTE": 2,
-					"REFUSEE": 3
+					"CONTRAT_SIGNE_TOUS": 1,
+					"CONTRAT_SIGNE_ETUDIANT": 2,
+					"CONTRAT_SIGNE_EMPLOYEUR": 3,
+					"ACCEPTE_APRES_ENTREVUE": 4,
+					"ENTREVUE_ACCEPTE_ETUDIANT": 5,
+					"ENTREVUE_PROPOSE": 6,
+					"EN_ATTENTE": 7,
+					"ENTREVUE_REFUSE_ETUDIANT": 8,
+					"REFUSEE_APRES_ENTREVUE": 9,
+					"CONTRAT_REFUSE_ETUDIANT": 10,
+					"REFUSEE": 11
 				};
 				return statusOrder[a.etat] - statusOrder[b.etat];
 			});
@@ -437,12 +936,21 @@ const DashboardHome = () => {
 										}}>
 											<b><em>{candidature.nomOffre}</em></b>&nbsp;{t("dashboard_home_page.at")}&nbsp;{candidature.compagnie}
 										</p>
-										{candidature.etat === "APPROUVEE" &&
-											<Icon path={mdiCheck} size={1} color="green" style={{marginLeft: "5px"}}/>}
-										{candidature.etat === "REFUSEE" &&
-											<Icon path={mdiClose} size={1} color="red" style={{marginLeft: "5px"}}/>}
-										{candidature.etat === "EN_ATTENTE" &&
+										{candidature.etat === "CONTRAT_SIGNE_TOUS" &&
+											<Icon path={mdiCheckCircleOutline} size={1} color="green"/>}
+										{(candidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" || candidature.etat === "CONTRAT_SIGNE_ETUDIANT") &&
 											<Icon path={mdiClockOutline} size={1} color="orange" style={{marginLeft: "5px"}}/>}
+										{(candidature.etat === "ENTREVUE_PROPOSE" || candidature.etat === "CONTRAT_SIGNE_EMPLOYEUR") &&
+											<Icon path={mdiClockOutline} size={1} color="blue" style={{marginLeft: "5px"}}/>}
+										{(candidature.etat === "EN_ATTENTE") &&
+											<Icon path={mdiClockOutline} size={1} color="orange" style={{marginLeft: "5px"}}/>}
+										{(candidature.etat === "ENTREVUE_REFUSE_ETUDIANT" || candidature.etat === "CONTRAT_REFUSE_ETUDIANT") &&
+											<Icon path={mdiClose} size={1} color="red" style={{marginLeft: "5px"}}/>}
+										{(candidature.etat === "REFUSEE" || candidature.etat === "REFUSEE_APRES_ENTREVUE") &&
+											<Icon path={mdiCloseCircleOutline} size={1} color="red" style={{marginLeft: "5px"}}/>}
+										{(candidature.etat === "ACCEPTE_APRES_ENTREVUE") &&
+											<Icon path={mdiClockOutline} size={1} color="orange" style={{marginLeft: "5px"}}/>}
+									
 									</div>
 								))}
 							</div>
@@ -473,13 +981,17 @@ const DashboardHome = () => {
 					<div className={"loading-placeholder"}></div>}
 				</h5>
 			</div>
+			
 			<div style={{"display": "flex", "gap": "20px"}}>
 				<div style={{"width": "70%"}}>
 					<div className="dashboard-card">
 						{GetOffreStageSection()}
 						{GetCandidaturesSection()}
+						{GetCandidaturesWindow()}
 						{GetPortfolioSection()}
 						{GetUserManagementSection()}
+						{GetCandidatureManagementSection()}
+						
 						<div style={{"height": "520px"}}>
 						</div>
 					</div>

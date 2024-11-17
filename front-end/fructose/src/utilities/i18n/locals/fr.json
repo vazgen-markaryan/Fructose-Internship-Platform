@@ -162,8 +162,8 @@
 		"date_fin": "Date de fin",
 		"creer_offre_stage": "Créer l'offre de stage",
 		"retour": "Retour a l'accueil",
-		"employeurs" : "Employeurs",
-		"employeur_select" : "Sélectionner un employeur",
+		"employeurs": "Employeurs",
+		"employeur_select": "Sélectionner un employeur",
 		"types_emploi": {
 			"select": "Sélectionner un type d'emploi",
 			"temps_partiel": "Temps partiel",
@@ -225,15 +225,7 @@
 		"modalFermer": "Fermer",
 		"my_applications": "Liste de vos applications aux Offres de Stage",
 		"no_applications": "Vous n'avez pas encore postulé à une Offre de Stage",
-		"at": "chez",
-		"sweetalert": {
-			"congratulations": "Félicitations!",
-			"approved_message": "Votre candidature a été approuvée.",
-			"pending": "En attente",
-			"pending_message": "Votre candidature est en attente. Veuillez patienter.",
-			"refused": "Refusée",
-			"refused_message": "Votre candidature a été refusée avec le commentaire suivant :"
-		}
+		"at": "chez"
 	},
 	"pdf_view_page": {
 		"error": "Une erreur inconnue est survenue"
@@ -453,5 +445,16 @@
 		"cancel": "Annuler",
 		"send": "Postuler",
 		"see_cv": "Voir mes CVs"
+	},
+	"view_candidatures_page": {
+		"interview_date": "Sélectionner une date pour l'entrevue",
+		"sweetalert": {
+			"success": "Succès",
+			"approved": "L'entrevue a été proposée",
+			"refused": "La candidature a été refusée",
+			"error": "Erreur",
+			"error_commentaire_refus": "Veuillez entrer un commentaire pour le refus",
+			"error_date_entrevue": "Veuillez entrer une date pour l'entrevue"
+		}
 	}
 }

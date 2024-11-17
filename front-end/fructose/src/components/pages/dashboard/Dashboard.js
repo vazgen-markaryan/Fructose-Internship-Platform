@@ -17,6 +17,7 @@ import DiscoverOffers from "../offre-stage/DiscoverOffers";
 import {ApplyOffreWindow} from "../offre-stage/ApplyOffreWindow";
 import {CandidatureProvider} from "../../providers/CandidatureProvider";
 import {ContratProvider} from "../../providers/ContratProvider";
+import {ViewCandidatures} from "../candidatures/ViewCandidatures";
 
 const Dashboard = () => {
 	return (
@@ -41,6 +42,11 @@ const Dashboard = () => {
 							    </Routes>
 							</ContratProvider>
 						</OffreStageProvider>
+						<CandidatureProvider>
+							<Routes>
+								<Route path="/view-candidatures" element={<RoleRoute element={<ViewCandidatures/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
+							</Routes>
+						</CandidatureProvider>
 					</CvProvider>
 
 					<Routes>
