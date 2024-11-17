@@ -93,7 +93,7 @@ const ViewCandidatures = () => {
 	const handleInterviewPassed = async () => {
 		Swal.fire({
 			title: 'Êtes-vous sûr?',
-			text: "Vous êtes sur le point d'accepter la candidature en raison de la réussite de l'entrevue et signer le contrat. Voulez-vous continuer?",
+			text: "Vous êtes sur le point d'accepter la candidature en raison de la réussite de l'entrevue. Voulez-vous continuer?",
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
@@ -103,7 +103,7 @@ const ViewCandidatures = () => {
 		}).then(async (result) => {
 			if (result.isConfirmed) {
 				try {
-					const response = await fetch(`/candidatures/modifierEtatCandidature/${currentCandidature.id}?nouvelEtat=CONTRAT_SIGNE_EMPLOYEUR`, {
+					const response = await fetch(`/candidatures/modifierEtatCandidature/${currentCandidature.id}?nouvelEtat=ACCEPTE_APRES_ENTREVUE`, {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ const ViewCandidatures = () => {
 									...item,
 									candidature: {
 										...item.candidature,
-										etat: "CONTRAT_SIGNE_EMPLOYEUR"
+										etat: "ACCEPTE_APRES_ENTREVUE"
 									}
 								}
 								: item
@@ -128,7 +128,7 @@ const ViewCandidatures = () => {
 						setCurrentCandidature(null);
 						await Swal.fire({
 							title: 'Accepté!',
-							text: "L'entrevue a été passée avec succès. Le contrat a été signé.",
+							text: "L'entrevue a été passée avec succès. La candidature a été acceptée.",
 							icon: 'success',
 							showConfirmButton: false,
 							timer: 2000
@@ -232,7 +232,8 @@ const ViewCandidatures = () => {
 					break
 				case "en_signature":
 					if (candidature.candidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ||
-						candidature.candidature.etat === "CONTRAT_SIGNE_ETUDIANT") {
+						candidature.candidature.etat === "CONTRAT_SIGNE_ETUDIANT" ||
+						candidature.candidature.etat === "ACCEPTE_APRES_ENTREVUE") {
 						newFilteredCandidatures.push(i)
 					}
 					break
@@ -542,6 +543,7 @@ const ViewCandidatures = () => {
 											// SI CONTRAT A ÉTÉ REFUSÉ PAR L'ÉTUDIANT
 											// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS
 											// SI ENTREVUE REFUSE PAR ETUDIANT
+											// SI ETUDIANT ACCEPTE_APRES_ENTREVUE
 											(currentCandidature.etat === "ENTREVUE_PROPOSE" ||
 												currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" ||
 												currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ||
@@ -549,7 +551,8 @@ const ViewCandidatures = () => {
 												currentCandidature.etat === "REFUSEE_APRES_ENTREVUE" ||
 												currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ||
 												currentCandidature.etat === "CONTRAT_SIGNE_TOUS" ||
-												currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT") ?
+												currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT" ||
+												currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
 												<div className="toolbar-items">
 													<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
 													<p className="text-green m-0">Approuvé</p>
@@ -586,12 +589,14 @@ const ViewCandidatures = () => {
 											// SI REFUSÉE APRES ENTREVUE
 											// SI CONTRAT A ÉTÉ REFUSÉ PAR L'ÉTUDIANT
 											// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS
+											// SI ETUDIANT ACCEPTE_APRES_ENTREVUE
 											(currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" ||
 												currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ||
 												currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT" ||
 												currentCandidature.etat === "REFUSEE_APRES_ENTREVUE" ||
 												currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ||
-												currentCandidature.etat === "CONTRAT_SIGNE_TOUS") ?
+												currentCandidature.etat === "CONTRAT_SIGNE_TOUS" ||
+												currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
 												<>
 													<div className="toolbar-items">
 														<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
@@ -675,49 +680,70 @@ const ViewCandidatures = () => {
 																<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
 																<p className="text-orange m-0">En attente de la signature de l'étudiant</p>
 															</div>
-														</>
-														:
-														// SI REFUSÉE APRES ENTREVUE
-														(currentCandidature.etat === "REFUSEE_APRES_ENTREVUE") ?
+														</> :
+														// SI ETUDIANT ACCEPTE_APRES_ENTREVUE
+														(currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
 															<>
+																{/*Si contrat pas genere afficher cela*/}
 																<div className={"toolbar-items"}>
-																	<Icon path={mdiHelpCircleOutline} size={1} className="text-red"/>
-																	<p className="text-red m-0">Le contrat ne peut être signé. La candidature était refusée après l'entrevue</p>
+																	<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
+																	<p className="text-orange m-0">En attente de la génération du Contrat par Gestionnaire</p>
 																</div>
+																{/*SI contrat genere afficher cela*/}
+																
+																{/*<div className="toolbar-items" style={{gap: "10px"}}>*/}
+																{/*	<button className="btn-filled bg-green" onClick={SIGNER}>*/}
+																{/*		SIGNER*/}
+																{/*	</button>*/}
+																{/*	<button className="btn-filled bg-red" onClick={PAS SIGNER}>*/}
+																{/*		PAS SIGNER*/}
+																{/*	</button>*/}
+																{/*</div>*/}
+																
+																{/*TODO FAIRE MEME SHIT DANS DASHBOARD HOME POUR EMPLOYEUR*/}
 															</>
 															:
-															// SI CONTRAT A ÉTÉ REFUSÉ PAR L'ÉTUDIANT
-															(currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT") ?
+															// SI REFUSÉE APRES ENTREVUE
+															(currentCandidature.etat === "REFUSEE_APRES_ENTREVUE") ?
 																<>
 																	<div className={"toolbar-items"}>
 																		<Icon path={mdiHelpCircleOutline} size={1} className="text-red"/>
-																		<p className="text-red m-0">La signature du contrat a été refusée par Étudiant</p>
+																		<p className="text-red m-0">Le contrat ne peut être signé. La candidature était refusée après l'entrevue</p>
 																	</div>
 																</>
 																:
-																// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS
-																(currentCandidature.etat === "CONTRAT_SIGNE_TOUS") ?
+																// SI CONTRAT A ÉTÉ REFUSÉ PAR L'ÉTUDIANT
+																(currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT") ?
 																	<>
 																		<div className={"toolbar-items"}>
-																			<Icon path={mdiHelpCircleOutline} size={1} className="text-green"/>
-																			<p className="text-green m-0">Tout le monde a signé le contrat. La candidature a été acceptée</p>
+																			<Icon path={mdiHelpCircleOutline} size={1} className="text-red"/>
+																			<p className="text-red m-0">La signature du contrat a été refusée par Étudiant</p>
 																		</div>
 																	</>
 																	:
-																	// SI ETUDIANT A REFUSÉ L'ENTREVUE
-																	(currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT") ?
+																	// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS
+																	(currentCandidature.etat === "CONTRAT_SIGNE_TOUS") ?
 																		<>
 																			<div className={"toolbar-items"}>
-																				<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
-																				<p className="text-dark m-0">Le contrat ne peut être signé. L'entrevue a été refusée par l'étudiant</p>
+																				<Icon path={mdiHelpCircleOutline} size={1} className="text-green"/>
+																				<p className="text-green m-0">Tout le monde a signé le contrat. La candidature a été acceptée</p>
 																			</div>
 																		</>
 																		:
-																		// TOMBE EN DEFAULT ÉTAT INITIALE
-																		< div className="toolbar-items">
-																			<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
-																			<p className="text-dark m-0">En attente des résultats de l'entrevue</p>
-																		</div>
+																		// SI ETUDIANT A REFUSÉ L'ENTREVUE
+																		(currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT") ?
+																			<>
+																				<div className={"toolbar-items"}>
+																					<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+																					<p className="text-dark m-0">Le contrat ne peut être signé. L'entrevue a été refusée par l'étudiant</p>
+																				</div>
+																			</>
+																			:
+																			// TOMBE EN DEFAULT ÉTAT INITIALE
+																			< div className="toolbar-items">
+																				<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+																				<p className="text-dark m-0">En attente des résultats de l'entrevue</p>
+																			</div>
 									}
 									<br></br>
 								</section>

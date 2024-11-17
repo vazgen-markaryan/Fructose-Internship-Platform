@@ -543,7 +543,7 @@ const DashboardHome = () => {
 	
 	const GetCandidatureManagementSection = () => {
 		if (currentUser != null) {
-			if (currentUser.role !== "PROFESSEUR") {
+			if (currentUser.role !== "PROFESSEUR" && currentUser.role !== "ADMIN") {
 				return (
 					<section>
 						<div className={"toolbar-items"}>
@@ -691,6 +691,7 @@ const DashboardHome = () => {
 										// SI CONTRAT A ÉTÉ SIGNÉ PAR L'ÉTUDIANT
 										// SI CONTRAT SIGNÉ PAR TOUS
 										// SI REFUSÉ APRÈS ENTREVUE
+										// SI ETUDIANT ACCEPTE_APRES_ENTREVUE
 										(currentCandidature.etat === "ENTREVUE_PROPOSE" ||
 											currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" ||
 											currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT" ||
@@ -698,7 +699,8 @@ const DashboardHome = () => {
 											currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ||
 											currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT" ||
 											currentCandidature.etat === "CONTRAT_SIGNE_TOUS" ||
-											currentCandidature.etat === "REFUSEE_APRES_ENTREVUE") ?
+											currentCandidature.etat === "REFUSEE_APRES_ENTREVUE" ||
+											currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
 											<div className="toolbar-items">
 												<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
 												<p className="text-green m-0">Approuvé</p>
@@ -743,12 +745,14 @@ const DashboardHome = () => {
 										// SI CONTRAT SIGNÉ PAR L'ÉTUDIANT
 										// SI CONTRAT SIGNÉ PAR TOUS
 										// SI REFUSÉ APRÈS ENTREVUE
+										// SI ETUDIANT ACCEPTE_APRES_ENTREVUE
 										(currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" ||
 											currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ||
 											currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ||
 											currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT" ||
 											currentCandidature.etat === "CONTRAT_SIGNE_TOUS" ||
-											currentCandidature.etat === "REFUSEE_APRES_ENTREVUE") ?
+											currentCandidature.etat === "REFUSEE_APRES_ENTREVUE" ||
+											currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
 											<>
 												<div className="toolbar-items">
 													<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
@@ -852,18 +856,27 @@ const DashboardHome = () => {
 																	<p className="text-green m-0">Tout le monde a signé le contrat. BRAVO! Votre candidature a été acceptée</p>
 																</div>
 																:
-																// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS
-																(currentCandidature.etat === "REFUSEE_APRES_ENTREVUE") ?
-																	<div className="toolbar-items">
-																		<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
-																		<p className="text-red m-0">La candidature a été refusée après l'entrevue</p>
-																	</div>
+																// SI ETUDIANT ACCEPTE_APRES_ENTREVUE
+																(currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
+																	<>
+																		<div className={"toolbar-items"}>
+																			<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
+																			<p className="text-orange m-0">En attente de la génération du Contrat par Gestionnaire</p>
+																		</div>
+																	</>
 																	:
-																	// TOMBE EN DEFAULT ÉTAT INITIALE
-																	<div className="toolbar-items">
-																		<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
-																		<p className="text-dark m-0">En attente des résultats de l'entrevue</p>
-																	</div>
+																	// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS
+																	(currentCandidature.etat === "REFUSEE_APRES_ENTREVUE") ?
+																		<div className="toolbar-items">
+																			<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
+																			<p className="text-red m-0">La candidature a été refusée après l'entrevue</p>
+																		</div>
+																		:
+																		// TOMBE EN DEFAULT ÉTAT INITIALE
+																		<div className="toolbar-items">
+																			<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+																			<p className="text-dark m-0">En attente des résultats de l'entrevue</p>
+																		</div>
 								}
 								<br/>
 							</section>
@@ -882,13 +895,14 @@ const DashboardHome = () => {
 					"CONTRAT_SIGNE_TOUS": 1,
 					"CONTRAT_SIGNE_ETUDIANT": 2,
 					"CONTRAT_SIGNE_EMPLOYEUR": 3,
-					"ENTREVUE_ACCEPTE_ETUDIANT": 4,
-					"ENTREVUE_PROPOSE": 5,
-					"EN_ATTENTE": 6,
-					"ENTREVUE_REFUSE_ETUDIANT": 7,
-					"REFUSEE_APRES_ENTREVUE": 8,
-					"CONTRAT_REFUSE_ETUDIANT": 9,
-					"REFUSEE": 10
+					"ACCEPTE_APRES_ENTREVUE": 4,
+					"ENTREVUE_ACCEPTE_ETUDIANT": 5,
+					"ENTREVUE_PROPOSE": 6,
+					"EN_ATTENTE": 7,
+					"ENTREVUE_REFUSE_ETUDIANT": 8,
+					"REFUSEE_APRES_ENTREVUE": 9,
+					"CONTRAT_REFUSE_ETUDIANT": 10,
+					"REFUSEE": 11
 				};
 				return statusOrder[a.etat] - statusOrder[b.etat];
 			});
@@ -934,6 +948,9 @@ const DashboardHome = () => {
 											<Icon path={mdiClose} size={1} color="red" style={{marginLeft: "5px"}}/>}
 										{(candidature.etat === "REFUSEE" || candidature.etat === "REFUSEE_APRES_ENTREVUE") &&
 											<Icon path={mdiCloseCircleOutline} size={1} color="red" style={{marginLeft: "5px"}}/>}
+										{(candidature.etat === "ACCEPTE_APRES_ENTREVUE") &&
+											<Icon path={mdiClockOutline} size={1} color="orange" style={{marginLeft: "5px"}}/>}
+									
 									</div>
 								))}
 							</div>

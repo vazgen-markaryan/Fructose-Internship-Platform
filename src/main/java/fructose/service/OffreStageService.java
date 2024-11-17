@@ -57,13 +57,11 @@ public class OffreStageService {
 		if (offreStageDTO == null) {
 			throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
 		}
-		System.out.println("ownerDTO: " + offreStageDTO.getOwnerDTO());
 		if (offreStageDTO.getOwnerDTO() == null) {
 			offreStageDTO.setOwnerDTO(utilisateurDTO);
 		}else if (utilisateurDTO.getRole() == Role.ADMIN){
 			offreStageDTO.setIsApproved(true);
 		}
-		System.out.println("ownerDTO: " + offreStageDTO.getOwnerDTO());
 		validateOffreStage(offreStageDTO);
 		OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
 		offreStageRepository.save(offreStage);
