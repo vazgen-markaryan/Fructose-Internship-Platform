@@ -13,16 +13,16 @@ public class ContratDTO {
     private Long id;
 
     @NotNull
-    private AdminDTO gestionnaire;
+    private AdminDTO adminDTO;
 
     @NotNull
-    private EmployeurDTO employeur;
+    private EmployeurDTO employeurDTO;
 
     @NotNull
-    private EtudiantDTO etudiant;
+    private EtudiantDTO etudiantDTO;
 
     @NotNull
-    private OffreStageDTO offreStage;
+    private OffreStageDTO offreStageDTO;
 
     @NotBlank
     private String signatureGestionnaire;
@@ -42,10 +42,10 @@ public class ContratDTO {
     public static ContratDTO toDTO(Contrat contrat) {
         ContratDTO contratDTO = new ContratDTO();
         contratDTO.setId(contrat.getId());
-        contratDTO.setGestionnaire(AdminDTO.toDTO(contrat.getGestionnaire()));
-        contratDTO.setEmployeur(EmployeurDTO.toDTO(contrat.getEmployeur()));
-        contratDTO.setEtudiant(EtudiantDTO.toDTO(contrat.getEtudiant()));
-        contratDTO.setOffreStage(OffreStageDTO.toDTO(contrat.getOffreStage()));
+        contratDTO.setAdminDTO(AdminDTO.toDTO(contrat.getGestionnaire()));
+        contratDTO.setEmployeurDTO(EmployeurDTO.toDTO(contrat.getEmployeur()));
+        contratDTO.setEtudiantDTO(EtudiantDTO.toDTO(contrat.getEtudiant()));
+        contratDTO.setOffreStageDTO(OffreStageDTO.toDTO(contrat.getOffreStage()));
         contratDTO.setSignatureGestionnaire(contrat.getSignatureGestionnaire());
         contratDTO.setDateSignatureGestionnaire(contrat.getDateSignatureGestionnaire());
         contratDTO.setSignatureEmployeur(contrat.getSignatureEmployeur());
@@ -58,10 +58,10 @@ public class ContratDTO {
     public static Contrat toEntity(ContratDTO contratDTO) {
         Contrat contrat = new Contrat();
         contrat.setId(contratDTO.getId());
-        contrat.setGestionnaire(AdminDTO.toEntity(contratDTO.getGestionnaire()));
-        contrat.setEmployeur(EmployeurDTO.toEntity(contratDTO.getEmployeur()));
-        contrat.setEtudiant(EtudiantDTO.toEntity(contratDTO.getEtudiant()));
-        contrat.setOffreStage(OffreStageDTO.toEntity(contratDTO.getOffreStage()));
+        contrat.setGestionnaire(AdminDTO.toEntity(contratDTO.getAdminDTO()));
+        contrat.setEmployeur(EmployeurDTO.toEntity(contratDTO.getEmployeurDTO()));
+        contrat.setEtudiant(EtudiantDTO.toEntity(contratDTO.getEtudiantDTO()));
+        contrat.setOffreStage(OffreStageDTO.toEntity(contratDTO.getOffreStageDTO()));
         contrat.setSignatureGestionnaire(contratDTO.getSignatureGestionnaire());
         contrat.setDateSignatureGestionnaire(contratDTO.getDateSignatureGestionnaire());
         contrat.setSignatureEmployeur(contratDTO.getSignatureEmployeur());
