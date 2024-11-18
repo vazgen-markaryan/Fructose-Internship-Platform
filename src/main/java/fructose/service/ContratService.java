@@ -56,11 +56,11 @@ public class ContratService {
         Role role = utilisateur.getRole();
 
         return switch (role) {
-            case EMPLOYEUR -> contratRepository.findAllByEmployeur(utilisateur)
+            case EMPLOYEUR -> contratRepository.findAllByCandidature_OffreStage_Owner(utilisateur)
                     .stream()
                     .map(ContratDTO::toDTO)
                     .collect(Collectors.toList());
-            case ETUDIANT -> contratRepository.findAllByEtudiant(utilisateur)
+            case ETUDIANT -> contratRepository.findAllByCandidature_Etudiant(utilisateur)
                     .stream()
                     .map(ContratDTO::toDTO)
                     .collect(Collectors.toList());
