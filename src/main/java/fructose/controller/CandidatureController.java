@@ -97,15 +97,16 @@ public class CandidatureController {
 	}
 	
 	@GetMapping("/accepteApresEntrevue")
-	public List<CandidatureDTO> getCandidaturesAccepteApresEntrevue(@RequestHeader("Authorization") String token) {
+	public ResponseEntity<?> getCandidaturesAccepteApresEntrevue(@RequestHeader("Authorization") String token) {
 		if (!utilisateurService.validationToken(token)) {
-			throw new RuntimeException("Invalid token");
+			return new ResponseEntity<>("Invalid token", HttpStatus.FORBIDDEN);
 		}
 		try {
-			return candidatureService.getCandidaturesByEtatAccepteApresEntrevue();
-		}catch (RuntimeException e){
+			List<CandidatureDTO>  candidatures = candidatureService.getCandidaturesByEtatAccepteApresEntrevue();
+			return new ResponseEntity<>(candidatures, HttpStatus.OK);
+		} catch (RuntimeException e) {
 			logger.error("Erreur lors de la récupération des candidatures acceptées après l'entrevue", e);
-			throw new RuntimeException("Une erreur est survenue lors de la récupération des candidatures acceptées après l'entrevue");
+			return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

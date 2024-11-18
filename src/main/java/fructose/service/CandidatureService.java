@@ -145,15 +145,18 @@ public class CandidatureService {
 	}
 	
 	public List<CandidatureDTO> getCandidaturesByEtatAccepteApresEntrevue() {
-		List<Candidature> candidatures = candidatureRepository.findByEtat(EtatCandidature.ACCEPTE_APRES_ENTREVUE);
-		List<CandidatureDTO> candidatureDTOs = new ArrayList<>();
-		System.out.println("hello it's me, the function getCandidatures");
-		
-		for (Candidature candidature : candidatures) {
-			System.out.println(candidature);
-			candidatureDTOs.add(CandidatureDTO.toDTO(candidature));
+		try {
+			List<Candidature> candidatures = candidatureRepository.findByEtatWithoutCv(EtatCandidature.ACCEPTE_APRES_ENTREVUE);
+			
+			List<CandidatureDTO> result = new ArrayList<>();
+			
+			for (Candidature candidature : candidatures) {
+				result.add(CandidatureDTO.toDTO(candidature));
+			}
+			return result;
+		} catch (Exception e) {
+			logger.error("Erreur lors de la récupération des candidatures par état accepté après entrevue", e);
+			throw new RuntimeException("Une erreur est survenue lors de la récupération des candidatures par état accepté après entrevue.", e);
 		}
-		
-		return candidatureDTOs;
 	}
 }

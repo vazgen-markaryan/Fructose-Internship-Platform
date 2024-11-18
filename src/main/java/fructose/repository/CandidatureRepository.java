@@ -28,5 +28,7 @@ public interface CandidatureRepository extends JpaRepository<Candidature, Long> 
 	@Query ("SELECT c.cv.id FROM Candidature c WHERE c.id = :candidatureId")
 	Long getCvId(Long candidatureId);
 	
-	List<Candidature> findByEtat(EtatCandidature etatCandidature);
+	@Query("SELECT new fructose.model.Candidature(c.id, c.etudiant, c.offreStage, c.etat, c.commentaireRefus, c.dateEntrevue) " +
+		"FROM Candidature c WHERE c.etat = :etat")
+	List<Candidature> findByEtatWithoutCv(@Param("etat") EtatCandidature etat);
 }
