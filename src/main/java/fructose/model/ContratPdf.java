@@ -15,10 +15,7 @@ public class ContratPdf {
     }
 
     public Document returnPdf() {
-        OffreStage offreStage = contrat.getOffreStage();
-        Employeur employeur = contrat.getEmployeur();
-        Etudiant etudiant = contrat.getEtudiant();
-        Admin gestionnaire = contrat.getGestionnaire();
+        OffreStage offreStage = contrat.getCandidature().getOffreStage();
 
         try {
             String dest = "contract_stage.pdf";

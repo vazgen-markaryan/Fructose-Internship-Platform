@@ -16,6 +16,9 @@ public class ContratDTO {
     private CandidatureDTO candidatureDTO;
 
     @NotBlank
+    private AdminDTO gestionnaire;
+
+    @NotBlank
     private String signatureGestionnaire;
 
     private LocalDate dateSignatureGestionnaire;
