@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 public class ContratService {
 
     private final ContratRepository contratRepository;
-    private final UtilisateurRepository utilisateurRepository;
+    private final UtilisateurRepository<Utilisateur, Long> utilisateurRepository;
 
-    public Utilisateur getUtilisateurEnCours() {
+    private Utilisateur getUtilisateurEnCours() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             return utilisateurRepository.findByEmail(authentication.getName());

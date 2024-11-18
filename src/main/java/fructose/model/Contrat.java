@@ -21,24 +21,9 @@ public class Contrat {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "gestionnaire_id", nullable = false)
+    @JoinColumn(name = "candidature_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Admin gestionnaire;
-
-    @ManyToOne
-    @JoinColumn(name = "employeur_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Employeur employeur;
-
-    @ManyToOne
-    @JoinColumn(name = "etudiant_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Etudiant etudiant;
-
-    @ManyToOne
-    @JoinColumn(name = "offre_stage_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private OffreStage offreStage;
+    private Candidature candidature;
 
     @Column(name = "signature_gestionnaire", nullable = false)
     private String signatureGestionnaire;
