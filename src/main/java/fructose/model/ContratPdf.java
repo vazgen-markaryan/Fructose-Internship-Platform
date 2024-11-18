@@ -16,7 +16,9 @@ public class ContratPdf {
 
     public Document returnPdf() {
         OffreStage offreStage = contrat.getCandidature().getOffreStage();
-
+        Utilisateur employeur = offreStage.getOwner();
+        Utilisateur etudiant = contrat.getCandidature().getEtudiant();
+        Admin gestionnaire = contrat.getGestionnaire();
         try {
             String dest = "contract_stage.pdf";
             PdfWriter writer = new PdfWriter(dest);
@@ -27,11 +29,11 @@ public class ContratPdf {
             document.add(new Paragraph("L'étudiant(e): " + etudiant.getFullName()));
             Table table = new Table(2);
             table.addCell("ENDROIT DU STAGE");
-            table.addCell(contrat.getOffreStage().getAdresse());
+            table.addCell(offreStage.getAdresse());
             table.addCell("DUREE DU STAGE");
             table.addCell("Date de début: " + offreStage.getDateDebut() + "\nDate de fin: " + offreStage.getDateFin() + "\nNombre total de semaines: " + offreStage.getDureeEnSemaines());
             table.addCell("HORAIRE DE TRAVAIL");
-            table.addCell("Horaire de travail: " + contrat.getOffreStage() + "\nNombre total d'heures par semaine: " + offreStage.getNombreHeuresSemaine() + "h");
+            table.addCell("Horaire de travail: " + offreStage.getTypeEmploi() + ", " + offreStage.getModaliteTravail() + "\nNombre total d'heures par semaine: " + offreStage.getNombreHeuresSemaine() + "h");
             table.addCell("SALAIRE");
             table.addCell("Salaire horaire: " + offreStage.getTauxHoraire() + "$");
             document.add(table);
