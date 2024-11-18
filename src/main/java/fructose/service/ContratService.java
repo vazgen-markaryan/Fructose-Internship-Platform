@@ -1,12 +1,16 @@
 package fructose.service;
 
+import fructose.model.Admin;
 import fructose.model.Contrat;
 import fructose.model.ContratPdf;
 import fructose.model.Utilisateur;
 import fructose.model.enumerator.Role;
 import fructose.repository.ContratRepository;
 import fructose.repository.UtilisateurRepository;
+import fructose.service.dto.AdminDTO;
+import fructose.service.dto.CandidatureDTO;
 import fructose.service.dto.ContratDTO;
+import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,10 +36,20 @@ public class ContratService {
     }
 
 
-    public ContratDTO createContrat(ContratDTO contratDTO) {
+    public Document generateContrat(CandidatureDTO candidatureDTO) {
+        System.out.println(getUtilisateurEnCours());
+        System.out.println(AdminDTO.toDTO((Admin) getUtilisateurEnCours()));
+        ContratDTO contratDTO = new ContratDTO();
+        contratDTO.setCandidatureDTO(candidatureDTO);
+        contratDTO.setGestionnaire(AdminDTO.toDTO((Admin) getUtilisateurEnCours()));
         Contrat contrat = ContratDTO.toEntity(contratDTO);
-        contrat = contratRepository.save(contrat);
-        return ContratDTO.toDTO(contrat);
+        ContratPdf contratPdf = new ContratPdf(contrat);
+        return contratPdf.returnPdf();
+    }
+
+    public void saveContrat(ContratDTO contratDTO) {
+        Contrat contrat = ContratDTO.toEntity(contratDTO);
+        contratRepository.save(contrat);
     }
 
     public void deleteContrat(Long id) {

@@ -3,7 +3,9 @@ package fructose.controller;
 import com.itextpdf.layout.Document;
 import fructose.service.ContratService;
 import fructose.service.UtilisateurService;
+import fructose.service.dto.CandidatureDTO;
 import fructose.service.dto.ContratDTO;
+import fructose.service.dto.UtilisateurDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -31,12 +33,26 @@ public class ContratController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<ContratDTO> createContrat(@RequestHeader("Authorization") String token, @Valid @RequestBody ContratDTO contratDTO) {
+    @PostMapping("/generate")
+    public ResponseEntity<byte[]> generateContrat(@RequestHeader("Authorization") String token, @Valid @RequestBody CandidatureDTO candidatureDTO) {
+        System.out.println(candidatureDTO);
         validateToken(token);
-        ContratDTO createdContrat = contratService.createContrat(contratDTO);
-        URI location = URI.create("/api/contrats/" + createdContrat.getId());
-        return ResponseEntity.created(location).body(createdContrat);
+        try {
+            Document pdfDocument = contratService.generateContrat(candidatureDTO);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            pdfDocument.close();
+            byte[] pdfBytes = byteArrayOutputStream.toByteArray();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "contrat_" + candidatureDTO.getId() + ".pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(pdfBytes);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error generating contract PDF", e);
+        }
     }
 
     @GetMapping("/{id}")

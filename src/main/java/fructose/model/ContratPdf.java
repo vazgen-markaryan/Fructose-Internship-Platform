@@ -19,6 +19,7 @@ public class ContratPdf {
         Utilisateur employeur = offreStage.getOwner();
         Utilisateur etudiant = contrat.getCandidature().getEtudiant();
         Admin gestionnaire = contrat.getGestionnaire();
+        System.out.println(gestionnaire);
         try {
             String dest = "contract_stage.pdf";
             PdfWriter writer = new PdfWriter(dest);
