@@ -27,7 +27,7 @@ public class Contrat {
 
     @ManyToOne
     @JoinColumn(name = "gestionnaire_id", nullable = false)
-    private Admin gestionnaire;
+    private Utilisateur gestionnaire;
 
     @Column(name = "signature_gestionnaire", nullable = false)
     private String signatureGestionnaire;

@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import { CandidatureContext } from '../../providers/CandidatureProvider';
 import { AuthContext } from '../../providers/AuthProvider';
 import GeneratePdfModal from '../../../utilities/modal/GeneratePdfModal';
 
 const ListCandidatureEnAttenteContrat = () => {
-	const { fetchCandidatureByEtatAccepteApresEntrevue, candidatures } = useContext(CandidatureContext);
+	const { fetchCandidatureByEtatAccepteApresEntrevue } = useContext(CandidatureContext);
 	const { currentUser } = useContext(AuthContext);
 	const [filteredCandidatures, setFilteredCandidatures] = useState([]);
 	const [isModalOpen, setModalOpen] = useState(false);
@@ -19,24 +19,15 @@ const ListCandidatureEnAttenteContrat = () => {
 			setFilteredCandidatures(response);
 		};
 		fetchData();
+	}, []);
+	
+	const handleClick = useCallback((candidature) => {
+		console.log('Button clicked for candidature:', candidature);
+		setSelectedCandidature(candidature);
+		setModalOpen(true);
 	}, [currentUser]);
 
 	const handleSavePdf = async (candidatureId) => {
-		try {
-			await saveContrat(candidatureId);
-			alert('PDF saved successfully!');
-		} catch (error) {
-			console.error('Error saving PDF:', error);
-			alert('Failed to save PDF.');
-		}
-	};
-
-	const handleClick = (candidature) => {
-		setSelectedCandidature(candidature);
-		setModalOpen(true);
-	};
-
-	const saveContrat = async (candidatureId) => {
 		console.log('Saving contrat for candidature:', candidatureId);
 	};
 
@@ -58,7 +49,7 @@ const ListCandidatureEnAttenteContrat = () => {
 				<GeneratePdfModal
 					onClose={() => setModalOpen(false)}
 					onSave={handleSavePdf}
-					candidature={selectedCandidature}
+					candidatureId={selectedCandidature.id}
 				/>
 			)}
 		</div>

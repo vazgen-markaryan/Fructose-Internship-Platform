@@ -159,4 +159,15 @@ public class CandidatureService {
 			throw new RuntimeException("Une erreur est survenue lors de la récupération des candidatures par état accepté après entrevue.", e);
 		}
 	}
+	
+	public CandidatureDTO getCandidatureById(Long candidatureId) {
+		try {
+			Candidature candidature = candidatureRepository.findById(candidatureId)
+				.orElseThrow(() -> new IllegalArgumentException("Candidature avec ID: " + candidatureId + " n'existe pas"));
+			return CandidatureDTO.toDTO(candidature);
+		} catch (Exception e) {
+			logger.error("Erreur lors de la récupération de la candidature avec ID: {}", candidatureId, e);
+			throw new RuntimeException("Une erreur est survenue lors de la récupération de la candidature.", e);
+		}
+	}
 }

@@ -10,6 +10,7 @@ import fructose.repository.ContratRepository;
 import fructose.service.dto.AdminDTO;
 import fructose.service.dto.CandidatureDTO;
 import fructose.service.dto.ContratDTO;
+import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,30 +27,20 @@ public class ContratService {
     private final ContratRepository contratRepository;
     private final AdminRepository adminRepository;
     
-    private Admin getUtilisateurEnCours() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            Admin admin = adminRepository.findByEmail(authentication.getName());
-            if (admin != null) {
-                return admin;
-            }
+    
+    public String generateContrat(CandidatureDTO candidatureDTO, UtilisateurDTO admin) {
+        try {
+            ContratDTO contratDTO = new ContratDTO();
+            contratDTO.setCandidatureDTO(candidatureDTO);
+            contratDTO.setGestionnaire(admin);
+            Contrat contrat = ContratDTO.toEntity(contratDTO);
+            System.out.println(contrat);
+            ContratPdf contratPdf = new ContratPdf(contrat);
+            return contratPdf.returnPdf();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error generating contract PDF", e);
         }
-        throw new IllegalArgumentException("Aucun utilisateur n'est connecté");
-    }
-
-
-    public Document generateContrat(CandidatureDTO candidatureDTO) {
-        ContratDTO contratDTO = new ContratDTO();
-        Admin admin = getUtilisateurEnCours();
-        System.out.println("Voici l'admin fetch de utilisateurEnCours : " + admin);
-        AdminDTO adminDTO = AdminDTO.toDTO(admin);
-        System.out.println("Voici comment on l'a transformer : " + adminDTO);
-        contratDTO.setCandidatureDTO(candidatureDTO);
-        contratDTO.setGestionnaire(adminDTO);
-        Contrat contrat = ContratDTO.toEntity(contratDTO);
-        System.out.println(contrat);
-        ContratPdf contratPdf = new ContratPdf(contrat);
-        return contratPdf.returnPdf();
     }
 
     public void saveContrat(ContratDTO contratDTO) {
@@ -70,54 +61,54 @@ public class ContratService {
         return ContratDTO.toDTO(contrat);
     }
 
-    public List<ContratDTO> getContrats() {
-        Utilisateur utilisateur = getUtilisateurEnCours();
-        Role role = utilisateur.getRole();
+//    public List<ContratDTO> getContrats() {
+//        Utilisateur utilisateur = getUtilisateurEnCours();
+//        Role role = utilisateur.getRole();
+//
+//        return switch (role) {
+//            case EMPLOYEUR -> contratRepository.findAllByCandidature_OffreStage_Owner(utilisateur)
+//                    .stream()
+//                    .map(ContratDTO::toDTO)
+//                    .collect(Collectors.toList());
+//            case ETUDIANT -> contratRepository.findAllByCandidature_Etudiant(utilisateur)
+//                    .stream()
+//                    .map(ContratDTO::toDTO)
+//                    .collect(Collectors.toList());
+//            case ADMIN -> contratRepository.findAll()
+//                    .stream()
+//                    .map(ContratDTO::toDTO)
+//                    .collect(Collectors.toList());
+//            default -> throw new IllegalArgumentException("Role not supported");
+//        };
+//    }
 
-        return switch (role) {
-            case EMPLOYEUR -> contratRepository.findAllByCandidature_OffreStage_Owner(utilisateur)
-                    .stream()
-                    .map(ContratDTO::toDTO)
-                    .collect(Collectors.toList());
-            case ETUDIANT -> contratRepository.findAllByCandidature_Etudiant(utilisateur)
-                    .stream()
-                    .map(ContratDTO::toDTO)
-                    .collect(Collectors.toList());
-            case ADMIN -> contratRepository.findAll()
-                    .stream()
-                    .map(ContratDTO::toDTO)
-                    .collect(Collectors.toList());
-            default -> throw new IllegalArgumentException("Role not supported");
-        };
-    }
+    //public ContratDTO signContrat(Long id, String signature) {
+        //Contrat contrat = contratRepository.findById(id)
+       //         .orElseThrow(() -> new IllegalArgumentException("Contrat with ID: " + id + " does not exist"));
 
-    public ContratDTO signContrat(Long id, String signature) {
-        Contrat contrat = contratRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Contrat with ID: " + id + " does not exist"));
+        //Utilisateur utilisateur = getUtilisateurEnCours();
+        //Role role = utilisateur.getRole();
+        //switch (role) {
+            //case EMPLOYEUR:
+                //contrat.setSignatureEmployeur(signature);
+                //break;
+            //case ETUDIANT:
+                //contrat.setSignatureEtudiant(signature);
+                //break;
+            //case ADMIN:
+                //contrat.setSignatureGestionnaire(signature);
+             //   break;
+         //   default:
+       //         throw new IllegalArgumentException("Role not supported");
+     //   }
+     //   contrat = contratRepository.save(contrat);
+     //   return ContratDTO.toDTO(contrat);
+    //}
 
-        Utilisateur utilisateur = getUtilisateurEnCours();
-        Role role = utilisateur.getRole();
-        switch (role) {
-            case EMPLOYEUR:
-                contrat.setSignatureEmployeur(signature);
-                break;
-            case ETUDIANT:
-                contrat.setSignatureEtudiant(signature);
-                break;
-            case ADMIN:
-                contrat.setSignatureGestionnaire(signature);
-                break;
-            default:
-                throw new IllegalArgumentException("Role not supported");
-        }
-        contrat = contratRepository.save(contrat);
-        return ContratDTO.toDTO(contrat);
-    }
-
-    public Document getContratPDFById(Long id) {
-        Contrat contrat = contratRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Contrat with ID: " + id + " does not exist"));
-        ContratPdf contratPdf = new ContratPdf(contrat);
-        return contratPdf.returnPdf();
-    }
+//    public Document getContratPDFById(Long id) {
+//        Contrat contrat = contratRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("Contrat with ID: " + id + " does not exist"));
+//        ContratPdf contratPdf = new ContratPdf(contrat);
+//        return contratPdf.returnPdf();
+//    }
 }
