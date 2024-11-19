@@ -415,6 +415,15 @@ header {
 	background-color: #e0e0e0;
 }
 
+.stepper-form{
+
+}
+
+.stepper-form-step{
+	max-width: 450px;
+	margin: auto;
+}
+
 /*Dahboard*/
 
 .dashboard-layout {
