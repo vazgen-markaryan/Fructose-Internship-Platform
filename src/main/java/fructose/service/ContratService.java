@@ -5,12 +5,11 @@ import fructose.model.Contrat;
 import fructose.model.ContratPdf;
 import fructose.model.Utilisateur;
 import fructose.model.enumerator.Role;
+import fructose.repository.AdminRepository;
 import fructose.repository.ContratRepository;
-import fructose.repository.UtilisateurRepository;
 import fructose.service.dto.AdminDTO;
 import fructose.service.dto.CandidatureDTO;
 import fructose.service.dto.ContratDTO;
-import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,24 +24,30 @@ import java.util.stream.Collectors;
 public class ContratService {
 
     private final ContratRepository contratRepository;
-    private final UtilisateurRepository<Utilisateur, Long> utilisateurRepository;
-
-    private Utilisateur getUtilisateurEnCours() {
+    private final AdminRepository adminRepository;
+    
+    private Admin getUtilisateurEnCours() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            return utilisateurRepository.findByEmail(authentication.getName());
+            Admin admin = adminRepository.findByEmail(authentication.getName());
+            if (admin != null) {
+                return admin;
+            }
         }
         throw new IllegalArgumentException("Aucun utilisateur n'est connecté");
     }
 
 
     public Document generateContrat(CandidatureDTO candidatureDTO) {
-        System.out.println(getUtilisateurEnCours());
-        System.out.println(AdminDTO.toDTO((Admin) getUtilisateurEnCours()));
         ContratDTO contratDTO = new ContratDTO();
+        Admin admin = getUtilisateurEnCours();
+        System.out.println("Voici l'admin fetch de utilisateurEnCours : " + admin);
+        AdminDTO adminDTO = AdminDTO.toDTO(admin);
+        System.out.println("Voici comment on l'a transformer : " + adminDTO);
         contratDTO.setCandidatureDTO(candidatureDTO);
-        contratDTO.setGestionnaire(AdminDTO.toDTO((Admin) getUtilisateurEnCours()));
+        contratDTO.setGestionnaire(adminDTO);
         Contrat contrat = ContratDTO.toEntity(contratDTO);
+        System.out.println(contrat);
         ContratPdf contratPdf = new ContratPdf(contrat);
         return contratPdf.returnPdf();
     }

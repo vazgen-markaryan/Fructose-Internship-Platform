@@ -43,6 +43,7 @@ public class ContratDTO {
         dto.setDateSignatureEmployeur(contrat.getDateSignatureEmployeur());
         dto.setSignatureEtudiant(contrat.getSignatureEtudiant());
         dto.setDateSignatureEtudiant(contrat.getDateSignatureEtudiant());
+        contrat.setGestionnaire(AdminDTO.toEntity(dto.getGestionnaire()));
         return dto;
     }
 
@@ -56,6 +57,7 @@ public class ContratDTO {
         contrat.setDateSignatureEmployeur(dto.getDateSignatureEmployeur());
         contrat.setSignatureEtudiant(dto.getSignatureEtudiant());
         contrat.setDateSignatureEtudiant(dto.getDateSignatureEtudiant());
+        contrat.setGestionnaire(AdminDTO.toEntity(dto.getGestionnaire()));
         return contrat;
     }
 }
