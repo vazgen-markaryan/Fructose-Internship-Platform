@@ -601,8 +601,7 @@ const ViewCandidatures = () => {
 													<div className="toolbar-items">
 														<Icon path={mdiCheckCircleOutline} size={1}
 															  className="text-green"/>
-														<p className="text-green m-0">Entrevue a été acceptée par
-															l'étudiant</p>
+														<p className="text-green m-0">{t("view_candidatures_page.interview_accepted_by_student")}</p>
 													</div>
 													<br/>
 													<p>{t("view_candidatures_page.proposed_interview_date", {date: currentCandidature.dateEntrevue})}</p>
