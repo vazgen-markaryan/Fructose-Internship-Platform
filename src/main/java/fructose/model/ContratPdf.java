@@ -8,9 +8,9 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 
 public class ContratPdf {
-
+    
     private final Contrat contrat;
-
+    
     public ContratPdf(Contrat contrat) {
         this.contrat = contrat;
     }
@@ -39,7 +39,7 @@ public class ContratPdf {
             table.addCell("Date de début: " + offreStage.getDateDebut() + "\nDate de fin: " + offreStage.getDateFin() +
                     "\nNombre total de semaines: " + offreStage.getDureeEnSemaines());
             table.addCell("HORAIRE DE TRAVAIL");
-            table.addCell("Horaire de travail: " + offreStage.getTypeEmploi() + ", " + offreStage.getModaliteTravail() +
+            table.addCell("Horaire de travail: " + offreStage.getTypeEmploi() + ", " + getModaliteTravail(offreStage.getModaliteTravail()) +
                     "\nNombre total d'heures par semaine: " + offreStage.getNombreHeuresSemaine() + "h");
             table.addCell("SALAIRE");
             table.addCell("Salaire horaire: " + offreStage.getTauxHoraire() + "$");
@@ -52,9 +52,9 @@ public class ContratPdf {
             document.add(new Paragraph("L’entreprise s’engage à:\n..."));
             document.add(new Paragraph("L’étudiant s’engage à:\n..."));
             document.add(new Paragraph("SIGNATURES"));
-            document.add(new Paragraph("Signature de l’étudiant(e): " + (contrat.getSignatureEtudiant() != null ? contrat.getSignatureEtudiant() : "_______________________")+  "\n " +  "Date de signature : "  + (contrat.getDateSignatureEmployeur() != null ? contrat.getDateSignatureEtudiant() : "_______________________")));
-            document.add(new Paragraph("Signature de l’employeur: " + (contrat.getSignatureEmployeur() != null ? contrat.getSignatureEmployeur() : "_______________________") +  "\n " + "Date de signature : "  + (contrat.getDateSignatureEmployeur() != null ? contrat.getDateSignatureEmployeur() : "_______________________")));
-            document.add(new Paragraph("Signature du gestionnaire de stage: " + (contrat.getSignatureGestionnaire() != null ? contrat.getSignatureGestionnaire() : "_______________________") +  "\n " +  " Date de signature : " + (contrat.getDateSignatureGestionnaire() != null ? contrat.getDateSignatureGestionnaire().toString() : "_______________________")));
+            document.add(new Paragraph("Signature de l’étudiant(e): " + (contrat.getSignatureEtudiant() != null ? contrat.getSignatureEtudiant() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEmployeur() != null ? contrat.getDateSignatureEtudiant() : "_______________________")));
+            document.add(new Paragraph("Signature de l’employeur: " + (contrat.getSignatureEmployeur() != null ? contrat.getSignatureEmployeur() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEmployeur() != null ? contrat.getDateSignatureEmployeur() : "_______________________")));
+            document.add(new Paragraph("Signature du gestionnaire de stage: " + (contrat.getSignatureGestionnaire() != null ? contrat.getSignatureGestionnaire() : "_______________________") + "\n " + " Date de signature : " + (contrat.getDateSignatureGestionnaire() != null ? contrat.getDateSignatureGestionnaire().toString() : "_______________________")));
             
             document.close();
             System.out.println("PDF created successfully!");
@@ -64,6 +64,14 @@ public class ContratPdf {
             throw new RuntimeException("PDF creation failed: " + e.getMessage());
         }
     }
-
     
+    private String getModaliteTravail(String modalite) {
+        if (modalite.equals("temps_plein")) {
+            return "Temps plein";
+        } else if (modalite.equals("temps_partiel")) {
+            return "Temps partiel";
+        } else {
+            return "Inconnu";
+        }
     }
+}
