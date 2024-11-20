@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {mdiArrowLeft} from "@mdi/js";
+import {mdiArrowLeft, mdiCheckCircleOutline, mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../providers/AuthProvider";
 import {getDepartement, getEmployeur} from "../../../utilities/api/apiService";
@@ -31,6 +31,9 @@ const CreerOffreStage = () => {
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
     const [employeurs, setEmployeurs] = useState([]);
+
+    const steps = 5
+    const [currentStep, setCurrentStep] = useState(1);
 
     const fetchEmployeurs = async () => {
         try {
@@ -73,40 +76,50 @@ const CreerOffreStage = () => {
 
         const errors = {};
 
-        if (nom.length < 3 || nom.length > 100) {
-            errors.nom = t("creer_offre_stage_page.errors.nom");
+        if (currentStep === 1 || currentStep === 5){
+            if (compagnie.length < 3 || compagnie.length > 100) {
+                errors.compagnie = t("creer_offre_stage_page.errors.compagnie");
+            }
+            if (adresse.length < 3 || adresse.length > 100) {
+                errors.adresse = t("creer_offre_stage_page.errors.address");
+            }
         }
-        if (poste.length < 3 || poste.length > 100) {
-            errors.poste = t("creer_offre_stage_page.errors.poste");
+        if (currentStep === 2 || currentStep === 5){
+            if (nom.length < 3 || nom.length > 100) {
+                errors.nom = t("creer_offre_stage_page.errors.nom");
+            }
+            if (poste.length < 3 || poste.length > 100) {
+                errors.poste = t("creer_offre_stage_page.errors.poste");
+            }
+            if (nombrePostes < 1) {
+                errors.nombrePostes = t("creer_offre_stage_page.errors.nombre_postes");
+            }
         }
-        if (description.length < 10 || description.length > 500) {
-            errors.description = t("creer_offre_stage_page.errors.description");
+        if (currentStep === 3 || currentStep === 5){
+            if (description.length < 10 || description.length > 500) {
+                errors.description = t("creer_offre_stage_page.errors.description");
+            }
         }
-        if (compagnie.length < 3 || compagnie.length > 100) {
-            errors.compagnie = t("creer_offre_stage_page.errors.compagnie");
+        if (currentStep === 4 || currentStep === 5){
+            if (tauxHoraire < 0) {
+                errors.tauxHoraire = t("creer_offre_stage_page.errors.taux_horaire");
+            }
+            if (nombreHeuresSemaine < 1) {
+                errors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_inferieur");
+            } else if (nombreHeuresSemaine > 40) {
+                errors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_superieur");
+            }
         }
-        if (tauxHoraire < 0) {
-            errors.tauxHoraire = t("creer_offre_stage_page.errors.taux_horaire");
-        }
-        if (adresse.length < 3 || adresse.length > 100) {
-            errors.adresse = t("creer_offre_stage_page.errors.address");
-        }
-        if (nombreHeuresSemaine < 1) {
-            errors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_inferieur");
-        } else if (nombreHeuresSemaine > 40) {
-            errors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_superieur");
-        }
-        if (nombrePostes < 1) {
-            errors.nombrePostes = t("creer_offre_stage_page.errors.nombre_postes");
-        }
-        if (departementDTO === "select" || departementDTO === "") {
-            errors.departementDTO = t("creer_offre_stage_page.errors.programme_etudes_select");
-        }
-        if (typeEmploi === "select" || typeEmploi === "") {
-            errors.typeEmploi = t("creer_offre_stage_page.errors.type_emploi_select");
-        }
-        if (modaliteTravail === "select" || modaliteTravail === "") {
-            errors.modaliteTravail = t("creer_offre_stage_page.errors.modalite_travail_select");
+        if (currentStep === 5) {
+            if (departementDTO === "select" || departementDTO === "") {
+                errors.departementDTO = t("creer_offre_stage_page.errors.programme_etudes_select");
+            }
+            if (typeEmploi === "select" || typeEmploi === "") {
+                errors.typeEmploi = t("creer_offre_stage_page.errors.type_emploi_select");
+            }
+            if (modaliteTravail === "select" || modaliteTravail === "") {
+                errors.modaliteTravail = t("creer_offre_stage_page.errors.modalite_travail_select");
+            }
         }
 
         return errors;
@@ -157,310 +170,106 @@ const CreerOffreStage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const errorMessage = validateFields();
+        console.log(errorMessage)
         if (Object.keys(errorMessage).length > 0) {
             setErrors(errorMessage);
         } else {
-            offreStage.dateDebut = new Date(offreStage.dateDebut).toISOString().split('T')[0];
-            offreStage.dateFin = new Date(offreStage.dateFin).toISOString().split('T')[0];
-            offreStage.dateLimiteCandidature = new Date(offreStage.dateLimiteCandidature).toISOString().split('T')[0];
-            const departement = await getDepartement(offreStage.departementDTO);
-            if (departement) {
-                offreStage.departementDTO = departement;
-            }
+            if (currentStep >= 5){
+                offreStage.dateDebut = new Date(offreStage.dateDebut).toISOString().split('T')[0];
+                offreStage.dateFin = new Date(offreStage.dateFin).toISOString().split('T')[0];
+                offreStage.dateLimiteCandidature = new Date(offreStage.dateLimiteCandidature).toISOString().split('T')[0];
+                const departement = await getDepartement(offreStage.departementDTO);
+                if (departement) {
+                    offreStage.departementDTO = departement;
+                }
 
-            const employeur = await getEmployeur(offreStage.ownerDTO.id, currentToken);
-            if (employeur) {
-                offreStage.ownerDTO = employeur;
+                const employeur = await getEmployeur(offreStage.ownerDTO.id, currentToken);
+                if (employeur) {
+                    offreStage.ownerDTO = employeur;
+                }
+                fetch('/creer-offre-stage', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': currentToken
+                    },
+                    body: JSON.stringify(offreStage)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.text().then(text => {
+                                throw new Error(text)
+                            });
+                        }
+                        return response;
+                    }).then(() => {
+                    setCurrentStep(6)
+                }).catch(error => {
+                    setErrors('Erreur :' + error.message);
+                    console.error('Erreur:', error);
+                });
+            } else {
+                setCurrentStep(currentStep + 1)
             }
-            fetch('/creer-offre-stage', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': currentToken
-                },
-                body: JSON.stringify(offreStage)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(text => {
-                            throw new Error(text)
-                        });
-                    }
-                    return response;
-                }).then(() => {
-                navigate('/dashboard');
-            }).catch(error => {
-                setErrors('Erreur :' + error.message);
-                console.error('Erreur:', error);
-            });
         }
     };
 
-    return (
-        <>
-            <div className="dashboard-card-toolbar">
-                <Link to="/dashboard">
-                    <button className="btn-icon-dashboard"><Icon path={mdiArrowLeft} size={1.4}/>
-                    </button>
-                </Link>
-                <h1>{t("creer_offre_stage_page.title")}</h1>
-            </div>
-            <div className="dashboard-card">
-                <div style={{width: "100%", height: "100px", backgroundColor: "red"}}>
-
-                </div>
-                <section>
-                    <br/>
-                    <form onSubmit={handleSubmit}>
-
-                        <div className="stepper-form-step">
-                            <h4>Informations de base</h4>
-                            <p>Veuillez remplir les champs ci-dessous en fournissant le nom officiel de votre compagnie
-                                ainsi que son adresse complète, incluant le numéro de rue, le nom de la rue, la ville,
-                                le code postal et le pays.</p>
-                            <br/>
-
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.compagnie")}</p>
-                                <input className={`${errors.compagnie ? "field-invalid" : ""}`}
-                                       value={offreStage.compagnie}
-                                       type="text" name="compagnie" onChange={handleInputChange} required/>
-                                <p className={"field-invalid-text"}>{errors.compagnie}</p>
-                            </div>
-
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.address")}</p>
-                                <input className={`${errors.adresse ? "field-invalid" : ""}`} value={offreStage.adresse}
-                                       type="text" name="adresse" onChange={handleInputChange} required/>
-                                <p className={"field-invalid-text"}>{errors.adresse}</p>
-                            </div>
-                        </div>
+    const getStep = () => {
+        switch (currentStep){
+            case 1:
+                return(
+                    <div className="stepper-form-step">
+                        <h4>Informations de base</h4>
+                        <p>Veuillez remplir les champs ci-dessous en fournissant le nom officiel de votre compagnie
+                            ainsi que son adresse complète, incluant le numéro de rue, le nom de la rue, la ville,
+                            le code postal et le pays.</p>
                         <br/>
-                        <div className="stepper-form-step">
-                            <h4>Informations sur l'emploi</h4>
-                            <p>Entrer les informations requises pour permettre aux étudiants de mieux vous trouver.</p>
-                            <br/>
 
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.nom")}</p>
-                                <input className={`${errors.nom ? "field-invalid" : ""}`} value={offreStage.nom}
-                                       type="text"
-                                       name="nom" onChange={handleInputChange} required/>
-                                <p className={"field-invalid-text"}>{errors.nom}</p>
-                            </div>
-
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.poste")}</p>
-                                <input className={`${errors.poste ? "field-invalid" : ""}`} value={offreStage.poste}
-                                       type="text" name="poste" onChange={handleInputChange} required/>
-                                <p className={"field-invalid-text"}>{errors.poste}</p>
-                                <p className="text-mini text-dark">Exemples: Technicien, Consultant, Scrum Master</p>
-                            </div>
-
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.nombre_postes")}</p>
-                                <input className={`${errors.nombrePostes ? "field-invalid" : ""}`}
-                                       value={offreStage.nombrePostes} type="number" name="nombrePostes"
-                                       onChange={handleInputChange} required min="1"/>
-                                <p className={"field-invalid-text"}>{errors.nombrePostes}</p>
-                            </div>
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.compagnie")}</p>
+                            <input className={`${errors.compagnie ? "field-invalid" : ""}`}
+                                   value={offreStage.compagnie}
+                                   type="text" name="compagnie" onChange={handleInputChange} required/>
+                            <p className={"field-invalid-text"}>{errors.compagnie}</p>
                         </div>
-                        <br/>
-                        <div className="stepper-form-step">
 
-                            <h4>Description</h4>
-                            <p>Entrer une description détailée de l'emploi, incluant une description du rôle de
-                                l'employé, des qualités recherchées, ainsi que l'expéreience requise.</p>
-                            <br/>
-                            <div className={"input-container"}>
-                            <textarea className={`${errors.description ? "field-invalid" : ""}`}
-                                      value={offreStage.description} name="description"
-                                      onChange={handleInputChange} required></textarea>
-                                <p className={"field-invalid-text"}>{errors.description}</p>
-                            </div>
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.address")}</p>
+                            <input className={`${errors.adresse ? "field-invalid" : ""}`} value={offreStage.adresse}
+                                   type="text" name="adresse" onChange={handleInputChange} required/>
+                            <p className={"field-invalid-text"}>{errors.adresse}</p>
                         </div>
+                    </div>
+                );
+            case 2:
+                return (
+                    <div className="stepper-form-step">
+                        <h4>Informations sur l'emploi</h4>
+                        <p>Entrer les informations requises pour permettre aux étudiants de mieux vous trouver.</p>
                         <br/>
-                        <div className="stepper-form-step">
-                            <h4>Particularités</h4>
-                            <p>En choisissant parmi les choix si-dessous, décrivez les différents modes de votre
-                                emploi.</p>
-                            <br/>
 
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.taux_horaire")}</p>
-                                <input className={`${errors.tauxHoraire ? "field-invalid" : ""}`}
-                                       value={offreStage.tauxHoraire}
-                                       type="number" name="tauxHoraire" onChange={handleInputChange} required min="0"/>
-                                <p className={"field-invalid-text"}>{errors.tauxHoraire}</p>
-                            </div>
-
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.nombre_heures_semaine")}</p>
-                                <input className={`${errors.nombreHeuresSemaine ? "field-invalid" : ""}`}
-                                       value={offreStage.nombreHeuresSemaine} type="number" name="nombreHeuresSemaine"
-                                       onChange={handleInputChange} required min="1"/>
-                                <p className={"field-invalid-text"}>{errors.nombreHeuresSemaine}</p>
-                            </div>
-
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.type_emploi")}</p>
-                                <select name="typeEmploi" onChange={handleInputChange} value={offreStage.typeEmploi}
-                                        required>
-                                    <option
-                                        value="select">{t("creer_offre_stage_page.modalites_travail.select")}</option>
-                                    <option
-                                        value="virtuel">{t("creer_offre_stage_page.modalites_travail.virtuel")}</option>
-                                    <option
-                                        value="presentiel">{t("creer_offre_stage_page.modalites_travail.presentiel")}</option>
-                                    <option
-                                        value="hybride">{t("creer_offre_stage_page.modalites_travail.hybride")}</option>
-                                </select>
-                                <p className={"field-invalid-text"}>{errors.typeEmploi}</p>
-                            </div>
-
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.programme_etudes")}</p>
-                                <select name="departementDTO" onChange={handleInputChange}
-                                        value={offreStage.departementDTO}
-                                        required>
-                                    <option value="">{t("programme.select")}</option>
-                                    <option value="cinema">{t("programme.cinema")}</option>
-                                    <option value="gestion_commerce">{t("programme.gestion_commerce")}</option>
-                                    <option
-                                        value="gestion_operations_chaine_logistique">{t("programme.gestion_operations_chaine_logistique")}</option>
-                                    <option
-                                        value="journalisme_multimedia">{t("programme.journalisme_multimedia")}</option>
-                                    <option
-                                        value="langues_trilinguisme_cultures">{t("programme.langues_trilinguisme_cultures")}</option>
-                                    <option
-                                        value="photographie_design_graphique">{t("programme.photographie_design_graphique")}</option>
-                                    <option value="sciences_nature">{t("programme.sciences_nature")}</option>
-                                    <option
-                                        value="sciences_humaines_administration_economie">{t("programme.sciences_humaines_administration_economie")}</option>
-                                    <option
-                                        value="sciences_humaines_individu_relations_humaines">{t("programme.sciences_humaines_individu_relations_humaines")}</option>
-                                    <option
-                                        value="sciences_humaines_monde_en_action">{t("programme.sciences_humaines_monde_en_action")}</option>
-                                    <option value="soins_infirmiers">{t("programme.soins_infirmiers")}</option>
-                                    <option
-                                        value="soins_infirmiers_auxiliaires">{t("programme.soins_infirmiers_auxiliaires")}</option>
-                                    <option
-                                        value="techniques_education_enfance">{t("programme.techniques_education_enfance")}</option>
-                                    <option
-                                        value="techniques_bureautique">{t("programme.techniques_bureautique")}</option>
-                                    <option
-                                        value="techniques_comptabilite_gestion">{t("programme.techniques_comptabilite_gestion")}</option>
-                                    <option
-                                        value="techniques_informatique">{t("programme.techniques_informatique")}</option>
-                                    <option
-                                        value="techniques_travail_social">{t("programme.techniques_travail_social")}</option>
-                                    <option
-                                        value="technologie_architecture">{t("programme.technologie_architecture")}</option>
-                                    <option
-                                        value="technologie_estimation_evaluation_batiment">{t("programme.technologie_estimation_evaluation_batiment")}</option>
-                                    <option
-                                        value="technologie_genie_civil">{t("programme.technologie_genie_civil")}</option>
-                                    <option
-                                        value="technologie_genie_electrique">{t("programme.technologie_genie_electrique")}</option>
-                                    <option
-                                        value="technologie_genie_physique">{t("programme.technologie_genie_physique")}</option>
-                                    <option value="tremplin_dec">{t("programme.tremplin_dec")}</option>
-                                </select>
-                                <p className={"field-invalid-text"}>{errors.departementDTO}</p>
-                            </div>
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.modalite_travail")}</p>
-                                <select name="modaliteTravail" onChange={handleInputChange}
-                                        value={offreStage.modaliteTravail}
-                                        required>
-                                    <option value={"select"}>{t("creer_offre_stage_page.types_emploi.select")}</option>
-                                    <option
-                                        value="temps_partiel">{t("creer_offre_stage_page.types_emploi.temps_partiel")}</option>
-                                    <option
-                                        value="temps_plein">{t("creer_offre_stage_page.types_emploi.temps_plein")}</option>
-                                </select>
-                                <p className={"field-invalid-text"}>{errors.modaliteTravail}</p>
-                            </div>
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.nom")}</p>
+                            <input className={`${errors.nom ? "field-invalid" : ""}`} value={offreStage.nom}
+                                   type="text"
+                                   name="nom" onChange={handleInputChange} required/>
+                            <p className={"field-invalid-text"}>{errors.nom}</p>
                         </div>
-                        <br/>
-                        <div className="stepper-form-step">
-                            <h4>Dates</h4>
-                            <p>Entrer la date du début et la fin du stage, ainsi que la date limite de candidature.</p>
-                            <br/>
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.date_debut")}</p>
-                                <input
-                                    className={`${errors.dateDebut ? "field-invalid" : ""}`}
-                                    type="date"
-                                    name="dateDebut"
-                                    onChange={handleInputChange}
-                                    value={offreStage.dateDebut instanceof Date && !isNaN(offreStage.dateDebut.getTime())
-                                        ? offreStage.dateDebut.toISOString().split('T')[0]
-                                        : ""}
-                                    required
-                                    min={offreStage.dateLimiteCandidature instanceof Date && !isNaN(offreStage.dateLimiteCandidature.getTime())
-                                        ? new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1)).toISOString().split('T')[0]
-                                        : ""}
-                                    onKeyDown={(e) => {
-                                        const minDate = new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1));
 
-                                        if (e.key === 'ArrowDown' && offreStage.dateDebut.getTime() <= minDate.getTime()) {
-                                            e.preventDefault(); // Prevent going below dateLimiteCandidature + 1 day
-                                        }
-                                    }}
-                                />
-                                <p className={"field-invalid-text"}>{errors.dateDebut}</p>
-                            </div>
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.poste")}</p>
+                            <input className={`${errors.poste ? "field-invalid" : ""}`} value={offreStage.poste}
+                                   type="text" name="poste" onChange={handleInputChange} required/>
+                            <p className={"field-invalid-text"}>{errors.poste}</p>
+                            <p className="text-mini text-dark">Exemples: Technicien, Consultant, Scrum Master</p>
+                        </div>
 
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.date_fin")}</p>
-                                <input
-                                    className={`${errors.dateFin ? "field-invalid" : ""}`}
-                                    type="date"
-                                    name="dateFin"
-                                    onChange={handleInputChange}
-                                    value={offreStage.dateFin instanceof Date && !isNaN(offreStage.dateFin.getTime())
-                                        ? offreStage.dateFin.toISOString().split('T')[0]
-                                        : ""}
-                                    required
-                                    min={offreStage.dateDebut instanceof Date && !isNaN(offreStage.dateDebut.getTime())
-                                        ? new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1)).toISOString().split('T')[0]
-                                        : ""}
-                                    onKeyDown={(e) => {
-                                        const currentDate = new Date(e.target.value);
-                                        const minDate = new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1));
-
-                                        if (e.key === 'ArrowDown' && currentDate <= minDate) {
-                                            e.preventDefault(); // Prevent going below dateDebut + 1 day
-                                        }
-                                    }}
-                                />
-                                <p className={"field-invalid-text"}>{errors.dateFin}</p>
-                            </div>
-
-                            <div className={"input-container"}>
-                                <p>{t("creer_offre_stage_page.date_limite_candidate")}</p>
-                                <input
-                                    className={`${errors.dateLimiteCandidature ? "field-invalid" : ""}`}
-                                    type="date"
-                                    name="dateLimiteCandidature"
-                                    onChange={handleInputChange}
-                                    value={offreStage.dateLimiteCandidature instanceof Date && !isNaN(offreStage.dateLimiteCandidature.getTime())
-                                        ? offreStage.dateLimiteCandidature.toISOString().split('T')[0]
-                                        : ""}
-                                    required
-                                    min={new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]}
-                                    onKeyDown={(e) => {
-                                        const currentDate = new Date(e.target.value);
-                                        const minDate = new Date(new Date().setDate(new Date().getDate() + 7));  // 7 days from today
-
-                                        if (e.key === 'ArrowDown' && currentDate <= minDate) {
-                                            e.preventDefault(); // Prevent going below 7 days from today
-                                        }
-                                    }}
-                                />
-                                <p className={"field-invalid-text"}>{errors.dateLimiteCandidature}</p>
-                            </div>
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.nombre_postes")}</p>
+                            <input className={`${errors.nombrePostes ? "field-invalid" : ""}`}
+                                   value={offreStage.nombrePostes} type="number" name="nombrePostes"
+                                   onChange={handleInputChange} required min="1"/>
+                            <p className={"field-invalid-text"}>{errors.nombrePostes}</p>
                         </div>
 
                         <div className={"input-container"}>
@@ -478,16 +287,300 @@ const CreerOffreStage = () => {
                                     </select>
                                 </>
                             }
+                        </div>
+                    </div>
+                )
+            case 3:
+                return (
+                    <div className="stepper-form-step">
+
+                        <h4>Description</h4>
+                        <p>Entrer une description détailée de l'emploi, incluant une description du rôle de
+                            l'employé, des qualités recherchées, ainsi que l'expéreience requise.</p>
+                        <br/>
+                        <div className={"input-container"}>
+                            <textarea className={`${errors.description ? "field-invalid" : ""}`}
+                                      value={offreStage.description} name="description"
+                                      onChange={handleInputChange} required></textarea>
+                            <p className={"field-invalid-text"}>{errors.description}</p>
+                        </div>
+                    </div>
+                )
+            case 4:
+                return (
+                    <div className="stepper-form-step">
+                        <h4>Particularités</h4>
+                        <p>En choisissant parmi les choix si-dessous, décrivez les différents modes de votre
+                            emploi.</p>
+                        <br/>
+
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.taux_horaire")}</p>
+                            <input className={`${errors.tauxHoraire ? "field-invalid" : ""}`}
+                                   value={offreStage.tauxHoraire}
+                                   type="number" name="tauxHoraire" onChange={handleInputChange} required min="0"/>
+                            <p className={"field-invalid-text"}>{errors.tauxHoraire}</p>
+                        </div>
+
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.nombre_heures_semaine")}</p>
+                            <input className={`${errors.nombreHeuresSemaine ? "field-invalid" : ""}`}
+                                   value={offreStage.nombreHeuresSemaine} type="number" name="nombreHeuresSemaine"
+                                   onChange={handleInputChange} required min="1"/>
+                            <p className={"field-invalid-text"}>{errors.nombreHeuresSemaine}</p>
+                        </div>
+
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.type_emploi")}</p>
+                            <select name="typeEmploi" onChange={handleInputChange} value={offreStage.typeEmploi}
+                                    required>
+                                <option
+                                    value="select">{t("creer_offre_stage_page.modalites_travail.select")}</option>
+                                <option
+                                    value="virtuel">{t("creer_offre_stage_page.modalites_travail.virtuel")}</option>
+                                <option
+                                    value="presentiel">{t("creer_offre_stage_page.modalites_travail.presentiel")}</option>
+                                <option
+                                    value="hybride">{t("creer_offre_stage_page.modalites_travail.hybride")}</option>
+                            </select>
+                            <p className={"field-invalid-text"}>{errors.typeEmploi}</p>
+                        </div>
+
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.programme_etudes")}</p>
+                            <select name="departementDTO" onChange={handleInputChange}
+                                    value={offreStage.departementDTO}
+                                    required>
+                                <option value="">{t("programme.select")}</option>
+                                <option value="cinema">{t("programme.cinema")}</option>
+                                <option value="gestion_commerce">{t("programme.gestion_commerce")}</option>
+                                <option
+                                    value="gestion_operations_chaine_logistique">{t("programme.gestion_operations_chaine_logistique")}</option>
+                                <option
+                                    value="journalisme_multimedia">{t("programme.journalisme_multimedia")}</option>
+                                <option
+                                    value="langues_trilinguisme_cultures">{t("programme.langues_trilinguisme_cultures")}</option>
+                                <option
+                                    value="photographie_design_graphique">{t("programme.photographie_design_graphique")}</option>
+                                <option value="sciences_nature">{t("programme.sciences_nature")}</option>
+                                <option
+                                    value="sciences_humaines_administration_economie">{t("programme.sciences_humaines_administration_economie")}</option>
+                                <option
+                                    value="sciences_humaines_individu_relations_humaines">{t("programme.sciences_humaines_individu_relations_humaines")}</option>
+                                <option
+                                    value="sciences_humaines_monde_en_action">{t("programme.sciences_humaines_monde_en_action")}</option>
+                                <option value="soins_infirmiers">{t("programme.soins_infirmiers")}</option>
+                                <option
+                                    value="soins_infirmiers_auxiliaires">{t("programme.soins_infirmiers_auxiliaires")}</option>
+                                <option
+                                    value="techniques_education_enfance">{t("programme.techniques_education_enfance")}</option>
+                                <option
+                                    value="techniques_bureautique">{t("programme.techniques_bureautique")}</option>
+                                <option
+                                    value="techniques_comptabilite_gestion">{t("programme.techniques_comptabilite_gestion")}</option>
+                                <option
+                                    value="techniques_informatique">{t("programme.techniques_informatique")}</option>
+                                <option
+                                    value="techniques_travail_social">{t("programme.techniques_travail_social")}</option>
+                                <option
+                                    value="technologie_architecture">{t("programme.technologie_architecture")}</option>
+                                <option
+                                    value="technologie_estimation_evaluation_batiment">{t("programme.technologie_estimation_evaluation_batiment")}</option>
+                                <option
+                                    value="technologie_genie_civil">{t("programme.technologie_genie_civil")}</option>
+                                <option
+                                    value="technologie_genie_electrique">{t("programme.technologie_genie_electrique")}</option>
+                                <option
+                                    value="technologie_genie_physique">{t("programme.technologie_genie_physique")}</option>
+                                <option value="tremplin_dec">{t("programme.tremplin_dec")}</option>
+                            </select>
+                            <p className={"field-invalid-text"}>{errors.departementDTO}</p>
+                        </div>
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.modalite_travail")}</p>
+                            <select name="modaliteTravail" onChange={handleInputChange}
+                                    value={offreStage.modaliteTravail}
+                                    required>
+                                <option value={"select"}>{t("creer_offre_stage_page.types_emploi.select")}</option>
+                                <option
+                                    value="temps_partiel">{t("creer_offre_stage_page.types_emploi.temps_partiel")}</option>
+                                <option
+                                    value="temps_plein">{t("creer_offre_stage_page.types_emploi.temps_plein")}</option>
+                            </select>
+                            <p className={"field-invalid-text"}>{errors.modaliteTravail}</p>
+                        </div>
+                    </div>
+                )
+            case 5:
+                return (
+                    <div className="stepper-form-step">
+                        <h4>Dates</h4>
+                        <p>Entrer la date du début et la fin du stage, ainsi que la date limite de candidature.</p>
+                        <br/>
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.date_debut")}</p>
+                            <input
+                                className={`${errors.dateDebut ? "field-invalid" : ""}`}
+                                type="date"
+                                name="dateDebut"
+                                onChange={handleInputChange}
+                                value={offreStage.dateDebut instanceof Date && !isNaN(offreStage.dateDebut.getTime())
+                                    ? offreStage.dateDebut.toISOString().split('T')[0]
+                                    : ""}
+                                required
+                                min={offreStage.dateLimiteCandidature instanceof Date && !isNaN(offreStage.dateLimiteCandidature.getTime())
+                                    ? new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1)).toISOString().split('T')[0]
+                                    : ""}
+                                onKeyDown={(e) => {
+                                    const minDate = new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1));
+
+                                    if (e.key === 'ArrowDown' && offreStage.dateDebut.getTime() <= minDate.getTime()) {
+                                        e.preventDefault(); // Prevent going below dateLimiteCandidature + 1 day
+                                    }
+                                }}
+                            />
+                            <p className={"field-invalid-text"}>{errors.dateDebut}</p>
+                        </div>
+
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.date_fin")}</p>
+                            <input
+                                className={`${errors.dateFin ? "field-invalid" : ""}`}
+                                type="date"
+                                name="dateFin"
+                                onChange={handleInputChange}
+                                value={offreStage.dateFin instanceof Date && !isNaN(offreStage.dateFin.getTime())
+                                    ? offreStage.dateFin.toISOString().split('T')[0]
+                                    : ""}
+                                required
+                                min={offreStage.dateDebut instanceof Date && !isNaN(offreStage.dateDebut.getTime())
+                                    ? new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1)).toISOString().split('T')[0]
+                                    : ""}
+                                onKeyDown={(e) => {
+                                    const currentDate = new Date(e.target.value);
+                                    const minDate = new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1));
+
+                                    if (e.key === 'ArrowDown' && currentDate <= minDate) {
+                                        e.preventDefault(); // Prevent going below dateDebut + 1 day
+                                    }
+                                }}
+                            />
+                            <p className={"field-invalid-text"}>{errors.dateFin}</p>
+                        </div>
+
+                        <div className={"input-container"}>
+                            <p>{t("creer_offre_stage_page.date_limite_candidate")}</p>
+                            <input
+                                className={`${errors.dateLimiteCandidature ? "field-invalid" : ""}`}
+                                type="date"
+                                name="dateLimiteCandidature"
+                                onChange={handleInputChange}
+                                value={offreStage.dateLimiteCandidature instanceof Date && !isNaN(offreStage.dateLimiteCandidature.getTime())
+                                    ? offreStage.dateLimiteCandidature.toISOString().split('T')[0]
+                                    : ""}
+                                required
+                                min={new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]}
+                                onKeyDown={(e) => {
+                                    const currentDate = new Date(e.target.value);
+                                    const minDate = new Date(new Date().setDate(new Date().getDate() + 7));  // 7 days from today
+
+                                    if (e.key === 'ArrowDown' && currentDate <= minDate) {
+                                        e.preventDefault(); // Prevent going below 7 days from today
+                                    }
+                                }}
+                            />
+                            <p className={"field-invalid-text"}>{errors.dateLimiteCandidature}</p>
+                        </div>
+                    </div>
+                )
+            case 6:
+                return(
+                    <div className="dashboard-placeholder-card" style={{backgroundColor: "transparent"}}>
+                        <div>
+                            <Icon path={mdiCheckCircleOutline} size={2.5}/>
+                            <h3>Succes</h3>
+                            <p>Votre offre de stage a été soumise. Veuillez allouer un délai afin que l'administrateur approuve votre offre.</p>
                             <br/>
-                            <div className="toolbar-items">
-                                <div className="toolbar-spacer">
-                                </div>
-                                <button className="btn-filled"
-                                        type="submit">{t("creer_offre_stage_page.creer_offre_stage")}</button>
+                            <button className="btn-filled">Revenir à l'accueil</button>
+                        </div>
+                    </div>
+                )
+        }
+    }
+
+
+
+    return (
+        <>
+            <div className="dashboard-card-toolbar">
+                <Link to="/dashboard">
+                    <button className="btn-icon-dashboard"><Icon path={mdiArrowLeft} size={1.4}/>
+                    </button>
+                </Link>
+                <h1>{t("creer_offre_stage_page.title")}</h1>
+            </div>
+            <div className="dashboard-card" style={{display: "flex", height:"calc(100vh - 300px)"}}>
+                <div style={{width: "100%", maxWidth: "300px", backgroundColor: "#0e2c3c", borderRadius:"5px 0 0 5px", padding: "20px", color: "white"}}>
+                    <div className="vertical-stepper">
+                        <div className="vertical-stepper-item">
+                            <div className="vertical-stepper-content">
+                                <h6 className="vertical-stepper-title">Informations de base</h6>
+                                <p className="vertical-stepper-desc">{t("creer_utilisateur_page.profile_2")}</p>
                             </div>
                         </div>
+                        <div className="vertical-stepper-item">
+                            <div className="vertical-stepper-content">
+                                <h6 className="vertical-stepper-title">Informations sur l'emploi</h6>
+                                <p className="vertical-stepper-desc">Impression et la visibilité du public</p>
+                            </div>
+                        </div>
+                        <div className="vertical-stepper-item">
+                            <div className="vertical-stepper-content">
+                                <h6 className="vertical-stepper-title">Description</h6>
+                                <p className="vertical-stepper-desc">Description sur l'emploi</p>
+                            </div>
+                        </div>
+                        <div className="vertical-stepper-item">
+                            <div className="vertical-stepper-content">
+                                <h6 className="vertical-stepper-title">Particularités</h6>
+                                <p className="vertical-stepper-desc">Horaire et Taux horaire du salarié</p>
+                            </div>
+                        </div>
+                        <div className="vertical-stepper-item">
+                            <div className="vertical-stepper-content">
+                                <h6 className="vertical-stepper-title">Dates</h6>
+                                <p className="vertical-stepper-desc">Périodes clés liés au poste</p>
+                            </div>
+                        </div>
+                        <div className="vertical-stepper-item">
+                            <div className="vertical-stepper-content">
+                                <h6 className="vertical-stepper-title">Soumission</h6>
+                            </div>
+                        </div>
+                        <div className="vertical-stepper-item">
+                            <div className="vertical-stepper-content">
+                                <h6 className="vertical-stepper-title">Approbation</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style={{position:"relative", flexGrow: "1"}}>
+                    <form onSubmit={handleSubmit}>
+                        {
+                            getStep()
+                        }
+
+                        <div className="form-dock">
+                            {
+                                (currentStep !== 1)?
+                                    <button type="button" onClick={() => {}}><Icon path={mdiChevronLeft} size={1}/></button>
+                                    :null
+                            }
+                            <div className={"toolbar-spacer"}></div>
+                            <button type="submit" className={"btn-filled"}>{t("information_base_page.continue")}<Icon path={mdiChevronRight} size={1}/></button>
+                        </div>
                     </form>
-                </section>
+                </div>
             </div>
         </>
     );

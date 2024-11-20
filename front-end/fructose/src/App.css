@@ -408,7 +408,7 @@ header {
 	left: 0;
 	top: 26px;
 	bottom: 8px;
-	z-index: -1;
+	z-index: 1;
 	transform: translateX(7px);
 	width: 4px;
 	border-radius: 4px;
@@ -420,6 +420,8 @@ header {
 }
 
 .stepper-form-step{
+	box-sizing: border-box;
+	padding: 30px 20px;
 	max-width: 450px;
 	margin: auto;
 }
