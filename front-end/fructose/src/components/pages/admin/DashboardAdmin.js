@@ -188,7 +188,7 @@ const DashboardHome = () => {
 	const GetUserManagementSection = () => {
 		if (currentUser != null) {
 				return (
-					<section>
+					<section style={{padding: 0, marginBottom: 25}}>
 						<div className={"toolbar-items"}>
 							<h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.user_management")}</h4>
 							<Link to="./admin/manage-users">

@@ -196,7 +196,9 @@
 		"reject_reason": "Raison du refus",
 		"reject_reason_placeholder": "Entrez le commentaire du refus ici",
 		"send": "Envoyer",
-		"close": "Fermer"
+		"close": "Fermer",
+		"generate": "Générer",
+		"generate_pdf": "Génération du Contrat de stage"
 	},
 	"dashboard_home_page": {
 		"home": "Accueil",
@@ -456,5 +458,8 @@
 			"error_commentaire_refus": "Veuillez entrer un commentaire pour le refus",
 			"error_date_entrevue": "Veuillez entrer une date pour l'entrevue"
 		}
+	},
+	"manage_contract_en_attente": {
+		"title": "Contrats de stage en attente de génération"
 	}
 }

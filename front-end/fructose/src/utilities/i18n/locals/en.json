@@ -196,7 +196,9 @@
 		"reject_reason": "Reason for rejection",
 		"reject_reason_placeholder": "Enter the reason for rejection",
 		"send": "Send",
-		"close": "Close"
+		"close": "Close",
+		"generate": "Generate",
+		"generate_pdf": "Generation of the internship Contract"
 	},
 	"dashboard_home_page": {
 		"home": "Home",
@@ -456,5 +458,8 @@
 			"error_commentaire_refus": "Please enter a reason for refusal",
 			"error_date_entrevue": "Please select an interview date"
 		}
+	},
+	"manage_contract_en_attente": {
+		"title": "Internship Contracts waiting for generation"
 	}
 }
