@@ -11,6 +11,10 @@
 - Commencer le sprint rapidement (ne pas tarder)
 - Faire les taches les plus importantes en premier (ceux qui vont être des dépendances avec les autres)
 
+# Point d'action du sprint 4 :
+- Mieux répartir les tâches selon les fichiers affectés
+- Éviter la surestimation du temps des stories du sprint.
+
 # Définition de DONE
 - Le code compile
 - 80% de coverage dans le test
