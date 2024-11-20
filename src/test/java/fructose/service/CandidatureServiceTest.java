@@ -88,17 +88,57 @@ class CandidatureServiceTest {
     void testApprouverCandidatureSuccess() {
         when(candidatureRepository.findById(1L)).thenReturn(Optional.of(candidature));
 
-        candidatureService.approuverCandidature(1L);
+        LocalDate validDate = LocalDate.now().plusDays(4); // Date valide : 4 jours après aujourd'hui
+
+        candidatureService.approuverCandidature(1L, validDate);
 
         verify(candidatureRepository, times(1)).findById(1L);
         verify(candidatureRepository, times(1)).save(candidature);
+
+        assertEquals(EtatCandidature.ENTREVUE_PROPOSE, candidature.getEtat(), "L'état de la candidature devrait être 'ENTREVUE_PROPOSE'.");
+        assertEquals(validDate, candidature.getDateEntrevue(), "La date d'entrevue n'a pas été correctement mise à jour.");
     }
+
 
     @Test
     void testApprouverCandidatureNotFound() {
-        when(candidatureRepository.findById(1L)).thenReturn(Optional.empty());
+        // Arrange
+        long candidatureId = 1L;
+        when(candidatureRepository.findById(candidatureId)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> candidatureService.approuverCandidature(1L));
+        // Act & Assert
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                candidatureService.approuverCandidature(candidatureId, LocalDate.now().plusDays(4))
+        );
+
+        assertEquals("Une erreur est survenue lors de l'approbation de la candidature.", exception.getMessage());
+
+        // Verify
+        verify(candidatureRepository, times(1)).findById(candidatureId);
+        verify(candidatureRepository, never()).save(any(Candidature.class));
+    }
+    @Test
+    void testApprouverCandidatureInvalidDate() {
+        LocalDate invalidDate = LocalDate.now().plusDays(2);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                candidatureService.approuverCandidature(1L, invalidDate)
+        );
+
+        assertEquals("La date d'entrevue doit être entre 3 jours à partir d'aujourd'hui et dans un mois.", exception.getMessage());
+    }
+
+    @Test
+    void testApprouverCandidatureRepositoryException() {
+        when(candidatureRepository.findById(1L)).thenThrow(new RuntimeException("Database error"));
+
+        LocalDate validDate = LocalDate.now().plusDays(4); // Valid date: 4 days from today
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                candidatureService.approuverCandidature(1L, validDate)
+        );
+
+        assertEquals("Une erreur est survenue lors de l'approbation de la candidature.", exception.getMessage());
 
         verify(candidatureRepository, times(1)).findById(1L);
         verify(candidatureRepository, never()).save(any(Candidature.class));
@@ -107,10 +147,9 @@ class CandidatureServiceTest {
     @Test
     void testGetOffreStageDetailsByEtudiantId() {
         Long etudiantId = 1L;
-
         List<Candidature> candidatures = Collections.singletonList(candidature);
-        when(candidatureRepository.findByEtudiantIdWithoutCv(etudiantId)).thenReturn(candidatures);
 
+        when(candidatureRepository.findByEtudiantIdWithoutCv(etudiantId)).thenReturn(candidatures);
         when(offreStageRepository.findById(offreStage.getId())).thenReturn(Optional.of(offreStage));
 
         List<Map<String, Object>> result = candidatureService.getOffreStageDetailsByEtudiantId(etudiantId);
@@ -120,14 +159,14 @@ class CandidatureServiceTest {
 
         Map<String, Object> expectedData = new HashMap<>();
         expectedData.put("id", candidature.getId());
+        expectedData.put("dateEntrevue", candidature.getDateEntrevue());
         expectedData.put("etat", candidature.getEtat());
         expectedData.put("commentaireRefus", candidature.getCommentaireRefus());
         expectedData.put("nomOffre", offreStage.getNom());
         expectedData.put("compagnie", offreStage.getCompagnie());
 
         List<Map<String, Object>> expected = Collections.singletonList(expectedData);
-
-        assertEquals(expected, result);
+        assertEquals(expected, result, "Le résultat devrait correspondre aux données attendues.");
     }
 
     @Test
@@ -334,6 +373,40 @@ class CandidatureServiceTest {
         verify(offreStageRepository, times(1)).getReferenceById(offreStage.getId());
         verify(candidatureRepository, times(1)).getCandidatureNumbers(etudiant.getId(), offreStage.getId());
         verify(cvRepository, times(1)).getReferenceById(1L);
+        verify(candidatureRepository, never()).save(any(Candidature.class));
+    }
+    @Test
+    void testModifierEtatCandidatureSuccess() {
+        when(candidatureRepository.findById(1L)).thenReturn(Optional.of(candidature));
+
+        candidatureService.modifierEtatCandidature(1L, EtatCandidature.ENTREVUE_PROPOSE);
+
+        verify(candidatureRepository, times(1)).findById(1L);
+        verify(candidatureRepository, times(1)).save(candidature);
+        assertEquals(EtatCandidature.ENTREVUE_PROPOSE, candidature.getEtat());
+    }
+
+    @Test
+    void testModifierEtatCandidatureNotFound() {
+        when(candidatureRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () ->
+                candidatureService.modifierEtatCandidature(1L, EtatCandidature.ENTREVUE_PROPOSE)
+        );
+
+        verify(candidatureRepository, times(1)).findById(1L);
+        verify(candidatureRepository, never()).save(any(Candidature.class));
+    }
+
+    @Test
+    void testModifierEtatCandidatureRepositoryException() {
+        when(candidatureRepository.findById(1L)).thenThrow(new RuntimeException("Database error"));
+
+        assertThrows(RuntimeException.class, () ->
+                candidatureService.modifierEtatCandidature(1L, EtatCandidature.ENTREVUE_PROPOSE)
+        );
+
+        verify(candidatureRepository, times(1)).findById(1L);
         verify(candidatureRepository, never()).save(any(Candidature.class));
     }
 

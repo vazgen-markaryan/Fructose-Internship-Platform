@@ -543,7 +543,7 @@ const DashboardHome = () => {
 	
 	const GetCandidatureManagementSection = () => {
 		if (currentUser != null) {
-			if (currentUser.role !== "PROFESSEUR" && currentUser.role !== "ADMIN") {
+			if (currentUser.role === "EMPLOYEUR") {
 				return (
 					<section>
 						<div className={"toolbar-items"}>
