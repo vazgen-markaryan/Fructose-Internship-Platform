@@ -47,18 +47,18 @@ const DashboardHome = () => {
 	
 	const handleAcceptInterview = async () => {
 		Swal.fire({
-			title: 'Êtes-vous sûr?',
-			html: `La date de votre entrevue proposée par Employeur est le :<br><strong>${new Date(currentCandidature.dateEntrevue).toLocaleDateString('fr-FR', {
+			title: t('dashboard_home_page.are_you_sure'),
+			html: `${t('dashboard_home_page.proposed_interview_date_employeur')}:<br><strong>${new Date(currentCandidature.dateEntrevue).toLocaleDateString('fr-FR', {
 				day: '2-digit',
 				month: '2-digit',
 				year: 'numeric'
-			})}<br></strong> L'acceptation est irréversible et vous engage à participer à l'entrevue à cette date.`,
+			})}<br></strong> ${t('dashboard_home_page.acceptance_irreversible')}`,
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
 			cancelButtonColor: '#d33',
-			confirmButtonText: 'Oui, accepter!',
-			cancelButtonText: 'Annuler'
+			confirmButtonText: t('dashboard_home_page.yes_accept'),
+			cancelButtonText: t('dashboard_home_page.cancel')
 		}).then(async (result) => {
 			if (result.isConfirmed) {
 				try {
@@ -81,23 +81,23 @@ const DashboardHome = () => {
 							} : candidature
 						));
 						Swal.fire({
-							title: 'Accepté!',
-							text: "L'entrevue a été acceptée.",
+							title: t('dashboard_home_page.accepted'),
+							text: t('dashboard_home_page.interview_accepted'),
 							icon: 'success',
 							showConfirmButton: false,
 							timer: 1500
 						})
 					} else {
 						Swal.fire({
-							title: 'Erreur!',
-							text: "Échec de l'acceptation de l'entrevue.",
+							title: t('dashboard_home_page.error'),
+							text: t('dashboard_home_page.interview_refusal_failed_acceptation'),
 							icon: 'error'
 						});
 					}
 				} catch (error) {
 					Swal.fire({
-						title: 'Erreur!',
-						text: "Une erreur s'est produite lors de l'acceptation de l'entrevue.",
+						title: t('dashboard_home_page.error'),
+						text: t('dashboard_home_page.interview_refusal_error_acceptation'),
 						icon: 'error'
 					});
 				}
@@ -107,14 +107,14 @@ const DashboardHome = () => {
 	
 	const handleRefuseInterview = async () => {
 		Swal.fire({
-			title: 'Êtes-vous sûr?',
-			text: "Vous êtes sur le point de refuser l'entrevue. Cette action est irréversible. Votre candidature pour cet Offre de Stage sera refusée.",
+			title: t('dashboard_home_page.are_you_sure'),
+			text: t('dashboard_home_page.refuse_interview_warning'),
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
 			cancelButtonColor: '#d33',
-			confirmButtonText: 'Oui, refuser!',
-			cancelButtonText: 'Annuler'
+			confirmButtonText: t('dashboard_home_page.yes_refuse'),
+			cancelButtonText: t('dashboard_home_page.cancel')
 		}).then(async (result) => {
 			if (result.isConfirmed) {
 				try {
@@ -137,24 +137,24 @@ const DashboardHome = () => {
 							} : candidature
 						));
 						await Swal.fire({
-							title: 'Refusé!',
-							text: "L'entrevue a été refusée.",
+							title: t('dashboard_home_page.refused'),
+							text: t('dashboard_home_page.interview_refused'),
 							icon: 'error',
 							showConfirmButton: false,
 							timer: 1500
 						})
 					} else {
 						await Swal.fire({
-							title: 'Erreur!',
-							text: "Échec du refus de l'entrevue.",
+							title: t('dashboard_home_page.error'),
+							text: t('dashboard_home_page.interview_refusal_failed'),
 							icon: 'error'
 						});
 					}
 				} catch (error) {
 					console.error("Error refusing interview:", error);
 					Swal.fire({
-						title: 'Erreur!',
-						text: "Une erreur s'est produite lors du refus de l'entrevue.",
+						title: t('dashboard_home_page.error'),
+						text: t('dashboard_home_page.interview_refusal_error'),
 						icon: 'error'
 					});
 				}
@@ -166,14 +166,14 @@ const DashboardHome = () => {
 	// Principalement dans if(response.ok) { ... } AVANT SWAL.FIRE
 	const handleSignerContrat = async () => {
 		Swal.fire({
-			title: 'Êtes-vous sûr?',
-			text: "Vous seriez invité à signer le contrat. Cette action est irréversible. Votre candidature pour cet Offre de Stage sera approuvé.",
+			title: t('dashboard_home_page.are_you_sure'),
+			text: t('dashboard_home_page.sign_contract_warning'),
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
 			cancelButtonColor: '#d33',
-			confirmButtonText: 'Oui, signer le contrat!',
-			cancelButtonText: 'Reviser ma décision'
+			confirmButtonText: t('dashboard_home_page.yes_sign_contract'),
+			cancelButtonText: t('dashboard_home_page.review_decision')
 		}).then(async (result) => {
 			if (result.isConfirmed) {
 				try {
@@ -196,23 +196,23 @@ const DashboardHome = () => {
 							} : candidature
 						));
 						await Swal.fire({
-							title: 'Accepté!',
-							text: "Le contrat a été signé avec succès.",
+							title: t('dashboard_home_page.accepted'),
+							text: t('dashboard_home_page.contract_signed_success'),
 							icon: 'success',
 							showConfirmButton: false,
 							timer: 1500
 						});
 					} else {
 						await Swal.fire({
-							title: 'Erreur!',
-							text: "Échec de la signature du contrat.",
+							title: t('dashboard_home_page.error'),
+							text: t('dashboard_home_page.contract_signing_failed'),
 							icon: 'error'
 						});
 					}
 				} catch (error) {
 					await Swal.fire({
-						title: 'Erreur!',
-						text: "Une erreur s'est produite lors de la signature du contrat.",
+						title: t('dashboard_home_page.error'),
+						text: t('dashboard_home_page.contract_signing_error'),
 						icon: 'error'
 					});
 				}
@@ -222,14 +222,14 @@ const DashboardHome = () => {
 	
 	const handleRefuserContrat = async () => {
 		Swal.fire({
-			title: 'Êtes-vous sûr?',
-			text: "Vous êtes sur le point de refuser la signature du contrat. Cette action est irréversible. Votre candidature pour cet Offre de Stage sera refusée.",
+			title: t('dashboard_home_page.are_you_sure'),
+			text: t('dashboard_home_page.refuse_contract_warning'),
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
 			cancelButtonColor: '#d33',
-			confirmButtonText: 'Oui, refuser la signature!',
-			cancelButtonText: 'Reviser ma décision'
+			confirmButtonText: t('dashboard_home_page.yes_refuse_contract'),
+			cancelButtonText: t('dashboard_home_page.review_decision')
 		}).then(async (result) => {
 			if (result.isConfirmed) {
 				try {
@@ -252,23 +252,23 @@ const DashboardHome = () => {
 							} : candidature
 						));
 						await Swal.fire({
-							title: 'Refusé!',
-							text: "La signature du contrat a été refusé.",
+							title: t('dashboard_home_page.refused'),
+							text: t('dashboard_home_page.contract_refused'),
 							icon: 'error',
 							showConfirmButton: false,
 							timer: 2000
 						});
 					} else {
 						await Swal.fire({
-							title: 'Erreur!',
-							text: "Échec du refus de la signature du contrat.",
+							title: t('dashboard_home_page.error'),
+							text: t('dashboard_home_page.contract_refusal_failed'),
 							icon: 'error'
 						});
 					}
 				} catch (error) {
 					await Swal.fire({
-						title: 'Erreur!',
-						text: "Une erreur s'est produite lors du refus du contrat.",
+						title: t('dashboard_home_page.error'),
+						text: t('dashboard_home_page.contract_refusal_error'),
 						icon: 'error'
 					});
 				}
@@ -524,13 +524,13 @@ const DashboardHome = () => {
 	
 	const GetCandidatureManagementSection = () => {
 		if (currentUser != null) {
-			if (currentUser.role !== "PROFESSEUR" && currentUser.role !== "ADMIN") {
+			if (currentUser.role === "EMPLOYEUR") {
 				return (
 					<section>
 						<div className={"toolbar-items"}>
-							<h4 className={"m-0 toolbar-spacer"}>Candidatures</h4>
+							<h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.application")}</h4>
 							<Link to="/dashboard/view-candidatures">
-								<button>Voir
+								<button>{t("dashboard_home_page.see")}
 									<Icon path={mdiChevronRight} size={1}/>
 								</button>
 							</Link>
@@ -626,7 +626,7 @@ const DashboardHome = () => {
 				<div className="window-frame">
 					<div className="window">
 						<div className="window-titlebar">
-							<h5>Candidature</h5>
+							<h5>{t("dashboard_home_page.application")}</h5>
 							<span className="toolbar-spacer"></span>
 							<button className="btn-icon" onClick={() => setCurrentCandidature(null)}>
 								<Icon path={mdiClose} size={1}/>
@@ -646,7 +646,7 @@ const DashboardHome = () => {
 										<h4 className="m-0">{currentCandidature.nomOffre ? currentCandidature.nomOffre : "N/A"}</h4>
 										<h6 className="m-0 text-dark">{currentCandidature.compagnie ? currentCandidature.compagnie : "N/A"}</h6>
 									</div>
-									<button className="btn-outline">Voir Offre</button>
+									<button className="btn-outline">{t("dashboard_home_page.view_offer")}</button>
 								</div>
 							</section>
 							
@@ -654,14 +654,14 @@ const DashboardHome = () => {
 							
 							<section className="nospace">
 								{/*SECTION CANDIDATURE INITIALE VUE ETUDIANT*/}
-								<h5>Candidature initiale</h5>
+								<h5>{t("dashboard_home_page.initial_application")}</h5>
 								{
 									// ÉTAT INITIALE
 									(currentCandidature.etat === "EN_ATTENTE")
 										?
 										<div className="toolbar-items">
 											<Icon path={mdiClockOutline} size={1} className="text-orange"/>
-											<p className="text-orange m-0">En attente de la réponse de l'employeur</p>
+											<p className="text-orange m-0">{t("dashboard_home_page.waiting_employer_response")}</p>
 										</div>
 										:
 										// SI ENTREVUE A ÉTÉ PROPOSÉE PAR EMPLOYEUR
@@ -684,13 +684,13 @@ const DashboardHome = () => {
 											currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
 											<div className="toolbar-items">
 												<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
-												<p className="text-green m-0">Approuvé</p>
+												<p className="text-green m-0">{t("dashboard_home_page.approve")}</p>
 											</div>
 											:
 											// SI CANDIDATURE A ÉTÉ REFUSÉE PAR EMPLOYEUR
 											<div className="toolbar-items">
 												<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
-												<p className="text-red m-0">Refusé avec le commentaire : {currentCandidature.commentaireRefus}</p>
+												<p className="text-red m-0">{t("dashboard_home_page.rejected_with_comment")}: {currentCandidature.commentaireRefus}</p>
 											</div>
 								}
 							</section>
@@ -699,23 +699,23 @@ const DashboardHome = () => {
 							
 							<section className="nospace">
 								{/*SECTION ENTREVUE VUE ETUDIANT*/}
-								<h5>Entrevue</h5>
+								<h5>{t("dashboard_home_page.interview")}</h5>
 								{
 									// SI ENTREVUE A ÉTÉ PROPOSÉE PAR EMPLOYEUR
 									(currentCandidature.etat === "ENTREVUE_PROPOSE") ?
 										<>
 											<div className="toolbar-items">
 												<Icon path={mdiClockOutline} size={1} className="text-blue"/>
-												<p className="text-blue m-0">En attente d'acceptation de la date de l'entrevue</p>
+												<p className="text-blue m-0">{t("dashboard_home_page.waiting_interview_acceptance")}</p>
 											</div>
 											<br/>
-											<p>Date de l'entrevue: {currentCandidature.dateEntrevue}</p>
+											<p>{t("dashboard_home_page.interview_date")}: {currentCandidature.dateEntrevue}</p>
 											<div className="toolbar-items" style={{gap: "10px"}}>
 												<button className="btn-filled bg-green" onClick={handleAcceptInterview}>
-													Accepter
+													{t("dashboard_home_page.accept")}
 												</button>
 												<button className="btn-filled bg-red" onClick={handleRefuseInterview}>
-													Refuser
+													{t("dashboard_home_page.refuse")}
 												</button>
 											</div>
 										</>
@@ -737,30 +737,30 @@ const DashboardHome = () => {
 											<>
 												<div className="toolbar-items">
 													<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
-													<p className="text-green m-0">Entrevue a été acceptée par l'étudiant</p>
+													<p className="text-green m-0">{t("dashboard_home_page.interview_accepted_by_student")}</p>
 												</div>
 												<br/>
-												<p>Date de l'entrevue proposé: {currentCandidature.dateEntrevue}</p>
+												<p>{t("dashboard_home_page.proposed_interview_date")}: {currentCandidature.dateEntrevue}</p>
 											</>
 											:
 											// SI ENTREVUE A ÉTÉ REFUSÉE PAR L'ÉTUDIANT
 											(currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT") ?
 												<div className="toolbar-items">
 													<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
-													<p className="text-red m-0">L'entrevue a été refusée par l'étudiant</p>
+													<p className="text-red m-0">{t("dashboard_home_page.interview_rejected_by_student")}</p>
 												</div>
 												:
 												// SI CANDIDATURE A ÉTÉ REFUSÉE PAR EMPLOYEUR
 												(currentCandidature.etat === "REFUSEE") ?
 													<div className="toolbar-items">
 														<Icon path={mdiCloseCircleOutline} size={1} className="text-dark"/>
-														<p className="text-dark m-0">L'entrevue ne peut être planifiée pour une candidature refusée</p>
+														<p className="text-dark m-0">{t("dashboard_home_page.interview_not_planned_for_rejected_application")}</p>
 													</div>
 													:
 													// TOMBE EN DEFAULT ÉTAT INITIALE
 													<div className="toolbar-items">
 														<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
-														<p className="text-dark m-0">En attente de la candidature initiale</p>
+														<p className="text-dark m-0">{t("dashboard_home_page.waiting_initial_application")}</p>
 													</div>
 								}
 							</section>
@@ -769,27 +769,27 @@ const DashboardHome = () => {
 							
 							<section className="nospace">
 								{/*SECTION CONTRAT  VUE ETUDIANT*/}
-								<h5>Contrat</h5>
+								<h5>{t("dashboard_home_page.contract")}</h5>
 								{
 									// SI CANDIDATURE A ÉTÉ REFUSÉE
 									(currentCandidature.etat === "REFUSEE") ?
 										<div className="toolbar-items">
 											<Icon path={mdiCloseCircleOutline} size={1} className="text-dark"/>
-											<p className="text-dark m-0">L'entrevue ne peut être planifiée pour une candidature refusée</p>
+											<p className="text-dark m-0">{t("dashboard_home_page.interview_not_planned_for_rejected_application")}</p>
 										</div>
 										:
 										// SI ENTREVUE A ÉTÉ ACCEPTÉE
 										(currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT") ?
 											<div className="toolbar-items">
 												<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-												<p className="text-orange m-0">En attente des résultats de l'entrevue</p>
+												<p className="text-orange m-0">{t("dashboard_home_page.waiting_interview_results")}</p>
 											</div>
 											:
 											// SI ENTREVUE A ÉTÉ REFUSÉE PAR L'ÉTUDIANT
 											(currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT") ?
 												<div className="toolbar-items">
 													<Icon path={mdiCloseCircleOutline} size={1} className="text-dark"/>
-													<p className="text-dark m-0">Le contrat ne peut être proposé pour une entrevue refusée par étudiant</p>
+													<p className="text-dark m-0">{t("dashboard_home_page.contract_not_proposed_for_rejected_interview")}</p>
 												</div>
 												:
 												// SI CONTRAT A ÉTÉ SIGNÉ PAR L'EMPLOYEUR
@@ -797,15 +797,15 @@ const DashboardHome = () => {
 													<>
 														<div className="toolbar-items">
 															<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
-															<p className="text-green m-0">Contrat signé par l'employeur</p>
+															<p className="text-green m-0">{t("dashboard_home_page.contract_signed_by_employer")}</p>
 														</div>
 														<br></br>
 														<div className="toolbar-items" style={{gap: "10px"}}>
 															<button className="btn-filled bg-green" onClick={handleSignerContrat}>
-																Signer
+																{t("dashboard_home_page.sign")}
 															</button>
 															<button className="btn-filled bg-red" onClick={handleRefuserContrat}>
-																Refuser
+																{t("dashboard_home_page.refuse")}
 															</button>
 														</div>
 													</>
@@ -814,27 +814,32 @@ const DashboardHome = () => {
 													(currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT") ?
 														<>
 															<div className="toolbar-items">
-																<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
-																<p className="text-green m-0">Contrat a été bien signé par l'étudiant</p>
+																<Icon path={mdiCheckCircleOutline} size={1}
+																	  className="text-green"/>
+																<p className="text-green m-0">{t("dashboard_home_page.contract_signed_by_student")}</p>
 															</div>
 															<div className="toolbar-items">
-																<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-																<p className="text-orange m-0">En attente de la signature du Gestionnaire de Stage</p>
+																<Icon path={mdiHelpCircleOutline} size={1}
+																	  className="text-orange"/>
+																<p className="text-orange m-0">{t("dashboard_home_page.waiting_manager_signature")}</p>
 															</div>
 														</>
 														:
 														// SI CONTRAT A ÉTÉ REFUSÉ PAR L'ÉTUDIANT
 														(currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT") ?
 															<div className="toolbar-items">
-																<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
-																<p className="text-red m-0">La signature du contrat a été refusée par l'étudiant. La candidature a été refusée.</p>
+																<Icon path={mdiCloseCircleOutline} size={1}
+																	  className="text-red"/>
+																<p className="text-red m-0">{t("dashboard_home_page.contract_rejected_by_student")}</p>
 															</div>
 															:
 															// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS
 															(currentCandidature.etat === "CONTRAT_SIGNE_TOUS") ?
 																<div className="toolbar-items">
-																	<Icon path={mdiCloseCircleOutline} size={1} className="text-green"/>
-																	<p className="text-green m-0">Tout le monde a signé le contrat. BRAVO! Votre candidature a été acceptée</p>
+																	<Icon path={mdiCloseCircleOutline} size={1}
+																		  className="text-green"/>
+																	<p className="text-green m-0">{t("dashboard_home_page.contract_signed_by_all")}</p>
+
 																</div>
 																:
 																// SI ETUDIANT ACCEPTE_APRES_ENTREVUE
@@ -842,7 +847,7 @@ const DashboardHome = () => {
 																	<>
 																		<div className={"toolbar-items"}>
 																			<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-																			<p className="text-orange m-0">En attente de la génération du Contrat par Gestionnaire</p>
+																			<p className="text-orange m-0">{t("dashboard_home_page.waiting_contract_generation")}</p>
 																		</div>
 																	</>
 																	:
@@ -850,13 +855,13 @@ const DashboardHome = () => {
 																	(currentCandidature.etat === "REFUSEE_APRES_ENTREVUE") ?
 																		<div className="toolbar-items">
 																			<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
-																			<p className="text-red m-0">La candidature a été refusée après l'entrevue</p>
+																			<p className="text-red m-0">{t("dashboard_home_page.application_rejected_after_interview")}</p>
 																		</div>
 																		:
 																		// TOMBE EN DEFAULT ÉTAT INITIALE
 																		<div className="toolbar-items">
 																			<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
-																			<p className="text-dark m-0">En attente des résultats de l'entrevue</p>
+																			<p className="text-dark m-0">{t("dashboard_home_page.waiting_interview_results")}</p>
 																		</div>
 								}
 								<br/>
