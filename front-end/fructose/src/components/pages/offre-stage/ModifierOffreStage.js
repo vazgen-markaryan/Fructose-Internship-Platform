@@ -12,7 +12,7 @@ const ModifierOffreStage = () => {
 	const {t} = useTranslation();
 	const navigate = useNavigate();
 	const {currentUser} = useContext(AuthContext);
-	const [offreStage, setOffreStage] = useState({});
+	const [offreStage, setOffreStage] = useState(null);
 	const [errors, setErrors] = useState({});
 	const {fetchOffreStage, updateOffreStage} = useContext(OffreStageContext);
 	
@@ -121,7 +121,7 @@ const ModifierOffreStage = () => {
 	};
 	
 	if (!offreStage) {
-		return <div>Loading...</div>;
+		return <h1>Erreur 404</h1>;
 	}
 	
 	return (
