@@ -16,6 +16,9 @@ public class ContratService {
 	private final ContratRepository contratRepository;
  
 	public String generateContrat(CandidatureDTO candidatureDTO, UtilisateurDTO admin) {
+		if (candidatureDTO == null || admin == null) {
+			throw new IllegalArgumentException("CandidatureDTO et UtilisateurDTO ne peuvent pas être nuls");
+		}
 		try {
 			ContratDTO contratDTO = new ContratDTO();
 			contratDTO.setCandidatureDTO(candidatureDTO);

@@ -53,7 +53,6 @@ const CandidatureProvider = ({children}) => {
 			});
 			if (response.ok) {
 				const data = await response.json();
-				console.log(data);
 				setCandidatures(data);
 				return data;
 			} else {
