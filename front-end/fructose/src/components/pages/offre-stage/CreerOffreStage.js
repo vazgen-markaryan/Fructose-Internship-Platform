@@ -300,7 +300,7 @@ const CreerOffreStage = () => {
                         <br/>
                         <div className={"input-container"}>
                             <textarea className={`${errors.description ? "field-invalid" : ""}`}
-                                      value={offreStage.description} name="description"
+                                      value={offreStage.description} name="description" style={{height: "200px"}}
                                       onChange={handleInputChange} required></textarea>
                             <p className={"field-invalid-text"}>{errors.description}</p>
                         </div>
@@ -495,7 +495,7 @@ const CreerOffreStage = () => {
                 )
             case 6:
                 return(
-                    <div className="dashboard-placeholder-card" style={{backgroundColor: "transparent"}}>
+                    <div className="dashboard-placeholder-card" style={{backgroundColor: "transparent", height: "100%"}}>
                         <div>
                             <Icon path={mdiCheckCircleOutline} size={2.5}/>
                             <h3>Succes</h3>
@@ -505,6 +505,21 @@ const CreerOffreStage = () => {
                         </div>
                     </div>
                 )
+        }
+    }
+
+    const getStepClass = (step) => {
+        if (currentStep === step){
+            return "active"
+        } else if (currentStep > step){
+            return "completed"
+        }
+        return ""
+    }
+
+    const returnToStep = () => {
+        if (currentStep - 1 > 0){
+            setCurrentStep(currentStep - 1)
         }
     }
 
@@ -519,40 +534,40 @@ const CreerOffreStage = () => {
                 </Link>
                 <h1>{t("creer_offre_stage_page.title")}</h1>
             </div>
-            <div className="dashboard-card" style={{display: "flex", height:"calc(100vh - 300px)"}}>
+            <div className="dashboard-card" style={{display: "flex", height:"calc(100vh - 300px)", minHeight:"600px"}}>
                 <div style={{width: "100%", maxWidth: "300px", backgroundColor: "#0e2c3c", borderRadius:"5px 0 0 5px", padding: "20px", color: "white"}}>
                     <div className="vertical-stepper">
-                        <div className="vertical-stepper-item">
+                        <div className={"vertical-stepper-item " + getStepClass(1)}>
                             <div className="vertical-stepper-content">
                                 <h6 className="vertical-stepper-title">Informations de base</h6>
-                                <p className="vertical-stepper-desc">{t("creer_utilisateur_page.profile_2")}</p>
+                                <p className="vertical-stepper-desc">Informations cruciales pour le profil de votre compagnie</p>
                             </div>
                         </div>
-                        <div className="vertical-stepper-item">
+                        <div className={"vertical-stepper-item " + getStepClass(2)}>
                             <div className="vertical-stepper-content">
                                 <h6 className="vertical-stepper-title">Informations sur l'emploi</h6>
                                 <p className="vertical-stepper-desc">Impression et la visibilité du public</p>
                             </div>
                         </div>
-                        <div className="vertical-stepper-item">
+                        <div className={"vertical-stepper-item " + getStepClass(3)}>
                             <div className="vertical-stepper-content">
                                 <h6 className="vertical-stepper-title">Description</h6>
                                 <p className="vertical-stepper-desc">Description sur l'emploi</p>
                             </div>
                         </div>
-                        <div className="vertical-stepper-item">
+                        <div className={"vertical-stepper-item " + getStepClass(4)}>
                             <div className="vertical-stepper-content">
                                 <h6 className="vertical-stepper-title">Particularités</h6>
                                 <p className="vertical-stepper-desc">Horaire et Taux horaire du salarié</p>
                             </div>
                         </div>
-                        <div className="vertical-stepper-item">
+                        <div className={"vertical-stepper-item " + getStepClass(5)}>
                             <div className="vertical-stepper-content">
                                 <h6 className="vertical-stepper-title">Dates</h6>
                                 <p className="vertical-stepper-desc">Périodes clés liés au poste</p>
                             </div>
                         </div>
-                        <div className="vertical-stepper-item">
+                        <div className={"vertical-stepper-item " + getStepClass(6)}>
                             <div className="vertical-stepper-content">
                                 <h6 className="vertical-stepper-title">Soumission</h6>
                             </div>
@@ -569,16 +584,18 @@ const CreerOffreStage = () => {
                         {
                             getStep()
                         }
-
+                        {
+                            (currentStep < 6)?
                         <div className="form-dock">
                             {
                                 (currentStep !== 1)?
-                                    <button type="button" onClick={() => {}}><Icon path={mdiChevronLeft} size={1}/></button>
+                                    <button type="button" onClick={() => {returnToStep()}}><Icon path={mdiChevronLeft} size={1}/></button>
                                     :null
                             }
                             <div className={"toolbar-spacer"}></div>
                             <button type="submit" className={"btn-filled"}>{t("information_base_page.continue")}<Icon path={mdiChevronRight} size={1}/></button>
-                        </div>
+                        </div>:null
+                        }
                     </form>
                 </div>
             </div>

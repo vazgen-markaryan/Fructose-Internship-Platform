@@ -378,13 +378,13 @@ header {
 	padding-bottom: 20px;
 }
 
-.vertical-stepper-title {
+.vertical-stepper-content > .vertical-stepper-title {
 	font-weight: bold;
 	font-size: 16px;
 	margin-bottom: 6px;
 }
 
-.vertical-stepper-desc {
+.vertical-stepper-content > .vertical-stepper-desc {
 	color: white;
 	font-weight: 300;
 	font-size: 14px;
@@ -392,6 +392,7 @@ header {
 
 .vertical-stepper-content {
 	max-width: 700px;
+	opacity: 0.3;
 }
 
 .vertical-stepper-item:before {
@@ -400,6 +401,8 @@ header {
 	height: 18px;
 	border-radius: 50%;
 	background-color: white;
+	box-sizing: border-box;
+	opacity: 0.3;
 }
 
 .vertical-stepper-item:not(:last-child):after {
@@ -413,6 +416,21 @@ header {
 	width: 4px;
 	border-radius: 4px;
 	background-color: #e0e0e0;
+	opacity: 0.3;
+}
+
+.vertical-stepper-item.active > .vertical-stepper-content, .vertical-stepper-item.completed > .vertical-stepper-content{
+	opacity: 1;
+}
+
+.vertical-stepper-item.active:before{
+	opacity: 1;
+	background-color: transparent;
+	border: 3px solid white;
+}
+
+.vertical-stepper-item.completed:before, .vertical-stepper-item.completed:after{
+	opacity: 1;
 }
 
 .stepper-form{
