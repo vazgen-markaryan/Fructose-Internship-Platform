@@ -24,16 +24,18 @@ const ViewContrats = () => {
     // };
 
     return (
-        <>
-            <h1>{t('contrats')}</h1>
-            <ul>
-                {contrats.map((contrat) => (
-                    <li key={contrat.id}>
-                        <h2>{contrat.offreStage.titre}</h2>
-                    </li>
-                ))}
-            </ul>
-        </>
+        <div>
+            <h1>Contrats</h1>
+            {contrats && contrats.length > 0 ? (
+                <ul>
+                    {contrats.map((contrat) => (
+                        <li key={contrat.id}>{contrat.offreStage.titre}</li>
+                    ))}
+                </ul>
+            ) : (
+                <p>No contracts available</p>
+            )}
+        </div>
     );
 };
 
