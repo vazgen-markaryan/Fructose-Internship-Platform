@@ -565,7 +565,8 @@
 		"confirm_reject_cancel_button": "Reviser ma décision",
 		"rejected_title": "Refusé!",
 		"rejected_text": "La candidature a été refusée en raison de l'échec de l'entrevue.",
-		"error_reject_text": "Échec du refus de la candidature."
+		"error_reject_text": "Échec du refus de la candidature.",
+		"accept": "Accepter"
 	},
 	"manage_contract_en_attente": {
 		"title": "Contrats de stage en attente de génération"

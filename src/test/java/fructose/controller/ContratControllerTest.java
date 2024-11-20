@@ -7,6 +7,7 @@ import fructose.service.dto.CandidatureDTO;
 import fructose.service.dto.ContratDTO;
 import fructose.service.dto.OffreStageDTO;
 import fructose.service.dto.UtilisateurDTO;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -177,7 +178,7 @@ public class ContratControllerTest {
 		
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
 	}
-	
+
 	@Test
 	public void testGenerateContrat_Success() throws IOException {
 		String token = "validToken";
@@ -186,20 +187,26 @@ public class ContratControllerTest {
 		CandidatureDTO candidatureDTO = new CandidatureDTO();
 		String pdfPath = "contract_stage1.pdf";
 		byte[] pdfBytes = new byte[]{1, 2, 3};
-		
+
+		// Create the file before the test
+		Files.write(new File(pdfPath).toPath(), pdfBytes);
+
 		when(utilisateurService.validationToken(token)).thenReturn(true);
 		when(utilisateurService.getUtilisateurByToken(token)).thenReturn(utilisateurDTO);
 		when(candidatureService.getCandidatureById(id)).thenReturn(candidatureDTO);
 		when(contratService.generateContrat(candidatureDTO, utilisateurDTO)).thenReturn(pdfPath);
-		
+
 		try (MockedStatic<Files> mockedFiles = mockStatic(Files.class)) {
 			mockedFiles.when(() -> Files.readAllBytes(any())).thenReturn(pdfBytes);
 			mockedFiles.when(() -> Files.delete(any())).thenAnswer(invocation -> null);
-			
+
 			ResponseEntity<byte[]> response = contratController.generateContrat(token, id);
-			
+
 			assertEquals(HttpStatus.OK, response.getStatusCode());
 			assertArrayEquals(pdfBytes, response.getBody());
 		}
+
+		// Delete the file after the test
+		Files.deleteIfExists(new File(pdfPath).toPath());
 	}
 }
