@@ -53,7 +53,8 @@ public class UtilisateurDTO {
 		utilisateur_dto.setPassword(utilisateur.getPassword());
 		utilisateur_dto.setMatricule(utilisateur.getMatricule());
 		utilisateur_dto.setRole(utilisateur.getRole());
-		utilisateur_dto.setDepartementDTO(DepartementDTO.toDTO(utilisateur.getDepartement()));
+		if (utilisateur.getDepartement() != null)
+			utilisateur_dto.setDepartementDTO(DepartementDTO.toDTO(utilisateur.getDepartement()));
 		utilisateur_dto.setCompanyName(utilisateur.getCompanyName());
 		utilisateur_dto.setIsApproved(utilisateur.getIsApproved());
 		return utilisateur_dto;

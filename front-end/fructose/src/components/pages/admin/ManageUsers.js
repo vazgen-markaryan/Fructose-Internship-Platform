@@ -1,23 +1,19 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
-    mdiAccountOutline,
-    mdiAccountQuestion,
-    mdiAccountSchoolOutline,
-    mdiAccountTieOutline,
-    mdiArrowLeft,
-    mdiBriefcaseClockOutline,
-    mdiCheck,
-    mdiClockOutline,
-    mdiClose,
-    mdiFileClockOutline,
-    mdiFolderAccountOutline,
-    mdiHumanMaleBoard,
+	mdiAccountOutline,
+	mdiAccountQuestion,
+	mdiAccountSchoolOutline,
+	mdiAccountTieOutline,
+	mdiArrowLeft,
+	mdiClose,
+	mdiHumanMaleBoard,
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../providers/AuthProvider";
 import {Link} from "react-router-dom";
 import {AdminContext} from "../../providers/AdminProvider";
 import {useTranslation} from "react-i18next";
+import StatusElement from "../../fragments/cv/StatusElement";
 
 const ManageUsers = () => {
 	
@@ -44,10 +40,10 @@ const ManageUsers = () => {
 	
 	const ApproveUserById = async (id) => {
 		await ApproveUser(id).then(response => {
-			if (response.ok) {
-				DeleteCurrentUserFromMemory()
-			}
-		})
+				if (response.ok) {
+					DeleteCurrentUserFromMemory()
+				}
+			})
 			.catch((error) => {
 				console.log(error)
 			});
@@ -55,10 +51,10 @@ const ManageUsers = () => {
 	
 	const RejectUserById = async (id) => {
 		await RejectUser(id).then(response => {
-			if (response.ok) {
-				DeleteCurrentUserFromMemory()
-			}
-		})
+				if (response.ok) {
+					DeleteCurrentUserFromMemory()
+				}
+			})
 			.catch((error) => {
 				console.log(error)
 			});
@@ -93,19 +89,7 @@ const ManageUsers = () => {
 	const getStatutElement = () => {
 		if (currentUserIndex !== null) {
 			if (!users[currentUserIndex].is_approved) {
-				return (
-					<>
-						<p className="m-0 text-orange">{t("manage_users_page.in_probation")}</p>
-						<Icon path={mdiClockOutline} size={0.8} className="text-orange"/>
-					</>
-				);
-			} else if (users[currentUserIndex].is_approved) {
-				return (
-					<>
-						<p className="m-0 text-green">{t("manage_users_page.approved")}</p>
-						<Icon path={mdiCheck} size={0.8} className="text-green"/>
-					</>
-				);
+				return <StatusElement status="pending" text={t("manage_users_page.in_probation")}/>;
 			}
 		}
 		return null;
@@ -158,7 +142,10 @@ const ManageUsers = () => {
 	const getUserDetailsSection = () => {
 		if (currentUserIndex != null) {
 			return (
-				<div className={`dashboard-card ${(isSwitching) ? "disappearing" : ""}`} style={{width: "35%"}}>
+				<div className={`dashboard-card ${(isSwitching) ? "disappearing" : ""}`} style={{
+					width: "35%",
+					height: "625px"
+				}}>
 					<div className="toolbar-items" style={{padding: "10px 10px 10px 16px"}}>
 						<h6 className="m-0">{t("manage_users_page.user_details")}</h6>
 						<span className="toolbar-spacer"></span>
@@ -182,43 +169,57 @@ const ManageUsers = () => {
 							{getStatutElement()}
 						</div>
 						<br/>
-						<p>{t("manage_users_page.details")}</p>
+						<h5>{t("manage_users_page.details")}</h5>
 						<table style={{width: "100%"}}>
 							<tbody>
 								<tr>
 									<td>{t("manage_users_page.role")}</td>
 									<td style={{textAlign: "right"}}>{t(`bd_role_traduction.${users[currentUserIndex].role}`)}</td>
 								</tr>
-								<tr>
-									<td>{t("manage_users_page.department")}</td>
-									<td style={{textAlign: "right"}}>{t("programme." + users[currentUserIndex].departementDTO.nom)}</td>
-								</tr>
-								<tr>
-									<td>{t("manage_users_page.matricule")}</td>
-									<td style={{textAlign: "right"}}>{users[currentUserIndex].matricule}</td>
-								</tr>
-								<tr>
-									<td>{t("manage_users_page.company")}</td>
-									<td style={{textAlign: "right"}}>{users[currentUserIndex].companyName}</td>
-								</tr>
+								{(users[currentUserIndex].role === "ETUDIANT" || users[currentUserIndex].role === "PROFESSEUR") && (
+									<>
+										<tr>
+											<td>{t("manage_users_page.department")}</td>
+											<td style={{textAlign: "right"}}>{t("programme." + users[currentUserIndex].departementDTO.nom)}</td>
+										</tr>
+										<tr>
+											<td>{t("manage_users_page.matricule")}</td>
+											<td style={{textAlign: "right"}}>{users[currentUserIndex].matricule}</td>
+										</tr>
+									</>
+								)}
+								{users[currentUserIndex].role === "EMPLOYEUR" && (
+									<tr>
+										<td>{t("manage_users_page.company")}</td>
+										<td style={{textAlign: "right"}}>{users[currentUserIndex].companyName}</td>
+									</tr>
+								)}
 							</tbody>
 						</table>
 						<br/>
-						<p>{t("manage_users_page.actions")}</p>
-						<button className="btn-option" onClick={() => {
-							ApproveUserById(users[currentUserIndex].id)
-						}}>
-							<Icon path={mdiCheck} size={1}/>{t("manage_users_page.approve")}
-						</button>
-						<button className="btn-option" onClick={() => {
-							RejectUserById(users[currentUserIndex].id)
-						}}>
-							<Icon path={mdiClose} size={1}/>{t("manage_users_page.delete")}
-						</button>
-						<button className="btn-option">
-							<Icon path={mdiFolderAccountOutline} size={1}/>
-							{t("manage_users_page.global_view")}
-						</button>
+
+						<h5>{t("discover_offers_page.actions")}</h5>
+
+						<div style={{
+							gap: "10px"
+						}}
+						     className="toolbar-items">
+							<button
+								className="btn-filled toolbar-spacer bg-green"
+								onClick={() => {
+									ApproveUserById(users[currentUserIndex].id)
+								}}
+							>
+								{t("manage_users_page.approve")}
+							</button>
+							<button
+								className="btn-filled toolbar-spacer bg-red"
+								onClick={() => {
+									RejectUserById(users[currentUserIndex].id)
+								}}>
+								{t("manage_users_page.delete")}
+							</button>
+						</div>
 					</section>
 				</div>
 			);
@@ -229,7 +230,7 @@ const ManageUsers = () => {
 	const getUserListSection = () => {
 		return (
 			<div style={{width: "65%"}}>
-				<div className="dashboard-card" style={{height: "450px", overflowY: "auto"}}>
+				<div className="dashboard-card" style={{height: "625px", overflowY: "auto"}}>
 					<section>
 						{
 							(users === null) ?
@@ -239,17 +240,6 @@ const ManageUsers = () => {
 								:
 								getUserListItems()
 						}
-					</section>
-				</div>
-				<br/>
-				<div className="dashboard-card">
-					<section>
-						<h5>{t("manage_users_page.related_options")}</h5>
-						<p><Icon path={mdiFileClockOutline} size={0.7}/>
-							<Link>{t("manage_users_page.not_approved_cvs")}</Link></p>
-						<p><Icon path={mdiBriefcaseClockOutline} size={0.7}/>
-							<Link>{t("manage_users_page.not_approved_stage")}</Link>
-						</p>
 					</section>
 				</div>
 			</div>

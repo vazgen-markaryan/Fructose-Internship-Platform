@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {mdiArrowLeft} from "@mdi/js";
 import Icon from "@mdi/react";
 import {AuthContext} from "../../providers/AuthProvider";
-import {getDepartement} from "../../../utilities/api/apiService";
+import {getDepartement, getEmployeur} from "../../../utilities/api/apiService";
 
 const CreerOffreStage = () => {
     const [offreStage, setOffreStage] = useState({
@@ -22,18 +22,42 @@ const CreerOffreStage = () => {
         nombreHeuresSemaine: 1,
         nombrePostes: 1,
         dateLimiteCandidature: new Date(),
+        ownerDTO: { id: '', fullName: '' }
     });
 
     const {currentToken} = useContext(AuthContext);
+    const {currentUser} = useContext(AuthContext);
     const {t} = useTranslation();
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
+    const [employeurs, setEmployeurs] = useState([]);
+
+    const fetchEmployeurs = async () => {
+        try {
+            const response = await fetch('/employeurs', {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': currentToken
+                },
+            });
+            if (response.ok) {
+                return await response.json();
+            }
+            return [];
+        } catch (error) {
+            return [];
+        }
+    }
 
     const handleInputChange = (event) => {
         const {name, value} = event.target;
 
         if (name === 'dateDebut' || name === 'dateFin' || name === 'dateLimiteCandidature') {
             setOffreStage({...offreStage, [name]: new Date(value)});
+        } else if (name === 'employeur') {
+            const selectedEmployeur = employeurs.find(employeur => employeur.id === Number(value));
+            setOffreStage({...offreStage, ownerDTO: selectedEmployeur});
         } else {
             setOffreStage({...offreStage, [name]: value});
         }
@@ -88,47 +112,47 @@ const CreerOffreStage = () => {
         return errors;
     }
 
-    useEffect(() => {
+    const getTranslatedErrors = (prevErrors) => {
+        const updatedErrors = { ...prevErrors };
+
+        if (prevErrors.nom) updatedErrors.nom = t("creer_offre_stage_page.errors.nom");
+        if (prevErrors.poste) updatedErrors.poste = t("creer_offre_stage_page.errors.poste");
+        if (prevErrors.description) updatedErrors.description = t("creer_offre_stage_page.errors.description");
+        if (prevErrors.compagnie) updatedErrors.compagnie = t("creer_offre_stage_page.errors.compagnie");
+        if (prevErrors.tauxHoraire) updatedErrors.tauxHoraire = t("creer_offre_stage_page.errors.taux_horaire");
+        if (prevErrors.adresse) updatedErrors.adresse = t("creer_offre_stage_page.errors.address");
+        if (prevErrors.nombreHeuresSemaine) updatedErrors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_inferieur");
+        if (prevErrors.nombrePostes) updatedErrors.nombrePostes = t("creer_offre_stage_page.errors.nombre_postes");
+        if (prevErrors.departementDTO) updatedErrors.departementDTO = t("creer_offre_stage_page.errors.programme_etudes_select");
+        if (prevErrors.typeEmploi) updatedErrors.typeEmploi = t("creer_offre_stage_page.errors.type_emploi_select");
+        if (prevErrors.modaliteTravail) updatedErrors.modaliteTravail = t("creer_offre_stage_page.errors.modalite_travail_select");
+
+        return updatedErrors;
+    };
+
+// Call `getTranslatedErrors` directly where you need to update errors, instead of inside `useEffect`.
+    const updateErrors = () => {
         setErrors((prevErrors) => {
-            const updatedErrors = {...prevErrors};
-
-            if (prevErrors.nom) {
-                updatedErrors.nom = t("creer_offre_stage_page.errors.nom");
-            }
-            if (prevErrors.poste) {
-                updatedErrors.poste = t("creer_offre_stage_page.errors.poste");
-            }
-            if (prevErrors.description) {
-                updatedErrors.description = t("creer_offre_stage_page.errors.description");
-            }
-            if (prevErrors.compagnie) {
-                updatedErrors.compagnie = t("creer_offre_stage_page.errors.compagnie");
-            }
-            if (prevErrors.tauxHoraire) {
-                updatedErrors.tauxHoraire = t("creer_offre_stage_page.errors.taux_horaire");
-            }
-            if (prevErrors.adresse) {
-                updatedErrors.adresse = t("creer_offre_stage_page.errors.address");
-            }
-            if (prevErrors.nombreHeuresSemaine) {
-                updatedErrors.nombreHeuresSemaine = t("creer_offre_stage_page.errors.nombre_heures_semaine_inferieur");
-            }
-            if (prevErrors.nombrePostes) {
-                updatedErrors.nombrePostes = t("creer_offre_stage_page.errors.nombre_postes");
-            }
-            if (prevErrors.departementDTO) {
-                updatedErrors.departementDTO = t("creer_offre_stage_page.errors.programme_etudes_select");
-            }
-            if (prevErrors.typeEmploi) {
-                updatedErrors.typeEmploi = t("creer_offre_stage_page.errors.type_emploi_select");
-            }
-            if (prevErrors.modaliteTravail) {
-                updatedErrors.modaliteTravail = t("creer_offre_stage_page.errors.modalite_travail_select");
-            }
-
-            return updatedErrors;
+            const translatedErrors = getTranslatedErrors(prevErrors);
+            // Only update if errors actually change to avoid re-renders
+            return JSON.stringify(prevErrors) !== JSON.stringify(translatedErrors) ? translatedErrors : prevErrors;
         });
+    };
+
+    useEffect( () => {
+        updateErrors();
     }, [t]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (currentUser && currentUser.role === 'ADMIN') {
+                await fetchEmployeurs().then((employeurs) => {
+                    setEmployeurs(employeurs);
+                });
+            }
+        }
+        fetchData();
+    }, [currentUser]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -142,6 +166,11 @@ const CreerOffreStage = () => {
             const departement = await getDepartement(offreStage.departementDTO);
             if (departement) {
                 offreStage.departementDTO = departement;
+            }
+
+            const employeur = await getEmployeur(offreStage.ownerDTO.id, currentToken);
+            if (employeur) {
+                offreStage.ownerDTO = employeur;
             }
             fetch('/creer-offre-stage', {
                 method: 'POST',
@@ -326,6 +355,20 @@ const CreerOffreStage = () => {
                             }}
                         />
                         <p className={"field-invalid-text"}>{errors.dateFin}</p>
+
+                        {currentUser && currentUser.role === 'ADMIN' &&
+                            <>
+                                <label>{t("creer_offre_stage_page.employeurs")}</label>
+                                <select name="employeur" onChange={handleInputChange}
+                                        value={offreStage.ownerDTO ? offreStage.ownerDTO.id : ''}
+                                        required>
+                                    <option value="">{t("creer_offre_stage_page.employeur_select")}</option>
+                                    {employeurs.map((employeur) => (
+                                        <option key={employeur.id} value={employeur.id}>{employeur.fullName}</option>
+                                    ))}
+                                </select>
+                            </>
+                        }
                         <br/>
                         <br/>
                         <button type="submit">{t("creer_offre_stage_page.creer_offre_stage")}</button>

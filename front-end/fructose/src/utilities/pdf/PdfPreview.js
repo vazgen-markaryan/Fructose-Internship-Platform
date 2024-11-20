@@ -1,15 +1,18 @@
 import React, {useState} from "react";
-import {Document, Page, pdfjs} from "react-pdf";
+import {Document, Page} from "react-pdf";
 import Icon from "@mdi/react";
-import {mdiChevronLeft, mdiChevronRight, mdiFileAlertOutline, mdiFullscreen, mdiFullscreenExit} from "@mdi/js";
+import {
+    mdiChevronLeft,
+    mdiChevronRight,
+    mdiDownloadOutline,
+    mdiFileAlertOutline,
+    mdiFullscreen,
+    mdiFullscreenExit
+} from "@mdi/js";
 import {useTranslation} from "react-i18next";
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.mjs',
-    import.meta.url,
-).toString();
 
-const PdfPreview = ({file, height = 500}) => {
+const PdfPreview = ({file, height = 500, filename = 'file.pdf'}) => {
 
     const {t} = useTranslation();
     const [numPages, setNumPages] = useState(null);
@@ -44,15 +47,19 @@ const PdfPreview = ({file, height = 500}) => {
 
     return (
         <div className={`pdf-file-preview-zone ${isFullScreen ? 'fullscreen' : ''}`} style={{
-            height: isFullScreen ? '80vh' : height + 'px',
+            height: isFullScreen ? 'auto' : height + 'px',
             width: 'auto',
             overflow: 'hidden',
             overflowX: 'hidden'
         }}>
-            <button onClick={toggleFullScreen} className="fullscreen-toggle"
+            <button onClick={toggleFullScreen} className="btn-icon"
                     style={{position: 'absolute', top: '10px', right: '10px', zIndex: 10}}>
                 <Icon path={isFullScreen ? mdiFullscreenExit : mdiFullscreen} size={1}/>
             </button>
+            <a href={file} download={filename} className="button btn-icon"
+               style={{position: 'absolute', top: '50px', right: '10px', zIndex: 10}}>
+                <Icon path={mdiDownloadOutline} size={1}/>
+            </a>
 
             <div style={{
                 height: isFullScreen ? 'calc(100% - 40px)' : '100%',
@@ -68,12 +75,20 @@ const PdfPreview = ({file, height = 500}) => {
                             <div className="loader"></div>
                         </div>}
                         error={<div className="loader-container text-dark">
-                            <div><Icon path={mdiFileAlertOutline} size={1.5}/><p>{t("pdf_view_page.error")}</p></div>
+                            <div><Icon path={mdiFileAlertOutline} size={1.5}/>
+                                <p>{t("pdf_view_page.error")}</p></div>
                         </div>}
                     >
                         {numPages && pageNumber <= numPages && (
                             <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false}
-                                  height={isFullScreen ? undefined : height}/>
+                                  height={isFullScreen ? undefined : height}
+                                  error={<div className="loader-container text-dark">
+                                      <div><Icon path={mdiFileAlertOutline} size={1.5}/>
+                                          <p>{t("pdf_view_page.error")}</p></div>
+                                  </div>}
+                                  loading={<div className="loader-container">
+                                      <div className="loader"></div>
+                                  </div>}/>
                         )}
                     </Document>
                 )}

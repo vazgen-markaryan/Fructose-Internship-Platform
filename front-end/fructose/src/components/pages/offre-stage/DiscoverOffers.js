@@ -15,15 +15,16 @@ import {
 	mdiChevronUp,
 	mdiDomain,
 	mdiFilterMultipleOutline,
-	mdiSchool
+	mdiSchoolOutline
 } from "@mdi/js";
-
+import {ApplyOffreWindowContext} from "./ApplyOffreWindow";
 
 const DiscoverOffers = () => {
 	
 	const {t} = useTranslation();
 	const {fetchOffresStage} = useContext(OffreStageContext);
 	const {isUserInit, currentUser} = useContext(AuthContext);
+	const {openCandidatureWindow} = useContext(ApplyOffreWindowContext);
 	const [offers, setOffers] = useState([])
 	const [currentOffer, setCurrentOffer] = useState(null)
 	const [displayFiltreWindow, setDisplayFiltreWindow] = useState(false)
@@ -31,6 +32,13 @@ const DiscoverOffers = () => {
 	const [filteredOffers, setFilteredOffers] = useState(null)
 	const location = useLocation();
 	const offerId = new URLSearchParams(location.search).get("offer");
+	
+	const handleApplyStage = async () => {
+		const isConfirmed = await openCandidatureWindow(currentOffer);
+		if (isConfirmed) {
+			setCurrentOffer({...currentOffer, hasCandidature: true})
+		}
+	};
 	
 	const createSessionList = () => {
 		const sessions = [];
@@ -146,7 +154,7 @@ const DiscoverOffers = () => {
 			{
 				name: t("discover_offers_page.filters.sessions.title"),
 				idName: "sessions",
-				icon: mdiSchool,
+				icon: mdiSchoolOutline,
 				fields: [
 					{
 						type: "radio",
@@ -171,7 +179,7 @@ const DiscoverOffers = () => {
 			value: session
 		});
 	});
-
+	
 	useEffect(() => {
 		if (isUserInit) {
 			(async function () {
@@ -185,7 +193,7 @@ const DiscoverOffers = () => {
 			})();
 		}
 	}, [isUserInit, fetchOffresStage, filters]);
-
+	
 	useEffect(() => {
 		if (offerId && offers.length > 0) {
 			const selectedOffer = offers.find((offer) => offer.id === parseInt(offerId));
@@ -454,6 +462,7 @@ const DiscoverOffers = () => {
 	
 	return (
 		<>
+			
 			<div className="dashboard-card-toolbar">
 				<Link to="/dashboard">
 					<button className="btn-icon-dashboard">
@@ -464,7 +473,9 @@ const DiscoverOffers = () => {
 			</div>
 			<div style={{display: "flex", gap: "20px", alignItems: "start"}}>
 				{getOffreListSection()}
-				{currentOffer && <OfferPreview currentOffer={currentOffer}/>}
+				{currentOffer && <OfferPreview currentOffer={currentOffer} handleApply={() => {
+					handleApplyStage()
+				}}/>}
 			</div>
 		</>
 	);

@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import Icon from "@mdi/react";
-import {mdiBriefcasePlusOutline} from "@mdi/js";
+import {mdiBriefcasePlusOutline, mdiChevronRight} from "@mdi/js";
 import OfferPreview from "../offre-stage/OfferPreview";
 import PdfPreview from "../../../utilities/pdf/PdfPreview";
 import {useTranslation} from "react-i18next";
@@ -8,206 +8,230 @@ import {CvContext} from "../../providers/CvProvider";
 import {AuthContext} from "../../providers/AuthProvider";
 import {OffreStageContext} from "../../providers/OffreStageProvider";
 import Modal from "../../../utilities/modal/Modal";
+import {Link} from "react-router-dom";
+import ViewContrats from "../contrat/ViewContrats";
+import ListCandidatureEnAttenteContrat from "../candidatures/ListCandidatureEnAttenteContrat";
 
-const DashboardHome = ({}) => {
-    const {t} = useTranslation();
-    const {getCvContenuById, GetAllCvs, GetCvs} = useContext(CvContext);
-    const {fetchOffresStage} = useContext(OffreStageContext);
-    const [allCvs, setAllCvs] = useState([]);
-    const [offresStage, setOffresStage] = useState([]);
-    const [currentOffer, setCurrentOffer] = useState(null);
-    const [currentCv, setCurrentCV] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentPageCv, setCurrentPageCv] = useState(1);
-    const itemsPerPage = 10;
-    const {currentUser, isUserInit} = useContext(AuthContext);
-    const textareaRef = useRef(null);
-    const {currentToken} = useContext(AuthContext)
-    const [isRejectModalOpen, setRejectModalOpen] = useState(false);
-    const [isRejectModalOpenCv, setRejectModalOpenCv] = useState(false);
+const DashboardHome = () => {
+	const {t} = useTranslation();
+	const {getCvContenuById, GetAllCvs, GetCvs} = useContext(CvContext);
+	const {fetchOffresStage} = useContext(OffreStageContext);
+	const [allCvs, setAllCvs] = useState([]);
+	const [offresStage, setOffresStage] = useState([]);
+	const [currentOffer, setCurrentOffer] = useState(null);
+	const [currentCv, setCurrentCV] = useState(null);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPageCv, setCurrentPageCv] = useState(1);
+	const itemsPerPage = 10;
+	const {currentUser, isUserInit} = useContext(AuthContext);
+	const textareaRef = useRef(null);
+	const {currentToken} = useContext(AuthContext)
+	const [setRejectModalOpen] = useState(false);
+	const [isRejectModalOpenCv, setRejectModalOpenCv] = useState(false);
 
-    useEffect(() => {
-        if (currentUser && isUserInit) {
-            (async function () {
-                try {
-                    const response = await fetchOffresStage();
-                    setOffresStage(response);
-                } catch (error) {
-                    console.log("error" + error);
-                }
-                try {
-                    const response = await GetAllCvs();
-                    const data = await response.text();
-                    setAllCvs(JSON.parse(data));
-                } catch (error) {
-                    console.log("error" + error);
-                }
-            })();
-        }
-    }, [currentUser, GetCvs, fetchOffresStage]);
+	useEffect(() => {
+		if (currentUser && isUserInit) {
+			(async function () {
+				try {
+					const response = await fetchOffresStage();
+					setOffresStage(response);
+				} catch (error) {
+					console.log("error" + error);
+				}
+				try {
+					const response = await GetAllCvs();
+					const data = await response.text();
+					setAllCvs(JSON.parse(data));
+				} catch (error) {
+					console.log("error" + error);
+				}
+			})();
+		}
+	}, [currentUser, GetCvs, fetchOffresStage, GetAllCvs, isUserInit]);
 
+	const handleValidateCv = (cvId) => {
+		fetch(`/accepter-cv/` + cvId, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": currentToken
+			}
+		})
+			.then(response => {
+				if (response.ok) {
+					setAllCvs((prevCv) => {
+						const updatedCvs = prevCv.filter((cv) => cv.id !== cvId);
+						if (updatedCvs.length === 0) {
+							setCurrentCV(null);
+						}
+						return updatedCvs;
+					});
+					setCurrentCV(null);
+					return response;
+				}
+				throw new Error("Erreur lors de l'acceptation du Cv");
+			})
+			.catch(error => {
+				console.error("Erreur lors de l'acceptation du cv:", error);
+			});
+	};
 
-    const handleValidateCv = (cvId) => {
-        fetch(`/accepter-cv/` + cvId, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": currentToken
-            }
-        })
-            .then(response => {
-                if (response.ok) {
-                    setAllCvs((prevCv) => {
-                        const updatedCvs = prevCv.filter((cv) => cv.id !== cvId);
-                        if (updatedCvs.length === 0) {
-                            setCurrentCV(null);
-                        }
-                        return updatedCvs;
-                    });
-                    setCurrentCV(null);
-                    return response;
-                }
-                throw new Error("Erreur lors de l'acceptation du Cv");
-            })
-            .catch(error => {
-                console.error("Erreur lors de l'acceptation du cv:", error);
-            });
-    };
+	const handleRejectCv = (cvId, string) => {
+		fetch(`/refuser-cv/` + cvId, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": currentToken
+			},
+			body: string,
+		})
+			.then(response => {
+				if (response.ok) {
+					setAllCvs((prevCv) => {
+						const updatedCvs = prevCv.filter((cv) => cv.id !== cvId);
+						if (updatedCvs.length === 0) {
+							setCurrentCV(null);
+						}
+						return updatedCvs;
+					});
+					setCurrentCV(null);
+					return response;
+				}
+				throw new Error("Erreur lors du refus du Cv");
+			})
+			.then(data => {
+				setRejectModalOpenCv(false);
+			})
+			.catch(error => {
+				console.error("Erreur lors du refus du cv:", error);
+			});
+	};
 
-    const handleRejectCv = (cvId, string) => {
-        fetch(`/refuser-cv/` + cvId, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": currentToken
-            },
-            body: string,
-        })
-            .then(response => {
-                if (response.ok) {
-                    setAllCvs((prevCv) => {
-                        const updatedCvs = prevCv.filter((cv) => cv.id !== cvId);
-                        if (updatedCvs.length === 0) {
-                            setCurrentCV(null);
-                        }
-                        return updatedCvs;
-                    });
-                    setCurrentCV(null);
-                    return response;
-                }
-                throw new Error("Erreur lors du refus du Cv");
-            })
-            .then(data => {
-                setRejectModalOpenCv(false);
-            })
-            .catch(error => {
-                console.error("Erreur lors du refus du cv:", error);
-            });
-    };
+	const fetchCvById = async (cvId) => {
+		try {
+			const response = await getCvContenuById(cvId);
+			const pdfBlob = await response.blob();
+			const fileUrl = URL.createObjectURL(pdfBlob);
+			const fileSize = pdfBlob.size;
+			setCurrentCV((prev) => ({...prev, fileUrl, fileSize}));
+		} catch (error) {
+			console.error("Erreur lors de la récupération du CV:", error);
+		}
+	};
 
-    const fetchCvById = async (cvId) => {
-        try {
-            const response = await getCvContenuById(cvId);
-            const pdfBlob = await response.blob();
-            const fileUrl = URL.createObjectURL(pdfBlob);
-            const fileSize = pdfBlob.size;
-            setCurrentCV((prev) => ({...prev, fileUrl, fileSize}));
-        } catch (error) {
-            console.error("Erreur lors de la récupération du CV:", error);
-        }
-    };
+	function handleValidateOffer(id) {
+		fetch(`/accepter-offre-stage/` + id, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": currentToken
+			}
+		})
+			.then(response => {
+				if (response.ok) {
+					setOffresStage((prevOffreStages) => {
+						const updatedOffres = prevOffreStages.filter((offreStage) => offreStage.id !== id);
+						if (updatedOffres.length === 0) {
+							setCurrentOffer(null);
+						}
+						return updatedOffres;
+					});
+					setCurrentOffer(null);
+				} else {
+					throw new Error("Erreur lors de l'acceptation de l'offre");
+				}
+			})
+			.catch(error => {
+				console.error("Erreur lors de l'acceptation de l'offre:", error);
+			});
+	}
 
-    function handleValidateOffer(id) {
-        fetch(`/accepter-offre-stage/` + id, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": currentToken
-            }
-        })
-            .then(response => {
-                if (response.ok) {
-                    setOffresStage((prevOffreStages) => {
-                        const updatedOffres = prevOffreStages.filter((offreStage) => offreStage.id !== id);
-                        if (updatedOffres.length === 0) {
-                            setCurrentOffer(null);
-                        }
-                        return updatedOffres;
-                    });
-                    setCurrentOffer(null);
-                } else {
-                    throw new Error("Erreur lors de l'acceptation de l'offre");
-                }
-            })
-            .catch(error => {
-                console.error("Erreur lors de l'acceptation de l'offre:", error);
-            });
-    }
+	function handleRejectOffer(id, string) {
+		fetch(`/refuser-offre-stage/` + id, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": currentToken
+			},
+			body: string,
+		})
+			.then(response => {
+				if (response.ok) {
+					setOffresStage((prevOffreStages) => {
+						const updatedOffres = prevOffreStages.filter((offreStage) => offreStage.id !== id);
+						if (updatedOffres.length === 0) {
+							setCurrentOffer(null);
+						}
+						return updatedOffres;
+					});
+					setCurrentOffer(null);
+					return response;
+				}
+				throw new Error("Erreur lors du refus de l'offre");
+			})
+			.then(data => {
+				setRejectModalOpen(false);
+			})
+			.catch(error => {
+				console.error("Erreur lors du refus de l'offre:", error);
+			});
+	}
 
-    function handleRejectOffer(id, string) {
-        fetch(`/refuser-offre-stage/` + id, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": currentToken
-            },
-            body: string,
-        })
-            .then(response => {
-                if (response.ok) {
-                    setOffresStage((prevOffreStages) => {
-                        const updatedOffres = prevOffreStages.filter((offreStage) => offreStage.id !== id);
-                        if (updatedOffres.length === 0) {
-                            setCurrentOffer(null);
-                        }
-                        return updatedOffres;
-                    });
-                    setCurrentOffer(null);
-                    return response;
-                }
-                throw new Error("Erreur lors du refus de l'offre");
-            })
-            .then(data => {
-                setRejectModalOpen(false);
-            })
-            .catch(error => {
-                console.error("Erreur lors du refus de l'offre:", error);
-            });
-    }
+	const handlePageChange = (pageNumber) => {
+		setCurrentPage(pageNumber);
+	};
 
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
+	const handlePageChangeCv = (pageNumber) => {
+		setCurrentPageCv(pageNumber);
+	};
+	
+	const GetUserManagementSection = () => {
+		if (currentUser != null) {
+				return (
+					<section style={{padding: 0, marginBottom: 25}}>
+						<div className={"toolbar-items"}>
+							<h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.user_management")}</h4>
+							<Link to="./admin/manage-users">
+								<button>{t("dashboard_home_page.not_approved_users")}
+									<Icon path={mdiChevronRight} size={1}/>
+								</button>
+							</Link>
+						</div>
+					</section>
+				)
+		}
+	}
 
-    const handlePageChangeCv = (pageNumber) => {
-        setCurrentPageCv(pageNumber);
-    };
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const endIndex = startIndex + itemsPerPage;
 
+	let selectedOffresStage = offresStage.filter(offre => !offre.isApproved && !offre.isRefused).slice(startIndex, endIndex);
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+	const totalPages = Math.ceil(offresStage.filter(offre => !offre.isApproved && !offre.isRefused).length / itemsPerPage);
 
-    let selectedOffresStage = offresStage.filter(offre => !offre.isApproved && !offre.isRefused)
-        .slice(startIndex, endIndex);
+	if (selectedOffresStage.length === 0 && currentPage > 1) {
+		setCurrentPage(currentPage - 1);
+	}
 
-    const totalPages = Math.ceil(offresStage.filter(offre => !offre.isApproved && !offre.isRefused).length / itemsPerPage);
+	const startIndexCvs = (currentPageCv - 1) * itemsPerPage;
+	const selectedCvs = allCvs.filter(cv => !cv.isApproved && !cv.isRefused).slice(startIndexCvs, startIndexCvs + itemsPerPage);
+	const totalPagesCv = Math.ceil(allCvs.filter(cv => !cv.isApproved && !cv.isRefused).length / itemsPerPage);
 
-    if (selectedOffresStage.length === 0 && currentPage > 1) {
-        setCurrentPage(currentPage - 1);
-    }
+	if (selectedCvs.length === 0 && currentPageCv > 1) {
+		setCurrentPageCv(currentPageCv - 1);
+	}
 
-    const startIndexCvs = (currentPageCv - 1) * itemsPerPage;
-    const selectedCvs = allCvs.filter(cv => !cv.isApproved && !cv.isRefused).slice(startIndexCvs, startIndexCvs + itemsPerPage);
-    const totalPagesCv = Math.ceil(allCvs.filter(cv => !cv.isApproved && !cv.isRefused).length / itemsPerPage);
-
-    if (selectedCvs.length === 0 && currentPageCv > 1) {
-        setCurrentPageCv(currentPageCv - 1);
-    }
-
-    return (
+	return (
         <section>
+	        {GetUserManagementSection()}
             <div className="toolbar-items">
                 <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.manage_offers")}</h4>
+                <Link to="/dashboard/creer-offre-stage">
+                    <button className={"btn-filled"}>
+                        <Icon path={mdiBriefcasePlusOutline} size={1}/>
+                        {t("dashboard_home_page.add_offer")}
+                    </button>
+                </Link>
             </div>
             <div style={{padding: "10px 0"}}>
                 {selectedOffresStage.length === 0 ? (
@@ -230,7 +254,10 @@ const DashboardHome = ({}) => {
                         borderRadius: "5px",
                         padding: "10px"
                     }}>
-                        <div style={{display: "flex", gap: "20px"}}>
+                        <div style={{
+                            display: "flex",
+                            gap: "20px"
+                        }}>
                             <div className="menu-list" style={{
                                 flex: 1,
                                 backgroundColor: "#f9f9f9",
@@ -266,7 +293,12 @@ const DashboardHome = ({}) => {
                         </div>
                     </div>
                 )}
-                <div style={{display: "flex", justifyContent: "center", gap: "5px", marginTop: "20px"}}>
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: "5px",
+                    marginTop: "20px"
+                }}>
                     {Array.from({length: totalPages}, (_, index) => (
                         <button
                             key={index}
@@ -305,7 +337,10 @@ const DashboardHome = ({}) => {
                         borderRadius: "5px",
                         padding: "10px"
                     }}>
-                        <div style={{display: "flex", gap: "20px"}}>
+                        <div style={{
+                            display: "flex",
+                            gap: "20px"
+                        }}>
                             <div className="menu-list" style={{
                                 flex: 1,
                                 backgroundColor: "#f9f9f9",
@@ -347,16 +382,28 @@ const DashboardHome = ({}) => {
                                     <PdfPreview file={currentCv.fileUrl}/>
 
                                     <div>
-                                        <p style={{textAlign: "center", margin: "10px 0", fontWeight: "bold"}}>
+                                        <p style={{
+                                            textAlign: "center",
+                                            margin: "10px 0",
+                                            fontWeight: "bold"
+                                        }}>
                                             {currentCv.filename}
                                         </p>
-
-                                        <div style={{display: "flex", justifyContent: "center", gap: "10px"}}>
-                                            <button className="btn-filled"
-                                                    onClick={() => handleValidateCv(currentCv.id)}>
+                                        <div style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            gap: "10px"
+                                        }}>
+                                            <button
+                                                className="btn-filled, bg-green"
+                                                onClick={() => handleValidateCv(currentCv.id)}
+                                            >
                                                 {t("modal.validate")}
                                             </button>
-                                            <button className="btn-outline" onClick={() => setRejectModalOpenCv(true)}>
+                                            <button
+                                                className="btn-filled bg-red"
+                                                onClick={() => setRejectModalOpenCv(true)}
+                                            >
                                                 {t("modal.reject")}
                                             </button>
                                         </div>
@@ -366,7 +413,11 @@ const DashboardHome = ({}) => {
                         </div>
                     </div>
                 )}
-                <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px"
+                }}>
                     {Array.from({length: totalPagesCv}, (_, index) => (
                         <button
                             key={index}
@@ -380,6 +431,9 @@ const DashboardHome = ({}) => {
                         </button>
                     ))}
                 </div>
+	        <div>
+		       <ListCandidatureEnAttenteContrat/>
+	       </div>
                 {isRejectModalOpenCv && (
                     <Modal onClose={() => setRejectModalOpenCv(false)} onSend={() => {
                         handleRejectCv(currentCv.id, textareaRef.current.value);
@@ -390,7 +444,10 @@ const DashboardHome = ({}) => {
                         <textarea
                             ref={textareaRef}
                             placeholder={t("modal.reject_reason_placeholder")}
-                            style={{width: "100%", height: "100px"}}
+                            style={{
+                                width: "100%",
+                                height: "100px"
+                            }}
                         />
                     </Modal>
                 )}

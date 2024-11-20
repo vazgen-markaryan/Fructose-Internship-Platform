@@ -128,4 +128,8 @@ public class OffreStage {
 		offreStage.setCommentaireRefus(commentaireRefus);
 		return offreStage;
 	}
+
+	public Long getDureeEnSemaines() {
+		return (dateFin.toEpochDay() - dateDebut.toEpochDay()) / 7;
+	}
 }

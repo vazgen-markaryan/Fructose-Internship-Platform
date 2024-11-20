@@ -212,6 +212,14 @@ public class UtilisateurService {
 			}
 		}
 	}
+
+	public List<UtilisateurDTO> getEmployeursApproved() {
+		List<Utilisateur> employeurs = employeurRepository.findByIsApproved(true)
+				.stream()
+				.filter(utilisateur -> utilisateur.getRole() == Role.EMPLOYEUR)
+				.toList();
+		return employeurs.stream().map(EmployeurDTO::toDTO).toList();
+	}
 	
 	public boolean verifyRoleEligibilityByToken(String token, Role[] roles) {
 		UtilisateurDTO utilisateur = getUtilisateurByToken(token);
@@ -221,5 +229,10 @@ public class UtilisateurService {
 	public boolean verifyRoleEligibilityByToken(String token, Role role) {
 		UtilisateurDTO utilisateur = getUtilisateurByToken(token);
 		return utilisateur.getRole().equals(role);
+	}
+
+	public UtilisateurDTO getEmployeurById(Long id) {
+		Employeur employeur = employeurRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Employeur avec ID: " + id + " n'existe pas"));
+		return EmployeurDTO.toDTO(employeur);
 	}
 }

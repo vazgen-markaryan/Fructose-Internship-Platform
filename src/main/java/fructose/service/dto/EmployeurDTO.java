@@ -19,9 +19,21 @@ public class EmployeurDTO extends UtilisateurDTO {
 		employeur_dto.setPassword(employeur.getPassword());
 		employeur_dto.setMatricule(employeur.getMatricule());
 		employeur_dto.setRole(Role.EMPLOYEUR);
-		employeur_dto.setDepartementDTO(DepartementDTO.toDTO(employeur.getDepartement()));
 		employeur_dto.setCompanyName(employeur.getCompanyName());
 		employeur_dto.setIsApproved(employeur.getIsApproved());
 		return employeur_dto;
+	}
+
+	public static Employeur toEntity(EmployeurDTO employeur_dto) {
+		Employeur employeur = new Employeur();
+		employeur.setId(employeur_dto.getId());
+		employeur.setFullName(employeur_dto.getFullName());
+		employeur.getCredentials().setEmail(employeur_dto.getEmail());
+		employeur.setPassword(employeur_dto.getPassword());
+		employeur.setMatricule(employeur_dto.getMatricule());
+		employeur.getCredentials().setRole(Role.EMPLOYEUR);
+		employeur.setCompanyName(employeur_dto.getCompanyName());
+		employeur.setIsApproved(employeur_dto.getIsApproved());
+		return employeur;
 	}
 }
