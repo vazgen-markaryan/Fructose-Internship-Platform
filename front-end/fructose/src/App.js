@@ -10,6 +10,12 @@ import {AuthProvider} from "./components/providers/AuthProvider";
 import {PrivateRoute} from "./utilities/routing/PrivateRoute";
 import {RoleRoute} from "./utilities/routing/RoleRoute";
 import {CandidatureProvider} from "./components/providers/CandidatureProvider";
+import {pdfjs} from "react-pdf";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+	'pdfjs-dist/build/pdf.worker.min.mjs',
+	import.meta.url,
+).toString();
 
 function App() {
 	
