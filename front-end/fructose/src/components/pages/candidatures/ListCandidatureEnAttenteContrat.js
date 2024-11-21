@@ -52,13 +52,17 @@ const ListCandidatureEnAttenteContrat = () => {
 		<section style={{padding: 0}}>
 			<h4 className={"m-0 toolbar-spacer"}>{t("manage_contract_en_attente.title")}</h4>
 			{filteredCandidatures.length === 0 ? (
-				<div className="dashboard-card" style={{width: "65%"}}>
-					<div className="dashboard-placeholder-card" style={{backgroundColor: "transparent"}}>
-						<div style={{textAlign: "center"}}>
-							<Icon path={mdiBriefcasePlusOutline} size={2}/>
-							<h6 style={{margin: "8px 0 14px 0"}}>{t('manage_offre_stage.messages.no_offre_stages')}</h6>
-						</div>
-					</div>
+				<div style={{
+					width: "400px",
+					display: "flex",
+					alignItems: "center",
+					backgroundColor: "#eee",
+					borderRadius: "5px",
+					gap: "5px",
+					padding: "10px"
+				}}>
+					<Icon path={mdiBriefcasePlusOutline} size={1}/>
+					<p className="m-0">{t("manage_offre_stage.messages.no_offre_stages_contracts")}</p>
 				</div>
 			) : (
 				<section className="menu-list" style={{padding: 0, marginTop: 15}}>

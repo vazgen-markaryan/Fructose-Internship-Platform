@@ -214,7 +214,7 @@
 		"portfolio": "My Portfolio",
 		"add_cv": "Add a CV",
 		"manage": "Manage",
-		"no_cv": "No CV",
+		"no_cv": "No Curiculums Vitae to approve at the moment",
 		"user_info": "User Information",
 		"full_name": "Full Name",
 		"email": "Email",
@@ -286,7 +286,8 @@
 		"delete_stage_confirmation": "Are you sure you want to delete this internship offer?",
 		"delete_stage_confirmation_text": "You will not be able to recover it once it is deleted.",
 		"delete_stage_confirm_button_text": "Yes, delete it",
-		"delete_stage_cancel_button_text": "No, it was a mistake"
+		"delete_stage_cancel_button_text": "No, it was a mistake",
+		"no_comment_reject_cv_text": "Please enter a reason for rejection"
 	},
 	"pdf_view_page": {
 		"error": "An unknown error occurred"
@@ -386,7 +387,7 @@
 			"delete": "Delete"
 		},
 		"messages": {
-			"no_offre_stages": "No internship offers to display at the moment"
+			"no_offre_stages_contracts": "No Contracts to be generated at the moment"
 		}
 	},
 	"modifier_offre_stage_page": {

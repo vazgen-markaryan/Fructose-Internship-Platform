@@ -214,7 +214,7 @@
 		"portfolio": "Mon Portfolio",
 		"add_cv": "Ajouter un CV",
 		"manage": "Gérer",
-		"no_cv": "Aucun CV",
+		"no_cv": "Aucun CV à afficher pour le moment",
 		"user_info": "Informations sur l'utilisateur",
 		"full_name": "Nom complet",
 		"email": "Courriel",
@@ -286,7 +286,8 @@
 		"delete_stage_confirmation": "Êtes-vous sûr de vouloir supprimer cette offre de stage?",
 		"delete_stage_confirmation_text": "Cette action est irréversible et supprimera définitivement cette offre de stage.",
 		"delete_stage_confirm_button_text": "Oui, supprimer",
-		"delete_stage_cancel_button_text": "Non, annuler"
+		"delete_stage_cancel_button_text": "Non, annuler",
+		"no_comment_reject_cv_text": "Veuillez entrer un commentaire pour le refus"
 	},
 	"pdf_view_page": {
 		"error": "Une erreur inconnue est survenue"
@@ -386,7 +387,7 @@
 			"delete": "Supprimer"
 		},
 		"messages": {
-			"no_offre_stages": "Aucune offre de stage à afficher pour le moment"
+			"no_offre_stages_contracts": "Aucune Contrat à générer pour le moment"
 		}
 	},
 	"modifier_offre_stage_page": {
