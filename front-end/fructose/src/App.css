@@ -321,7 +321,7 @@ header {
 
 .header-user-menu {
 	position: absolute;
-	width: 260px;
+	width: auto;
 	height: auto;
 	background-color: white;
 	top: 70px;
