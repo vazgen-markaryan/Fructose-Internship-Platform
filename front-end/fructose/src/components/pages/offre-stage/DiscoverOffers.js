@@ -64,26 +64,11 @@ const DiscoverOffers = () => {
 	
 	const [filters, setFilters] = useState(
 		{
-			type: {
-				default: "tous",
-				value: "tous"
-			},
-			emplacement: {
-				default: "tous",
-				value: "tous"
-			},
-			tauxHoraire: {
-				default: 0,
-				value: 0
-			},
-			departmenet: {
-				default: 0,
-				value: 0
-			},
-			sessions: {
-				default: "tous",
-				value: "tous"
-			}
+			type: {default: "tous", value: "tous"},
+			emplacement: {default: "tous", value: "tous"},
+			tauxHoraire: {default: 0, value: 0},
+			departmenet: {default: 0, value: 0},
+			sessions: {default: "tous", value: "tous"}
 		}
 	)
 	
@@ -94,11 +79,7 @@ const DiscoverOffers = () => {
 				idName: "type",
 				icon: mdiBriefcaseOutline,
 				fields: [
-					{
-						type: "radio",
-						label: "Tous",
-						value: "tous"
-					},
+					{type: "radio", label: t("discover_offers_page.filters.all"), value: "tous"},
 					{
 						type: "radio",
 						label: t("discover_offers_page.filters.internship_type.temps_partiel"),
@@ -116,11 +97,7 @@ const DiscoverOffers = () => {
 				idName: "emplacement",
 				icon: mdiDomain,
 				fields: [
-					{
-						type: "radio",
-						label: "Tous",
-						value: "tous"
-					},
+					{type: "radio", label: t("discover_offers_page.filters.all"), value: "tous"},
 					{
 						type: "radio",
 						label: t("discover_offers_page.filters.emplacement.presentiel"),
@@ -143,12 +120,7 @@ const DiscoverOffers = () => {
 				idName: "tauxHoraire",
 				icon: mdiCashMultiple,
 				fields: [
-					{
-						type: "number",
-						value: 0,
-						min: 0,
-						max: 50
-					}
+					{type: "number", value: 0, min: 0, max: 50}
 				]
 			},
 			{
@@ -156,11 +128,7 @@ const DiscoverOffers = () => {
 				idName: "sessions",
 				icon: mdiSchoolOutline,
 				fields: [
-					{
-						type: "radio",
-						label: "Tous",
-						value: "tous"
-					},
+					{type: "radio", label: t("discover_offers_page.filters.all"), value: "tous"},
 				]
 			}
 		]
@@ -188,7 +156,7 @@ const DiscoverOffers = () => {
 					setOffers(response);
 					setFilteredOffers(filterOffers(response, filters));
 				} catch (error) {
-					// Handle error
+					console.error("Erreur lors de la récupération des offres :", error);
 				}
 			})();
 		}

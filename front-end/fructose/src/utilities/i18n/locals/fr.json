@@ -474,6 +474,7 @@
 		"limited_places": "Places limitées",
 		"filters": {
 			"title": "Filtres",
+			"all": "Tous",
 			"internship_type": {
 				"title": "Type de stage",
 				"temps_partiel": "Temps partiel",

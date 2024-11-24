@@ -474,6 +474,7 @@
 		"limited_places": "Limited places",
 		"filters": {
 			"title": "Filters",
+			"all": "All",
 			"internship_type": {
 				"title": "Type of Internship",
 				"temps_partiel": "Part-time",
