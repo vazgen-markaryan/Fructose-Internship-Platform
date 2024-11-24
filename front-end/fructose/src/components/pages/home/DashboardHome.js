@@ -677,6 +677,7 @@ const DashboardHome = () => {
 											currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" ||
 											currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT" ||
 											currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ||
+											
 											currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ||
 											currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT" ||
 											currentCandidature.etat === "CONTRAT_SIGNE_TOUS" ||
@@ -866,6 +867,15 @@ const DashboardHome = () => {
 								}
 								<br/>
 							</section>
+							
+							{/*<CandidatureStatus*/}
+							{/*	currentCandidature={currentCandidature}*/}
+							{/*	t={t}*/}
+							{/*	handleAcceptInterview={handleAcceptInterview}*/}
+							{/*	handleRefuseInterview={handleRefuseInterview}*/}
+							{/*	handleSignerContrat={handleSignerContrat}*/}
+							{/*	handleRefuserContrat={handleRefuserContrat}*/}
+							
 						</div>
 					</div>
 				</div>
@@ -976,7 +986,6 @@ const DashboardHome = () => {
 						{GetCandidaturesWindow()}
 						{GetPortfolioSection()}
 						{GetCandidatureManagementSection()}
-						
 						<div style={{"height": "520px"}}>
 						</div>
 					</div>
