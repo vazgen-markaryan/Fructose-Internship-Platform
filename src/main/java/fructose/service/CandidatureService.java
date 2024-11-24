@@ -97,6 +97,7 @@ public class CandidatureService {
 			candidatureData.put("etat", candidature.getEtat());
 			candidatureData.put("commentaireRefus", candidature.getCommentaireRefus());
 			candidatureData.put("dateEntrevue", candidature.getDateEntrevue());
+			candidatureData.put("offreStageId", candidature.getOffreStage().getId());
 			
 			// Ajouter les informations de l'offre de stage
 			OffreStage offreStage = offreStageRepository.findById(candidature.getOffreStage().getId()).orElse(null);

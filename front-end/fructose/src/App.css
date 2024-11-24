@@ -939,3 +939,8 @@ tr {
 	animation-timing-function: cubic-bezier(.7,.8,.23,.94);
 	animation-duration: 0.3s;
 }
+
+.btn-candidature {
+	background-color: #4CAF50;
+	color: white;
+}

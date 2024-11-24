@@ -18,6 +18,7 @@ import {
 	mdiSchoolOutline
 } from "@mdi/js";
 import {ApplyOffreWindowContext} from "./ApplyOffreWindow";
+import {CandidatureContext} from "../../providers/CandidatureProvider";
 
 const DiscoverOffers = () => {
 	
@@ -25,6 +26,7 @@ const DiscoverOffers = () => {
 	const {fetchOffresStage} = useContext(OffreStageContext);
 	const {isUserInit, currentUser} = useContext(AuthContext);
 	const {openCandidatureWindow} = useContext(ApplyOffreWindowContext);
+	const {fetchCandidaturesById, candidatures} = useContext(CandidatureContext);
 	const [offers, setOffers] = useState([])
 	const [currentOffer, setCurrentOffer] = useState(null)
 	const [displayFiltreWindow, setDisplayFiltreWindow] = useState(false)
@@ -147,6 +149,16 @@ const DiscoverOffers = () => {
 			value: session
 		});
 	});
+	
+	useEffect(() => {
+		if (currentUser) {
+			fetchCandidaturesById(currentUser.id);
+		}
+	}, [currentUser, fetchCandidaturesById]);
+	
+	const isOfferApplied = (offerId) => {
+		return candidatures.some((candidature) => candidature.offreStageId === offerId);
+	};
 	
 	useEffect(() => {
 		if (isUserInit) {
@@ -430,7 +442,6 @@ const DiscoverOffers = () => {
 	
 	return (
 		<>
-			
 			<div className="dashboard-card-toolbar">
 				<Link to="/dashboard">
 					<button className="btn-icon-dashboard">
@@ -441,9 +452,11 @@ const DiscoverOffers = () => {
 			</div>
 			<div style={{display: "flex", gap: "20px", alignItems: "start"}}>
 				{getOffreListSection()}
-				{currentOffer && <OfferPreview currentOffer={currentOffer} handleApply={() => {
-					handleApplyStage()
-				}}/>}
+				{currentOffer && <OfferPreview
+					currentOffer={currentOffer}
+					handleApply={handleApplyStage}
+					isApplied={isOfferApplied(currentOffer.id)}
+				/>}
 			</div>
 		</>
 	);
