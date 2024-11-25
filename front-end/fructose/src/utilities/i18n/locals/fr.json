@@ -245,7 +245,7 @@
 		"interview_not_planned_for_rejected_application": "Entrevue non planifiée pour une candidature refusée",
 		"waiting_initial_application": "En attente de la candidature initiale",
 		"contract": "Contrat",
-		"contract_not_proposed_for_rejected_interview": "L'entrevue ne peut être planifiée pour une candidature refusée",
+		"contract_not_proposed_for_rejected_interview": "L'entrevue ne peut pas être planifiée pour une candidature refusée",
 		"contract_signed_by_employer": "Contrat signé par l'employeur",
 		"sign": "Signer",
 		"contract_signed_by_student": "Contrat signé par l'étudiant",
