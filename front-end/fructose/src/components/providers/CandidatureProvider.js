@@ -62,14 +62,36 @@ const CandidatureProvider = ({children}) => {
 			console.error("Erreur " + error);
 		}
 	}
-	
+	const fetchStagiaireByOwner = async () => {
+		try {
+			const response = await fetch('/candidatures/stagiaireByOwner', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': currentToken,
+				}
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				console.log('Candidatures:', data);
+				return data;
+			} else {
+				const errorText = await response.text();
+				throw new Error(errorText);
+			}
+		} catch (error) {
+			console.error('Erreur lors de la récupération des candidatures:', error);
+		}
+	};
 	return (
 		<CandidatureContext.Provider value={{
 			candidatures,
 			fetchCandidaturesById,
 			ApplyOffreStage,
 			setCandidatures,
-			fetchCandidatureByEtatAccepteApresEntrevue
+			fetchCandidatureByEtatAccepteApresEntrevue,
+			fetchStagiaireByOwner
 		}}>
 			{children}
 		</CandidatureContext.Provider>
