@@ -14,7 +14,6 @@ const ListCandidatureEnAttenteContrat = () => {
 	const [selectedCandidature, setSelectedCandidature] = useState(null);
 	
 	useEffect(() => {
-		console.log('Fetching candidatures');
 		const fetchData = async () => {
 			const response = await fetchCandidatureByEtatAccepteApresEntrevue();
 			if (response === undefined) {
@@ -30,7 +29,7 @@ const ListCandidatureEnAttenteContrat = () => {
 		setModalOpen(true);
 	};
 	
-	const handleSavePdf = async () => {
+	const handleSaveContrat = async () => {
 		const response = await fetch(`/contrats`, {
 				method: 'POST',
 				headers: {
@@ -84,7 +83,7 @@ const ListCandidatureEnAttenteContrat = () => {
 			{isModalOpen && (
 				<GeneratePdfModal
 					onClose={() => setModalOpen(false)}
-					onSave={handleSavePdf}
+					onSave={handleSaveContrat}
 					candidatureId={selectedCandidature.id}
 				/>
 			)}

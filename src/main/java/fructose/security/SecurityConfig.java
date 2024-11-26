@@ -53,6 +53,7 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.PUT, "/refuser-offre-stage/**").authenticated()
 				.requestMatchers(HttpMethod.PUT, "/approuver-offre-stage/**").authenticated()
 				.requestMatchers(HttpMethod.GET, "/candidatures/**").authenticated()
+				.requestMatchers(HttpMethod.GET, "/contrats/**").authenticated()
 				.anyRequest().authenticated()
 			).addFilterBefore(new JwtAuthentificationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
 		return http.build();

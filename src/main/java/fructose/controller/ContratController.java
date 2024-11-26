@@ -5,6 +5,7 @@ import fructose.service.ContratService;
 import fructose.service.UtilisateurService;
 import fructose.service.dto.CandidatureDTO;
 import fructose.service.dto.ContratDTO;
+import fructose.service.dto.ContratSansCvDTO;
 import fructose.service.dto.UtilisateurDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,49 +22,72 @@ import java.time.LocalDate;
 @RequestMapping ("/contrats")
 @RequiredArgsConstructor
 public class ContratController {
-	
+
 	private final ContratService contratService;
 	private final UtilisateurService utilisateurService;
 	private final CandidatureService candidatureService;
-	
+
 	private void validateToken(String token) {
 		if (!utilisateurService.validationToken(token)) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 		}
 	}
-	
+
 	@GetMapping ("/generate/{id}")
 	public ResponseEntity<byte[]> generateContrat(@RequestHeader ("Authorization") String token, @PathVariable Long id) {
 		validateToken(token); // Validates the token
 		try {
 			UtilisateurDTO utilisateur = utilisateurService.getUtilisateurByToken(token);
 			CandidatureDTO candidatureDTO = candidatureService.getCandidatureById(id);
-			
+
 			String pdfPath = contratService.generateContrat(candidatureDTO, utilisateur);
-			
-			File pdfFile = new File(pdfPath);
-			if (!pdfFile.exists()) {
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Generated PDF not found");
+			return getPDFResponseEntity(pdfPath);
+		}catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error generating contract", e);
+		}
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<byte[]> generateContratAlreadyExists(@RequestHeader ("Authorization") String token, @PathVariable Long id) {
+		System.out.println("Token: " + token);
+		validateToken(token);
+		System.out.println("Contrat ID: " + id);
+		try {
+			ContratDTO contrat = contratService.getContratById(id);
+			System.out.println("Contrat: " + contrat);
+			if (contrat == null) {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Contract not found");
 			}
-			
-			byte[] pdfBytes = Files.readAllBytes(pdfFile.toPath());
-			
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_PDF);
-			headers.setContentDisposition(ContentDisposition.inline().filename("contract_stage.pdf").build());
-			headers.setContentLength(pdfBytes.length);
-			
-			Files.delete(pdfFile.toPath());
-			
-			return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-			
-		} catch (IOException e) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error reading contract PDF", e);
+
+			String pdfPath = contratService.generateContrat(contrat);
+			return getPDFResponseEntity(pdfPath);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error generating contract", e);
 		}
 	}
-	
+
+	private ResponseEntity<byte[]> getPDFResponseEntity(String pdfPath) {
+		try {
+			File pdfFile = new File(pdfPath);
+			if (!pdfFile.exists()) {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Generated PDF not found");
+			}
+
+			byte[] pdfBytes = Files.readAllBytes(pdfFile.toPath());
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_PDF);
+			headers.setContentDisposition(ContentDisposition.inline().filename("contract_stage.pdf").build());
+			headers.setContentLength(pdfBytes.length);
+
+			Files.delete(pdfFile.toPath());
+
+			return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+		} catch (IOException e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error reading contract PDF", e);
+		}
+	}
+
 	@PostMapping
 	public void saveContrat(@RequestHeader ("Authorization") String token, @Valid @RequestBody CandidatureDTO candidatureDTO) {
 		validateToken(token);
@@ -81,7 +105,7 @@ public class ContratController {
 	}
 
 	@GetMapping ("/candidatures/{id}")
-	public ContratDTO getContratByCandidatureId(@RequestHeader ("Authorization") String token, @PathVariable Long id) {
+	public ContratSansCvDTO getContratByCandidatureId(@RequestHeader ("Authorization") String token, @PathVariable Long id) {
 		validateToken(token);
 		try {
 			return contratService.getContratByCandidatureId(id);
@@ -89,4 +113,6 @@ public class ContratController {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting contract by contrat id because ", e);
 		}
 	}
+
+
 }

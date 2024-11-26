@@ -43,9 +43,11 @@ const Dashboard = () => {
 							</ContratProvider>
 						</OffreStageProvider>
 						<CandidatureProvider>
-							<Routes>
-								<Route path="/view-candidatures" element={<RoleRoute element={<ViewCandidatures/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
-							</Routes>
+							<ContratProvider>
+								<Routes>
+									<Route path="/view-candidatures" element={<RoleRoute element={<ViewCandidatures/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
+								</Routes>
+							</ContratProvider>
 						</CandidatureProvider>
 					</CvProvider>
 

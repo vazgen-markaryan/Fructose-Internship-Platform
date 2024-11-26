@@ -21,6 +21,7 @@ import {AuthContext} from "../../providers/AuthProvider";
 import Modal from "../../../utilities/modal/Modal";
 import {CvContext} from "../../providers/CvProvider";
 import Swal from "sweetalert2";
+import ViewContrat from "../contrat/ViewContrat";
 
 const ViewCandidatures = () => {
 	
@@ -233,7 +234,8 @@ const ViewCandidatures = () => {
 				case "en_signature":
 					if (candidature.candidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ||
 						candidature.candidature.etat === "CONTRAT_SIGNE_ETUDIANT" ||
-						candidature.candidature.etat === "ACCEPTE_APRES_ENTREVUE") {
+						candidature.candidature.etat === "ACCEPTE_APRES_ENTREVUE" ||
+						candidature.candidature.etat === "CONTRAT_CREER_PAR_GESTIONNAIRE") {
 						newFilteredCandidatures.push(i)
 					}
 					break
@@ -552,7 +554,8 @@ const ViewCandidatures = () => {
 												currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ||
 												currentCandidature.etat === "CONTRAT_SIGNE_TOUS" ||
 												currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT" ||
-												currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
+												currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE" ||
+												currentCandidature.etat === "CONTRAT_CREER_PAR_GESTIONNAIRE") ?
 												<div className="toolbar-items">
 													<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
 													<p className="text-green m-0">{t("view_candidatures_page.approved")}</p>
@@ -596,7 +599,9 @@ const ViewCandidatures = () => {
 												currentCandidature.etat === "REFUSEE_APRES_ENTREVUE" ||
 												currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ||
 												currentCandidature.etat === "CONTRAT_SIGNE_TOUS" ||
-												currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
+												currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE" ||
+												currentCandidature.etat === "CONTRAT_CREER_PAR_GESTIONNAIRE") ?
+
 												<>
 													<div className="toolbar-items">
 														<Icon path={mdiCheckCircleOutline} size={1}
@@ -667,17 +672,16 @@ const ViewCandidatures = () => {
 												</>
 												:
 												// SI CONTRAT A ÉTÉ SIGNÉ PAR L'ÉTUDIANT
-												(currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT") ?
+												(currentCandidature.etat === "CONTRAT_CREER_PAR_GESTIONNAIRE") ?
 													<>
 														<div className="toolbar-items">
 															<Icon path={mdiCheckCircleOutline} size={1}
 																  className="text-green"/>
-															<p className="text-green m-0">{t("view_candidatures_page.contract_signed_by_student")}</p>
+															<p className="text-green m-0">{t("view_candidatures_page.contract_created")}</p>
+
 														</div>
-														<div className="toolbar-items">
-															<Icon path={mdiHelpCircleOutline} size={1}
-																  className="text-orange"/>
-															<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_manager_signature")}</p>
+														<div>
+															<ViewContrat candidature={currentCandidature}/>
 														</div>
 													</>
 													:

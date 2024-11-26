@@ -48,10 +48,10 @@ public class ContratPdf {
 			document.add(new Paragraph("L’entreprise s’engage à:\n..."));
 			document.add(new Paragraph("L’étudiant s’engage à:\n..."));
 			document.add(new Paragraph("SIGNATURES"));
-			document.add(new Paragraph("Signature de l’étudiant(e): " + (contrat.getSignatureEtudiant() != null ? contrat.getSignatureEtudiant() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEmployeur() != null ? contrat.getDateSignatureEtudiant() : "_______________________")));
+
+			document.add(new Paragraph("Signature de l’étudiant(e): " + (contrat.getSignatureEtudiant() != null ? contrat.getSignatureEtudiant() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEtudiant() != null ? contrat.getDateSignatureEtudiant() : "_______________________")));
 			document.add(new Paragraph("Signature de l’employeur: " + (contrat.getSignatureEmployeur() != null ? contrat.getSignatureEmployeur() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEmployeur() != null ? contrat.getDateSignatureEmployeur() : "_______________________")));
 			document.add(new Paragraph("Signature du gestionnaire de stage: " + (contrat.getSignatureGestionnaire() != null ? contrat.getSignatureGestionnaire() : "_______________________") + "\n " + " Date de signature : " + (contrat.getDateSignatureGestionnaire() != null ? contrat.getDateSignatureGestionnaire().toString() : "_______________________")));
-			
 			document.close();
 			return dest;
 		} catch (Exception e) {
