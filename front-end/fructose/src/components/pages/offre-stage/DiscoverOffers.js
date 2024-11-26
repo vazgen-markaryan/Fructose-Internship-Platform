@@ -195,9 +195,13 @@ const DiscoverOffers = () => {
 	}, [isUserInit, fetchOffresStage, filters]);
 	
 	useEffect(() => {
-		if (offerId && offers.length > 0) {
-			const selectedOffer = offers.find((offer) => offer.id === parseInt(offerId));
-			setCurrentOffer(selectedOffer);
+		if (offers.length > 0){
+			if (offerId) {
+				const selectedOffer = offers.find((offer) => offer.id === parseInt(offerId));
+				setCurrentOffer(selectedOffer);
+			} else {
+				setCurrentOffer(offers[0])
+			}
 		}
 	}, [location.search, offerId, offers]);
 	
