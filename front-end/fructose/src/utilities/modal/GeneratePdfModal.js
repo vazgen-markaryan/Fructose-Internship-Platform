@@ -1,30 +1,24 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {AuthContext} from '../../components/providers/AuthProvider';
+import {ContratContext} from "../../components/providers/ContratProvider";
 
 const GeneratePdfModal = ({onClose, onSave, candidatureId}) => {
 	const {t} = useTranslation();
 	const [pdfUrl, setPdfUrl] = useState('');
 	const {currentToken} = useContext(AuthContext);
+	const {fetchPdf} = useContext(ContratContext);
 	
 	useEffect(() => {
-		const fetchPdf = async () => {
+		const getPdf = async () => {
 			try {
-				const response = await fetch(`/contrats/generate/${candidatureId}`, {
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': currentToken
-					},
-				});
-				const pdfBlob = await response.blob();
-				const pdfUrl = URL.createObjectURL(pdfBlob);
+				const pdfUrl = await fetchPdf(candidatureId);
 				setPdfUrl(pdfUrl);
 			} catch (error) {
 				console.error('Error fetching PDF:', error);
 			}
 		};
-		fetchPdf();
+		getPdf();
 	}, [candidatureId]);
 	
 	const handleSave = () => {

@@ -14,6 +14,7 @@ const ListCandidatureEnAttenteContrat = () => {
 	const [selectedCandidature, setSelectedCandidature] = useState(null);
 	
 	useEffect(() => {
+		console.log('Fetching candidatures');
 		const fetchData = async () => {
 			const response = await fetchCandidatureByEtatAccepteApresEntrevue();
 			if (response === undefined) {
@@ -22,7 +23,7 @@ const ListCandidatureEnAttenteContrat = () => {
 			setFilteredCandidatures(response);
 		};
 		fetchData();
-	}, []);
+	}, [selectedCandidature]);
 	
 	const handleClick = (candidature) => {
 		setSelectedCandidature(candidature);
@@ -41,6 +42,13 @@ const ListCandidatureEnAttenteContrat = () => {
 		);
 		if (response.ok) {
 			console.log('Contrat created successfully');
+			const response = await fetch(`/candidatures/modifierEtatCandidature/${selectedCandidature.id}?nouvelEtat=CONTRAT_CREER_PAR_GESTIONNAIRE`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': currentToken
+				}
+			});
 		} else {
 			console.error('Error creating contrat');
 		}

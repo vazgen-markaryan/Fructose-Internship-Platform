@@ -36,4 +36,15 @@ public class ContratService {
 		Contrat contrat = ContratDTO.toEntity(contratDTO);
 		contratRepository.save(contrat);
 	}
+
+	public ContratDTO getContratByCandidatureId(Long id) {
+		if (id == null) {
+			throw new IllegalArgumentException("ID de candidature ne peut pas être nul");
+		}
+		Contrat contrat = contratRepository.findByCandidatureId(id);
+		if (contrat == null) {
+			throw new IllegalArgumentException("Contrat avec ID de candidature: " + id + " n'existe pas");
+		}
+		return ContratDTO.toDTO(contrat);
+	}
 }

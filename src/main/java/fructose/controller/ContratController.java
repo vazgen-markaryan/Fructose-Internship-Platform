@@ -79,4 +79,14 @@ public class ContratController {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error saving contract", e);
 		}
 	}
+
+	@GetMapping ("/candidatures/{id}")
+	public ContratDTO getContratByCandidatureId(@RequestHeader ("Authorization") String token, @PathVariable Long id) {
+		validateToken(token);
+		try {
+			return contratService.getContratByCandidatureId(id);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting contract by contrat id because ", e);
+		}
+	}
 }

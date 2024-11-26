@@ -6,26 +6,32 @@ const ContratContext = React.createContext(undefined);
 const ContratProvider = ({children}) => {
     const {currentToken} = useContext(AuthContext);
 
-    const fetchContrats = async () => {
-        try {
-            const response = await fetch('/api/contrats', {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': currentToken
-                },
-            });
-            if (response.ok) {
-                return await response.json();
+        const fetchContratByCandidatureId = async (id) => {
+        return await fetch(`/contrats/candidatures/${id}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': currentToken
             }
-            return [];
-        } catch (error) {
-            return [];
-        }
+        });
     }
+
+    const fetchPdf = async (candidatureId) => {
+        const response = await fetch(`/contrats/generate/${candidatureId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': currentToken
+            },
+        });
+        const pdfBlob = await response.blob();
+        return URL.createObjectURL(pdfBlob);
+    };
+
     return (
         <ContratContext.Provider value={{
-            fetchContrats
+            fetchContratByCandidatureId,
+            fetchPdf
         }}>
             {children}
         </ContratContext.Provider>

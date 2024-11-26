@@ -9,7 +9,7 @@ import {AuthContext} from "../../providers/AuthProvider";
 import {OffreStageContext} from "../../providers/OffreStageProvider";
 import Modal from "../../../utilities/modal/Modal";
 import {Link} from "react-router-dom";
-import ViewContrats from "../contrat/ViewContrats";
+import ViewContrats from "../contrat/ViewContrat";
 import ListCandidatureEnAttenteContrat from "../candidatures/ListCandidatureEnAttenteContrat";
 
 const DashboardHome = () => {

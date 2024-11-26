@@ -10,7 +10,5 @@ import java.util.List;
 @Repository
 public interface ContratRepository extends JpaRepository<Contrat, Long> {
 
-    List<Contrat> findAllByCandidature_OffreStage_Owner(Utilisateur employeur);
-
-    List<Contrat> findAllByCandidature_Etudiant(Utilisateur etudiant);
+    Contrat findByCandidatureId(Long id);
 }

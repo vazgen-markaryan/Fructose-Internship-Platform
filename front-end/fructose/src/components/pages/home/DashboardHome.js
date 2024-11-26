@@ -976,7 +976,7 @@ const DashboardHome = () => {
 						{GetCandidaturesWindow()}
 						{GetPortfolioSection()}
 						{GetCandidatureManagementSection()}
-						
+
 						<div style={{"height": "520px"}}>
 						</div>
 					</div>
