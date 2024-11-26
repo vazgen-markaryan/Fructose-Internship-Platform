@@ -5,7 +5,7 @@ import React, {useContext, useState} from "react";
 import {AuthContext} from "../../providers/AuthProvider";
 import {useTranslation} from "react-i18next";
 
-const HeaderMain = ({theme}) => {
+const HeaderMain = ({theme, background}) => {
 	
 	const {t, i18n} = useTranslation();
 	const [menuOpen, setMenuOpen] = useState(false)
@@ -122,7 +122,7 @@ const HeaderMain = ({theme}) => {
 	}
 	
 	return (
-		<header style={{"color": ((theme === "dark") ? "black" : "white")}}>
+		<header style={{"color": ((theme === "dark") ? "black" : "white"), background: ((background)?"linear-gradient(" + background + ",transparent)":"none")}}>
 			<Link to="/"><img src={"/assets/logo/logo" + ((theme === "dark") ? "-blk" : "") + ".png"} alt=""
 			                  className={"logo"}/></Link>
 			<div className={"toolbar-spacer"}></div>
