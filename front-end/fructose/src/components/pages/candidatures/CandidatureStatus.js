@@ -282,7 +282,7 @@ const CandidatureStatus = ({
 													isEmployeur ?
 														(
 															<>
-																{contrat.signatureEmployeur === "Non signé" ?
+																{contrat.signatureEmployeur === "Non signe" ?
 																	(
 																		<div className="toolbar-items">
 																			<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
@@ -290,7 +290,7 @@ const CandidatureStatus = ({
 																		</div>
 																	)
 																	:
-																	(contrat.signatureEtudiant === "Non signé" ?
+																	(contrat.signatureEtudiant === "Non signe" ?
 																			(
 																				<div className="toolbar-items">
 																					<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
@@ -325,7 +325,7 @@ const CandidatureStatus = ({
 														)
 												) :
 												
-												currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" && contrat && contrat.signatureEtudiant === "Non signé" ?
+												currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" && contrat && contrat.signatureEtudiant === "Non signe" ?
 													(
 														<>
 															<div className="toolbar-items">

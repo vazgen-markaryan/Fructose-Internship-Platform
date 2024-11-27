@@ -75,13 +75,24 @@ const ContratProvider = ({children}) => {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 	};
+
+	const handleSignerContrat = (contrat, setCurrentCandidature) => {
+		console.log("Sign contrat: " + contrat.id);
+		try {
+			signContract(contrat.id);
+			console.log("Contrat signé avec succès");
+			setCurrentCandidature(null);
+		} catch (error) {
+			console.error("Error signing contract: " + error);
+		}
+	};
 	
 	return (
 		<ContratContext.Provider value={{
 			fetchContratByCandidatureId,
 			fetchPdf,
 			fetchPdfByContratId,
-			signContract
+			handleSignerContrat
 		}}>
 			{children}
 		</ContratContext.Provider>

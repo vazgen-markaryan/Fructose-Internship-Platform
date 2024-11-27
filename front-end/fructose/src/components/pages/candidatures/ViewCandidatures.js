@@ -17,7 +17,7 @@ import {AuthContext} from "../../providers/AuthProvider";
 import Modal from "../../../utilities/modal/Modal";
 import {CvContext} from "../../providers/CvProvider";
 import Swal from "sweetalert2";
-import {ContratContext} from "../../providers/ContratProvider";
+import {ContratContext, handleSignerContrat} from "../../providers/ContratProvider";
 import CandidatureStatus from "./CandidatureStatus";
 
 const ViewCandidatures = () => {
@@ -34,7 +34,7 @@ const ViewCandidatures = () => {
 	const [candidatureCategory, setCandidatureCategory] = useState("nouvelles_candidatures")
 	const [isRejectModalOpen, setRejectModalOpen] = useState(false);
 	const textareaRef = useRef(null);
-	const {fetchContratByCandidatureId, signContract} = useContext(ContratContext);
+	const {fetchContratByCandidatureId, handleSignerContrat} = useContext(ContratContext);
 	const [contrat, setContrat] = useState(null);
 	
 	const today = new Date();
@@ -103,15 +103,8 @@ const ViewCandidatures = () => {
 	}
 	
 	//TODO  METTRE DANS PROVIDER. DONT REPEAT YOURSELF CALISS (Dashboard HOME PAREIL)
-	const handleSignerContrat = () => {
-		console.log("Sign contrat: " + contrat.id);
-		try {
-			signContract(contrat.id);
-			console.log("Contrat signé avec succès");
-			setCurrentCandidature(null);
-		} catch (error) {
-			console.error("Error signing contract: " + error);
-		}
+	const handleSignerContratClick = () => {
+		handleSignerContrat(contrat, setCurrentCandidature);
 	};
 	
 	const handleInterviewPassed = async () => {
@@ -552,7 +545,7 @@ const ViewCandidatures = () => {
 									handleRefuse={handleRefuse}
 									handleInterviewPassed={handleInterviewPassed}
 									handleInterviewFail={handleInterviewFail}
-									handleSignerContrat={handleSignerContrat}
+									handleSignerContrat={handleSignerContratClick}
 									// TODO AJOUTER HANDLE REFUSER CONTRAT
 								/>
 							

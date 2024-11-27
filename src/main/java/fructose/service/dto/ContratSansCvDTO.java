@@ -14,9 +14,9 @@ public class ContratSansCvDTO {
     private Long gestionnaireId;
     private String signatureGestionnaire;
     private LocalDate dateSignatureGestionnaire;
-    private String signatureEmployeur;
+    private String signatureEmployeur = "Non signe";
     private LocalDate dateSignatureEmployeur;
-    private String signatureEtudiant;
+    private String signatureEtudiant = "Non signe";
     private LocalDate dateSignatureEtudiant;
 
     // Constructeur, getters et setters

@@ -23,7 +23,7 @@ import OfferPreview from "../offre-stage/OfferPreview";
 import {CandidatureContext} from "../../providers/CandidatureProvider";
 import Swal from "sweetalert2";
 import CandidatureStatus from "../candidatures/CandidatureStatus";
-import {ContratContext} from "../../providers/ContratProvider";
+import {ContratContext, handleSignerContrat} from "../../providers/ContratProvider";
 
 const DashboardHome = () => {
 	
@@ -41,7 +41,7 @@ const DashboardHome = () => {
 	const [currentCandidature, setCurrentCandidature] = useState(null);
 	const navigate = useNavigate();
 	const {currentToken} = useContext(AuthContext)
-	const {fetchContratByCandidatureId, signContract} = useContext(ContratContext);
+	const {fetchContratByCandidatureId, handleSignerContrat} = useContext(ContratContext);
 	const [contrat, setContrat] = useState(null);
 	
 	const handleCvClick = (cv) => {
@@ -164,16 +164,9 @@ const DashboardHome = () => {
 			}
 		});
 	};
-	
-	const handleSignerContrat = () => {
-		console.log("Sign contrat: " + contrat.id);
-		try {
-			signContract(contrat.id);
-			console.log("Contrat signé avec succès");
-			setCurrentCandidature(null);
-		} catch (error) {
-			console.error("Error signing contract: " + error);
-		}
+
+	const handleSignerContratClick = () => {
+		handleSignerContrat(contrat, setCurrentCandidature);
 	};
 	
 	useEffect(() => {
@@ -630,7 +623,7 @@ const DashboardHome = () => {
 								currentCandidature={currentCandidature}
 								handleAcceptInterview={handleAcceptInterview}
 								handleRefuseInterview={handleRefuseInterview}
-								handleSignerContrat={handleSignerContrat}
+								handleSignerContrat={handleSignerContratClick}
 								//TODO AJOUTER HANDLE REFUSER CONTRAT
 							/>
 							
