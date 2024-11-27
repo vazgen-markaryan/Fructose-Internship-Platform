@@ -35,7 +35,7 @@ const ViewContrat = ({contrat, handleSign}) => {
                 <PdfPreview file={pdfUrl} />
             </div>
             <div className="toolbar-items" style={{ padding: "10px" }}>
-                {contrat && contrat.signatureEmployeur === null ? (
+                {contrat && contrat.signatureEmployeur === "Non signé" ? (
                     <>
                         <button className="btn-filled bg-green" onClick={handleSign}>{t("view_contrat_page.sign")}</button>
                         <button className="btn-filled bg-red" onClick={handleNoSign}>{t("view_contrat_page.no_sign")}</button>

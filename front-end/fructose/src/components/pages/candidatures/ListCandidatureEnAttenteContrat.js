@@ -41,7 +41,7 @@ const ListCandidatureEnAttenteContrat = () => {
 		);
 		if (response.ok) {
 			console.log('Contrat created successfully');
-			const response = await fetch(`/candidatures/modifierEtatCandidature/${selectedCandidature.id}?nouvelEtat=CONTRAT_CREER_PAR_GESTIONNAIRE`, {
+			const response = await fetch(`/candidatures/modifierEtatCandidature/${selectedCandidature.id}?nouvelEtat=CONTRAT_CREE_PAR_GESTIONNAIRE`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

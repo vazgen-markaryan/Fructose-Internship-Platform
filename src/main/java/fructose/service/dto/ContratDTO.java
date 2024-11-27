@@ -20,11 +20,11 @@ public class ContratDTO {
 	
 	private LocalDate dateSignatureGestionnaire;
 	
-	private String signatureEmployeur;
+	private String signatureEmployeur = "Non signé";
 	
 	private LocalDate dateSignatureEmployeur;
 	
-	private String signatureEtudiant;
+	private String signatureEtudiant = "Non signé";
 	
 	private LocalDate dateSignatureEtudiant;
 	
