@@ -557,6 +557,7 @@
 		"waiting_for_contract_generation": "En attente de la génération du Contrat par Gestionnaire",
 		"contract_not_signed_after_interview_refusal": "Le contrat ne peut être signé. La candidature était refusée après l'entrevue",
 		"contract_refused_by_student": "La signature du contrat a été refusée par Étudiant",
+		"contract_refused_by_employer": "La signature du contrat a été refusée par Employeur",
 		"contract_signed_by_all": "Tout le monde a signé le contrat. La candidature a été acceptée",
 		"contract_not_signed_after_interview_refusal_by_student": "Le contrat ne peut être signé. L'entrevue a été refusée par l'étudiant",
 		"contract_cannot_be_signed_entrevue_rejected_by_student": "Le contrat ne peut pas être signé. Vous avez réfusé l'entrevue",

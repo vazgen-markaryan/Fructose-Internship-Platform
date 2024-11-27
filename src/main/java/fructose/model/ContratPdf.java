@@ -51,8 +51,8 @@ public class ContratPdf {
 			document.add(new Paragraph("L’étudiant s’engage à:\n..."));
 			document.add(new Paragraph("SIGNATURES"));
 
-			document.add(new Paragraph("Signature de l’étudiant(e): " + (!Objects.equals(contrat.getSignatureEtudiant(), "Non signé") ? contrat.getSignatureEtudiant() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEtudiant() != null ? contrat.getDateSignatureEtudiant() : "_______________________")));
-			document.add(new Paragraph("Signature de l’employeur: " + (!Objects.equals(contrat.getSignatureEmployeur(), "Non signé") ? contrat.getSignatureEmployeur() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEmployeur() != null ? contrat.getDateSignatureEmployeur() : "_______________________")));
+			document.add(new Paragraph("Signature de l’étudiant(e): " + (!Objects.equals(contrat.getSignatureEtudiant(), "Non signe") ? contrat.getSignatureEtudiant() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEtudiant() != null ? contrat.getDateSignatureEtudiant() : "_______________________")));
+			document.add(new Paragraph("Signature de l’employeur: " + (!Objects.equals(contrat.getSignatureEmployeur(), "Non signe") ? contrat.getSignatureEmployeur() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEmployeur() != null ? contrat.getDateSignatureEmployeur() : "_______________________")));
 			document.add(new Paragraph("Signature du gestionnaire de stage: " + (contrat.getSignatureGestionnaire() != null ? contrat.getSignatureGestionnaire() : "_______________________") + "\n " + " Date de signature : " + (contrat.getDateSignatureGestionnaire() != null ? contrat.getDateSignatureGestionnaire().toString() : "_______________________")));
 			document.close();
 			return dest;

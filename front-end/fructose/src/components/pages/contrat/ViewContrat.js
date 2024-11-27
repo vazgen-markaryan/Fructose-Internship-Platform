@@ -32,7 +32,7 @@ const ViewContrat = ({contrat, handleSign}) => {
 				<PdfPreview file={pdfUrl}/>
 			</div>
 			<div className="toolbar-items" style={{padding: "10px"}}>
-				{contrat && contrat.signatureEmployeur === "Non signé"  || contrat.signatureEtudiant === "Non signé"? (
+				{contrat && contrat.signatureEmployeur === "Non signe"  || contrat.signatureEtudiant === "Non signe"? (
 					<>
 						<button className="btn-filled bg-green" onClick={handleSign}>{t("dashboard_home_page.sign")}</button>
 						<button className="btn-filled bg-red" onClick={handleNoSign}>{t("dashboard_home_page.no_sign")}</button>
@@ -43,9 +43,6 @@ const ViewContrat = ({contrat, handleSign}) => {
 			</div>
 		</>
 	)
-		;
-	
-	
-};
+}
 
 export default ViewContrat;
