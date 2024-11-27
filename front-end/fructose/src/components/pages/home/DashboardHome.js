@@ -1027,6 +1027,69 @@ const DashboardHome = () => {
             <div style={{"display": "flex", "gap": "20px"}}>
                 <div style={{"width": "70%"}}>
                     <div className="dashboard-card">
+                        <section>
+                            <div className={"toolbar-items"}>
+                                <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
+                                <Link to="/dashboard/discover-offers">
+                                    <button>{t("dashboard_home_page.explore")}
+                                        <Icon path={mdiChevronRight} size={1}/>
+                                    </button>
+                                </Link>
+                            </div>
+                            <br/>
+                            <div style={{display: "flex", gap: "10px"}}>
+                                <div style={{width: "66%"}}>
+                                    <div style={{height: "300px", backgroundColor: "#21277c", position: "relative", borderRadius: "5px", color: "white"}}>
+                                        <div style={{position: "absolute", top: "0", left: "0", padding: "20px", opacity: "0.3"}}>
+                                            <h4>TECHNIQUE DE L'INFORMATIQUE</h4>
+                                        </div>
+                                        <div style={{position: "absolute", bottom: "0", left: "0", right: "0", padding: "20px", display: "flex", alignItems: "end"}}>
+                                            <div style={{flexGrow: 1}}>
+                                                <h3 className="m-0" style={{marginBottom: "5px"}}>Développer des solutions blockchain</h3>
+                                                <h6 className="m-0">Ubisoft incorpore</h6>
+                                            </div>
+                                            <Icon path={mdiArrowRight} size={1}/>
+                                        </div>
+                                    </div>
+                                    <div style={{height: "10px"}}></div>
+                                    <div style={{display:"flex", gap:"10px"}}>
+                                        <div style={{width: "50%"}}>
+                                            <div style={{height: "170px", backgroundColor: "green", position: "relative", borderRadius: "5px", color: "white"}}>
+                                                <div style={{position: "absolute", top: "0", left: "0", padding: "20px", opacity: "0.3"}}>
+                                                    <h6>TECHNIQUE DE L'INFORMATIQUE</h6>
+                                                </div>
+                                                <div style={{position: "absolute", bottom: "0", left: "0", right: "0", padding: "20px", display: "flex", alignItems: "end"}}>
+                                                    <div style={{flexGrow: 1}}>
+                                                        <h5 className="m-0" style={{marginBottom: "8px"}}>Développer des solutions blockchain</h5>
+                                                        <h6 className="m-0">Ubisoft incorpore</h6>
+                                                    </div>
+                                                    <Icon path={mdiArrowRight} size={0.8}/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style={{width: "50%"}}>
+                                            <div className="bg-red" style={{height: "170px", position: "relative", borderRadius: "5px", color: "white"}}>
+                                                <div style={{position: "absolute", top: "0", left: "0", padding: "20px", opacity: "0.3"}}>
+                                                    <h6>TECHNIQUE DE L'INFORMATIQUE</h6>
+                                                </div>
+                                                <div style={{position: "absolute", bottom: "0", left: "0", right: "0", padding: "20px", display: "flex", alignItems: "end"}}>
+                                                    <div style={{flexGrow: 1}}>
+                                                        <h5 className="m-0" style={{marginBottom: "8px"}}>Développer des solutions blockchain</h5>
+                                                        <h6 className="m-0">Ubisoft incorpore</h6>
+                                                    </div>
+                                                    <Icon path={mdiArrowRight} size={0.8}/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="card" style={{width: "33%"}}>
+
+                                </div>
+                            </div>
+                        </section>
+
+
                         {GetOffreStageSection()}
                         {GetCandidaturesSection()}
                         {GetCandidaturesWindow()}
