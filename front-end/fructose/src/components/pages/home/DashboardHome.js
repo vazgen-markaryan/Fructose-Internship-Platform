@@ -3,19 +3,19 @@ import {AuthContext} from "../../providers/AuthProvider";
 import {Link, useNavigate} from "react-router-dom";
 import Icon from "@mdi/react";
 import {
-	mdiAccountCircle,
-	mdiAlertCircleOutline, mdiArrowRight,
-	mdiBriefcasePlusOutline,
-	mdiBriefcaseRemoveOutline,
-	mdiCheck,
-	mdiCheckCircleOutline,
-	mdiChevronRight,
-	mdiClockOutline,
-	mdiClose,
-	mdiCloseCircleOutline,
-	mdiFileDocumentOutline,
-	mdiHelpCircleOutline,
-	mdiPlus
+    mdiAccountCircle,
+    mdiAlertCircleOutline, mdiArrowRight, mdiBriefcaseOutline,
+    mdiBriefcasePlusOutline,
+    mdiBriefcaseRemoveOutline, mdiBriefcaseVariantOutline,
+    mdiCheck,
+    mdiCheckCircleOutline,
+    mdiChevronRight,
+    mdiClockOutline,
+    mdiClose,
+    mdiCloseCircleOutline,
+    mdiFileDocumentOutline, mdiFileSign, mdiForumOutline,
+    mdiHelpCircleOutline,
+    mdiPlus, mdiSendOutline
 } from "@mdi/js";
 import {OffreStageContext} from "../../providers/OffreStageProvider";
 import {CvContext} from "../../providers/CvProvider";
@@ -24,6 +24,7 @@ import DashboardHomeAdmin from "../admin/DashboardAdmin";
 import OfferPreview from "../offre-stage/OfferPreview";
 import {CandidatureContext} from "../../providers/CandidatureProvider";
 import Swal from "sweetalert2";
+import CandidatureProgress from "../candidatures/CandidatureProgress";
 
 const DashboardHome = () => {
 
@@ -1036,8 +1037,30 @@ const DashboardHome = () => {
 						<section>
 							<div className="menu-list">
 								<div className="menu-list-item">
-
+                                    <Icon path={mdiBriefcaseOutline} size={1} />
+                                    <div>
+                                        <h6 className="m-0">Dev Je ne sais quoi</h6>
+                                        <p className="m-0 text-dark">Ubisoft Holding LLC</p>
+                                    </div>
+                                    <div className="toolbar-spacer"></div>
+                                    <CandidatureProgress status={"EN_ATTENTE"}></CandidatureProgress>
 								</div>
+                                <div className="menu-list-item">
+                                    <Icon path={mdiBriefcaseOutline} size={1} />
+                                    <div>
+                                        <h6 className="m-0">Dev Je ne sais quoi</h6>
+                                        <p className="m-0 text-dark">Ubisoft Holding LLC</p>
+                                    </div>
+                                    <div className="toolbar-spacer"></div>
+                                    <CandidatureProgress status={"EN_ATTENTE"}></CandidatureProgress>
+                                </div>
+
+                                <div className="menu-list-item menu-list-item-placeholder">
+                                </div>
+                                <div className="menu-list-item menu-list-item-placeholder">
+                                </div>
+                                <div className="menu-list-item menu-list-item-placeholder">
+                                </div>
 							</div>
 						</section>
 
@@ -1074,7 +1097,14 @@ const DashboardHome = () => {
                                 </div>
                             </div>
                             <div className="banner bg-grey">
-                                <Icon path={mdiCheckCircleOutline} size={1.2}/>
+                                <Icon path={mdiBriefcaseVariantOutline} size={1.2}/>
+                                <div className="toolbar-spacer">
+                                    <h5 className="m-0">Commencez à postuler</h5>
+                                    <p className="m-0">Plusieures offres de stage disponibles</p>
+                                </div>
+                            </div>
+                            <div className="banner bg-grey">
+                                <Icon path={mdiBriefcaseVariantOutline} size={1.2}/>
                                 <div className="toolbar-spacer">
                                     <h5 className="m-0">Commencez à postuler</h5>
                                     <p className="m-0">Plusieures offres de stage disponibles</p>
