@@ -745,11 +745,6 @@ const DashboardHome = () => {
 							{/*					<p>{t("dashboard_home_page.proposed_interview_date")}: {currentCandidature.dateEntrevue}</p>*/}
 							{/*				</>*/}
 							{/*				:*/}
-							
-							
-							
-							
-							
 							{/*				// SI ENTREVUE A ÉTÉ REFUSÉE PAR L'ÉTUDIANT*/}
 							{/*				(currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT") ?*/}
 							{/*					<div className="toolbar-items">*/}
@@ -788,9 +783,6 @@ const DashboardHome = () => {
 							{/*				<p className="text-dark m-0">{t("dashboard_home_page.interview_not_planned_for_rejected_application")}</p>*/}
 							{/*			</div>*/}
 							{/*			:*/}
-							
-							
-							
 							{/*			// SI ENTREVUE A ÉTÉ ACCEPTÉE*/}
 							{/*			(currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT") ?*/}
 							{/*				<div className="toolbar-items">*/}
@@ -798,9 +790,6 @@ const DashboardHome = () => {
 							{/*					<p className="text-orange m-0">{t("dashboard_home_page.waiting_interview_results")}</p>*/}
 							{/*				</div>*/}
 							{/*				:*/}
-							
-							
-							
 							{/*				// SI ENTREVUE A ÉTÉ REFUSÉE PAR L'ÉTUDIANT*/}
 							{/*				(currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT") ?*/}
 							{/*					<div className="toolbar-items">*/}
@@ -808,6 +797,14 @@ const DashboardHome = () => {
 							{/*						<p className="text-dark m-0">{t("dashboard_home_page.contract_not_proposed_for_rejected_interview")}</p>*/}
 							{/*					</div>*/}
 							{/*					:*/}
+							
+							
+							
+							
+							
+							
+							
+							
 							
 							
 							

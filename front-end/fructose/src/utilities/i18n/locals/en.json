@@ -555,6 +555,7 @@
 		"contract_refused_by_student": "Contract signing was refused by student",
 		"contract_signed_by_all": "Everyone signed the contract. The application was accepted",
 		"contract_not_signed_after_interview_refusal_by_student": "Contract cannot be signed. Interview was refused by student",
+		"contract_cannot_be_signed_entrevue_rejected_by_student": "Contract cannot be signed. You refused the interview",
 		"waiting_for_interview_results": "Waiting for interview results",
 		"confirm_accept_title": "Are you sure?",
 		"confirm_accept_text": "You are about to accept the application due to the successful interview. Do you want to continue?",

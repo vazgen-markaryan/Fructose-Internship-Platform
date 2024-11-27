@@ -555,6 +555,7 @@
 		"contract_refused_by_student": "La signature du contrat a été refusée par Étudiant",
 		"contract_signed_by_all": "Tout le monde a signé le contrat. La candidature a été acceptée",
 		"contract_not_signed_after_interview_refusal_by_student": "Le contrat ne peut être signé. L'entrevue a été refusée par l'étudiant",
+		"contract_cannot_be_signed_entrevue_rejected_by_student": "Le contrat ne peut pas être signé. Vous avez réfusé l'entrevue",
 		"waiting_for_interview_results": "En attente des résultats de l'entrevue",
 		"confirm_accept_title": "Êtes-vous sûr?",
 		"confirm_accept_text": "Vous êtes sur le point d'accepter la candidature en raison de la réussite de l'entrevue. Voulez-vous continuer?",
