@@ -5,7 +5,6 @@ import { CandidatureContext } from "../../providers/CandidatureProvider";
 import Icon from "@mdi/react";
 import {mdiBriefcasePlusOutline, mdiChevronRight} from "@mdi/js";
 import {Link} from "react-router-dom";
-import {Modal, Button} from "@react-pdf-viewer/core";
 
 const EvaluationEmployeur = () => {
     const { currentUser } = useContext(AuthContext);
@@ -16,51 +15,17 @@ const EvaluationEmployeur = () => {
     const [currentCandidature, setCurrentCandidature] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
-    const [showModal, setShowModal] = useState(false);
-    const [currentStep, setCurrentStep] = useState(1);
-    const [formData, setFormData] = useState({
-        nomEleve: "",
-        programme: "",
-        entreprise: "",
-        superviseur: "",
-        fonction: "",
-        telephone: "",
-        productivite: {},
-        qualiteTravail: {},
-        relationsInterpersonnelles: {},
-        habiletesPersonnelles: {},
-        appreciationGlobale: "",
-    });
-
-    const handleShowModal = () => setShowModal(true);
-    const handleCloseModal = () => {
-        setShowModal(false);
-        setCurrentStep(1); // Réinitialise l'étape au début.
-    };
-
-    const handleNextStep = () => setCurrentStep((prev) => prev + 1);
-    const handlePreviousStep = () => setCurrentStep((prev) => prev - 1);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
 
     useEffect(() => {
         if (currentUser && currentUser.role === "EMPLOYEUR") {
             fetchStagiaireByOwner()
-                .then((data) => setCandidatures(data || [])) // Par défaut, un tableau vide
+                .then((data) => setCandidatures(data || []))
                 .catch((error) => {
                     console.error("Erreur lors de la récupération des données :", error);
                     setCandidatures([]); // Gestion des erreurs
                 });
         }
     }, [currentUser, fetchStagiaireByOwner]);
-
-    const handlePageChange = (page) => setCurrentPage(page);
 
     if (currentUser && currentUser.role === "EMPLOYEUR") {
         const startIndex = (currentPage - 1) * itemsPerPage;
@@ -145,11 +110,25 @@ const EvaluationEmployeur = () => {
                                                 >
                                                     évaluation non disponible avant le --:--:--
                                                 </p>
-                                                <Link to="/dashboard/evaluation-step/">
-                                                    <button> Évaluer
-                                                        <Icon path={mdiChevronRight} size={1}/>
+                                                <Link
+                                                    to="/dashboard/evaluation-step/"
+                                                    state={{
+                                                        candidature: {
+                                                            nomEleve: candidature.etudiant.fullName,
+                                                            programme: candidature.programme,
+                                                            entreprise: candidature.entreprise,
+                                                            superviseur: candidature.superviseur,
+                                                            fonction: candidature.fonction,
+                                                            telephone: candidature.telephone,
+                                                        },
+                                                    }}
+                                                >
+                                                    <button>
+                                                        Évaluer
+                                                        <Icon path={mdiChevronRight} size={1} />
                                                     </button>
                                                 </Link>
+
                                             </div>
                                         </div>
                                     ))}
