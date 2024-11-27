@@ -28,19 +28,20 @@ const CandidatureProvider = ({children}) => {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
-					'Authorization': currentToken
+					'Authorization': `Bearer ${currentToken}`,
 				},
 			});
 			if (response.ok) {
 				const data = await response.json();
 				setCandidatures(data);
 			} else {
-				throw new Error('Failed to fetch candidatures');
+				console.error('Échec de la récupération des candidatures');
 			}
 		} catch (error) {
-			console.error("Erreur " + error);
+			console.error('Erreur lors de la récupération des candidatures :', error);
 		}
 	};
+	
 	
 	const fetchCandidatureByEtatAccepteApresEntrevue = async () => {
 		try {
@@ -58,7 +59,7 @@ const CandidatureProvider = ({children}) => {
 			} else {
 				throw new Error('Failed to fetch candidatures');
 			}
-		}catch (error) {
+		} catch (error) {
 			console.error("Erreur " + error);
 		}
 	}

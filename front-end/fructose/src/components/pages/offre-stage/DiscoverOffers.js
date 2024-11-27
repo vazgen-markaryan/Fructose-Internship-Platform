@@ -18,6 +18,7 @@ import {
 	mdiSchoolOutline
 } from "@mdi/js";
 import {ApplyOffreWindowContext} from "./ApplyOffreWindow";
+import {CandidatureContext} from "../../providers/CandidatureProvider";
 
 const DiscoverOffers = () => {
 	
@@ -25,6 +26,7 @@ const DiscoverOffers = () => {
 	const {fetchOffresStage} = useContext(OffreStageContext);
 	const {isUserInit, currentUser} = useContext(AuthContext);
 	const {openCandidatureWindow} = useContext(ApplyOffreWindowContext);
+	const {fetchCandidaturesById, candidatures} = useContext(CandidatureContext);
 	const [offers, setOffers] = useState([])
 	const [currentOffer, setCurrentOffer] = useState(null)
 	const [displayFiltreWindow, setDisplayFiltreWindow] = useState(false)
@@ -64,26 +66,11 @@ const DiscoverOffers = () => {
 	
 	const [filters, setFilters] = useState(
 		{
-			type: {
-				default: "tous",
-				value: "tous"
-			},
-			emplacement: {
-				default: "tous",
-				value: "tous"
-			},
-			tauxHoraire: {
-				default: 0,
-				value: 0
-			},
-			departmenet: {
-				default: 0,
-				value: 0
-			},
-			sessions: {
-				default: "tous",
-				value: "tous"
-			}
+			type: {default: "tous", value: "tous"},
+			emplacement: {default: "tous", value: "tous"},
+			tauxHoraire: {default: 0, value: 0},
+			departmenet: {default: 0, value: 0},
+			sessions: {default: "tous", value: "tous"}
 		}
 	)
 	
@@ -94,11 +81,7 @@ const DiscoverOffers = () => {
 				idName: "type",
 				icon: mdiBriefcaseOutline,
 				fields: [
-					{
-						type: "radio",
-						label: "Tous",
-						value: "tous"
-					},
+					{type: "radio", label: t("discover_offers_page.filters.all"), value: "tous"},
 					{
 						type: "radio",
 						label: t("discover_offers_page.filters.internship_type.temps_partiel"),
@@ -116,11 +99,7 @@ const DiscoverOffers = () => {
 				idName: "emplacement",
 				icon: mdiDomain,
 				fields: [
-					{
-						type: "radio",
-						label: "Tous",
-						value: "tous"
-					},
+					{type: "radio", label: t("discover_offers_page.filters.all"), value: "tous"},
 					{
 						type: "radio",
 						label: t("discover_offers_page.filters.emplacement.presentiel"),
@@ -143,12 +122,7 @@ const DiscoverOffers = () => {
 				idName: "tauxHoraire",
 				icon: mdiCashMultiple,
 				fields: [
-					{
-						type: "number",
-						value: 0,
-						min: 0,
-						max: 50
-					}
+					{type: "number", value: 0, min: 0, max: 50}
 				]
 			},
 			{
@@ -156,11 +130,7 @@ const DiscoverOffers = () => {
 				idName: "sessions",
 				icon: mdiSchoolOutline,
 				fields: [
-					{
-						type: "radio",
-						label: "Tous",
-						value: "tous"
-					},
+					{type: "radio", label: t("discover_offers_page.filters.all"), value: "tous"},
 				]
 			}
 		]
@@ -181,6 +151,16 @@ const DiscoverOffers = () => {
 	});
 	
 	useEffect(() => {
+		if (currentUser) {
+			fetchCandidaturesById(currentUser.id);
+		}
+	}, [currentUser, fetchCandidaturesById]);
+	
+	const isOfferApplied = (offerId) => {
+		return candidatures.some((candidature) => candidature.offreStageId === offerId);
+	};
+	
+	useEffect(() => {
 		if (isUserInit) {
 			(async function () {
 				try {
@@ -188,7 +168,7 @@ const DiscoverOffers = () => {
 					setOffers(response);
 					setFilteredOffers(filterOffers(response, filters));
 				} catch (error) {
-					// Handle error
+					console.error("Erreur lors de la récupération des offres :", error);
 				}
 			})();
 		}
@@ -462,7 +442,6 @@ const DiscoverOffers = () => {
 	
 	return (
 		<>
-			
 			<div className="dashboard-card-toolbar">
 				<Link to="/dashboard">
 					<button className="btn-icon-dashboard">
@@ -473,9 +452,11 @@ const DiscoverOffers = () => {
 			</div>
 			<div style={{display: "flex", gap: "20px", alignItems: "start"}}>
 				{getOffreListSection()}
-				{currentOffer && <OfferPreview currentOffer={currentOffer} handleApply={() => {
-					handleApplyStage()
-				}}/>}
+				{currentOffer && <OfferPreview
+					currentOffer={currentOffer}
+					handleApply={handleApplyStage}
+					isApplied={isOfferApplied(currentOffer.id)}
+				/>}
 			</div>
 		</>
 	);

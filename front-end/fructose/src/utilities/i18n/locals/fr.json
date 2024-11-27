@@ -214,7 +214,7 @@
 		"portfolio": "Mon Portfolio",
 		"add_cv": "Ajouter un CV",
 		"manage": "Gérer",
-		"no_cv": "Aucun CV",
+		"no_cv": "Aucun CV à afficher pour le moment",
 		"user_info": "Informations sur l'utilisateur",
 		"full_name": "Nom complet",
 		"email": "Courriel",
@@ -245,9 +245,10 @@
 		"interview_not_planned_for_rejected_application": "Entrevue non planifiée pour une candidature refusée",
 		"waiting_initial_application": "En attente de la candidature initiale",
 		"contract": "Contrat",
-		"contract_not_proposed_for_rejected_interview": "L'entrevue ne peut être planifiée pour une candidature refusée",
+		"contract_not_proposed_for_rejected_interview": "L'entrevue ne peut pas être planifiée pour une candidature refusée",
 		"contract_signed_by_employer": "Contrat signé par l'employeur",
 		"sign": "Signer",
+		"no_sign": "Ne pas signer",
 		"contract_signed_by_student": "Contrat signé par l'étudiant",
 		"waiting_manager_signature": "En attente de la signature du gestionnaire",
 		"contract_rejected_by_student": "Contrat refusé par l'étudiant",
@@ -282,7 +283,12 @@
 		"contract_refused": "La signature du contrat a été refusé.",
 		"contract_refusal_failed": "Échec du refus de la signature du contrat.",
 		"contract_refusal_error": "Une erreur s'est produite lors du refus du contrat.",
-		"waiting_contract_generation": "En attente de la génération du Contrat par Gestionnaire"
+		"waiting_contract_generation": "En attente de la génération du Contrat par Gestionnaire",
+		"delete_stage_confirmation": "Êtes-vous sûr de vouloir supprimer cette offre de stage?",
+		"delete_stage_confirmation_text": "Cette action est irréversible et supprimera définitivement cette offre de stage.",
+		"delete_stage_confirm_button_text": "Oui, supprimer",
+		"delete_stage_cancel_button_text": "Non, annuler",
+		"no_comment_reject_cv_text": "Veuillez entrer un commentaire pour le refus"
 	},
 	"pdf_view_page": {
 		"error": "Une erreur inconnue est survenue"
@@ -382,7 +388,7 @@
 			"delete": "Supprimer"
 		},
 		"messages": {
-			"no_offre_stages": "Aucune offre de stage à afficher pour le moment"
+			"no_offre_stages_contracts": "Aucune Contrat à générer pour le moment"
 		}
 	},
 	"modifier_offre_stage_page": {
@@ -469,6 +475,7 @@
 		"limited_places": "Places limitées",
 		"filters": {
 			"title": "Filtres",
+			"all": "Tous",
 			"internship_type": {
 				"title": "Type de stage",
 				"temps_partiel": "Temps partiel",
@@ -542,13 +549,14 @@
 		"contract": "Contrat",
 		"contract_not_signed_for_refused_application": "Le contrat ne peut être signé pour une candidature refusée",
 		"contract_signed_by_student": "Contrat a été bien signé par l'étudiant",
-		"waiting_for_manager_signature": "En attente de la signature du Gestionnaire de Stage",
-		"waiting_for_student_signature": "En attente de la signature de l'étudiant",
+		"waiting_for_employer_signature": "En attente de la signature de l'Employeur",
+		"waiting_for_student_signature": "En attente de la signature de l'Étudiant",
 		"waiting_for_contract_generation": "En attente de la génération du Contrat par Gestionnaire",
 		"contract_not_signed_after_interview_refusal": "Le contrat ne peut être signé. La candidature était refusée après l'entrevue",
 		"contract_refused_by_student": "La signature du contrat a été refusée par Étudiant",
 		"contract_signed_by_all": "Tout le monde a signé le contrat. La candidature a été acceptée",
 		"contract_not_signed_after_interview_refusal_by_student": "Le contrat ne peut être signé. L'entrevue a été refusée par l'étudiant",
+		"contract_cannot_be_signed_entrevue_rejected_by_student": "Le contrat ne peut pas être signé. Vous avez réfusé l'entrevue",
 		"waiting_for_interview_results": "En attente des résultats de l'entrevue",
 		"confirm_accept_title": "Êtes-vous sûr?",
 		"confirm_accept_text": "Vous êtes sur le point d'accepter la candidature en raison de la réussite de l'entrevue. Voulez-vous continuer?",
@@ -566,7 +574,9 @@
 		"rejected_title": "Refusé!",
 		"rejected_text": "La candidature a été refusée en raison de l'échec de l'entrevue.",
 		"error_reject_text": "Échec du refus de la candidature.",
-		"accept": "Accepter"
+		"accept": "Accepter",
+		"passed_entrevue": "Vous avez passé l'entrevue avec succès.",
+		"waiting_for_your_signature" : "En attente de votre signature"
 	},
 	"manage_contract_en_attente": {
 		"title": "Contrats de stage en attente de génération"

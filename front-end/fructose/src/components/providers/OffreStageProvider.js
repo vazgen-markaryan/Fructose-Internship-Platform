@@ -1,10 +1,13 @@
 import React, {createContext, useContext, useState} from 'react';
 import {AuthContext} from "./AuthProvider";
+import {useTranslation} from "react-i18next";
+import Swal from "sweetalert2";
 
 const OffreStageContext = createContext(undefined);
 
 const OffreStageProvider = ({children}) => {
 	
+	const {t} = useTranslation();
 	const {currentToken} = useContext(AuthContext);
 	const [offreStage, setOffreStage] = useState({
 		nom: '',
@@ -63,13 +66,26 @@ const OffreStageProvider = ({children}) => {
 	};
 	
 	const deleteOffreStage = async (id) => {
-		return await fetch(`/delete-offre-stage/${id}`, {
-			method: "DELETE",
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': currentToken
-			},
+		const result = await Swal.fire({
+			title: t('dashboard_home_page.delete_stage_confirmation'),
+			text: t('dashboard_home_page.delete_stage_confirmation_text'),
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: t('dashboard_home_page.delete_stage_confirm_button_text'),
+			cancelButtonText: t('dashboard_home_page.delete_stage_cancel_button_text')
 		});
+		
+		if (result.isConfirmed) {
+			return await fetch(`/delete-offre-stage/${id}`, {
+				method: "DELETE",
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': currentToken
+				},
+			});
+		}
 	}
 	
 	const updateOffreStage = async (updatedData) => {
