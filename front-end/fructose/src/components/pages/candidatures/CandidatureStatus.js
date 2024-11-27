@@ -304,7 +304,7 @@ const CandidatureStatus = ({
 																<br></br>
 																
 																<div>
-																	{contrat && <ViewContrat contrat={contrat} handleSign={handleSignerContrat}/>}
+																	{contrat && <ViewContrat contrat={contrat} handleSign={handleSignerContrat} handleNoSign={handleRefuserContrat}/>}
 																</div>
 															</>
 														)
@@ -319,7 +319,7 @@ const CandidatureStatus = ({
 																<br></br>
 																
 																<div>
-																	{contrat && <ViewContrat contrat={contrat}  handleSign={handleSignerContrat}/>}
+																	{contrat && <ViewContrat contrat={contrat}  handleSign={handleSignerContrat} handleNoSign={handleRefuserContrat}/>}
 																</div>
 															</>
 														)
@@ -334,7 +334,7 @@ const CandidatureStatus = ({
 															</div>
 															{
 																contrat &&
-																<ViewContrat contrat={contrat}/>
+																<ViewContrat contrat={contrat} handleSign={handleSignerContrat} handleNoSign={handleRefuserContrat}/>
 															}
 														</>
 													)

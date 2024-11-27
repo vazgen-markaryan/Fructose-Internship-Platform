@@ -79,20 +79,50 @@ const ContratProvider = ({children}) => {
 	const handleSignerContrat = (contrat, setCurrentCandidature) => {
 		console.log("Sign contrat: " + contrat.id);
 		try {
-			signContract(contrat.id);
-			console.log("Contrat signé avec succès");
-			setCurrentCandidature(null);
+			signContract(contrat.id).then(r =>
+				console.log("Contrat signé avec succès"),
+				setCurrentCandidature(null)
+			);
 		} catch (error) {
 			console.error("Error signing contract: " + error);
 		}
 	};
+
+	const refuseSignContract = async (contratId) => {
+		const response = await fetch(`/contrats/${contratId}/refuser`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': currentToken
+			},
+		});
+
+		if (!response.ok) {
+			const errorText = await response.text();
+			console.error('Error response:', errorText);
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+	};
+
+	const handleRefuseSignerContrat = (contrat, setCurrentCandidature) => {
+		console.log("Refuse signer contrat: " + contrat.id);
+		try {
+			refuseSignContract(contrat.id).then(r =>
+				console.log("Contrat refusé avec succès"),
+				setCurrentCandidature(null)
+			);
+		} catch (error) {
+			console.error("Error refusing contract: " + error);
+		}
+	}
 	
 	return (
 		<ContratContext.Provider value={{
 			fetchContratByCandidatureId,
 			fetchPdf,
 			fetchPdfByContratId,
-			handleSignerContrat
+			handleSignerContrat,
+			handleRefuseSignerContrat
 		}}>
 			{children}
 		</ContratContext.Provider>

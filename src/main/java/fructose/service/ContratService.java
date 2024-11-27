@@ -96,4 +96,22 @@ public class ContratService {
 		}
 		contratRepository.save(contrat);
 	}
+
+	public void refuserContrat(Long id, UtilisateurDTO utilisateur) {
+		if (id == null || utilisateur == null) {
+			throw new IllegalArgumentException("ID de contrat et UtilisateurDTO ne peuvent pas être nuls");
+		}
+		Contrat contrat = contratRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Contrat avec ID: " + id + " n'existe pas"));
+		switch (utilisateur.getRole()) {
+			case EMPLOYEUR:
+				contrat.setSignatureEmployeur("Refuse");
+				break;
+			case ETUDIANT:
+				contrat.setSignatureEtudiant("Refuse");
+				break;
+			default:
+				throw new IllegalArgumentException("Utilisateur n'est pas un employeur ou un étudiant");
+		}
+		contratRepository.save(contrat);
+	}
 }

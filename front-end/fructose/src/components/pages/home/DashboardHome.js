@@ -41,7 +41,7 @@ const DashboardHome = () => {
 	const [currentCandidature, setCurrentCandidature] = useState(null);
 	const navigate = useNavigate();
 	const {currentToken} = useContext(AuthContext)
-	const {fetchContratByCandidatureId, handleSignerContrat} = useContext(ContratContext);
+	const {fetchContratByCandidatureId, handleSignerContrat, handleRefuseSignerContrat} = useContext(ContratContext);
 	const [contrat, setContrat] = useState(null);
 	
 	const handleCvClick = (cv) => {
@@ -168,6 +168,10 @@ const DashboardHome = () => {
 	const handleSignerContratClick = () => {
 		handleSignerContrat(contrat, setCurrentCandidature);
 	};
+
+	const handleRefuseSignerContratClick = () => {
+		handleRefuseSignerContrat(contrat, setCurrentCandidature);
+	}
 	
 	useEffect(() => {
 		if (currentUser) {
@@ -624,6 +628,7 @@ const DashboardHome = () => {
 								handleAcceptInterview={handleAcceptInterview}
 								handleRefuseInterview={handleRefuseInterview}
 								handleSignerContrat={handleSignerContratClick}
+								handleRefuserContrat={handleRefuseSignerContratClick}
 								//TODO AJOUTER HANDLE REFUSER CONTRAT
 							/>
 							

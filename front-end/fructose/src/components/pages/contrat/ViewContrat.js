@@ -3,10 +3,12 @@ import {useTranslation} from "react-i18next";
 import {ContratContext} from "../../providers/ContratProvider";
 import PdfPreview from "../../../utilities/pdf/PdfPreview";
 
-const ViewContrat = ({contrat, handleSign}) => {
+const ViewContrat = ({contrat, handleSign, handleNoSign}) => {
 	const {t} = useTranslation();
 	const {fetchPdfByContratId} = useContext(ContratContext);
 	const [pdfUrl, setPdfUrl] = useState('');
+	const isEmployeur = localStorage.getItem('role') === 'Employeur';
+	const isEtudiant = localStorage.getItem('role') === 'Etudiant';
 	
 	useEffect(() => {
 		if (contrat) {
@@ -22,24 +24,27 @@ const ViewContrat = ({contrat, handleSign}) => {
 		}
 	}, [contrat, fetchPdfByContratId]);
 	
-	const handleNoSign = () => {
-		console.log("No sign contrat: " + contrat.id);
-	}
-	
 	return (
 		<>
 			<div>
 				<PdfPreview file={pdfUrl}/>
 			</div>
 			<div className="toolbar-items" style={{padding: "10px"}}>
-				{contrat && contrat.signatureEmployeur === "Non signe"  || contrat.signatureEtudiant === "Non signe"? (
+				{contrat &&
+				((["Non signe"].includes(contrat.signatureEmployeur) && isEmployeur) ||
+					(["Non signe"].includes(contrat.signatureEtudiant) && isEtudiant)) &&
+				!["Refuse"].includes(contrat.signatureEmployeur) &&
+				!["Refuse"].includes(contrat.signatureEtudiant) ? (
 					<>
-						<button className="btn-filled bg-green" onClick={handleSign}>{t("dashboard_home_page.sign")}</button>
-						<button className="btn-filled bg-red" onClick={handleNoSign}>{t("dashboard_home_page.no_sign")}</button>
+						<button className="btn-filled bg-green" onClick={handleSign}>
+							{t("dashboard_home_page.sign")}
+						</button>
+						<button className="btn-filled bg-red" onClick={handleNoSign}>
+							{t("dashboard_home_page.no_sign")}
+						</button>
 					</>
-				)
-                                        : null
-				}
+				) : null}
+
 			</div>
 		</>
 	)
