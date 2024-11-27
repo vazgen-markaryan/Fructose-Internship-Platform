@@ -170,4 +170,23 @@ public class CandidatureService {
 			throw new RuntimeException("Une erreur est survenue lors de la récupération de la candidature.", e);
 		}
 	}
+
+	public List<Map<String, Object>> findStagiaireByOwner(Long id) {
+		List<Map<String, Object>> result = new ArrayList<>();
+
+		List<Candidature> candidatures = candidatureRepository.findStagiaireByOwner(id, EtatCandidature.CONTRAT_SIGNE_TOUS);
+
+		for (Candidature candidature : candidatures) {
+			Map<String, Object> candidatureData = new HashMap<>();
+			candidatureData.put("candidature", CandidatureDTO.toDTO(candidature));
+			Utilisateur etudiant = candidature.getEtudiant();
+			candidatureData.put("etudiant", EtudiantDTO.toDTO(etudiant));
+			OffreStage offreStage = candidature.getOffreStage();
+			candidatureData.put("idOffreStage", offreStage.getId());
+			Cv cv = cvRepository.getAllById(candidatureRepository.getCvId(candidature.getId()));
+			candidatureData.put("cvId", cv.getId());
+			result.add(candidatureData);
+		}
+		return result;
+	}
 }
