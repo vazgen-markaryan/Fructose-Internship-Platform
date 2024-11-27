@@ -11,6 +11,9 @@ import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @RequiredArgsConstructor
 @Service
 public class ContratService {
@@ -72,5 +75,25 @@ public class ContratService {
 			throw new IllegalArgumentException("ID de contrat ne peut pas être nul");
 		}
 		return ContratDTO.toDTO(contratRepository.findById(contratId).orElseThrow(() -> new IllegalArgumentException("Contrat avec ID: " + contratId + " n'existe pas")));
+	}
+
+	public void signContrat(Long contratId, UtilisateurDTO utilisateurDTO) {
+		if (contratId == null || utilisateurDTO == null) {
+			throw new IllegalArgumentException("ID de contrat et UtilisateurDTO ne peuvent pas être nuls");
+		}
+		Contrat contrat = contratRepository.findById(contratId).orElseThrow(() -> new IllegalArgumentException("Contrat avec ID: " + contratId + " n'existe pas"));
+		switch (utilisateurDTO.getRole()) {
+			case EMPLOYEUR:
+				contrat.setSignatureEmployeur(utilisateurDTO.getFullName());
+				contrat.setDateSignatureEmployeur(LocalDate.now());
+				break;
+			case ETUDIANT:
+				contrat.setSignatureEtudiant(utilisateurDTO.getFullName());
+				contrat.setDateSignatureEtudiant(LocalDate.now());
+				break;
+			default:
+				throw new IllegalArgumentException("Utilisateur n'est pas un employeur ou un étudiant");
+		}
+		contratRepository.save(contrat);
 	}
 }

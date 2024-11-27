@@ -114,5 +114,19 @@ public class ContratController {
 		}
 	}
 
+	@PatchMapping("/{id}/signer")
+	public void signerContrat(@RequestHeader ("Authorization") String token, @PathVariable Long id) {
+		validateToken(token);
+		try {
+			UtilisateurDTO utilisateur = utilisateurService.getUtilisateurByToken(token);
+			ContratDTO contrat = contratService.getContratById(id);
+			if (contrat == null) {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Contract not found");
+			}
+			contratService.signContrat(id, utilisateur);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error signing contract", e);
+		}
+	}
 
 }

@@ -60,11 +60,28 @@ const ContratProvider = ({children}) => {
         return URL.createObjectURL(pdfBlob);
     }
 
+    const signContract = async (contratId) => {
+        const response = await fetch(`/contrats/${contratId}/signer`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': currentToken
+            },
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error response:', errorText);
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    };
+
     return (
         <ContratContext.Provider value={{
             fetchContratByCandidatureId,
             fetchPdf,
-            fetchPdfByContratId
+            fetchPdfByContratId,
+            signContract
         }}>
             {children}
         </ContratContext.Provider>

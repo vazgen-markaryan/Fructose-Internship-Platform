@@ -22,6 +22,7 @@ import Modal from "../../../utilities/modal/Modal";
 import {CvContext} from "../../providers/CvProvider";
 import Swal from "sweetalert2";
 import ViewContrat from "../contrat/ViewContrat";
+import {ContratContext} from "../../providers/ContratProvider";
 
 const ViewCandidatures = () => {
 	
@@ -37,11 +38,13 @@ const ViewCandidatures = () => {
 	const [candidatureCategory, setCandidatureCategory] = useState("nouvelles_candidatures")
 	const [isRejectModalOpen, setRejectModalOpen] = useState(false);
 	const textareaRef = useRef(null);
+	const {fetchContratByCandidatureId, signContract } = useContext(ContratContext);
+	const [contrat, setContrat] = useState(null);
 	
 	const today = new Date();
 	const minDate = new Date(today.setDate(today.getDate() + 3)).toISOString().split('T')[0];
 	const maxDate = new Date(today.setMonth(today.getMonth() + 1)).toISOString().split('T')[0];
-	
+
 	useEffect(() => {
 		fetch("/candidatures/candidaturesEmployeur", {
 			method: "GET",
@@ -61,10 +64,24 @@ const ViewCandidatures = () => {
 			})
 			.catch(error => console.error("Error fetching candidatures", error));
 	}, [currentToken]);
-	
+
 	useEffect(() => {
 		loadFilteredCategories(candidatureCategory);
 	}, [candidatures, candidatureCategory]);
+
+	useEffect(() => {
+		if (currentCandidature) {
+			const fetchContrat = async () => {
+				try {
+					const data = await fetchContratByCandidatureId(currentCandidature.id);
+					setContrat(data);
+				} catch (error) {
+					console.error("Erreur " + error);
+				}
+			};
+			fetchContrat();
+		}
+	}, [currentCandidature]);
 	
 	const fetchCvById = async (cvId) => {
 		try {
@@ -88,6 +105,18 @@ const ViewCandidatures = () => {
 		setCandidatureCategory(newCategory)
 		loadFilteredCategories(newCategory)
 	}
+
+	const handleSign = () => {
+		// handle sign
+		console.log("Sign contrat: " + contrat.id);
+		try{
+			signContract(contrat.id);
+			console.log("Contrat signé avec succès");
+			setCurrentCandidature(null);
+		}catch (error){
+			console.error("Error signing contract: " + error);
+		}
+	};
 	
 	// TODO : ATTACHER CREATION DU CONTRAT ICI CAR C'EST LE BUTTON DE ACCEPTER CANDIDATURE APRES ENTREVUE
 	// Principalement dans if(response.ok) { ... } AVANT SWAL.FIRE
@@ -671,28 +700,29 @@ const ViewCandidatures = () => {
 													</div>
 												</>
 												:
-												// SI CONTRAT A ÉTÉ SIGNÉ PAR L'ÉTUDIANT
-												(currentCandidature.etat === "CONTRAT_CREER_PAR_GESTIONNAIRE") ?
+												// SI CONTRAT A ÉTÉ GÉNÉRER PAR GESTIONNAIRE
+												(currentCandidature.etat === "CONTRAT_CREER_PAR_GESTIONNAIRE") && contrat && contrat.signatureEmployeur === null ?
 													<>
 														<div className="toolbar-items">
-															<Icon path={mdiCheckCircleOutline} size={1}
-																  className="text-green"/>
-															<p className="text-green m-0">{t("view_candidatures_page.contract_created")}</p>
-
+															<Icon path={mdiArrowLeft} size={1}
+																  className="text-yellow"/>
+															<p className="text-yellow m-0">{t("view_candidatures_page.waiting_sign_employeur")}</p>
 														</div>
 														<div>
-															<ViewContrat candidature={currentCandidature}/>
+															{console.log(contrat)}
+															{contrat && <ViewContrat contrat={contrat} handleSign={handleSign} />}
 														</div>
 													</>
 													:
 													// SI CONTRAT A ÉTÉ SIGNÉ PAR L'EMPLOYEUR
-													(currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR") ?
+													(currentCandidature.etat === "CONTRAT_CREER_PAR_GESTIONNAIRE") ?
 														<>
 															<div className={"toolbar-items"}>
 																<Icon path={mdiHelpCircleOutline} size={1}
 																	  className="text-orange"/>
 																<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_student_signature")}</p>
 															</div>
+															{contrat && <ViewContrat contrat={contrat} />}
 														</> :
 														// SI ETUDIANT ACCEPTE_APRES_ENTREVUE
 														(currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?
