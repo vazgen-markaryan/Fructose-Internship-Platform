@@ -573,7 +573,8 @@
 		"rejected_title": "Refusé!",
 		"rejected_text": "La candidature a été refusée en raison de l'échec de l'entrevue.",
 		"error_reject_text": "Échec du refus de la candidature.",
-		"accept": "Accepter"
+		"accept": "Accepter",
+		"candidature_accepted": "Votre candidature a été acceptée"
 	},
 	"manage_contract_en_attente": {
 		"title": "Contrats de stage en attente de génération"

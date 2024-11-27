@@ -13,7 +13,6 @@ import {
 	mdiClose,
 	mdiCloseCircleOutline,
 	mdiFileDocumentOutline,
-	mdiHelpCircleOutline,
 	mdiPlus
 } from "@mdi/js";
 import {OffreStageContext} from "../../providers/OffreStageProvider";
@@ -653,182 +652,6 @@ const DashboardHome = () => {
 							
 							<hr/>
 							
-							{/*<section className="nospace">*/}
-							{/*	/!*SECTION CANDIDATURE INITIALE VUE ETUDIANT*!/*/}
-							{/*	<h5>{t("dashboard_home_page.initial_application")}</h5>*/}
-							{/*	{*/}
-							{/*		// ÉTAT INITIALE*/}
-							{/*		(currentCandidature.etat === "EN_ATTENTE")*/}
-							{/*			?*/}
-							{/*			<div className="toolbar-items">*/}
-							{/*				<Icon path={mdiClockOutline} size={1} className="text-orange"/>*/}
-							{/*				<p className="text-orange m-0">{t("dashboard_home_page.waiting_employer_response")}</p>*/}
-							{/*			</div>*/}
-							{/*			:*/}
-							{/*			// SI ENTREVUE A ÉTÉ PROPOSÉE PAR EMPLOYEUR*/}
-							{/*			// SI ENTREVUE A ÉTÉ ACCEPTÉE PAR L'ÉTUDIANT*/}
-							{/*			// SI ENTREVUE A ÉTÉ REFUSÉE PAR L'ÉTUDIANT*/}
-							{/*			// SI CONTRAT A ÉTÉ SIGNÉ PAR L'EMPLOYEUR*/}
-							{/*			// SI CONTRAT A ÉTÉ REFUSÉ PAR L'ÉTUDIANT*/}
-							{/*			// SI CONTRAT A ÉTÉ SIGNÉ PAR L'ÉTUDIANT*/}
-							{/*			// SI CONTRAT SIGNÉ PAR TOUS*/}
-							{/*			// SI REFUSÉ APRÈS ENTREVUE*/}
-							{/*			// SI ETUDIANT ACCEPTE_APRES_ENTREVUE*/}
-							{/*			(currentCandidature.etat === "ENTREVUE_PROPOSE" ||*/}
-							{/*				currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" ||*/}
-							{/*				currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT" ||*/}
-							{/*				currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ||*/}
-							{/*				*/}
-							{/*				currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ||*/}
-							{/*				currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT" ||*/}
-							{/*				currentCandidature.etat === "CONTRAT_SIGNE_TOUS" ||*/}
-							{/*				currentCandidature.etat === "REFUSEE_APRES_ENTREVUE" ||*/}
-							{/*				currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?*/}
-							{/*				<div className="toolbar-items">*/}
-							{/*					<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>*/}
-							{/*					<p className="text-green m-0">{t("dashboard_home_page.approve")}</p>*/}
-							{/*				</div>*/}
-							{/*				:*/}
-							{/*				// SI CANDIDATURE A ÉTÉ REFUSÉE PAR EMPLOYEUR*/}
-							{/*				<div className="toolbar-items">*/}
-							{/*					<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>*/}
-							{/*					<p className="text-red m-0">{t("dashboard_home_page.rejected_with_comment")}: {currentCandidature.commentaireRefus}</p>*/}
-							{/*				</div>*/}
-							{/*	}*/}
-							{/*</section>*/}
-							
-							{/*<hr/>*/}
-							
-							{/*<section className="nospace">*/}
-							{/*	/!*SECTION ENTREVUE VUE ETUDIANT*!/*/}
-							{/*	<h5>{t("dashboard_home_page.interview")}</h5>*/}
-							{/*	{*/}
-							{/*		// SI ENTREVUE A ÉTÉ PROPOSÉE PAR EMPLOYEUR*/}
-							{/*		(currentCandidature.etat === "ENTREVUE_PROPOSE") ?*/}
-							{/*			<>*/}
-							{/*				<div className="toolbar-items">*/}
-							{/*					<Icon path={mdiClockOutline} size={1} className="text-blue"/>*/}
-							{/*					<p className="text-blue m-0">{t("dashboard_home_page.waiting_interview_acceptance")}</p>*/}
-							{/*				</div>*/}
-							{/*				<br/>*/}
-							{/*				<p>{t("dashboard_home_page.interview_date")}: {currentCandidature.dateEntrevue}</p>*/}
-							{/*				<div className="toolbar-items" style={{gap: "10px"}}>*/}
-							{/*					<button className="btn-filled bg-green" onClick={handleAcceptInterview}>*/}
-							{/*						{t("dashboard_home_page.accept")}*/}
-							{/*					</button>*/}
-							{/*					<button className="btn-filled bg-red" onClick={handleRefuseInterview}>*/}
-							{/*						{t("dashboard_home_page.refuse")}*/}
-							{/*					</button>*/}
-							{/*				</div>*/}
-							{/*			</>*/}
-							{/*			:*/}
-							{/*			// SI ENTREVUE ACCEPTÉE PAR L'ÉTUDIANT*/}
-							{/*			// SI CONTRAT SIGNÉ PAR L'EMPLOYEUR*/}
-							{/*			// SI CONTRAT REFUSÉ PAR L'ÉTUDIANT*/}
-							{/*			// SI CONTRAT SIGNÉ PAR L'ÉTUDIANT*/}
-							{/*			// SI CONTRAT SIGNÉ PAR TOUS*/}
-							{/*			// SI REFUSÉ APRÈS ENTREVUE*/}
-							{/*			// SI ETUDIANT ACCEPTE_APRES_ENTREVUE*/}
-							{/*			(currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" ||*/}
-							{/*				currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ||*/}
-							{/*				currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ||*/}
-							{/*				currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT" ||*/}
-							{/*				currentCandidature.etat === "CONTRAT_SIGNE_TOUS" ||*/}
-							{/*				currentCandidature.etat === "REFUSEE_APRES_ENTREVUE" ||*/}
-							{/*				currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?*/}
-							{/*				<>*/}
-							{/*					<div className="toolbar-items">*/}
-							{/*						<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>*/}
-							{/*						<p className="text-green m-0">{t("dashboard_home_page.interview_accepted_by_student")}</p>*/}
-							{/*					</div>*/}
-							{/*					<br/>*/}
-							{/*					<p>{t("dashboard_home_page.proposed_interview_date")}: {currentCandidature.dateEntrevue}</p>*/}
-							{/*				</>*/}
-							{/*				:*/}
-							{/*				// SI ENTREVUE A ÉTÉ REFUSÉE PAR L'ÉTUDIANT*/}
-							{/*				(currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT") ?*/}
-							{/*					<div className="toolbar-items">*/}
-							{/*						<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>*/}
-							{/*						<p className="text-red m-0">{t("dashboard_home_page.interview_rejected_by_student")}</p>*/}
-							{/*					</div>*/}
-							{/*					:*/}
-							{/*					// SI CANDIDATURE A ÉTÉ REFUSÉE PAR EMPLOYEUR*/}
-							{/*					(currentCandidature.etat === "REFUSEE") ?*/}
-							{/*						<div className="toolbar-items">*/}
-							{/*							<Icon path={mdiCloseCircleOutline} size={1} className="text-dark"/>*/}
-							{/*							<p className="text-dark m-0">{t("dashboard_home_page.interview_not_planned_for_rejected_application")}</p>*/}
-							{/*						</div>*/}
-							{/*						:*/}
-							{/*						// TOMBE EN DEFAULT ÉTAT INITIALE*/}
-							{/*				<div className="toolbar-items">*/}
-							{/*							<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>*/}
-							{/*							<p className="text-dark m-0">{t("dashboard_home_page.waiting_initial_application")}</p>*/}
-							{/*						</div>*/}
-							{/*	}*/}
-							{/*</section>*/}
-							
-							{/*<hr/>*/}
-							
-							
-							
-							
-							{/*<section className="nospace">*/}
-							{/*	/!*SECTION CONTRAT  VUE ETUDIANT*!/*/}
-							{/*	<h5>{t("dashboard_home_page.contract")}</h5>*/}
-							{/*	{*/}
-							{/*		// SI CANDIDATURE A ÉTÉ REFUSÉE*/}
-							{/*		(currentCandidature.etat === "REFUSEE") ?*/}
-							{/*			<div className="toolbar-items">*/}
-							{/*				<Icon path={mdiCloseCircleOutline} size={1} className="text-dark"/>*/}
-							{/*				<p className="text-dark m-0">{t("dashboard_home_page.interview_not_planned_for_rejected_application")}</p>*/}
-							{/*			</div>*/}
-							{/*			:*/}
-							{/*			// SI ENTREVUE A ÉTÉ ACCEPTÉE*/}
-							{/*			(currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT") ?*/}
-							{/*				<div className="toolbar-items">*/}
-							{/*					<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>*/}
-							{/*					<p className="text-orange m-0">{t("dashboard_home_page.waiting_interview_results")}</p>*/}
-							{/*				</div>*/}
-							{/*				:*/}
-							{/*				// SI ENTREVUE A ÉTÉ REFUSÉE PAR L'ÉTUDIANT*/}
-							{/*				(currentCandidature.etat === "ENTREVUE_REFUSE_ETUDIANT") ?*/}
-							{/*					<div className="toolbar-items">*/}
-							{/*						<Icon path={mdiCloseCircleOutline} size={1} className="text-dark"/>*/}
-							{/*						<p className="text-dark m-0">{t("dashboard_home_page.contract_not_proposed_for_rejected_interview")}</p>*/}
-							{/*					</div>*/}
-							{/*					:*/}
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							{/*					// SI CONTRAT A ÉTÉ SIGNÉ PAR L'EMPLOYEUR*/}
-							{/*					(currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR") ?*/}
-							{/*						<>*/}
-							{/*							<div className="toolbar-items">*/}
-							{/*								<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>*/}
-							{/*								<p className="text-green m-0">{t("dashboard_home_page.contract_signed_by_employer")}</p>*/}
-							{/*							</div>*/}
-							{/*							<br></br>*/}
-							{/*							<div className="toolbar-items" style={{gap: "10px"}}>*/}
-							{/*								<button className="btn-filled bg-green" onClick={handleSignerContrat}>*/}
-							{/*									{t("dashboard_home_page.sign")}*/}
-							{/*								</button>*/}
-							{/*								<button className="btn-filled bg-red" onClick={handleRefuserContrat}>*/}
-							{/*									{t("dashboard_home_page.refuse")}*/}
-							{/*								</button>*/}
-							{/*							</div>*/}
-							{/*						</>*/}
-							{/*						:*/}
-							
-							
-							
 							{/*						// SI CONTRAT A ÉTÉ SIGNÉ PAR L'ÉTUDIANT*/}
 							{/*						(currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT") ?*/}
 							{/*							<>*/}
@@ -845,8 +668,6 @@ const DashboardHome = () => {
 							{/*							</>*/}
 							{/*							:*/}
 							
-							
-							
 							{/*							// SI CONTRAT A ÉTÉ REFUSÉ PAR L'ÉTUDIANT*/}
 							{/*							(currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT") ?*/}
 							{/*								<div className="toolbar-items">*/}
@@ -855,8 +676,6 @@ const DashboardHome = () => {
 							{/*									<p className="text-red m-0">{t("dashboard_home_page.contract_rejected_by_student")}</p>*/}
 							{/*								</div>*/}
 							{/*								:*/}
-							
-							
 							
 							{/*								// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS*/}
 							{/*								(currentCandidature.etat === "CONTRAT_SIGNE_TOUS") ?*/}
@@ -868,30 +687,6 @@ const DashboardHome = () => {
 							{/*									</div>*/}
 							{/*									:*/}
 							
-							
-							
-							{/*									// SI ETUDIANT ACCEPTE_APRES_ENTREVUE*/}
-							{/*									(currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE") ?*/}
-							{/*										<>*/}
-							{/*											<div className={"toolbar-items"}>*/}
-							{/*												<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>*/}
-							{/*												<p className="text-orange m-0">{t("dashboard_home_page.waiting_contract_generation")}</p>*/}
-							{/*											</div>*/}
-							{/*										</>*/}
-							{/*										:*/}
-							
-							
-							
-							{/*										// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS*/}
-							{/*										(currentCandidature.etat === "REFUSEE_APRES_ENTREVUE") ?*/}
-							{/*											<div className="toolbar-items">*/}
-							{/*												<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>*/}
-							{/*												<p className="text-red m-0">{t("dashboard_home_page.application_rejected_after_interview")}</p>*/}
-							{/*											</div>*/}
-							{/*											:*/}
-							
-							
-							
 							{/*											// TOMBE EN DEFAULT ÉTAT INITIALE*/}
 							{/*											<div className="toolbar-items">*/}
 							{/*												<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>*/}
@@ -900,6 +695,20 @@ const DashboardHome = () => {
 							{/*	}*/}
 							{/*	<br/>*/}
 							{/*</section>*/}
+							
+							
+							{/*(*/}
+							{/*// VUE EMPLOYEUR*/}
+							{/*isEmployeur ?*/}
+							{/*(*/}
+							
+							{/*)*/}
+							{/*: // VUE ETUDIANT*/}
+							{/*(*/}
+							
+							{/*)*/}
+							{/*)*/}
+							
 							
 							<CandidatureStatus
 								currentCandidature={currentCandidature}

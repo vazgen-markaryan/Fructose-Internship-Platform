@@ -573,7 +573,8 @@
 		"rejected_title": "Rejected!",
 		"rejected_text": "The application has been rejected due to the failed interview.",
 		"error_reject_text": "Failed to reject the application.",
-		"accept": "Accept"
+		"accept": "Accept",
+		"candidature_accepted": "Your application has been accepted"
 	},
 	"manage_contract_en_attente": {
 		"title": "Internship Contracts waiting for generation"

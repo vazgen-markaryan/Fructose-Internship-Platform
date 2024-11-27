@@ -15,6 +15,9 @@ public enum EtatCandidature {
 	// Phase d'après l'entrevue
 	ACCEPTE_APRES_ENTREVUE,                         // Offre accepte par l'employeur après entrevue
 	REFUSEE_APRES_ENTREVUE,                         // Offre refusée par l'étudiant après entrevue
+	
+	CONTRAT_CREE_PAR_GESTIONNAIRE,       // Contrat créé par le gestionnaire
+	
 	CONTRAT_SIGNE_EMPLOYEUR,                     // Contrat signé par l'employeur et proposé à l'étudiant
 	
 	// Phase de décision de l'étudiant
