@@ -238,27 +238,27 @@ const CandidatureStatus = ({
 									: // SI ETUDIANNT A ÉTÉ ACCEPTÉ APRÈS L'ENTREVUE
 									currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE" ?
 										(
-											// VUE EMPLOYEUR
-											isEmployeur ?
-												(
-													<div className="toolbar-items">
-														<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-														<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_contract_generation")}</p>
-													</div>
-												)
-												: // VUE ETUDIANT
-												(
-													<>
-														<div className={"toolbar-items"}>
-															<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
-															<p className="text-green m-0">{t("view_candidatures_page.passed_entrevue")}</p>
-														</div>
-														<div className="toolbar-items">
-															<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-															<p className="text-orange m-0">{t("dashboard_home_page.waiting_contract_generation")}</p>
-														</div>
-													</>
-												)
+											// VUE EMPLOYEUR ET ETUDIANT
+											<>
+												<div className="toolbar-items">
+													<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
+													<p className="text-green m-0">
+														{/*SI VUE EMPLOYEUR */}
+														{isEmployeur ?
+															t("view_candidatures_page.student_passed_entrevue")
+															: // SI VUE ETUDIANT
+															t("view_candidatures_page.you_passed_entrevue")
+														}
+													</p>
+												</div>
+												
+												<div className={"toolbar-items"}>
+													<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
+													<p className="text-orange m-0">
+														{t("view_candidatures_page.waiting_for_contract_generation")}
+													</p>
+												</div>
+											</>
 										)
 										: // SI CANDIDATURE A ÉTÉ REFUSÉE APRÈS L'ENTREVUE
 										currentCandidature.etat === "REFUSEE_APRES_ENTREVUE" ?
@@ -304,7 +304,8 @@ const CandidatureStatus = ({
 																<br></br>
 																
 																<div>
-																	{contrat && <ViewContrat contrat={contrat} handleSign={handleSignerContrat}/>}
+																	{contrat &&
+																		<ViewContrat contrat={contrat} handleSign={handleSignerContrat}/>}
 																</div>
 															</>
 														)
@@ -319,7 +320,8 @@ const CandidatureStatus = ({
 																<br></br>
 																
 																<div>
-																	{contrat && <ViewContrat contrat={contrat}  handleSign={handleSignerContrat}/>}
+																	{contrat &&
+																		<ViewContrat contrat={contrat} handleSign={handleSignerContrat}/>}
 																</div>
 															</>
 														)

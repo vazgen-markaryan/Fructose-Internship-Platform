@@ -288,7 +288,10 @@
 		"delete_stage_confirmation_text": "Cette action est irréversible et supprimera définitivement cette offre de stage.",
 		"delete_stage_confirm_button_text": "Oui, supprimer",
 		"delete_stage_cancel_button_text": "Non, annuler",
-		"no_comment_reject_cv_text": "Veuillez entrer un commentaire pour le refus"
+		"no_comment_reject_cv_text": "Veuillez entrer un commentaire pour le refus",
+		"cv_rejected_success": "CV refusé avec succès",
+		"offer_rejected_success": "L'Offre de stage a été refusée avec succès",
+		"no_comment_reject_offer_text": "Veuillez entrer un commentaire pour le refus"
 	},
 	"pdf_view_page": {
 		"error": "Une erreur inconnue est survenue"
@@ -388,7 +391,7 @@
 			"delete": "Supprimer"
 		},
 		"messages": {
-			"no_offre_stages_contracts": "Aucune Contrat à générer pour le moment"
+			"no_offre_stages_contracts": "Aucun Contrat à générer pour le moment"
 		}
 	},
 	"modifier_offre_stage_page": {
@@ -575,7 +578,8 @@
 		"rejected_text": "La candidature a été refusée en raison de l'échec de l'entrevue.",
 		"error_reject_text": "Échec du refus de la candidature.",
 		"accept": "Accepter",
-		"passed_entrevue": "Vous avez passé l'entrevue avec succès.",
+		"you_passed_entrevue": "Vous avez passé l'entrevue avec succès.",
+		"student_passed_entrevue": "Étudiant a passé l'entrevue avec succès.",
 		"waiting_for_your_signature" : "En attente de votre signature"
 	},
 	"manage_contract_en_attente": {

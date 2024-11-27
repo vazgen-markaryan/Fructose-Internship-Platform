@@ -50,6 +50,7 @@ const DashboardHome = () => {
 		}
 	}, [currentUser, GetCvs, fetchOffresStage, GetAllCvs, isUserInit]);
 	
+	//TODO ADD SWAL
 	const handleValidateCv = (cvId) => {
 		fetch(`/accepter-cv/` + cvId, {
 			method: "POST",
@@ -78,42 +79,41 @@ const DashboardHome = () => {
 	};
 	
 	const handleRejectCv = (cvId, string) => {
-		Swal.fire({
-			title: "Oops...",
-			text: t("dashboard_home_page.no_comment_reject_cv_text"),
-			icon: "error"
-		}).then((willReject) => {
-			if (willReject) {
-				fetch(`/refuser-cv/` + cvId, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						"Authorization": currentToken
-					},
-					body: string,
-				})
-					.then(response => {
-						if (response.ok) {
-							setAllCvs((prevCv) => {
-								const updatedCvs = prevCv.filter((cv) => cv.id !== cvId);
-								if (updatedCvs.length === 0) {
-									setCurrentCV(null);
-								}
-								return updatedCvs;
-							});
+		fetch(`/refuser-cv/` + cvId, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": currentToken
+			},
+			body: string,
+		})
+			.then(response => {
+				if (response.ok) {
+					setAllCvs((prevCv) => {
+						const updatedCvs = prevCv.filter((cv) => cv.id !== cvId);
+						if (updatedCvs.length === 0) {
 							setCurrentCV(null);
-							return response;
 						}
-						throw new Error("Erreur lors du refus du Cv");
-					})
-					.then(data => {
-						setRejectModalOpenCv(false);
-					})
-					.catch(error => {
-						console.error("Erreur lors du refus du cv:", error);
+						return updatedCvs;
 					});
-			}
-		});
+					setCurrentCV(null);
+					Swal.fire({
+						title: "Success",
+						text: t("dashboard_home_page.cv_rejected_success"),
+						icon: "success"
+					});
+				} else {
+					throw new Error("Erreur lors du refus du Cv");
+				}
+			})
+			.catch(error => {
+				console.error("Erreur lors du refus du cv:", error);
+				Swal.fire({
+					title: "Oops...",
+					text: t("dashboard_home_page.no_comment_reject_cv_text"),
+					icon: "error"
+				});
+			});
 	};
 	
 	const fetchCvById = async (cvId) => {
@@ -155,7 +155,7 @@ const DashboardHome = () => {
 			});
 	}
 	
-	function handleRejectOffer(id, string) {
+	const handleRejectOffer = (id, string) => {
 		fetch(`/refuser-offre-stage/` + id, {
 			method: "POST",
 			headers: {
@@ -174,24 +174,23 @@ const DashboardHome = () => {
 						return updatedOffres;
 					});
 					setCurrentOffer(null);
-					return response;
+					Swal.fire({
+						title: "Success",
+						text: t("dashboard_home_page.offer_rejected_success"),
+						icon: "success"
+					});
+				} else {
+					throw new Error("Erreur lors du refus de l'offre");
 				}
-				throw new Error("Erreur lors du refus de l'offre");
-			})
-			.then(data => {
-				setRejectModalOpen(false);
 			})
 			.catch(error => {
 				console.error("Erreur lors du refus de l'offre:", error);
+				Swal.fire({
+					title: "Oops...",
+					text: t("dashboard_home_page.no_comment_reject_offer_text"),
+					icon: "error"
+				});
 			});
-	}
-	
-	const handlePageChange = (pageNumber) => {
-		setCurrentPage(pageNumber);
-	};
-	
-	const handlePageChangeCv = (pageNumber) => {
-		setCurrentPageCv(pageNumber);
 	};
 	
 	const GetUserManagementSection = () => {
@@ -211,20 +210,27 @@ const DashboardHome = () => {
 		}
 	}
 	
+	const handlePageChange = (pageNumber) => {
+		setCurrentPage(pageNumber);
+	};
+	
+	const handlePageChangeCv = (pageNumber) => {
+		setCurrentPageCv(pageNumber);
+	};
+	
 	const startIndex = (currentPage - 1) * itemsPerPage;
 	const endIndex = startIndex + itemsPerPage;
-	
-	let selectedOffresStage = offresStage.filter(offre => !offre.isApproved && !offre.isRefused).slice(startIndex, endIndex);
-	
+	const selectedOffresStage = offresStage.filter(offre => !offre.isApproved && !offre.isRefused).slice(startIndex, endIndex);
 	const totalPages = Math.ceil(offresStage.filter(offre => !offre.isApproved && !offre.isRefused).length / itemsPerPage);
+	
+	const startIndexCvs = (currentPageCv - 1) * itemsPerPage;
+	const endIndexCvs = startIndexCvs + itemsPerPage;
+	const selectedCvs = allCvs.filter(cv => !cv.isApproved && !cv.isRefused).slice(startIndexCvs, startIndexCvs + endIndexCvs);
+	const totalPagesCv = Math.ceil(allCvs.filter(cv => !cv.isApproved && !cv.isRefused).length / itemsPerPage);
 	
 	if (selectedOffresStage.length === 0 && currentPage > 1) {
 		setCurrentPage(currentPage - 1);
 	}
-	
-	const startIndexCvs = (currentPageCv - 1) * itemsPerPage;
-	const selectedCvs = allCvs.filter(cv => !cv.isApproved && !cv.isRefused).slice(startIndexCvs, startIndexCvs + itemsPerPage);
-	const totalPagesCv = Math.ceil(allCvs.filter(cv => !cv.isApproved && !cv.isRefused).length / itemsPerPage);
 	
 	if (selectedCvs.length === 0 && currentPageCv > 1) {
 		setCurrentPageCv(currentPageCv - 1);
@@ -302,25 +308,27 @@ const DashboardHome = () => {
 						</div>
 					</div>
 				)}
-				<div style={{
-					display: "flex",
-					justifyContent: "center",
-					gap: "5px",
-					marginTop: "20px"
-				}}>
-					{Array.from({length: totalPages}, (_, index) => (
-						<button
-							key={index}
-							className={(currentPage === index + 1) ? "btn-filled" : ""}
-							onClick={() => {
-								handlePageChange(index + 1);
-								setCurrentOffer(null);
-							}}
-						>
-							{index + 1}
-						</button>
-					))}
-				</div>
+				{selectedOffresStage.length > itemsPerPage && (
+					<div style={{
+						display: "flex",
+						justifyContent: "center",
+						gap: "5px",
+						marginTop: "20px"
+					}}>
+						{Array.from({length: totalPages}, (_, index) => (
+							<button
+								key={index}
+								className={(currentPage === index + 1) ? "btn-filled" : ""}
+								onClick={() => {
+									handlePageChange(index + 1);
+									setCurrentOffer(null);
+								}}
+							>
+								{index + 1}
+							</button>
+						))}
+					</div>
+				)}
 			</div>
 			<div className="toolbar-items">
 				<h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.manage_cv")}</h4>
@@ -422,24 +430,26 @@ const DashboardHome = () => {
 						</div>
 					</div>
 				)}
-				<div style={{
-					display: "flex",
-					justifyContent: "center",
-					marginTop: "20px"
-				}}>
-					{Array.from({length: totalPagesCv}, (_, index) => (
-						<button
-							key={index}
-							className={(currentPageCv === index + 1) ? "btn-filled" : ""}
-							onClick={() => {
-								handlePageChangeCv(index + 1);
-								setCurrentCV(null);
-							}}
-						>
-							{index + 1}
-						</button>
-					))}
-				</div>
+				{allCvs.length > itemsPerPage && (
+					<div style={{
+						display: "flex",
+						justifyContent: "center",
+						marginTop: "20px"
+					}}>
+						{Array.from({length: totalPagesCv}, (_, index) => (
+							<button
+								key={index}
+								className={(currentPageCv === index + 1) ? "btn-filled" : ""}
+								onClick={() => {
+									handlePageChangeCv(index + 1);
+									setCurrentCV(null);
+								}}
+							>
+								{index + 1}
+							</button>
+						))}
+					</div>
+				)}
 				<div>
 					<br></br>
 					<ListCandidatureEnAttenteContrat/>

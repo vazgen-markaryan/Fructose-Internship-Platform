@@ -398,6 +398,7 @@ const ViewCandidatures = () => {
 				</Link>
 				<h1>{t("view_candidatures_page.title")}</h1>
 			</div>
+			
 			<div style={{display: "flex", gap: "20px"}}>
 				<div className="dashboard-card" style={{width: "30%"}}>
 					<section>
@@ -435,8 +436,8 @@ const ViewCandidatures = () => {
 						</button>
 					</section>
 				</div>
-				<div className="dashboard-card"
-				     style={{width: "70%", maxHeight: "550px", overflowY: "auto", height: "80vh"}}>
+				
+				<div className="dashboard-card" style={{width: "70%", maxHeight: "550px", overflowY: "auto", height: "80vh"}}>
 					<section>
 						<h5>{t("view_candidatures_page.your_applications")}</h5>
 						<div className="menu-list">
@@ -484,6 +485,7 @@ const ViewCandidatures = () => {
 				(currentCandidature !== null) ?
 					<div className="window-frame">
 						<div className="window">
+							
 							<div className="window-titlebar">
 								<h5>{t("view_candidatures_page.application")}</h5>
 								<span className="toolbar-spacer"></span>
@@ -491,6 +493,7 @@ const ViewCandidatures = () => {
 									<Icon path={mdiClose} size={1}/>
 								</button>
 							</div>
+							
 							<div className="window-content">
 								<section className="nospace">
 									<div className="toolbar-items" style={{gap: "8px"}}>
@@ -508,7 +511,9 @@ const ViewCandidatures = () => {
 										<button className="btn-outline">{t("view_candidatures_page.view_offer")}</button>
 									</div>
 								</section>
+								
 								<hr/>
+								
 								<section className="nospace">
 									<div style={{
 										display: "flex",
@@ -523,23 +528,6 @@ const ViewCandidatures = () => {
 												: null
 										)
 									}
-									<div className="list-bullet">
-										<div className="user-profile-section-profile-picture" style={{
-											"background": "url('/assets/auth/default-profile.jpg') center / cover",
-											width: "36px",
-											height: "36px",
-											margin: 0
-										}}></div>
-										<div>
-											<h6 className="m-0">{currentCandidature.etudiantDTO ? currentCandidature.etudiantDTO.fullName : "Loading"}</h6>
-											<p className="m-0 text-dark">{currentCandidature.etudiantDTO.matricule}</p>
-										</div>
-										
-										<div className="toolbar-spacer"></div>
-										<a href={"mailto:"}>
-											<button>{t("discover_offers_page.contact")}</button>
-										</a>
-									</div>
 								</section>
 								
 								<hr/>
@@ -555,7 +543,6 @@ const ViewCandidatures = () => {
 									handleSignerContrat={handleSignerContrat}
 									// TODO AJOUTER HANDLE REFUSER CONTRAT
 								/>
-							
 							</div>
 						</div>
 					</div>

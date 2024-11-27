@@ -236,6 +236,10 @@ const DashboardHome = () => {
 		setCurrentPage(pageNumber);
 	};
 	
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const selectedOffresStage = offresStage.slice(startIndex, startIndex + itemsPerPage);
+	const totalPages = Math.ceil(offresStage.length / itemsPerPage);
+	
 	const GetOffreStageSection = () => {
 		if (currentUser != null) {
 			if (currentUser.role === "ETUDIANT") {
@@ -406,25 +410,27 @@ const DashboardHome = () => {
 									</div>
 								</div>
 							)}
-							<div style={{
-								display: "flex",
-								justifyContent: "center",
-								gap: "5px",
-								marginTop: "20px"
-							}}>
-								{Array.from({length: Math.ceil(offresStage.length / itemsPerPage)}, (_, index) => (
-									<button
-										key={index}
-										className={(currentPage === index + 1) ? "btn-filled" : ""}
-										onClick={() => {
-											handlePageChange(index + 1);
-											setCurrentOffer(null);
-										}}
-									>
-										{index + 1}
-									</button>
-								))}
-							</div>
+							{offresStage.length > itemsPerPage && (
+								<div style={{
+									display: "flex",
+									justifyContent: "center",
+									gap: "5px",
+									marginTop: "20px"
+								}}>
+									{Array.from({length: totalPages}, (_, index) => (
+										<button
+											key={index}
+											className={(currentPage === index + 1) ? "btn-filled" : ""}
+											onClick={() => {
+												handlePageChange(index + 1);
+												setCurrentOffer(null);
+											}}
+										>
+											{index + 1}
+										</button>
+									))}
+								</div>
+							)}
 						</div>
 					</section>
 				);

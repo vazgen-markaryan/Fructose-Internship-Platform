@@ -288,7 +288,10 @@
 		"delete_stage_confirmation_text": "You will not be able to recover it once it is deleted.",
 		"delete_stage_confirm_button_text": "Yes, delete it",
 		"delete_stage_cancel_button_text": "No, it was a mistake",
-		"no_comment_reject_cv_text": "Please enter a reason for rejection"
+		"no_comment_reject_cv_text": "Please enter a reason for rejection",
+		"cv_rejected_success": "The CV has been rejected",
+		"offer_rejected_success": "The internship offer has been rejected",
+		"no_comment_reject_offer_text": "Please enter a reason for rejection"
 	},
 	"pdf_view_page": {
 		"error": "An unknown error occurred"
@@ -575,7 +578,8 @@
 		"rejected_text": "The application has been rejected due to the failed interview.",
 		"error_reject_text": "Failed to reject the application.",
 		"accept": "Accept",
-		"passed_entrevue": "You passed the interview. Congratulations!",
+		"you_passed_entrevue": "You passed the interview. Congratulations!",
+		"student_passed_entrevue": "Student passed the interview",
 		"waiting_for_your_signature" : "Waiting for your signature"
 	},
 	"manage_contract_en_attente": {
