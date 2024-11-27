@@ -30,4 +30,10 @@ public class SectionEvaluation {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     private EvaluationEmployeur evaluation;
+
+    private String commentaireSection;
+
+    public void addCritere(CritereEvaluation critere) {
+        this.criteres.add(critere);
+    }
 }
