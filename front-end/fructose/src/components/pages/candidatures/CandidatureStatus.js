@@ -273,7 +273,9 @@ const CandidatureStatus = ({
 											)
 											
 											
-											// TODO AFFIHCAGE DES MESSAGES DE SIGNATURE DRY
+											
+											
+											
 											// TODO PAS A CA PLACE
 											: // SI CONTRAT A ÉTÉ CRÉÉ PAR GESTIONNAIRE ET NON SIGNÉ PAR EMPLOYEUR
 											currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" && contrat ?
@@ -282,27 +284,27 @@ const CandidatureStatus = ({
 													isEmployeur ?
 														(
 															<>
+																{/*// SI CONTRAT N'EST PAS ENCORE SIGNÉ PAR EMPLOYEUR*/}
 																{contrat.signatureEmployeur === "Non signé" ?
 																	(
 																		<div className="toolbar-items">
-																			<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-																			<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_your_signature")}</p>
+																			<Icon path={mdiHelpCircleOutline} size={1} className="text-blue"/>
+																			<p className="text-blue m-0">{t("view_candidatures_page.waiting_for_your_signature")}</p>
 																		</div>
-																	)
-																	:
-																	(contrat.signatureEtudiant === "Non signé" ?
-																			(
-																				<div className="toolbar-items">
-																					<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-																					<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_student_signature")}</p>
-																				</div>
-																			)
-																			: null
-																	)
+																	) : null // SINON AFFICHE RIEN
 																}
 																
+																{/*// SI CONTRAT N'EST PAS ENCORE SIGNÉ PAR ETUDIANT*/}
+																{contrat.signatureEtudiant === "Non signé" ?
+																	(
+																		<div className="toolbar-items">
+																			<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
+																			<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_student_signature")}</p>
+																		</div>
+																	)
+																	: null // SINON AFFICHE RIEN
+																}
 																<br></br>
-																
 																<div>
 																	{contrat &&
 																		<ViewContrat contrat={contrat} handleSign={handleSignerContrat}/>}
@@ -312,13 +314,27 @@ const CandidatureStatus = ({
 														: // VUE ETUDIANT
 														(
 															<>
-																<div className="toolbar-items">
-																	<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-																	<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_your_signature")}</p>
-																</div>
+																{/*// SI CONTRAT N'EST PAS ENCORE SIGNÉ PAR EMPLOYEUR*/}
+																{contrat.signatureEmployeur === "Non signé" ?
+																	(
+																		<div className="toolbar-items">
+																			<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
+																			<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_employer_signature")}</p>
+																		</div>
+																	)
+																	: null // SINON AFFICHE RIEN
+																}
 																
+																{/*SI CONTRAT N'EST PAS ENCORE SIGNÉ PAR ETUDIANT*/}
+																{contrat.signatureEtudiant === "Non signé" ?
+																	(
+																		<div className="toolbar-items">
+																			<Icon path={mdiHelpCircleOutline} size={1} className="text-blue"/>
+																			<p className="text-blue m-0">{t("view_candidatures_page.waiting_for_your_signature")}</p>
+																		</div>
+																	) : null // SINON AFFICHE RIEN
+																}
 																<br></br>
-																
 																<div>
 																	{contrat &&
 																		<ViewContrat contrat={contrat} handleSign={handleSignerContrat}/>}
@@ -343,6 +359,7 @@ const CandidatureStatus = ({
 													
 													
 													// TODO REVOIR LES CONDITIONS
+													//TODO TOUT CELA EST VUE EMOLOYEUR
 													: // SI CONTRAT SIGNÉ PAR EMPLOYEUR
 													currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ? (
 															// VUE EMPLOYEUR

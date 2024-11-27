@@ -571,7 +571,7 @@ const DashboardHome = () => {
 							</section>
 							
 							<hr/>
-							
+							{/*TODO TOUCHE PAS ÇA (c) VAZGEN!*/}
 							{/*						// SI CONTRAT A ÉTÉ SIGNÉ PAR L'ÉTUDIANT*/}
 							{/*						(currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT") ?*/}
 							{/*							<>*/}
@@ -587,7 +587,6 @@ const DashboardHome = () => {
 							{/*								</div>*/}
 							{/*							</>*/}
 							{/*							:*/}
-							
 							{/*							// SI CONTRAT A ÉTÉ REFUSÉ PAR L'ÉTUDIANT*/}
 							{/*							(currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT") ?*/}
 							{/*								<div className="toolbar-items">*/}
@@ -596,27 +595,22 @@ const DashboardHome = () => {
 							{/*									<p className="text-red m-0">{t("dashboard_home_page.contract_rejected_by_student")}</p>*/}
 							{/*								</div>*/}
 							{/*								:*/}
-							
 							{/*								// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS*/}
 							{/*								(currentCandidature.etat === "CONTRAT_SIGNE_TOUS") ?*/}
 							{/*									<div className="toolbar-items">*/}
 							{/*										<Icon path={mdiCloseCircleOutline} size={1}*/}
 							{/*											  className="text-green"/>*/}
 							{/*										<p className="text-green m-0">{t("dashboard_home_page.contract_signed_by_all")}</p>*/}
-							
 							{/*									</div>*/}
 							{/*									:*/}
-							
 							{/*											// TOMBE EN DEFAULT ÉTAT INITIALE*/}
 							{/*											<div className="toolbar-items">*/}
 							{/*												<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>*/}
 							{/*												<p className="text-dark m-0">{t("dashboard_home_page.waiting_interview_results")}</p>*/}
 							{/*											</div>*/}
 							{/*	}*/}
-							{/*	<br/>*/}
+							
 							{/*</section>*/}
-							
-							
 							{/*(*/}
 							{/*// VUE EMPLOYEUR*/}
 							{/*isEmployeur ?*/}
