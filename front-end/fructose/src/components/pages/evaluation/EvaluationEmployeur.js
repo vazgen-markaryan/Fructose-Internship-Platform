@@ -22,8 +22,9 @@ const EvaluationEmployeur = () => {
                 .then((data) => setCandidatures(data || []))
                 .catch((error) => {
                     console.error("Erreur lors de la récupération des données :", error);
-                    setCandidatures([]); // Gestion des erreurs
+                    setCandidatures([]);
                 });
+            console.log(candidatures);
         }
     }, [currentUser, fetchStagiaireByOwner]);
 
@@ -34,7 +35,7 @@ const EvaluationEmployeur = () => {
         return (
             <section>
                 <div className="toolbar-items">
-                    <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.stagiaire")}</h4>
+                    <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.stagiaire_a_evaluer")}</h4>
                 </div>
                 <div style={{ padding: "10px 0" }}>
                     {candidatures.length === 0 ? (
@@ -50,7 +51,7 @@ const EvaluationEmployeur = () => {
                             }}
                         >
                             <Icon path={mdiBriefcasePlusOutline} size={1} />
-                            <p className="m-0">{t("dashboard_home_page.no_stagiaire")}</p>
+                            <p className="m-0">{t("dashboard_home_page.no_stagiaire_a_evaluer")}</p>
                         </div>
                     ) : (
                         <div
@@ -114,12 +115,7 @@ const EvaluationEmployeur = () => {
                                                     to="/dashboard/evaluation-step/"
                                                     state={{
                                                         candidature: {
-                                                            nomEleve: candidature.etudiant.fullName,
-                                                            programme: candidature.programme,
-                                                            entreprise: candidature.entreprise,
-                                                            superviseur: candidature.superviseur,
-                                                            fonction: candidature.fonction,
-                                                            telephone: candidature.telephone,
+                                                            candidature: candidature.candidature
                                                         },
                                                     }}
                                                 >

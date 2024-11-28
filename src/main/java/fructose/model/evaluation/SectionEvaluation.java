@@ -13,13 +13,14 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(exclude = "evaluation")
 public class SectionEvaluation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column (name = "name", nullable = false)
     private String name;
 
     @Column(name = "commentaire", nullable = false)

@@ -9,14 +9,11 @@ const EvaluationEtapes = () => {
     const {currentToken} = useContext(AuthContext);
     const location = useLocation();
     const initialCandidature = location.state?.candidature || {};
+    const [errors, setErrors] = useState({});
+
     // Structure des données du formulaire
     const [formData, setFormData] = useState({
-        nomEleve: initialCandidature.nomEleve || "",
-        programme: initialCandidature.programme || "",
-        entreprise: initialCandidature.entreprise || "",
-        superviseur: initialCandidature.superviseur || "",
-        fonction: initialCandidature.fonction || "",
-        telephone: initialCandidature.telephone || "",
+        candidature: initialCandidature.candidature || "",
         productivite: {commentaire: "", champs: {}},
         qualiteTravail: {commentaire: "", champs: {}},
         relationsInterpersonnelles: {commentaire: "", champs: {}},
@@ -27,6 +24,12 @@ const EvaluationEtapes = () => {
         prochainStage: "",
         commentairesAccomplissementMandat: "",
     });
+    const ReponseEvaluation = {
+        TOTAL_AGREE: "Totalement en accord",
+        MOSTLY_AGREE: "Plutôt en accord",
+        MOSTLY_DISAGREE: "Plutôt en désaccord",
+        TOTAL_DISAGREE: "Totalement en désaccord",
+    };
 
     // Gestion des changements dans les champs
     const handleChange = (e) => {
@@ -53,23 +56,155 @@ const EvaluationEtapes = () => {
         });
     };
 
-    // Navigation entre les étapes
     const handleNextStep = () => {
-        if (currentStep < 6) setCurrentStep((prev) => prev + 1);
+        const stepFields = {
+            1: {
+                section: "productivite",
+                fields: [
+                    "Planifier et organiser son travail de façon efficace",
+                    "Comprendre rapidement les directives relatives à son travail",
+                    "Maintenir un rythme de travail soutenu",
+                    "Établir ses priorités",
+                    "Respecter ses échéanciers",
+                ],
+            },
+            2: {
+                section: "qualiteTravail",
+                fields: [
+                    "Respecter les mandats qui lui ont été confiés",
+                    "Porter attention aux détails dans la réalisation de ses tâches",
+                    "Vérifier son travail, s’assurer que rien n’a été oublié",
+                    "Rechercher des occasions de se perfectionner",
+                    "Faire une bonne analyse des problèmes rencontrés",
+                ],
+            },
+            3: {
+                section: "relationsInterpersonnelles",
+                fields: [
+                    "Établir facilement des contacts avec les gens",
+                    "Contribuer activement au travail d’équipe",
+                    "S’adapter facilement à la culture de l’entreprise",
+                    "Accepter les critiques constructives",
+                    "Être respectueux envers les gens",
+                    "Faire preuve d’écoute active en essayant de comprendre le point de vue de l’autre",
+                ],
+            },
+            4: {
+                section: "habiletesPersonnelles",
+                fields: [
+                    "Démontrer de l’intérêt et de la motivation au travail",
+                    "Exprimer clairement ses idées",
+                    "Faire preuve d’initiative",
+                    "Travailler de façon sécuritaire",
+                    "Démontrer un bon sens des responsabilités ne requérant qu’un minimum de supervision",
+                    "Être ponctuel et assidu à son travail",
+                ],
+            },
+        };
+
+        // Étapes 1 à 4 : Validation des champs
+        if (currentStep <= 4) {
+            const { section, fields } = stepFields[currentStep] || {};
+
+            if (!fields) {
+                console.error("Aucun champ trouvé pour l'étape actuelle :", currentStep);
+                return;
+            }
+
+            const newErrors = {};
+
+            fields.forEach((field) => {
+                if (!formData[section]?.champs?.[field]?.trim()) {
+                    newErrors[`${section}.champs.${field}`] = "Ce champ est obligatoire.";
+                }
+            });
+
+            if (Object.keys(newErrors).length > 0) {
+                setErrors(newErrors); // Mettre à jour les erreurs
+                return;
+            }
+
+            setErrors({});
+        }
+
+        if (currentStep === 5) {
+            const appreciationFields = [
+                "valeur",
+                "commentaire",
+            ];
+
+            const newErrors = {};
+
+            appreciationFields.forEach((field) => {
+                if (!formData.appreciationGlobale[field]?.trim()) {
+                    newErrors[`appreciationGlobale.${field}`] = "Ce champ est obligatoire.";
+                }
+            });
+
+            if (Object.keys(newErrors).length > 0) {
+                setErrors(newErrors);
+                return;
+            }
+
+            setErrors({});
+        }
+
+        if (currentStep === 6) {
+            const finalFields = [
+                "evaluationDiscutee",
+                "nombreHeures",
+                "prochainStage",
+            ];
+
+            const newErrors = {};
+
+            finalFields.forEach((field) => {
+                if (!formData[field]?.trim()) {
+                    newErrors[field] = "Ce champ est obligatoire.";
+                }
+            });
+
+            if (Object.keys(newErrors).length > 0) {
+                setErrors(newErrors);
+                return;
+            }
+
+            setErrors({});
+        }
+
+        if (currentStep < 6) {
+            setCurrentStep((prev) => prev + 1);
+        }
     };
+
 
     const handlePreviousStep = () => {
         if (currentStep > 1) setCurrentStep((prev) => prev - 1);
     };
 
     const handleSubmit = async () => {
+        const finalFields = [
+            "evaluationDiscutee",
+            "nombreHeures",
+            "prochainStage",
+        ];
+
+        const newErrors = {};
+
+        finalFields.forEach((field) => {
+            if (!formData[field]?.trim()) {
+                newErrors[field] = "Ce champ est obligatoire.";
+            }
+        });
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
+        setErrors({});
         const preparedData = {
-            nomEleve: formData.nomEleve,
-            programme: formData.programme,
-            entreprise: formData.entreprise,
-            superviseur: formData.superviseur,
-            fonction: formData.fonction,
-            telephone: formData.telephone,
+            candidature: formData.candidature,
             appreciationGlobale: formData.appreciationGlobale.valeur,
             commentaireAppreciationGlobale: formData.appreciationGlobale.commentaire,
             discuterAvecEtudiant: formData.evaluationDiscutee,
@@ -94,14 +229,13 @@ const EvaluationEtapes = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${currentToken}`,
+                    "Authorization": currentToken,
                 },
                 body: JSON.stringify(preparedData),
             });
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("Évaluation soumise avec succès :", data);
             } else {
                 console.error("Erreur lors de la soumission de l'évaluation");
             }
@@ -174,28 +308,34 @@ const EvaluationEtapes = () => {
                     <h3>{title}</h3>
                     <p>{description}</p>
                     {items.map((item, idx) => (
-                        <div key={idx} style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            marginBottom: "15px"
-                        }}>
-                            <label htmlFor={`${section}.champs.${item}`}
-                                   style={{flex: 1, textAlign: "left", marginRight: "10px"}}>{item}</label>
-                            <select
-                                id={`${section}.champs.${item}`}
-                                name={`${section}.champs.${item}`}
-                                value={formData[section].champs[item] || ""}
-                                onChange={handleChange}
-                                style={{width: "50%", textAlign: "center", textAlignLast: "center"}}
-                            >
-                                <option value="">Sélectionner</option>
-                                <option value="totalement">Totalement en accord</option>
-                                <option value="plutot">Plutôt en accord</option>
-                                <option value="plutotPas">Plutôt en désaccord</option>
-                                <option value="pas">Totalement en désaccord</option>
-                                <option value="na">N/A</option>
-                            </select>
+                        <div key={idx} style={{ marginBottom: "15px" }}>
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                <label htmlFor={`${section}.champs.${item}`} style={{ flex: 1, marginRight: "10px" }}>
+                                    {item}
+                                </label>
+                                <select
+                                    id={`${section}.champs.${item}`}
+                                    name={`${section}.champs.${item}`}
+                                    value={formData[section]?.champs?.[item] || ""}
+                                    onChange={handleChange}
+                                    style={{
+                                        width: "50%",
+                                        textAlign: "center",
+                                        textAlignLast: "center",
+                                        border: errors[`${section}.champs.${item}`] ? "1px solid red" : "1px solid #ccc",
+                                    }}
+                                >
+                                    <option value="">Sélectionner</option>
+                                    {Object.entries(ReponseEvaluation).map(([key, label]) => (
+                                        <option key={key} value={key}>
+                                            {label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            {errors[`${section}.champs.${item}`] && (
+                                <span style={{ color: "red", fontSize: "12px" }}>{errors[`${section}.champs.${item}`]}</span>
+                            )}
                         </div>
                     ))}
                     <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
@@ -232,6 +372,9 @@ const EvaluationEtapes = () => {
                             <label>{option}</label>
                         </div>
                     ))}
+                    {errors["appreciationGlobale.valeur"] && (
+                        <span style={{ color: "red", fontSize: "12px" }}>{errors["appreciationGlobale.valeur"]}</span>
+                    )}
                     <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
                         <label>Précisez votre appréciation :</label>
                         <textarea
@@ -241,6 +384,9 @@ const EvaluationEtapes = () => {
                             style={{width: "60%", marginLeft: "10px", fontSize: 12}}
                         ></textarea>
                     </div>
+                    {errors["appreciationGlobale.commentaire"] && (
+                        <span style={{ color: "red", fontSize: "12px" }}>{errors["appreciationGlobale.commentaire"]}</span>
+                    )}
                 </section>
             );
         } else if (currentStep === 6) {
@@ -266,6 +412,11 @@ const EvaluationEtapes = () => {
                         />
                         <label>Non</label>
                     </div>
+                    {errors["evaluationDiscutee"] && (
+                        <span style={{color: "red", fontSize: "12px"}}>{errors["evaluationDiscutee"]}</span>
+                    )}
+                    <br/>
+                    <br/>
                     <label>Nombre d’heures réel d’encadrement :</label>
                     <input
                         type="number"
@@ -273,6 +424,12 @@ const EvaluationEtapes = () => {
                         value={formData.nombreHeures || ""}
                         onChange={handleChange}
                     />
+                    <br/>
+                    {errors["nombreHeures"] && (
+                        <span style={{color: "red", fontSize: "12px"}}>{errors["nombreHeures"]}</span>
+                    )}
+                    <br/>
+                    <br/>
                     <label>L’entreprise aimerait accueillir l’élève :</label>
                     <div>
                         <input
@@ -300,6 +457,9 @@ const EvaluationEtapes = () => {
                         />
                         <label>Peut-être</label>
                     </div>
+                    {errors["prochainStage"] && (
+                        <span style={{color: "red", fontSize: "12px"}}>{errors["prochainStage"]}</span>
+                    )}
                 </section>
             );
         } else {
@@ -423,7 +583,12 @@ const EvaluationEtapes = () => {
                             )}
                             {currentStep === 6 && (
                                 <button
-                                    onClick={handleSubmit}
+                                    onClick={() => {
+                                        handleSubmit().then(() => {
+                                            alert("Évaluation soumise avec succès !");
+                                            window.location.href = "/dashboard";
+                                        });
+                                    }}
                                     className="btn-filled"
                                     style={{marginLeft: "auto", marginRight: "50px"}}
                                 >

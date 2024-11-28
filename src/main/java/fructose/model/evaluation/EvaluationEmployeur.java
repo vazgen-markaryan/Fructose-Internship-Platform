@@ -1,5 +1,6 @@
 package fructose.model.evaluation;
 
+import fructose.model.Candidature;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,23 +18,9 @@ public class EvaluationEmployeur {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nom_eleve", nullable = false)
-    private String nomEleve;
-
-    @Column(name = "programme", nullable = false)
-    private String programme;
-
-    @Column(name = "entreprise", nullable = false)
-    private String entreprise;
-
-    @Column(name = "superviseur", nullable = false)
-    private String superviseur;
-
-    @Column(name = "fonction", nullable = false)
-    private String fonction;
-
-    @Column(name = "telephone", nullable = false)
-    private String telephone;
+    @ManyToOne
+    @JoinColumn(name = "candidature_id", nullable = false)
+    private Candidature candidature;
 
     @OneToMany(mappedBy = "evaluation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SectionEvaluation> sections;
