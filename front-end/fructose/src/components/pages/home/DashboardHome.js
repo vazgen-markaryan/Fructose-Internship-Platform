@@ -338,42 +338,69 @@ const DashboardHome = () => {
                                     </button>
                                 </Link>
                             </div>
-                            <div style={{
-                                "padding": "10px 0",
-                                display: "flex",
-                                gap: "10px",
-                                width: "100%"
-                            }}>
-                                {offresStage.reverse().slice(0, 3).map((item, index) => (
-                                    <Link to={`/dashboard/discover-offers?offer=${item.id}`} key={index} style={{
-                                        textDecoration: "none",
-                                        flex: 1
-                                    }}>
-                                        <div className="card">
-                                            <div className="card-image">
-                                                <h5>{item.poste}</h5>
+                            <br/>
+                            <div>
+                                <div style={{display: "flex", gap: "10px"}}>
+                                    {
+                                        (offresStage.length > 0)?
+                                            <Link to={`/dashboard/discover-offers?offer=${offresStage[0].id}`} style={{width: "66%"}}>
+                                                <div className="card no-border" style={{height: "300px"}}>
+                                                    <div className="card-image" style={{backgroundColor: "#21277c"}}>
+                                                        <div className="card-image-shadowed-text">
+                                                            <h4>{ t("programme." + offresStage[0].departementDTO.nom) }</h4>
+                                                        </div>
+                                                        <div className="card-image-information toolbar-items" style={{alignItems: "flex-end"}}>
+                                                            <div className="toolbar-spacer card-image-information-content">
+                                                                <h3>{ offresStage[0].poste }</h3>
+                                                                <h6>{ offresStage[0].ownerDTO.companyName }</h6>
+                                                            </div>
+                                                            <Icon path={mdiArrowRight} size={1}/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                            :null
+                                    }
+                                    {
+                                        (offresStage.length > 1)?
+                                            <Link to={`/dashboard/discover-offers?offer=${offresStage[1].id}`} style={{width: "33%"}}>
+                                                <div className="card no-border" style={{height: "300px"}}>
+                                                    <div className="card-image" style={{backgroundColor: "#dedede", color: "black"}}>
+                                                        <div className="card-image-shadowed-text">
+                                                            <h6>{ t("programme." + offresStage[1].departementDTO.nom) }</h6>
+                                                        </div>
+                                                        <div className="card-image-information toolbar-items">
+                                                            <div className="toolbar-spacer card-image-information-content">
+                                                                <h4>{ offresStage[1].poste }</h4>
+                                                                <h6>{ offresStage[1].ownerDTO.companyName }</h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                            :null
+                                    }
+                                </div>
+                                <div style={{height: "10px"}}></div>
+                                <div style={{display:"flex", gap:"10px"}}>
+                                    {offresStage.reverse().slice(2, 5).map((item, index) => (
+                                        <Link to={`/dashboard/discover-offers?offer=${item.id}`} key={index} style={{width: "33%"}}>
+                                            <div className="card no-border" style={{height: "170px"}}>
+                                                <div className="card-image" style={{backgroundColor: "#d1d1d1", color: "black"}}>
+                                                    <div className="card-image-shadowed-text">
+                                                        <h6>{t("programme." + item.departementDTO.nom)}</h6>
+                                                    </div>
+                                                    <div className="card-image-information toolbar-items">
+                                                        <div className="toolbar-spacer card-image-information-content">
+                                                            <h5>{item.poste}</h5>
+                                                            <h6>{item.ownerDTO.companyName}</h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="card-content">
-                                                <p style={{
-                                                    fontSize: "11px",
-                                                    textTransform: "uppercase"
-                                                }} className="text-dark">
-                                                    {t("programme." + item.departementDTO.nom)}
-                                                </p>
-                                                <p>{item.ownerDTO.companyName}</p>
-                                                {
-                                                    (item.nombrePostes <= 5) ?
-                                                        <span className="badge text-mini"><Icon
-                                                            path={mdiAlertCircleOutline}
-                                                            size={0.5}/>{t("dashboard_home_page.limited_places")}
-														</span>
-                                                        :
-                                                        <></>
-                                                }
-                                            </div>
-                                        </div>
-                                    </Link>
-                                ))}
+                                        </Link>
+                                    ))}
+                                </div>
                             </div>
                         </section>
                     );
@@ -1027,68 +1054,6 @@ const DashboardHome = () => {
             <div style={{"display": "flex", "gap": "20px"}}>
                 <div style={{"width": "70%"}}>
                     <div className="dashboard-card">
-                        <section>
-                            <div className={"toolbar-items"}>
-                                <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
-                                <Link to="/dashboard/discover-offers">
-                                    <button>{t("dashboard_home_page.explore")}
-                                        <Icon path={mdiChevronRight} size={1}/>
-                                    </button>
-                                </Link>
-                            </div>
-                            <br/>
-                            <div style={{display: "flex", gap: "10px"}}>
-                                <div style={{width: "66%"}}>
-                                    <div style={{height: "300px", backgroundColor: "#21277c", position: "relative", borderRadius: "5px", color: "white"}}>
-                                        <div style={{position: "absolute", top: "0", left: "0", padding: "20px", opacity: "0.3"}}>
-                                            <h4>TECHNIQUE DE L'INFORMATIQUE</h4>
-                                        </div>
-                                        <div style={{position: "absolute", bottom: "0", left: "0", right: "0", padding: "20px", display: "flex", alignItems: "end"}}>
-                                            <div style={{flexGrow: 1}}>
-                                                <h3 className="m-0" style={{marginBottom: "5px"}}>Développer des solutions blockchain</h3>
-                                                <h6 className="m-0">Ubisoft incorpore</h6>
-                                            </div>
-                                            <Icon path={mdiArrowRight} size={1}/>
-                                        </div>
-                                    </div>
-                                    <div style={{height: "10px"}}></div>
-                                    <div style={{display:"flex", gap:"10px"}}>
-                                        <div style={{width: "50%"}}>
-                                            <div style={{height: "170px", backgroundColor: "green", position: "relative", borderRadius: "5px", color: "white"}}>
-                                                <div style={{position: "absolute", top: "0", left: "0", padding: "20px", opacity: "0.3"}}>
-                                                    <h6>TECHNIQUE DE L'INFORMATIQUE</h6>
-                                                </div>
-                                                <div style={{position: "absolute", bottom: "0", left: "0", right: "0", padding: "20px", display: "flex", alignItems: "end"}}>
-                                                    <div style={{flexGrow: 1}}>
-                                                        <h5 className="m-0" style={{marginBottom: "8px"}}>Développer des solutions blockchain</h5>
-                                                        <h6 className="m-0">Ubisoft incorpore</h6>
-                                                    </div>
-                                                    <Icon path={mdiArrowRight} size={0.8}/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div style={{width: "50%"}}>
-                                            <div className="bg-red" style={{height: "170px", position: "relative", borderRadius: "5px", color: "white"}}>
-                                                <div style={{position: "absolute", top: "0", left: "0", padding: "20px", opacity: "0.3"}}>
-                                                    <h6>TECHNIQUE DE L'INFORMATIQUE</h6>
-                                                </div>
-                                                <div style={{position: "absolute", bottom: "0", left: "0", right: "0", padding: "20px", display: "flex", alignItems: "end"}}>
-                                                    <div style={{flexGrow: 1}}>
-                                                        <h5 className="m-0" style={{marginBottom: "8px"}}>Développer des solutions blockchain</h5>
-                                                        <h6 className="m-0">Ubisoft incorpore</h6>
-                                                    </div>
-                                                    <Icon path={mdiArrowRight} size={0.8}/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card" style={{width: "33%"}}>
-
-                                </div>
-                            </div>
-                        </section>
-
 
                         {GetOffreStageSection()}
                         {GetCandidaturesSection()}

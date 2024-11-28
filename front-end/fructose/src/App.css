@@ -867,6 +867,11 @@ tr {
 .card {
 	border-radius: var(--border-radius);
 	border: 1px solid #d1d1d1;
+	min-width: 200px;
+}
+
+.card.no-border {
+	border: none;
 }
 
 .card > .card-image {
@@ -875,16 +880,45 @@ tr {
 	background-color: grey;
 	border-radius: var(--border-radius) var(--border-radius) 0 0;
 	position: relative;
-	background: url('/public/assets/offers/default-company-banner.jpg') center / cover, linear-gradient(#eeeeee, #eeeeee);
-
+	color: white;
+	user-select: none;
+	cursor: pointer;
+	transition: 0.3s;
 }
 
-.card > .card-image > h5 {
+.card > .card-image:hover{
+	opacity: 0.8;
+}
+
+.card > .card-image:only-child{
+	height: 100%;
+	border-radius: var(--border-radius);
+}
+
+.card > .card-image > h5, .card > .card-image > .card-image-information {
 	font-weight: 300;
 	position: absolute;
-	bottom: 10px;
-	left: 10px;
-	color: white;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 20px;
+}
+
+.card-image-information-content > h3, .card-image-information-content > h4{
+	margin-bottom: 8px;
+}
+
+.card-image-information-content > h6{
+	margin: 0;
+}
+
+.card > .card-image > .card-image-shadowed-text{
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 20px;
+	opacity: 0.3;
+	color: inherit;
 }
 
 .card > .card-content {
