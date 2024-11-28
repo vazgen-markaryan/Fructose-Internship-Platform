@@ -3,8 +3,6 @@ package fructose.model.evaluation;
 import fructose.model.Candidature;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -22,7 +20,6 @@ public class EvaluationEmployeur {
 
     @ManyToOne
     @JoinColumn(name = "candidature_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Candidature candidature;
 
     @OneToMany(mappedBy = "evaluation", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -32,10 +29,14 @@ public class EvaluationEmployeur {
     private String appreciationGlobale;
     @Column(name = "commentaire_appreciation_globale", nullable = false)
     private String commentaireAppreciationGlobale;
-    @Column(name = "appreciation_stage", nullable = false)
+    @Column(name = "discuter_avec_etudiant", nullable = false)
+    private String discuterAvecEtudiant;
+    @Column(name = "nombre_heure_encadrement", nullable = false)
     private float nombreHeureEncadrement;
-    @Column(name = "commentaire_appreciation_stage", nullable = false)
+    @Column(name = "acceuille_eleve_prochain_stage", nullable = false)
     private String acceuilleEleveProchainStage;
-    @Column(name = "appreciation_formation", nullable = false)
+    @Column(name = "commentaires_accomplissement_mandat", nullable = false)
     private String commentairesAccomplissementMandat;
+    @Column(name = "signature", nullable = false)
+    private String signature;
 }

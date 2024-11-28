@@ -13,14 +13,18 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(exclude = "evaluation")
 public class SectionEvaluation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column (name = "name", nullable = false)
     private String name;
+
+    @Column(name = "commentaire", nullable = false)
+    private String commentaire;
 
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CritereEvaluation> criteres;

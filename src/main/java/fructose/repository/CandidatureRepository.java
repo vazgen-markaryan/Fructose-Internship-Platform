@@ -31,4 +31,8 @@ public interface CandidatureRepository extends JpaRepository<Candidature, Long> 
 	@Query("SELECT new fructose.model.Candidature(c.id, c.etudiant, c.offreStage, c.etat, c.commentaireRefus, c.dateEntrevue) " +
 		"FROM Candidature c WHERE c.etat = :etat")
 	List<Candidature> findByEtatWithoutCv(@Param("etat") EtatCandidature etat);
+
+	@Query("SELECT new fructose.model.Candidature(c.id, c.etudiant, c.offreStage, c.etat, c.commentaireRefus, c.dateEntrevue) " +
+	"FROM Candidature c LEFT JOIN EvaluationEmployeur e ON c.id = e.candidature.id WHERE c.etat = :etat AND c.offreStage.owner.id = :ownerId AND e.id IS NULL")
+	List<Candidature> findStagiaireByOwner(@Param("ownerId") Long id, @Param("etat") EtatCandidature etat);
 }

@@ -109,4 +109,19 @@ public class CandidatureController {
 			return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@GetMapping ("/stagiaireByOwner")
+	public ResponseEntity<?> findByStagiaireByOwner(@RequestHeader ("Authorization") String token) {
+		if (!utilisateurService.validationToken(token)) {
+			return new ResponseEntity<>("Invalid token", HttpStatus.BAD_REQUEST);
+		}
+		UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
+
+		try {
+			List<Map<String, Object>> candidatures = candidatureService.findStagiaireByOwner(utilisateurDTO.getId());
+			return new ResponseEntity<>(candidatures, HttpStatus.OK);
+		} catch (RuntimeException e) {
+			logger.error("Erreur lors de la récupération des candidatures pour l'offre de stage ID: {}", utilisateurDTO.getId(), e);
+			return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

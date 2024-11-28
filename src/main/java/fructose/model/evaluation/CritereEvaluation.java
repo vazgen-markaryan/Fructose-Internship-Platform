@@ -2,10 +2,7 @@ package fructose.model.evaluation;
 
 import fructose.model.enumerator.ReponseEvaluation;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -14,12 +11,14 @@ import org.hibernate.annotations.OnDeleteAction;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "section")
 public class CritereEvaluation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "question", nullable = false)
     private String question;
 
     @Enumerated(EnumType.STRING)
