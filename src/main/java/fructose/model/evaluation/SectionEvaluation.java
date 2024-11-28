@@ -31,6 +31,12 @@ public class SectionEvaluation {
     @JsonBackReference
     private EvaluationEmployeur evaluation;
 
+    @ManyToOne
+    @JoinColumn(name = "evaluation_milieu_stage_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
+    private EvaluationMilieuStage evaluationMilieuStage;
+
     private String commentaireSection;
 
     public void addCritere(CritereEvaluation critere) {
