@@ -233,6 +233,10 @@ const DashboardHome = () => {
 		setCurrentPage(pageNumber);
 	};
 	
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const selectedOffresStage = offresStage.slice(startIndex, startIndex + itemsPerPage);
+	const totalPages = Math.ceil(offresStage.length / itemsPerPage);
+	
 	const GetOffreStageSection = () => {
 		if (currentUser != null) {
 			if (currentUser.role === "ETUDIANT") {
@@ -403,25 +407,27 @@ const DashboardHome = () => {
 									</div>
 								</div>
 							)}
-							<div style={{
-								display: "flex",
-								justifyContent: "center",
-								gap: "5px",
-								marginTop: "20px"
-							}}>
-								{Array.from({length: Math.ceil(offresStage.length / itemsPerPage)}, (_, index) => (
-									<button
-										key={index}
-										className={(currentPage === index + 1) ? "btn-filled" : ""}
-										onClick={() => {
-											handlePageChange(index + 1);
-											setCurrentOffer(null);
-										}}
-									>
-										{index + 1}
-									</button>
-								))}
-							</div>
+							{offresStage.length > itemsPerPage && (
+								<div style={{
+									display: "flex",
+									justifyContent: "center",
+									gap: "5px",
+									marginTop: "20px"
+								}}>
+									{Array.from({length: totalPages}, (_, index) => (
+										<button
+											key={index}
+											className={(currentPage === index + 1) ? "btn-filled" : ""}
+											onClick={() => {
+												handlePageChange(index + 1);
+												setCurrentOffer(null);
+											}}
+										>
+											{index + 1}
+										</button>
+									))}
+								</div>
+							)}
 						</div>
 					</section>
 				);
@@ -562,7 +568,7 @@ const DashboardHome = () => {
 							</section>
 							
 							<hr/>
-							
+							{/*TODO TOUCHE PAS ÇA (c) VAZGEN!*/}
 							{/*						// SI CONTRAT A ÉTÉ SIGNÉ PAR L'ÉTUDIANT*/}
 							{/*						(currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT") ?*/}
 							{/*							<>*/}
@@ -578,7 +584,6 @@ const DashboardHome = () => {
 							{/*								</div>*/}
 							{/*							</>*/}
 							{/*							:*/}
-							
 							{/*							// SI CONTRAT A ÉTÉ REFUSÉ PAR L'ÉTUDIANT*/}
 							{/*							(currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT") ?*/}
 							{/*								<div className="toolbar-items">*/}
@@ -587,27 +592,22 @@ const DashboardHome = () => {
 							{/*									<p className="text-red m-0">{t("dashboard_home_page.contract_rejected_by_student")}</p>*/}
 							{/*								</div>*/}
 							{/*								:*/}
-							
 							{/*								// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS*/}
 							{/*								(currentCandidature.etat === "CONTRAT_SIGNE_TOUS") ?*/}
 							{/*									<div className="toolbar-items">*/}
 							{/*										<Icon path={mdiCloseCircleOutline} size={1}*/}
 							{/*											  className="text-green"/>*/}
 							{/*										<p className="text-green m-0">{t("dashboard_home_page.contract_signed_by_all")}</p>*/}
-							
 							{/*									</div>*/}
 							{/*									:*/}
-							
 							{/*											// TOMBE EN DEFAULT ÉTAT INITIALE*/}
 							{/*											<div className="toolbar-items">*/}
 							{/*												<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>*/}
 							{/*												<p className="text-dark m-0">{t("dashboard_home_page.waiting_interview_results")}</p>*/}
 							{/*											</div>*/}
 							{/*	}*/}
-							{/*	<br/>*/}
+							
 							{/*</section>*/}
-							
-							
 							{/*(*/}
 							{/*// VUE EMPLOYEUR*/}
 							{/*isEmployeur ?*/}

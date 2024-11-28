@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import Icon from '@mdi/react';
-import {mdiCheckCircleOutline, mdiClockOutline, mdiCloseCircleOutline, mdiHelpCircleOutline} from '@mdi/js';
+import {mdiCheckCircleOutline, mdiClockOutline, mdiCloseCircleOutline} from '@mdi/js';
 import {AuthContext} from "../../providers/AuthProvider";
 import ViewContrat from "../contrat/ViewContrat";
 
@@ -80,7 +80,7 @@ const CandidatureStatus = ({
 						(
 							// VUE EMPLOYEUR ET ETUDIANT
 							<div className="toolbar-items">
-								<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+								<Icon path={mdiClockOutline} size={1} className="text-dark"/>
 								<p className="text-dark m-0">{t("view_candidatures_page.waiting_for_initial_application")}</p>
 							</div>
 						)
@@ -187,7 +187,7 @@ const CandidatureStatus = ({
 						currentCandidature.etat === "ENTREVUE_PROPOSE" ?
 							(
 								<div className="toolbar-items">
-									<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+									<Icon path={mdiClockOutline} size={1} className="text-dark"/>
 									<p className="text-dark m-0">{t("view_candidatures_page.waiting_for_interview_results")}</p>
 								</div>
 							)
@@ -211,7 +211,7 @@ const CandidatureStatus = ({
 										: // VUE ETUDIANT
 										(
 											<div className="toolbar-items">
-												<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
+												<Icon path={mdiClockOutline} size={1} className="text-orange"/>
 												<p className="text-orange m-0">{t("dashboard_home_page.waiting_interview_results")}</p>
 											</div>
 										)
@@ -223,7 +223,7 @@ const CandidatureStatus = ({
 										isEmployeur ?
 											(
 												<div className="toolbar-items">
-													<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
+													<Icon path={mdiCloseCircleOutline} size={1} className="text-dark"/>
 													<p className="text-dark m-0">{t("view_candidatures_page.contract_not_signed_after_interview_refusal_by_student")}</p>
 												</div>
 											)
@@ -238,27 +238,27 @@ const CandidatureStatus = ({
 									: // SI ETUDIANNT A ÉTÉ ACCEPTÉ APRÈS L'ENTREVUE
 									currentCandidature.etat === "ACCEPTE_APRES_ENTREVUE" ?
 										(
-											// VUE EMPLOYEUR
-											isEmployeur ?
-												(
-													<div className="toolbar-items">
-														<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-														<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_contract_generation")}</p>
-													</div>
-												)
-												: // VUE ETUDIANT
-												(
-													<>
-														<div className={"toolbar-items"}>
-															<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
-															<p className="text-green m-0">{t("view_candidatures_page.passed_entrevue")}</p>
-														</div>
-														<div className="toolbar-items">
-															<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-															<p className="text-orange m-0">{t("dashboard_home_page.waiting_contract_generation")}</p>
-														</div>
-													</>
-												)
+											// VUE EMPLOYEUR ET ETUDIANT
+											<>
+												<div className="toolbar-items">
+													<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
+													<p className="text-green m-0">
+														{/*SI VUE EMPLOYEUR */}
+														{isEmployeur ?
+															t("view_candidatures_page.student_passed_entrevue")
+															: // SI VUE ETUDIANT
+															t("view_candidatures_page.you_passed_entrevue")
+														}
+													</p>
+												</div>
+												
+												<div className={"toolbar-items"}>
+													<Icon path={mdiClockOutline} size={1} className="text-orange"/>
+													<p className="text-orange m-0">
+														{t("view_candidatures_page.waiting_for_contract_generation")}
+													</p>
+												</div>
+											</>
 										)
 										: // SI CANDIDATURE A ÉTÉ REFUSÉE APRÈS L'ENTREVUE
 										currentCandidature.etat === "REFUSEE_APRES_ENTREVUE" ?
@@ -266,138 +266,102 @@ const CandidatureStatus = ({
 												// VUE EMPLOYEUR ET ETUDIANT
 												(
 													<div className="toolbar-items">
-														<Icon path={mdiHelpCircleOutline} size={1} className="text-red"/>
+														<Icon path={mdiClockOutline} size={1} className="text-red"/>
 														<p className="text-red m-0">{t("view_candidatures_page.contract_not_signed_after_interview_refusal")}</p>
 													</div>
 												)
 											)
 											
 											
-											// TODO AFFIHCAGE DES MESSAGES DE SIGNATURE DRY
+											
+											
+											
 											// TODO PAS A CA PLACE
 											: // SI CONTRAT A ÉTÉ CRÉÉ PAR GESTIONNAIRE ET NON SIGNÉ PAR EMPLOYEUR
 											currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" && contrat ?
 												(
-													// VUE EMPLOYEUR
-													isEmployeur ?
-														(
-															<>
-																{contrat.signatureEmployeur === "Non signe" ?
-																	(
-																		<div className="toolbar-items">
-																			<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-																			<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_your_signature")}</p>
-																		</div>
-																	)
-																	:
-																	(contrat.signatureEtudiant === "Non signe" ?
-																			(
-																				<div className="toolbar-items">
-																					<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-																					<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_student_signature")}</p>
-																				</div>
-																			)
-																			: null
-																	)
-																}
-																
-																<br></br>
-																
-																<div>
-																	{contrat && <ViewContrat contrat={contrat} handleSign={handleSignerContrat} handleNoSign={handleRefuserContrat}/>}
-																</div>
-															</>
-														)
-														: // VUE ETUDIANT
-														(
-															<>
+													<>
+														{/*// SI CONTRAT N'EST PAS ENCORE SIGNÉ PAR EMPLOYEUR*/}
+														{contrat.signatureEmployeur === "Non signe" &&
+															(
 																<div className="toolbar-items">
-																	<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-																	<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_your_signature")}</p>
+																	<Icon path={mdiClockOutline} size={1} className={isEmployeur ? "text-blue" : "text-orange"}/>
+																	<p className={isEmployeur ? "text-blue m-0" : "text-orange m-0"}>
+																		{
+																			isEmployeur ?
+																				t("view_candidatures_page.waiting_for_your_signature")
+																				:
+																				t("view_candidatures_page.waiting_for_employer_signature")
+																		}
+																	</p>
 																</div>
-																
-																<br></br>
-																
-																<div>
-																	{contrat && <ViewContrat contrat={contrat}  handleSign={handleSignerContrat} handleNoSign={handleRefuserContrat}/>}
+															)
+														}
+														
+														{/*// SI CONTRAT N'EST PAS ENCORE SIGNÉ PAR ETUDIANT*/}
+														{contrat.signatureEtudiant === "Non signe" &&
+															(
+																<div className="toolbar-items">
+																	<Icon path={mdiClockOutline} size={1} className={isEmployeur ? "text-orange" : "text-blue"}/>
+																	<p className={isEmployeur ? "text-orange m-0" : "text-blue m-0"}>
+																		{
+																			isEmployeur ?
+																				t("view_candidatures_page.waiting_for_student_signature")
+																				:
+																				t("view_candidatures_page.waiting_for_your_signature")
+																		}
+																	</p>
 																</div>
-															</>
-														)
-												) :
-												
-												currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" && contrat && contrat.signatureEtudiant === "Non signe" ?
-													(
-														<>
-															<div className="toolbar-items">
-																<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-																<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_student_signature")}</p>
-															</div>
-															{
-																contrat &&
-																<ViewContrat contrat={contrat} handleSign={handleSignerContrat} handleNoSign={handleRefuserContrat}/>
-															}
-														</>
-													)
-													
-													
-													// TODO REVOIR LES CONDITIONS
-													: // SI CONTRAT SIGNÉ PAR EMPLOYEUR
-													currentCandidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ? (
-															// VUE EMPLOYEUR
-															isEmployeur ? (
-																	<div className="toolbar-items">
-																		<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-																		<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_student_signature")}</p>
-																	</div>
-																)
-																: // VUE ETUDIANT
-																(
-																	<>
-																		<div className="toolbar-items">
-																			<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
-																			<p className="text-green m-0">{t("dashboard_home_page.contract_signed_by_employer")}</p>
-																		</div>
-																		<br></br>
-																		<div className="toolbar-items" style={{gap: "10px"}}>
-																			<button className="btn-filled bg-green" onClick={handleSignerContrat}>
-																				{t("dashboard_home_page.sign")}
-																			</button>
-																			<button className="btn-filled bg-red" onClick={handleRefuserContrat}>
-																				{t("dashboard_home_page.refuse")}
-																			</button>
-																		</div>
-																	</>
-																)
-														)
-														:
-														currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT" ? (
-															<>
+															)
+														}
+														
+														{/*SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS*/}
+														{
+															contrat.signatureEmployeur !== "Non signe" &&
+															contrat.signatureEtudiant !== "Non signe" &&
+															contrat.signatureGestionnaire !== "Non signe" &&
+															contrat.signatureEmployeur !== "Refuse" &&
+															contrat.signatureEtudiant !== "Refuse" &&
+															contrat.signatureGestionnaire !== "Refuse" &&
+															(
 																<div className="toolbar-items">
 																	<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
-																	<p className="text-green m-0">{t("view_candidatures_page.contract_signed_by_student")}</p>
+																	<p className="text-green m-0">{t("view_candidatures_page.contract_signed_by_all")}</p>
 																</div>
-																<div className="toolbar-items">
-																	<Icon path={mdiHelpCircleOutline} size={1} className="text-orange"/>
-																	<p className="text-orange m-0">{t("view_candidatures_page.waiting_for_manager_signature")}</p>
-																</div>
-															</>
-														) : currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ? (
-															<div className="toolbar-items">
-																<Icon path={mdiHelpCircleOutline} size={1} className="text-red"/>
-																<p className="text-red m-0">{t("view_candidatures_page.contract_refused_by_student")}</p>
-															</div>
-														) : currentCandidature.etat === "CONTRAT_SIGNE_TOUS" ? (
-															<div className="toolbar-items">
-																<Icon path={mdiHelpCircleOutline} size={1} className="text-green"/>
-																<p className="text-green m-0">{t("view_candidatures_page.contract_signed_by_all")}</p>
-															</div>
-														) : (
-															// EN ATTENTE
-															<div className="toolbar-items">
-																<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>
-																<p className="text-dark m-0">{t("view_candidatures_page.waiting_for_initial_application")}</p>
-															</div>
-														)
+															)
+														}
+														
+														{/*SI CONTRAT A ÉTÉ REFUSÉ PAR QUELQU'UN*/}
+														{
+															contrat.signatureEmployeur === "Refuse" ||
+															contrat.signatureEtudiant === "Refuse" ||
+															contrat.signatureGestionnaire === "Refuse" ?
+																(
+																	<div className="toolbar-items">
+																		<Icon path={mdiCloseCircleOutline} size={1} className="text-red"/>
+																		<p className="text-red m-0">
+																			{contrat.signatureEmployeur === "Refuse" && t("view_candidatures_page.contract_refused_by_employer")}
+																			{contrat.signatureEtudiant === "Refuse" && t("view_candidatures_page.contract_refused_by_student")}
+																		</p>
+																	</div>
+																)
+																: null
+														}
+														
+														{/*SI CONTRAT N'EST PAS ENCORE SIGNÉ PAR EMPLOYEUR OU ETUDIANT*/}
+														
+														
+														<br/>
+														
+														{/* PDF DU CONTRAT*/}
+														<div>
+															{contrat &&
+																<ViewContrat contrat={contrat} handleSign={handleSignerContrat} handleNoSign={handleRefuserContrat}/>}
+														</div>
+													</>
+												)
+												: // TODO NULL POUR L'INSTANT
+												null
 				}
 				<br></br>
 			</section>
@@ -406,3 +370,20 @@ const CandidatureStatus = ({
 }
 
 export default CandidatureStatus;
+
+// TODO REVOIR LES CONDITIONS
+//TODO TOUT CELA EST VUE EMOLOYEUR
+// : currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT" ? (
+// 		<div className="toolbar-items">
+// 			<Icon path={mdiClockOutline} size={1} className="text-red"/>
+// 			<p className="text-red m-0">{t("view_candidatures_page.contract_refused_by_student")}</p>
+// 		</div>
+// 	)
+// 	:
+// 	(
+// 		// EN ATTENTE
+// 		<div className="toolbar-items">
+// 			<Icon path={mdiClockOutline} size={1} className="text-dark"/>
+// 			<p className="text-dark m-0">{t("view_candidatures_page.waiting_for_initial_application")}</p>
+// 		</div>
+// 	)

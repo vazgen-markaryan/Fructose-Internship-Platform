@@ -288,7 +288,10 @@
 		"delete_stage_confirmation_text": "Cette action est irréversible et supprimera définitivement cette offre de stage.",
 		"delete_stage_confirm_button_text": "Oui, supprimer",
 		"delete_stage_cancel_button_text": "Non, annuler",
-		"no_comment_reject_cv_text": "Veuillez entrer un commentaire pour le refus"
+		"no_comment_reject_cv_text": "Veuillez entrer un commentaire pour le refus",
+		"cv_rejected_success": "CV refusé avec succès",
+		"offer_rejected_success": "L'Offre de stage a été refusée avec succès",
+		"no_comment_reject_offer_text": "Veuillez entrer un commentaire pour le refus"
 	},
 	"pdf_view_page": {
 		"error": "Une erreur inconnue est survenue"
@@ -388,7 +391,7 @@
 			"delete": "Supprimer"
 		},
 		"messages": {
-			"no_offre_stages_contracts": "Aucune Contrat à générer pour le moment"
+			"no_offre_stages_contracts": "Aucun Contrat à générer pour le moment"
 		}
 	},
 	"modifier_offre_stage_page": {
@@ -554,6 +557,7 @@
 		"waiting_for_contract_generation": "En attente de la génération du Contrat par Gestionnaire",
 		"contract_not_signed_after_interview_refusal": "Le contrat ne peut être signé. La candidature était refusée après l'entrevue",
 		"contract_refused_by_student": "La signature du contrat a été refusée par Étudiant",
+		"contract_refused_by_employer": "La signature du contrat a été refusée par Employeur",
 		"contract_signed_by_all": "Tout le monde a signé le contrat. La candidature a été acceptée",
 		"contract_not_signed_after_interview_refusal_by_student": "Le contrat ne peut être signé. L'entrevue a été refusée par l'étudiant",
 		"contract_cannot_be_signed_entrevue_rejected_by_student": "Le contrat ne peut pas être signé. Vous avez réfusé l'entrevue",
@@ -575,7 +579,8 @@
 		"rejected_text": "La candidature a été refusée en raison de l'échec de l'entrevue.",
 		"error_reject_text": "Échec du refus de la candidature.",
 		"accept": "Accepter",
-		"passed_entrevue": "Vous avez passé l'entrevue avec succès.",
+		"you_passed_entrevue": "Vous avez passé l'entrevue avec succès.",
+		"student_passed_entrevue": "Étudiant a passé l'entrevue avec succès.",
 		"waiting_for_your_signature" : "En attente de votre signature"
 	},
 	"manage_contract_en_attente": {

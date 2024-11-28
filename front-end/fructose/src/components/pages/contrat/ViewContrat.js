@@ -2,13 +2,13 @@ import React, {useContext, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {ContratContext} from "../../providers/ContratProvider";
 import PdfPreview from "../../../utilities/pdf/PdfPreview";
+import {AuthContext} from "../../providers/AuthProvider";
 
 const ViewContrat = ({contrat, handleSign, handleNoSign}) => {
 	const {t} = useTranslation();
 	const {fetchPdfByContratId} = useContext(ContratContext);
 	const [pdfUrl, setPdfUrl] = useState('');
-	const isEmployeur = localStorage.getItem('role') === 'Employeur';
-	const isEtudiant = localStorage.getItem('role') === 'Etudiant';
+	const {currentUser} = useContext(AuthContext);
 	
 	useEffect(() => {
 		if (contrat) {
@@ -31,8 +31,8 @@ const ViewContrat = ({contrat, handleSign, handleNoSign}) => {
 			</div>
 			<div className="toolbar-items" style={{padding: "10px"}}>
 				{contrat &&
-				((["Non signe"].includes(contrat.signatureEmployeur) && isEmployeur) ||
-					(["Non signe"].includes(contrat.signatureEtudiant) && isEtudiant)) &&
+				((["Non signe"].includes(contrat.signatureEmployeur) && currentUser.role === "EMPLOYEUR") ||
+					(["Non signe"].includes(contrat.signatureEtudiant) && currentUser.role === "ETUDIANT")) &&
 				!["Refuse"].includes(contrat.signatureEmployeur) &&
 				!["Refuse"].includes(contrat.signatureEtudiant) ? (
 					<>
@@ -44,13 +44,9 @@ const ViewContrat = ({contrat, handleSign, handleNoSign}) => {
 						</button>
 					</>
 				) : null}
-
 			</div>
 		</>
 	)
-		;
-	
-	
-};
+}
 
 export default ViewContrat;
