@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(exclude = "candidature")
 public class EvaluationEmployeur {
 
     @Id

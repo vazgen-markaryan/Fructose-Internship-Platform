@@ -5,26 +5,27 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import fructose.model.Candidature;
+import fructose.model.OffreStage;
+import fructose.model.Utilisateur;
 import fructose.model.evaluation.CritereEvaluation;
 import fructose.model.evaluation.EvaluationEmployeur;
 import fructose.model.evaluation.SectionEvaluation;
-import fructose.service.dto.UtilisateurDTO;
-
 import java.util.Date;
 
 
 public class EvaluationEmployeurPdf {
 
     private final EvaluationEmployeur evaluation;
-    private UtilisateurDTO etudiantDTO;
-
-    public EvaluationEmployeurPdf(EvaluationEmployeur evaluation, UtilisateurDTO etudiantDTO) {
+    public EvaluationEmployeurPdf(EvaluationEmployeur evaluation) {
         this.evaluation = evaluation;
-        this.etudiantDTO = etudiantDTO;
     }
 
     public String createPdf() {
         String dest = "evaluation_stagiaire_" + ".pdf";
+        Candidature candidature = evaluation.getCandidature();
+        Utilisateur etudiant = candidature.getEtudiant();
+        OffreStage offreStage = candidature.getOffreStage();
 
         try {
             PdfWriter writer = new PdfWriter(dest);
@@ -33,11 +34,11 @@ public class EvaluationEmployeurPdf {
 
             document.add(new Paragraph("FICHE D’ÉVALUATION DU STAGIAIRE").setBold().setFontSize(16));
 
-            document.add(new Paragraph("Nom de l'élève : " + etudiantDTO.getFullName()));
-            document.add(new Paragraph("Programme d’études :" + etudiantDTO.getDepartementDTO().getNom()));
-            document.add(new Paragraph("Nom de l’entreprise : " + evaluation.getCandidature().getOffreStage().getCompagnie()));
-            document.add(new Paragraph("Nom du superviseur : " + evaluation.getCandidature().getOffreStage().getOwner().getFullName()));
-            document.add(new Paragraph("Fonction : " + evaluation.getCandidature().getOffreStage().getNom()));
+            document.add(new Paragraph("Nom de l'élève : " + etudiant.getFullName()));
+            document.add(new Paragraph("Programme d’études :" + etudiant.getDepartement().getNom()));
+            document.add(new Paragraph("Nom de l’entreprise : " + offreStage.getCompagnie()));
+            document.add(new Paragraph("Nom du superviseur : " + offreStage.getOwner().getFullName()));
+            document.add(new Paragraph("Fonction : " + offreStage.getNom()));
 
             for (SectionEvaluation section : evaluation.getSections()) {
                 document.add(new Paragraph("\n" + section.getName().toUpperCase()).setBold());
@@ -62,9 +63,9 @@ public class EvaluationEmployeurPdf {
             document.add(new Paragraph("\nNombre d’heures d’encadrement : " + evaluation.getNombreHeureEncadrement()));
             document.add(new Paragraph("L'entreprise souhaite accueillir l'élève pour un prochain stage : " + (evaluation.getAcceuilleEleveProchainStage())));
 
-            document.add(new Paragraph("\nNom : " + evaluation.getCandidature().getOffreStage().getOwner().getFullName()));
+            document.add(new Paragraph("\nNom : " + offreStage.getOwner().getFullName()));
             document.add(new Paragraph("Signature : " + evaluation.getSignature()));
-            document.add(new Paragraph("Date : " +new Date() ));
+            document.add(new Paragraph("Date : " +new Date()));
 
             document.close();
             return dest;
