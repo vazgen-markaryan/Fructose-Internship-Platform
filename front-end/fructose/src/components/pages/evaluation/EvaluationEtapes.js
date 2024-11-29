@@ -2,6 +2,7 @@ import React, {useState, useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {Link, useLocation} from "react-router-dom";
 import {AuthContext} from "../../providers/AuthProvider";
+import PdfPreview from "../../../utilities/pdf/PdfPreview";
 
 const EvaluationEtapes = () => {
     const {t} = useTranslation();
@@ -10,6 +11,8 @@ const EvaluationEtapes = () => {
     const location = useLocation();
     const initialCandidature = location.state?.candidature || {};
     const [errors, setErrors] = useState({});
+    const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
+    const [isPdfPreviewVisible, setIsPdfPreviewVisible] = useState(false);
 
     // Structure des données du formulaire
     const [formData, setFormData] = useState({
@@ -23,6 +26,7 @@ const EvaluationEtapes = () => {
         nombreHeures: "",
         prochainStage: "",
         commentairesAccomplissementMandat: "",
+        signature: "",
     });
     const ReponseEvaluation = {
         TOTAL_AGREE: "Totalement en accord",
@@ -104,7 +108,7 @@ const EvaluationEtapes = () => {
 
         // Étapes 1 à 4 : Validation des champs
         if (currentStep <= 4) {
-            const { section, fields } = stepFields[currentStep] || {};
+            const {section, fields} = stepFields[currentStep] || {};
 
             if (!fields) {
                 console.error("Aucun champ trouvé pour l'étape actuelle :", currentStep);
@@ -187,10 +191,10 @@ const EvaluationEtapes = () => {
             "evaluationDiscutee",
             "nombreHeures",
             "prochainStage",
+            "signature",
         ];
 
         const newErrors = {};
-
         finalFields.forEach((field) => {
             if (!formData[field]?.trim()) {
                 newErrors[field] = "Ce champ est obligatoire.";
@@ -202,16 +206,17 @@ const EvaluationEtapes = () => {
             return;
         }
 
-        setErrors({});
         const preparedData = {
-            candidature: formData.candidature,
+            candidatureDTO: {
+                ...formData.candidature,
+            },
             appreciationGlobale: formData.appreciationGlobale.valeur,
             commentaireAppreciationGlobale: formData.appreciationGlobale.commentaire,
             discuterAvecEtudiant: formData.evaluationDiscutee,
             nombreHeureEncadrement: parseFloat(formData.nombreHeures),
             acceuilleEleveProchainStage: formData.prochainStage,
             commentairesAccomplissementMandat: formData.commentairesAccomplissementMandat,
-            signature: "Marie Curie",
+            signature:formData.signature,
             sections: Object.keys(formData)
                 .filter((key) => ["productivite", "qualiteTravail", "relationsInterpersonnelles", "habiletesPersonnelles"].includes(key))
                 .map((sectionKey) => ({
@@ -223,7 +228,7 @@ const EvaluationEtapes = () => {
                     })),
                 })),
         };
-
+        console.log("preparedData", preparedData.candidatureDTO);
         try {
             const response = await fetch("/evaluations/creer", {
                 method: "POST",
@@ -235,15 +240,20 @@ const EvaluationEtapes = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
+                const pdfBytes = await response.arrayBuffer();
+                const pdfBlob = new Blob([pdfBytes], { type: "application/pdf" });
+                const pdfUrl = URL.createObjectURL(pdfBlob);
+
+                setPdfPreviewUrl(pdfUrl);
+                setIsPdfPreviewVisible(true);
             } else {
                 console.error("Erreur lors de la soumission de l'évaluation");
             }
         } catch (error) {
             console.error("Erreur lors de la soumission de l'évaluation :", error);
         }
-
     };
+
 
 
     // Rendu des étapes
@@ -308,9 +318,9 @@ const EvaluationEtapes = () => {
                     <h3>{title}</h3>
                     <p>{description}</p>
                     {items.map((item, idx) => (
-                        <div key={idx} style={{ marginBottom: "15px" }}>
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                                <label htmlFor={`${section}.champs.${item}`} style={{ flex: 1, marginRight: "10px" }}>
+                        <div key={idx} style={{marginBottom: "15px"}}>
+                            <div style={{display: "flex", alignItems: "center"}}>
+                                <label htmlFor={`${section}.champs.${item}`} style={{flex: 1, marginRight: "10px"}}>
                                     {item}
                                 </label>
                                 <select
@@ -334,7 +344,10 @@ const EvaluationEtapes = () => {
                                 </select>
                             </div>
                             {errors[`${section}.champs.${item}`] && (
-                                <span style={{ color: "red", fontSize: "12px" }}>{errors[`${section}.champs.${item}`]}</span>
+                                <span style={{
+                                    color: "red",
+                                    fontSize: "12px"
+                                }}>{errors[`${section}.champs.${item}`]}</span>
                             )}
                         </div>
                     ))}
@@ -373,7 +386,7 @@ const EvaluationEtapes = () => {
                         </div>
                     ))}
                     {errors["appreciationGlobale.valeur"] && (
-                        <span style={{ color: "red", fontSize: "12px" }}>{errors["appreciationGlobale.valeur"]}</span>
+                        <span style={{color: "red", fontSize: "12px"}}>{errors["appreciationGlobale.valeur"]}</span>
                     )}
                     <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
                         <label>Précisez votre appréciation :</label>
@@ -385,7 +398,8 @@ const EvaluationEtapes = () => {
                         ></textarea>
                     </div>
                     {errors["appreciationGlobale.commentaire"] && (
-                        <span style={{ color: "red", fontSize: "12px" }}>{errors["appreciationGlobale.commentaire"]}</span>
+                        <span
+                            style={{color: "red", fontSize: "12px"}}>{errors["appreciationGlobale.commentaire"]}</span>
                     )}
                 </section>
             );
@@ -459,6 +473,18 @@ const EvaluationEtapes = () => {
                     </div>
                     {errors["prochainStage"] && (
                         <span style={{color: "red", fontSize: "12px"}}>{errors["prochainStage"]}</span>
+                    )}
+                    <br/>
+                    <label>Signature :</label>
+                    <input
+                        type="text"
+                        name="signature"
+                        value={formData.signature || ""}
+                        onChange={handleChange}
+                        style={{ width: "60%", marginLeft: "10px", fontSize: 12 }}
+                    />
+                    {errors["signature"] && (
+                        <span style={{ color: "red", fontSize: "12px" }}>{errors["signature"]}</span>
                     )}
                 </section>
             );
@@ -553,51 +579,69 @@ const EvaluationEtapes = () => {
                         <br/>
                     </div>
                     <div className="signup-content">
-                        {renderStep()}
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                marginBottom: "20px",
-                                position: "absolute",
-                                bottom: "0px",
-                                width: "100%",
-                            }}
-                        >
-                            {currentStep > 1 && (
-                                <button
-                                    onClick={handlePreviousStep}
-                                    style={{marginRight: "auto"}}
-                                >
-                                    Précédent
-                                </button>
-                            )}
-                            {currentStep < 6 && (
-                                <button
-                                    onClick={handleNextStep}
-                                    className="btn-filled"
-                                    style={{marginLeft: "auto", marginRight: "50px"}}
-                                >
-                                    Suivant
-                                </button>
-                            )}
-                            {currentStep === 6 && (
-                                <button
-                                    onClick={() => {
-                                        handleSubmit().then(() => {
-                                            alert("Évaluation soumise avec succès !");
-                                            window.location.href = "/dashboard";
-                                        });
+                        {!isPdfPreviewVisible ? (
+                            <>
+                                {renderStep()}
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        marginBottom: "20px",
+                                        position: "absolute",
+                                        bottom: "0px",
+                                        width: "100%",
                                     }}
-                                    className="btn-filled"
-                                    style={{marginLeft: "auto", marginRight: "50px"}}
                                 >
-                                    Soumettre
+                                    {currentStep > 1 && (
+                                        <button
+                                            onClick={handlePreviousStep}
+                                            style={{marginRight: "auto"}}
+                                        >
+                                            Précédent
+                                        </button>
+                                    )}
+                                    {currentStep < 6 && (
+                                        <button
+                                            onClick={handleNextStep}
+                                            className="btn-filled"
+                                            style={{marginLeft: "auto", marginRight: "50px"}}
+                                        >
+                                            Suivant
+                                        </button>
+                                    )}
+                                    {currentStep === 6 && (
+                                        <div>
+                                            <button
+                                                onClick={() => {
+                                                    handleSubmit();
+                                                }}
+                                                className="btn-filled"
+                                                style={{marginLeft: "auto", marginRight: "50px"}}
+                                            >
+                                                Soumettre
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <div>
+                                <PdfPreview file={pdfPreviewUrl} height={500} filename="evaluation_stagiaire.pdf"/>
+                                <button
+                                    onClick={() => (window.location.href = "/dashboard")}
+                                    className="btn-filled"
+                                    style={{
+                                        marginTop: "20px",
+                                        display: "block",
+                                        marginLeft: "auto",
+                                        marginRight: "auto",
+                                    }}
+                                >
+                                    Retour au tableau de bord
                                 </button>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
-
                 </div>
             </div>
         </div>
