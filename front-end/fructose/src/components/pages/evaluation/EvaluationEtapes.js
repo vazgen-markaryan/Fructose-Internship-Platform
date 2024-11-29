@@ -29,10 +29,10 @@ const EvaluationEtapes = () => {
         signature: "",
     });
     const ReponseEvaluation = {
-        TOTAL_AGREE: "Totalement en accord",
-        MOSTLY_AGREE: "Plutôt en accord",
-        MOSTLY_DISAGREE: "Plutôt en désaccord",
-        TOTAL_DISAGREE: "Totalement en désaccord",
+        TOTAL_AGREE: t("evaluation_employeur.step.total_agree"),
+        MOSTLY_AGREE: t("evaluation_employeur.step.mostly_agree"),
+        MOSTLY_DISAGREE: t("evaluation_employeur.step.mostly_disagree"),
+        TOTAL_DISAGREE: t("evaluation_employeur.step.total_disagree"),
     };
 
     // Gestion des changements dans les champs
@@ -65,43 +65,43 @@ const EvaluationEtapes = () => {
             1: {
                 section: "productivite",
                 fields: [
-                    "Planifier et organiser son travail de façon efficace",
-                    "Comprendre rapidement les directives relatives à son travail",
-                    "Maintenir un rythme de travail soutenu",
-                    "Établir ses priorités",
-                    "Respecter ses échéanciers",
+                    t("evaluation_employeur.step.productivite.fields.field1"),
+                    t("evaluation_employeur.step.productivite.fields.field2"),
+                    t("evaluation_employeur.step.productivite.fields.field3"),
+                    t("evaluation_employeur.step.productivite.fields.field4"),
+                    t("evaluation_employeur.step.productivite.fields.field5"),
                 ],
             },
             2: {
                 section: "qualiteTravail",
                 fields: [
-                    "Respecter les mandats qui lui ont été confiés",
-                    "Porter attention aux détails dans la réalisation de ses tâches",
-                    "Vérifier son travail, s’assurer que rien n’a été oublié",
-                    "Rechercher des occasions de se perfectionner",
-                    "Faire une bonne analyse des problèmes rencontrés",
+                    t("evaluation_employeur.step.qualiteTravail.fields.field1"),
+                    t("evaluation_employeur.step.qualiteTravail.fields.field2"),
+                    t("evaluation_employeur.step.qualiteTravail.fields.field3"),
+                    t("evaluation_employeur.step.qualiteTravail.fields.field4"),
+                    t("evaluation_employeur.step.qualiteTravail.fields.field5"),
                 ],
             },
             3: {
                 section: "relationsInterpersonnelles",
                 fields: [
-                    "Établir facilement des contacts avec les gens",
-                    "Contribuer activement au travail d’équipe",
-                    "S’adapter facilement à la culture de l’entreprise",
-                    "Accepter les critiques constructives",
-                    "Être respectueux envers les gens",
-                    "Faire preuve d’écoute active en essayant de comprendre le point de vue de l’autre",
+                    t("evaluation_employeur.step.relationsInterpersonnelles.fields.field1"),
+                    t("evaluation_employeur.step.relationsInterpersonnelles.fields.field2"),
+                    t("evaluation_employeur.step.relationsInterpersonnelles.fields.field3"),
+                    t("evaluation_employeur.step.relationsInterpersonnelles.fields.field4"),
+                    t("evaluation_employeur.step.relationsInterpersonnelles.fields.field5"),
+                    t("evaluation_employeur.step.relationsInterpersonnelles.fields.field6"),
                 ],
             },
             4: {
                 section: "habiletesPersonnelles",
                 fields: [
-                    "Démontrer de l’intérêt et de la motivation au travail",
-                    "Exprimer clairement ses idées",
-                    "Faire preuve d’initiative",
-                    "Travailler de façon sécuritaire",
-                    "Démontrer un bon sens des responsabilités ne requérant qu’un minimum de supervision",
-                    "Être ponctuel et assidu à son travail",
+                    t("evaluation_employeur.step.habiletesPersonnelles.fields.field1"),
+                    t("evaluation_employeur.step.habiletesPersonnelles.fields.field2"),
+                    t("evaluation_employeur.step.habiletesPersonnelles.fields.field3"),
+                    t("evaluation_employeur.step.habiletesPersonnelles.fields.field4"),
+                    t("evaluation_employeur.step.habiletesPersonnelles.fields.field5"),
+                    t("evaluation_employeur.step.habiletesPersonnelles.fields.field6"),
                 ],
             },
         };
@@ -260,52 +260,52 @@ const EvaluationEtapes = () => {
     const renderStep = () => {
         const stepOptions = [
             {
-                title: "Étape 1: Productivité",
-                description: "Capacité d’optimiser son rendement au travail",
+                title: t("evaluation_employeur.step.productivite.title"),
+                description: t("evaluation_employeur.step.productivite.description"),
                 items: [
-                    "Planifier et organiser son travail de façon efficace",
-                    "Comprendre rapidement les directives relatives à son travail",
-                    "Maintenir un rythme de travail soutenu",
-                    "Établir ses priorités",
-                    "Respecter ses échéanciers"
+                    t("evaluation_employeur.step.productivite.fields.field1"),
+                    t("evaluation_employeur.step.productivite.fields.field2"),
+                    t("evaluation_employeur.step.productivite.fields.field3"),
+                    t("evaluation_employeur.step.productivite.fields.field4"),
+                    t("evaluation_employeur.step.productivite.fields.field5"),
                 ],
                 section: "productivite"
             },
             {
-                title: "Étape 2: QUALITÉ DU TRAVAIL",
-                description: "Capacité de s’acquitter des tâches sous sa responsabilité en s’imposant personnellement des normes de qualité",
+                title: t("evaluation_employeur.step.qualiteTravail.title"),
+                description: t("evaluation_employeur.step.qualiteTravail.description"),
                 items: [
-                    "Respecter les mandats qui lui ont été confiés",
-                    "Porter attention aux détails dans la réalisation de ses tâches",
-                    "Vérifier son travail, s’assurer que rien n’a été oublié",
-                    "Rechercher des occasions de se perfectionner",
-                    "Faire une bonne analyse des problèmes rencontrés"
+                    t("evaluation_employeur.step.qualiteTravail.fields.field1"),
+                    t("evaluation_employeur.step.qualiteTravail.fields.field2"),
+                    t("evaluation_employeur.step.qualiteTravail.fields.field3"),
+                    t("evaluation_employeur.step.qualiteTravail.fields.field4"),
+                    t("evaluation_employeur.step.qualiteTravail.fields.field5"),
                 ],
                 section: "qualiteTravail"
             },
             {
-                title: "Étape 3: QUALITÉS DES RELATIONS",
-                description: "Capacité d’établir des interrelations harmonieuses dans son milieu de travail",
+                title: t("evaluation_employeur.step.relationsInterpersonnelles.title"),
+                description:t("evaluation_employeur.step.relationsInterpersonnelles.description"),
                 items: [
-                    "Établir facilement des contacts avec les gens",
-                    "Contribuer activement au travail d’équipe",
-                    "S’adapter facilement à la culture de l’entreprise",
-                    "Accepter les critiques constructives",
-                    "Être respectueux envers les gens",
-                    "Faire preuve d’écoute active en essayant de comprendre le point de vue de l’autre"
+                    t("evaluation_employeur.step.relationsInterpersonnelles.fields.field1"),
+                    t("evaluation_employeur.step.relationsInterpersonnelles.fields.field2"),
+                    t("evaluation_employeur.step.relationsInterpersonnelles.fields.field3"),
+                    t("evaluation_employeur.step.relationsInterpersonnelles.fields.field4"),
+                    t("evaluation_employeur.step.relationsInterpersonnelles.fields.field5"),
+                    t("evaluation_employeur.step.relationsInterpersonnelles.fields.field6"),
                 ],
                 section: "relationsInterpersonnelles"
             },
             {
-                title: "Étape 4: HABILETÉS PERSONNELLES",
-                description: "Capacité de faire preuve d’attitudes ou de comportements matures et responsables",
+                title: t("evaluation_employeur.step.habiletesPersonnelles.title"),
+                description: t("evaluation_employeur.step.habiletesPersonnelles.description"),
                 items: [
-                    "Démontrer de l’intérêt et de la motivation au travail",
-                    "Exprimer clairement ses idées",
-                    "Faire preuve d’initiative",
-                    "Travailler de façon sécuritaire",
-                    "Démontrer un bon sens des responsabilités ne requérant qu’un minimum de supervision",
-                    "Être ponctuel et assidu à son travail"
+                    t("evaluation_employeur.step.habiletesPersonnelles.fields.field1"),
+                    t("evaluation_employeur.step.habiletesPersonnelles.fields.field2"),
+                    t("evaluation_employeur.step.habiletesPersonnelles.fields.field3"),
+                    t("evaluation_employeur.step.habiletesPersonnelles.fields.field4"),
+                    t("evaluation_employeur.step.habiletesPersonnelles.fields.field5"),
+                    t("evaluation_employeur.step.habiletesPersonnelles.fields.field6"),
                 ],
                 section: "habiletesPersonnelles"
             }
@@ -335,7 +335,7 @@ const EvaluationEtapes = () => {
                                         border: errors[`${section}.champs.${item}`] ? "1px solid red" : "1px solid #ccc",
                                     }}
                                 >
-                                    <option value="">Sélectionner</option>
+                                    <option value="">{t("evaluation_employeur.step.select")}</option>
                                     {Object.entries(ReponseEvaluation).map(([key, label]) => (
                                         <option key={key} value={key}>
                                             {label}
@@ -352,7 +352,7 @@ const EvaluationEtapes = () => {
                         </div>
                     ))}
                     <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                        <label style={{marginBottom: "10px"}}>Commentaire :</label>
+                        <label style={{marginBottom: "10px"}}>{t("evaluation_employeur.step.comment")}</label>
                         <textarea
                             name={`${section}.commentaire`}
                             value={formData[section].commentaire || ""}
@@ -365,14 +365,14 @@ const EvaluationEtapes = () => {
         } else if (currentStep === 5) {
             return (
                 <section>
-                    <h3>Étape 5: Appréciation globale</h3>
-                    <label>Les habiletés démontrées :</label>
+                    <h3>{t("evaluation_employeur.step.appreciationGlobale.title")}</h3>
+                    <label>{t("evaluation_employeur.step.appreciationGlobale.description")}</label>
                     {[
-                        "Dépassent de beaucoup les attentes",
-                        "Dépassent les attentes",
-                        "Répondent pleinement aux attentes",
-                        "Répondent partiellement aux attentes",
-                        "Ne répondent pas aux attentes"
+                        t("evaluation_employeur.step.appreciationGlobale.options.option1"),
+                        t("evaluation_employeur.step.appreciationGlobale.options.option2"),
+                        t("evaluation_employeur.step.appreciationGlobale.options.option3"),
+                        t("evaluation_employeur.step.appreciationGlobale.options.option4"),
+                        t("evaluation_employeur.step.appreciationGlobale.options.option5"),
                     ].map((option, idx) => (
                         <div key={idx}>
                             <input
@@ -389,7 +389,7 @@ const EvaluationEtapes = () => {
                         <span style={{color: "red", fontSize: "12px"}}>{errors["appreciationGlobale.valeur"]}</span>
                     )}
                     <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                        <label>Précisez votre appréciation :</label>
+                        <label>{t("evaluation_employeur.step.appreciationGlobale.comment_label")}</label>
                         <textarea
                             name="appreciationGlobale.commentaire"
                             value={formData.appreciationGlobale.commentaire || ""}
@@ -406,8 +406,8 @@ const EvaluationEtapes = () => {
         } else if (currentStep === 6) {
             return (
                 <section>
-                    <h3>Étape 6: Évaluation finale</h3>
-                    <label>Cette évaluation a été discutée avec le stagiaire :</label>
+                    <h3>{t("evaluation_employeur.step.evaluationFinale.title")}</h3>
+                    <label>{t("evaluation_employeur.step.evaluationFinale.discussion_label")}</label>
                     <div>
                         <input
                             type="radio"
@@ -416,7 +416,7 @@ const EvaluationEtapes = () => {
                             onChange={handleChange}
                             checked={formData.evaluationDiscutee === "Oui"}
                         />
-                        <label>Oui</label>
+                        <label>{t("evaluation_employeur.step.evaluationFinale.stage_options.yes")}</label>
                         <input
                             type="radio"
                             name="evaluationDiscutee"
@@ -424,14 +424,14 @@ const EvaluationEtapes = () => {
                             onChange={handleChange}
                             checked={formData.evaluationDiscutee === "Non"}
                         />
-                        <label>Non</label>
+                        <label>{t("evaluation_employeur.step.evaluationFinale.stage_options.no")}</label>
                     </div>
                     {errors["evaluationDiscutee"] && (
                         <span style={{color: "red", fontSize: "12px"}}>{errors["evaluationDiscutee"]}</span>
                     )}
                     <br/>
                     <br/>
-                    <label>Nombre d’heures réel d’encadrement :</label>
+                    <label>{t("evaluation_employeur.step.evaluationFinale.hours_label")}</label>
                     <input
                         type="number"
                         name="nombreHeures"
@@ -444,7 +444,7 @@ const EvaluationEtapes = () => {
                     )}
                     <br/>
                     <br/>
-                    <label>L’entreprise aimerait accueillir l’élève :</label>
+                    <label>{t("evaluation_employeur.step.evaluationFinale.stage_label")}</label>
                     <div>
                         <input
                             type="radio"
@@ -453,7 +453,7 @@ const EvaluationEtapes = () => {
                             onChange={handleChange}
                             checked={formData.prochainStage === "Oui"}
                         />
-                        <label>Oui</label>
+                        <label>{t("evaluation_employeur.step.evaluationFinale.stage_options.yes")}</label>
                         <input
                             type="radio"
                             name="prochainStage"
@@ -461,7 +461,7 @@ const EvaluationEtapes = () => {
                             onChange={handleChange}
                             checked={formData.prochainStage === "Non"}
                         />
-                        <label>Non</label>
+                        <label>{t("evaluation_employeur.step.evaluationFinale.stage_options.no")}</label>
                         <input
                             type="radio"
                             name="prochainStage"
@@ -469,22 +469,22 @@ const EvaluationEtapes = () => {
                             onChange={handleChange}
                             checked={formData.prochainStage === "Peut-être"}
                         />
-                        <label>Peut-être</label>
+                        <label>{t("evaluation_employeur.step.evaluationFinale.stage_options.maybe")}</label>
                     </div>
                     {errors["prochainStage"] && (
                         <span style={{color: "red", fontSize: "12px"}}>{errors["prochainStage"]}</span>
                     )}
                     <br/>
-                    <label>Signature :</label>
+                    <label>{t("evaluation_employeur.step.evaluationFinale.signature_label")}</label>
                     <input
                         type="text"
                         name="signature"
                         value={formData.signature || ""}
                         onChange={handleChange}
-                        style={{ width: "60%", marginLeft: "10px", fontSize: 12 }}
+                        style={{width: "60%", marginLeft: "10px", fontSize: 12}}
                     />
                     {errors["signature"] && (
-                        <span style={{ color: "red", fontSize: "12px" }}>{errors["signature"]}</span>
+                        <span style={{color: "red", fontSize: "12px"}}>{errors["signature"]}</span>
                     )}
                 </section>
             );
@@ -514,67 +514,70 @@ const EvaluationEtapes = () => {
                             </Link>
                         </div>
                         <br/>
-                        <h5>Évaluation</h5>
+                        <h5>{t("evaluation_employeur.evaluation_steps.title")}</h5>
                         <br/>
-                        {
-                            (currentStep !== 0) ?
-                                <div className="vertical-stepper">
-                                    <div className="vertical-stepper-item">
-                                        <div className="vertical-stepper-content">
-                                            <h6 className="vertical-stepper-title">Étape 1: Productivité</h6>
-                                            <p className="text-center"
-                                               style={{fontStyle: "italic", margin: 0}}>
-                                                Capacité d’optimiser son rendement au travail
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="vertical-stepper-item">
-                                        <div className="vertical-stepper-content">
-                                            <h6 className="vertical-stepper-title">Étape 2: Qualité du travail</h6>
-                                            <p className="text-center"
-                                               style={{fontStyle: "italic", margin: 0}}>
-                                                Capacité de s’acquitter des tâches sous sa responsabilité en s’imposant
-                                                personnellement
-                                                des normes de qualité
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="vertical-stepper-item">
-                                        <div className="vertical-stepper-content">
-                                            <h6 className="vertical-stepper-title">Étape 3: Qualités des relations</h6>
-                                            <p className="text-center"
-                                               style={{fontStyle: "italic", margin: 0}}>
-                                                Capacité d’établir des interrelations harmonieuses dans son milieu de
-                                                travail
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="vertical-stepper-item">
-                                        <div className="vertical-stepper-content">
-                                            <h6 className="vertical-stepper-title">Étape 4: Habiletés personnelles</h6>
-                                            <p className="text-center"
-                                               style={{fontStyle: "italic", margin: 0}}>
-                                                Capacité de faire preuve d’attitudes ou de comportements matures et
-                                                responsables
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="vertical-stepper-item">
-                                        <div className="vertical-stepper-content">
-                                            <h6 className="vertical-stepper-title">Étape 5: Appréciation globale</h6>
-                                        </div>
-                                    </div>
-                                    <div className="vertical-stepper-item">
-                                        <div className="vertical-stepper-content">
-                                            <h6 className="vertical-stepper-title">Étape 6: Évaluation finale</h6>
-                                        </div>
+                        {currentStep !== 0 ? (
+                            <div className="vertical-stepper">
+                                <div className="vertical-stepper-item">
+                                    <div className="vertical-stepper-content">
+                                        <h6 className="vertical-stepper-title">
+                                            {t("evaluation_employeur.evaluation_steps.step1.title")}
+                                        </h6>
+                                        <p className="text-center" style={{fontStyle: "italic", margin: 0}}>
+                                            {t("evaluation_employeur.evaluation_steps.step1.description")}
+                                        </p>
                                     </div>
                                 </div>
-                                :
-                                <div>
-                                    <h1>{t("creer_utilisateur_page.carriere")}.</h1>
+                                <div className="vertical-stepper-item">
+                                    <div className="vertical-stepper-content">
+                                        <h6 className="vertical-stepper-title">
+                                            {t("evaluation_employeur.evaluation_steps.step2.title")}
+                                        </h6>
+                                        <p className="text-center" style={{fontStyle: "italic", margin: 0}}>
+                                            {t("evaluation_employeur.evaluation_steps.step2.description")}
+                                        </p>
+                                    </div>
                                 </div>
-                        }
+                                <div className="vertical-stepper-item">
+                                    <div className="vertical-stepper-content">
+                                        <h6 className="vertical-stepper-title">
+                                            {t("evaluation_employeur.evaluation_steps.step3.title")}
+                                        </h6>
+                                        <p className="text-center" style={{fontStyle: "italic", margin: 0}}>
+                                            {t("evaluation_employeur.evaluation_steps.step3.description")}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="vertical-stepper-item">
+                                    <div className="vertical-stepper-content">
+                                        <h6 className="vertical-stepper-title">
+                                            {t("evaluation_employeur.evaluation_steps.step4.title")}
+                                        </h6>
+                                        <p className="text-center" style={{fontStyle: "italic", margin: 0}}>
+                                            {t("evaluation_employeur.evaluation_steps.step4.description")}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="vertical-stepper-item">
+                                    <div className="vertical-stepper-content">
+                                        <h6 className="vertical-stepper-title">
+                                            {t("evaluation_employeur.evaluation_steps.step5.title")}
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div className="vertical-stepper-item">
+                                    <div className="vertical-stepper-content">
+                                        <h6 className="vertical-stepper-title">
+                                            {t("evaluation_employeur.evaluation_steps.step6.title")}
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div>
+                                <h1>{t("evaluation_employeur.evaluation_steps.no_step")}</h1>
+                            </div>
+                        )}
                         <br/>
                         <br/>
                     </div>
@@ -597,7 +600,7 @@ const EvaluationEtapes = () => {
                                             onClick={handlePreviousStep}
                                             style={{marginRight: "auto"}}
                                         >
-                                            Précédent
+                                            {t("evaluation_employeur.step.previous")}
                                         </button>
                                     )}
                                     {currentStep < 6 && (
@@ -606,7 +609,8 @@ const EvaluationEtapes = () => {
                                             className="btn-filled"
                                             style={{marginLeft: "auto", marginRight: "50px"}}
                                         >
-                                            Suivant
+
+                                            {t("evaluation_employeur.step.next")}
                                         </button>
                                     )}
                                     {currentStep === 6 && (
@@ -618,7 +622,8 @@ const EvaluationEtapes = () => {
                                                 className="btn-filled"
                                                 style={{marginLeft: "auto", marginRight: "50px"}}
                                             >
-                                                Soumettre
+
+                                                {t("evaluation_employeur.step.submit")}
                                             </button>
                                         </div>
                                     )}
@@ -637,7 +642,7 @@ const EvaluationEtapes = () => {
                                         marginRight: "auto",
                                     }}
                                 >
-                                    Retour au tableau de bord
+                                    {t("evaluation_employeur.step.back_to_dashboard")}
                                 </button>
                             </div>
                         )}

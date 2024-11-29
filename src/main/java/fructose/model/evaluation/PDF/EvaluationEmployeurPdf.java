@@ -48,7 +48,7 @@ public class EvaluationEmployeurPdf {
 
                 for (CritereEvaluation critere : section.getCriteres()) {
                     table.addCell(critere.getQuestion());
-                    table.addCell(String.valueOf(critere.getReponse()));
+                    table.addCell(critere.getReponse().getLabel());
                 }
                 document.add(table);
 

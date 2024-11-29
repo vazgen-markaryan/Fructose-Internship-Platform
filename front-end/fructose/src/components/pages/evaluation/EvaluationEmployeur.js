@@ -35,7 +35,7 @@ const EvaluationEmployeur = () => {
         return (
             <section>
                 <div className="toolbar-items">
-                    <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.stagiaire_a_evaluer")}</h4>
+                    <h4 className="m-0 toolbar-spacer">{t("evaluation_employeur.stagiaire_a_evaluer")}</h4>
                 </div>
                 <div style={{ padding: "10px 0" }}>
                     {candidatures.length === 0 ? (
@@ -50,8 +50,7 @@ const EvaluationEmployeur = () => {
                                 padding: "10px",
                             }}
                         >
-                            <Icon path={mdiBriefcasePlusOutline} size={1} />
-                            <p className="m-0">{t("dashboard_home_page.no_stagiaire_a_evaluer")}</p>
+                            <p className="m-0">{t("evaluation_employeur.no_stagiaire_a_evaluer")}</p>
                         </div>
                     ) : (
                         <div
@@ -103,14 +102,8 @@ const EvaluationEmployeur = () => {
                                                     marginLeft: "auto",
                                                 }}
                                             >
-                                                <p
-                                                    className="m-0"
-                                                    style={{
-                                                        color: "red",
-                                                    }}
-                                                >
-                                                    évaluation non disponible avant le --:--:--
-                                                </p>
+                                                <p className="m-0"
+                                                   style={{color: "red"}}>{t("evaluation_employeur.evaluation_non_disponible")}</p>
                                                 <Link
                                                     to="/dashboard/evaluation-step/"
                                                     state={{
@@ -120,7 +113,7 @@ const EvaluationEmployeur = () => {
                                                     }}
                                                 >
                                                     <button>
-                                                        Évaluer
+                                                        {t("evaluation_employeur.evaluer")}
                                                         <Icon path={mdiChevronRight} size={1} />
                                                     </button>
                                                 </Link>
