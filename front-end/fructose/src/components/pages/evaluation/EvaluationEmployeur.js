@@ -83,6 +83,14 @@ const EvaluationEmployeur = () => {
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+    const isButtonEnabled = (dateFinStage) => {
+        const today = new Date();
+        const endDate = new Date(dateFinStage);
+        const twoWeeksBeforeEnd = new Date(endDate);
+        twoWeeksBeforeEnd.setDate(endDate.getDate() - 14);
+        return today >= twoWeeksBeforeEnd && today <= endDate;
+    };
+
 
     if (currentUser?.role === "EMPLOYEUR") {
         const startIndex = (currentPage - 1) * itemsPerPage;
@@ -109,24 +117,85 @@ const EvaluationEmployeur = () => {
                             }}
                         >
                             {selectedCandidatures.map((candidature, index) => (
-                                <div key={index} style={{
-                                    alignItems: "center",
-                                    width: "400px",
-                                    display: "flex",
-                                    backgroundColor: "#eee",
-                                    borderRadius: "5px",
-                                    gap: "5px",
-                                    padding: "10px"
-                                }}>
-                                    <p className="m-0">{candidature.etudiant.fullName}</p>
-                                    <Link to="/dashboard/evaluation-step/" state={{candidature}}>
-                                        <button>
-                                            {t("evaluation_employeur.evaluer")}
-                                            <Icon path={mdiChevronRight} size={1}/>
-                                        </button>
+                                <div
+                                    key={index}
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                        width: "97%",
+                                        backgroundColor: "#eee",
+                                        borderRadius: "5px",
+                                        padding: "10px",
+                                        marginBottom: "10px",
+                                    }}
+                                >
+                                    <p style={{margin: 0, flex: 1, textAlign: "left"}}>
+                                        {candidature.etudiant.fullName}
+                                    </p>
+
+                                    <Link
+                                        to="/dashboard/evaluation-step/"
+                                        state={{candidature}}
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "10px",
+                                            marginLeft: "auto",
+                                            textDecoration: "none",
+                                        }}
+                                    >
+                                        {isButtonEnabled(candidature.candidature.offreStageDTO.dateFin) ? (
+                                            <>
+                                                <p style={{margin: 0, color: "green"}}>
+                                                    {t("evaluation_employeur.evaluation_disponible")}
+                                                </p>
+                                                <button
+                                                    className="btn-filled"
+                                                    style={{
+                                                        alignItems: "center",
+                                                        borderRadius: "4px",
+                                                        cursor: "pointer",
+                                                        display: "flex",
+                                                        gap: "5px",
+                                                    }}
+                                                >
+                                                    {t("evaluation_employeur.evaluer")}
+                                                    <Icon path={mdiChevronRight} size={1}/>
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <p style={{margin: 0, color: "red"}}>
+                                                    {t("evaluation_employeur.evaluation_non_disponible")} (
+                                                    {new Date(
+                                                        new Date(
+                                                            candidature.candidature.offreStageDTO.dateFin
+                                                        ).setDate(
+                                                            new Date(candidature.candidature.offreStageDTO.dateFin).getDate() - 14
+                                                        )
+                                                    ).toLocaleDateString()}
+                                                    )
+                                                </p>
+                                                <button
+                                                    className="btn-filled:disabled"
+                                                    style={{
+                                                        alignItems: "center",
+                                                        borderRadius: "4px",
+                                                        cursor: "not-allowed",
+                                                        display: "flex",
+                                                        gap: "5px",
+                                                    }}
+                                                >
+                                                    {t("evaluation_employeur.evaluer")}
+                                                    <Icon path={mdiChevronRight} size={1}/>
+                                                </button>
+                                            </>
+                                        )}
                                     </Link>
                                 </div>
                             ))}
+
                         </div>
                     )}
                 </div>
@@ -143,7 +212,7 @@ const EvaluationEmployeur = () => {
                 <div className="toolbar-items">
                     <h4>{t("dashboard_home_page.manage_evaluations")}</h4>
                 </div>
-                <div style={{ padding: "10px 0" }}>
+                <div style={{padding: "10px 0"}}>
                     {evaluation.length === 0 ? (
                         <div
                             style={{
@@ -156,7 +225,7 @@ const EvaluationEmployeur = () => {
                                 padding: "10px"
                             }}
                         >
-                            <Icon path={mdiBriefcasePlusOutline} size={1} />
+                            <Icon path={mdiBriefcasePlusOutline} size={1}/>
                             <p>{t("dashboard_home_page.no_evaluation")}</p>
                         </div>
                     ) : (
@@ -168,7 +237,7 @@ const EvaluationEmployeur = () => {
                                 padding: "10px"
                             }}
                         >
-                            <div style={{ display: "flex", gap: "20px" }}>
+                            <div style={{display: "flex", gap: "20px"}}>
                                 <div
                                     className="menu-list"
                                     style={{
@@ -196,7 +265,7 @@ const EvaluationEmployeur = () => {
                                                 fetchEvaluationByCandidatureId(evalItem).then(setEvaluationPdfUrl);
                                             }}
                                         >
-                                            <Icon path={mdiFileOutline} size={1} />
+                                            <Icon path={mdiFileOutline} size={1}/>
                                             <p>
                                                 {evalItem.candidatureDTO.etudiantDTO.fullName} - {evalItem.candidatureDTO.offreStageDTO.nom} - {evalItem.candidatureDTO.offreStageDTO.compagnie}
                                             </p>
@@ -216,7 +285,7 @@ const EvaluationEmployeur = () => {
                                 boxShadow: "0 0 10px rgba(0,0,0,0.1)"
                             }}
                         >
-                            <PdfPreview file={evaluationPdfUrl} />
+                            <PdfPreview file={evaluationPdfUrl}/>
                         </div>
                     )}
                     <div
@@ -226,7 +295,7 @@ const EvaluationEmployeur = () => {
                             marginTop: "20px"
                         }}
                     >
-                        {Array.from({ length: Math.ceil(evaluation.length / itemsPerPage) }).map((_, index) => (
+                        {Array.from({length: Math.ceil(evaluation.length / itemsPerPage)}).map((_, index) => (
                             <button
                                 key={index}
                                 className={currentPage === index + 1 ? "btn-filled" : ""}

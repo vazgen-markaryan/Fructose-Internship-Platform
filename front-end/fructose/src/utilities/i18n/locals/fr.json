@@ -282,7 +282,9 @@
 		"contract_refused": "La signature du contrat a été refusé.",
 		"contract_refusal_failed": "Échec du refus de la signature du contrat.",
 		"contract_refusal_error": "Une erreur s'est produite lors du refus du contrat.",
-		"waiting_contract_generation": "En attente de la génération du Contrat par Gestionnaire"
+		"waiting_contract_generation": "En attente de la génération du Contrat par Gestionnaire",
+		"manage_evaluations": "Stagiaires évalués",
+		"no_evaluation": "Aucune évaluation à afficher pour le moment"
 	},
 	"pdf_view_page": {
 		"error": "Une erreur inconnue est survenue"
@@ -574,8 +576,9 @@
 	"evaluation_employeur": {
 		"stagiaire_a_evaluer": "Stagiaire à évaluer",
 		"no_stagiaire_a_evaluer": "Aucun stagiaire à évaluer",
-		"evaluation_non_disponible": "évaluation non disponible avant le --:--:--",
+		"evaluation_non_disponible": "évaluation non disponible avant le :",
 		"evaluer": "Évaluer",
+		"evaluation_disponible" : "évaluation disponible",
 		"step": {
 			"productivite": {
 				"title": "Étape 1: Productivité",

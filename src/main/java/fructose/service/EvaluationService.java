@@ -1,7 +1,5 @@
 package fructose.service;
 
-import fructose.model.Candidature;
-import fructose.model.Utilisateur;
 import fructose.model.evaluation.CritereEvaluation;
 import fructose.model.evaluation.EvaluationEmployeur;
 import fructose.model.evaluation.PDF.EvaluationEmployeurPdf;
@@ -21,18 +19,10 @@ public class EvaluationService {
 
     @Autowired
     private EvaluationRepository evaluationRepository;
-    @Autowired
-    private CandidatureRepository candidatureRepository;
 
     @Transactional
     public String creerEvaluation(EvaluationEmployeurDTO evaluationDTO) {
-        EvaluationEmployeur evaluation = EvaluationEmployeurDTO.toEntity(evaluationDTO);
-        for (SectionEvaluation section : evaluation.getSections()) {
-            section.setEvaluation(evaluation);
-            for (CritereEvaluation critere : section.getCriteres()) {
-                critere.setSection(section);
-            }
-        }
+        EvaluationEmployeur evaluation = InitializeData(evaluationDTO);
         evaluationRepository.save(evaluation);
         return generateEvaluationPdf(evaluation);
     }
@@ -52,6 +42,11 @@ public class EvaluationService {
     }
 
     public String recupererEvaluationParId(EvaluationEmployeurDTO evaluationDTO) {
+        EvaluationEmployeur evaluation = InitializeData(evaluationDTO);
+        return generateEvaluationPdf(evaluation);
+    }
+
+    public static EvaluationEmployeur InitializeData(EvaluationEmployeurDTO evaluationDTO) {
         EvaluationEmployeur evaluation = EvaluationEmployeurDTO.toEntity(evaluationDTO);
         for (SectionEvaluation section : evaluation.getSections()) {
             section.setEvaluation(evaluation);
@@ -59,17 +54,15 @@ public class EvaluationService {
                 critere.setSection(section);
             }
         }
-        return generateEvaluationPdf(evaluation);
+        return evaluation;
     }
 
     public List<EvaluationEmployeurDTO> findAllEvaluation() {
         List<EvaluationEmployeurDTO> evaluationEmployeurDTOS = new ArrayList<>();
         List<EvaluationEmployeur> evaluationEmployeurList = evaluationRepository.findAll();
-
-        for (EvaluationEmployeur evaluationEmployeur : evaluationEmployeurList){
+        for(EvaluationEmployeur evaluationEmployeur : evaluationEmployeurList){
             evaluationEmployeurDTOS.add(EvaluationEmployeurDTO.toDTO(evaluationEmployeur));
         }
-
         return evaluationEmployeurDTOS;
     }
 }

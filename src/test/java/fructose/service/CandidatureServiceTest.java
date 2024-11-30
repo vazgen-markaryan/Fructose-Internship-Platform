@@ -117,6 +117,7 @@ class CandidatureServiceTest {
         verify(candidatureRepository, times(1)).findById(candidatureId);
         verify(candidatureRepository, never()).save(any(Candidature.class));
     }
+
     @Test
     void testApprouverCandidatureInvalidDate() {
         LocalDate invalidDate = LocalDate.now().plusDays(2);
@@ -262,7 +263,6 @@ class CandidatureServiceTest {
     }
 
 
-
     @Test
     void testGetCandidaturesByOffreStageIdNoCandidatures() {
         Long employeurId = 1L;
@@ -375,6 +375,7 @@ class CandidatureServiceTest {
         verify(cvRepository, times(1)).getReferenceById(1L);
         verify(candidatureRepository, never()).save(any(Candidature.class));
     }
+
     @Test
     void testModifierEtatCandidatureSuccess() {
         when(candidatureRepository.findById(1L)).thenReturn(Optional.of(candidature));
@@ -410,4 +411,84 @@ class CandidatureServiceTest {
         verify(candidatureRepository, never()).save(any(Candidature.class));
     }
 
+    @Test
+    void testFindStagiaireByOwner() {
+        Long ownerId = 1L;
+
+        Candidature candidature = new Candidature();
+        candidature.setId(1L);
+        candidature.setEtat(EtatCandidature.CONTRAT_SIGNE_TOUS);
+
+        Credentials studentCredentials = Credentials.builder()
+                .email("student@example.com")
+                .password("password")
+                .role(Role.ETUDIANT)
+                .build();
+        Utilisateur etudiant = new Utilisateur();
+        etudiant.setFullName("John Doe");
+        etudiant.setCredentials(studentCredentials);
+
+        Departement departement = new Departement();
+        departement.setId(1L);
+        etudiant.setDepartement(departement);
+
+        candidature.setEtudiant(etudiant);
+
+        Cv cv = new Cv();
+        cv.setId(1L);
+        cv.setUtilisateur(etudiant);
+        candidature.setCv(cv);
+
+        Credentials credentials2 = Credentials.builder().email("Blabla@gmail.com").password("GG").role(Role.EMPLOYEUR).build();
+        Utilisateur employeur = new Utilisateur();
+        employeur.setFullName("John Doe");
+        employeur.setCredentials(credentials2);
+
+        OffreStage offreStage = new OffreStage();
+        offreStage.setId(1L);
+        offreStage.setNom("Stage en Développement");
+        offreStage.setCompagnie("TechCorp");
+        offreStage.setDepartement(departement);
+        offreStage.setTauxHoraire(15.0);
+        offreStage.setTypeEmploi("presentiel");
+        offreStage.setAdresse("123 Rue Exemple");
+        offreStage.setModaliteTravail("temps_plein");
+        offreStage.setDateDebut(LocalDate.of(2023, 1, 1));
+        offreStage.setDateFin(LocalDate.of(2023, 6, 30));
+        offreStage.setNombreHeuresSemaine(40);
+        offreStage.setNombrePostes(2);
+        offreStage.setDateLimiteCandidature(LocalDate.of(2022, 12, 31));
+        offreStage.setOwner(employeur);
+        offreStage.setIsApproved(false);
+        offreStage.setIsRefused(false);
+        offreStage.setCommentaireRefus("Commentaire par défaut");
+        candidature.setOffreStage(offreStage);
+
+        List<Candidature> candidatures = List.of(candidature);
+
+        // Mocking repository methods
+        when(candidatureRepository.findStagiaireByOwner(ownerId, EtatCandidature.CONTRAT_SIGNE_TOUS)).thenReturn(candidatures);
+        when(candidatureRepository.getCvId(candidature.getId())).thenReturn(cv.getId());
+        when(cvRepository.getAllById(cv.getId())).thenReturn(cv);
+
+        // Calling the service method
+        List<Map<String, Object>> result = candidatureService.findStagiaireByOwner(ownerId);
+
+        // Verifying repository calls
+        verify(candidatureRepository, times(1)).findStagiaireByOwner(ownerId, EtatCandidature.CONTRAT_SIGNE_TOUS);
+        verify(candidatureRepository, times(1)).getCvId(candidature.getId());
+        verify(cvRepository, times(1)).getAllById(cv.getId());
+
+        // Expected output structure
+        Map<String, Object> expectedData = new HashMap<>();
+        expectedData.put("candidature", CandidatureDTO.toDTO(candidature));
+        expectedData.put("etudiant", EtudiantDTO.toDTO(etudiant));
+        expectedData.put("idOffreStage", offreStage.getId());
+        expectedData.put("cvId", cv.getId());
+
+        List<Map<String, Object>> expected = List.of(expectedData);
+
+        // Asserting results
+        Assertions.assertThat(result).usingRecursiveComparison().isEqualTo(expected);
+    }
 }
