@@ -7,7 +7,6 @@ import {
 	mdiBriefcasePlusOutline,
 	mdiBriefcaseRemoveOutline,
 	mdiCheck,
-	mdiCheckCircleOutline,
 	mdiChevronRight,
 	mdiClockOutline,
 	mdiClose,
@@ -18,12 +17,12 @@ import {
 import {OffreStageContext} from "../../providers/OffreStageProvider";
 import {CvContext} from "../../providers/CvProvider";
 import {useTranslation} from "react-i18next";
-import DashboardHomeAdmin from "../admin/DashboardAdmin";
+import DashboardAdmin from "../admin/DashboardAdmin";
 import OfferPreview from "../offre-stage/OfferPreview";
 import {CandidatureContext} from "../../providers/CandidatureProvider";
 import Swal from "sweetalert2";
 import CandidatureStatus from "../candidatures/CandidatureStatus";
-import {ContratContext, handleSignerContrat} from "../../providers/ContratProvider";
+import {ContratContext} from "../../providers/ContratProvider";
 
 const DashboardHome = () => {
 	
@@ -41,7 +40,11 @@ const DashboardHome = () => {
 	const [currentCandidature, setCurrentCandidature] = useState(null);
 	const navigate = useNavigate();
 	const {currentToken} = useContext(AuthContext)
-	const {fetchContratByCandidatureId, handleSignerContrat, handleRefuseSignerContrat} = useContext(ContratContext);
+	const {
+		fetchContratByCandidatureId,
+		handleSignerContrat,
+		handleRefuseSignerContrat
+	} = useContext(ContratContext);
 	const [contrat, setContrat] = useState(null);
 	
 	const handleCvClick = (cv) => {
@@ -88,7 +91,7 @@ const DashboardHome = () => {
 							text: t('dashboard_home_page.interview_accepted'),
 							icon: 'success',
 							showConfirmButton: false,
-							timer: 1500
+							timer: 2000
 						})
 					} else {
 						Swal.fire({
@@ -144,7 +147,7 @@ const DashboardHome = () => {
 							text: t('dashboard_home_page.interview_refused'),
 							icon: 'error',
 							showConfirmButton: false,
-							timer: 1500
+							timer: 2000
 						})
 					} else {
 						await Swal.fire({
@@ -164,11 +167,11 @@ const DashboardHome = () => {
 			}
 		});
 	};
-
+	
 	const handleSignerContratClick = () => {
 		handleSignerContrat(contrat, setCurrentCandidature);
 	};
-
+	
 	const handleRefuseSignerContratClick = () => {
 		handleRefuseSignerContrat(contrat, setCurrentCandidature);
 	}
@@ -433,7 +436,7 @@ const DashboardHome = () => {
 				);
 			} else if (currentUser.role === "ADMIN") {
 				return (
-					<DashboardHomeAdmin/>
+					<DashboardAdmin/>
 				);
 			}
 		}
@@ -568,58 +571,6 @@ const DashboardHome = () => {
 							</section>
 							
 							<hr/>
-							{/*TODO TOUCHE PAS ÇA (c) VAZGEN!*/}
-							{/*						// SI CONTRAT A ÉTÉ SIGNÉ PAR L'ÉTUDIANT*/}
-							{/*						(currentCandidature.etat === "CONTRAT_SIGNE_ETUDIANT") ?*/}
-							{/*							<>*/}
-							{/*								<div className="toolbar-items">*/}
-							{/*									<Icon path={mdiCheckCircleOutline} size={1}*/}
-							{/*										  className="text-green"/>*/}
-							{/*									<p className="text-green m-0">{t("dashboard_home_page.contract_signed_by_student")}</p>*/}
-							{/*								</div>*/}
-							{/*								<div className="toolbar-items">*/}
-							{/*									<Icon path={mdiHelpCircleOutline} size={1}*/}
-							{/*										  className="text-orange"/>*/}
-							{/*									<p className="text-orange m-0">{t("dashboard_home_page.waiting_manager_signature")}</p>*/}
-							{/*								</div>*/}
-							{/*							</>*/}
-							{/*							:*/}
-							{/*							// SI CONTRAT A ÉTÉ REFUSÉ PAR L'ÉTUDIANT*/}
-							{/*							(currentCandidature.etat === "CONTRAT_REFUSE_ETUDIANT") ?*/}
-							{/*								<div className="toolbar-items">*/}
-							{/*									<Icon path={mdiCloseCircleOutline} size={1}*/}
-							{/*										  className="text-red"/>*/}
-							{/*									<p className="text-red m-0">{t("dashboard_home_page.contract_rejected_by_student")}</p>*/}
-							{/*								</div>*/}
-							{/*								:*/}
-							{/*								// SI CONTRAT A ÉTÉ SIGNÉ PAR TOUS*/}
-							{/*								(currentCandidature.etat === "CONTRAT_SIGNE_TOUS") ?*/}
-							{/*									<div className="toolbar-items">*/}
-							{/*										<Icon path={mdiCloseCircleOutline} size={1}*/}
-							{/*											  className="text-green"/>*/}
-							{/*										<p className="text-green m-0">{t("dashboard_home_page.contract_signed_by_all")}</p>*/}
-							{/*									</div>*/}
-							{/*									:*/}
-							{/*											// TOMBE EN DEFAULT ÉTAT INITIALE*/}
-							{/*											<div className="toolbar-items">*/}
-							{/*												<Icon path={mdiHelpCircleOutline} size={1} className="text-dark"/>*/}
-							{/*												<p className="text-dark m-0">{t("dashboard_home_page.waiting_interview_results")}</p>*/}
-							{/*											</div>*/}
-							{/*	}*/}
-							
-							{/*</section>*/}
-							{/*(*/}
-							{/*// VUE EMPLOYEUR*/}
-							{/*isEmployeur ?*/}
-							{/*(*/}
-							
-							{/*)*/}
-							{/*: // VUE ETUDIANT*/}
-							{/*(*/}
-							
-							{/*)*/}
-							{/*)*/}
-							
 							
 							<CandidatureStatus
 								t={t}
@@ -629,9 +580,8 @@ const DashboardHome = () => {
 								handleRefuseInterview={handleRefuseInterview}
 								handleSignerContrat={handleSignerContratClick}
 								handleRefuserContrat={handleRefuseSignerContratClick}
-								//TODO AJOUTER HANDLE REFUSER CONTRAT
 							/>
-							
+						
 						</div>
 					</div>
 				</div>
@@ -643,17 +593,14 @@ const DashboardHome = () => {
 		if (currentUser && currentUser.role === "ETUDIANT") {
 			const sortedCandidatures = [...candidatures].sort((a, b) => {
 				const statusOrder = {
-					"CONTRAT_SIGNE_TOUS": 1,
-					"CONTRAT_SIGNE_ETUDIANT": 2,
-					"CONTRAT_SIGNE_EMPLOYEUR": 3,
-					"ACCEPTE_APRES_ENTREVUE": 4,
-					"ENTREVUE_ACCEPTE_ETUDIANT": 5,
-					"ENTREVUE_PROPOSE": 6,
-					"EN_ATTENTE": 7,
-					"ENTREVUE_REFUSE_ETUDIANT": 8,
-					"REFUSEE_APRES_ENTREVUE": 9,
-					"CONTRAT_REFUSE_ETUDIANT": 10,
-					"REFUSEE": 11
+					"CONTRAT_CREE_PAR_GESTIONNAIRE": 1,
+					"ACCEPTE_APRES_ENTREVUE": 2,
+					"ENTREVUE_ACCEPTE_ETUDIANT": 3,
+					"ENTREVUE_PROPOSE": 4,
+					"EN_ATTENTE": 5,
+					"ENTREVUE_REFUSE_ETUDIANT": 6,
+					"REFUSEE_APRES_ENTREVUE": 7,
+					"REFUSEE": 8
 				};
 				return statusOrder[a.etat] - statusOrder[b.etat];
 			});
@@ -687,21 +634,20 @@ const DashboardHome = () => {
 										}}>
 											<b><em>{candidature.nomOffre}</em></b>&nbsp;{t("dashboard_home_page.at")}&nbsp;{candidature.compagnie}
 										</p>
-										{candidature.etat === "CONTRAT_SIGNE_TOUS" &&
-											<Icon path={mdiCheckCircleOutline} size={1} color="green"/>}
-										{(candidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" || candidature.etat === "CONTRAT_SIGNE_ETUDIANT") &&
+										{(candidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT") &&
 											<Icon path={mdiClockOutline} size={1} color="orange" style={{marginLeft: "5px"}}/>}
-										{(candidature.etat === "ENTREVUE_PROPOSE" || candidature.etat === "CONTRAT_SIGNE_EMPLOYEUR") &&
+										{(candidature.etat === "ENTREVUE_PROPOSE") &&
 											<Icon path={mdiClockOutline} size={1} color="blue" style={{marginLeft: "5px"}}/>}
 										{(candidature.etat === "EN_ATTENTE") &&
 											<Icon path={mdiClockOutline} size={1} color="orange" style={{marginLeft: "5px"}}/>}
-										{(candidature.etat === "ENTREVUE_REFUSE_ETUDIANT" || candidature.etat === "CONTRAT_REFUSE_ETUDIANT") &&
-											<Icon path={mdiClose} size={1} color="red" style={{marginLeft: "5px"}}/>}
+										{(candidature.etat === "ENTREVUE_REFUSE_ETUDIANT") &&
+											<Icon path={mdiCloseCircleOutline} size={1} color="red" style={{marginLeft: "5px"}}/>}
 										{(candidature.etat === "REFUSEE" || candidature.etat === "REFUSEE_APRES_ENTREVUE") &&
 											<Icon path={mdiCloseCircleOutline} size={1} color="red" style={{marginLeft: "5px"}}/>}
 										{(candidature.etat === "ACCEPTE_APRES_ENTREVUE") &&
 											<Icon path={mdiClockOutline} size={1} color="orange" style={{marginLeft: "5px"}}/>}
-									
+										{(candidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE") &&
+											<Icon path={mdiCheck} size={1} color="green" style={{marginLeft: "5px"}}/>}
 									</div>
 								))}
 							</div>

@@ -154,7 +154,8 @@ const DiscoverOffers = () => {
 		if (currentUser) {
 			fetchCandidaturesById(currentUser.id);
 		}
-	}, [currentUser, fetchCandidaturesById]);
+		// Il dit d'inclure fetchCandidaturesById dans le tableau de dépendances, et il commence à spam des requetes dans Reseau
+	}, [currentUser]);
 	
 	const isOfferApplied = (offerId) => {
 		return candidatures.some((candidature) => candidature.offreStageId === offerId);

@@ -42,7 +42,6 @@ const CandidatureProvider = ({children}) => {
 		}
 	};
 	
-	
 	const fetchCandidatureByEtatAccepteApresEntrevue = async () => {
 		try {
 			const response = await fetch(`/candidatures/accepteApresEntrevue`, {

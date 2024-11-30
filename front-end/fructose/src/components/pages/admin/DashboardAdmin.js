@@ -12,7 +12,7 @@ import {Link} from "react-router-dom";
 import ListCandidatureEnAttenteContrat from "../candidatures/ListCandidatureEnAttenteContrat";
 import Swal from "sweetalert2";
 
-const DashboardHome = () => {
+const DashboardAdmin = () => {
 	
 	const {t} = useTranslation();
 	const {getCvContenuById, GetAllCvs, GetCvs} = useContext(CvContext);
@@ -27,7 +27,6 @@ const DashboardHome = () => {
 	const {currentUser, isUserInit} = useContext(AuthContext);
 	const textareaRef = useRef(null);
 	const {currentToken} = useContext(AuthContext)
-	const [setRejectModalOpen] = useState(false);
 	const [isRejectModalOpenCv, setRejectModalOpenCv] = useState(false);
 	
 	useEffect(() => {
@@ -50,32 +49,55 @@ const DashboardHome = () => {
 		}
 	}, [currentUser, GetCvs, fetchOffresStage, GetAllCvs, isUserInit]);
 	
-	//TODO ADD SWAL
 	const handleValidateCv = (cvId) => {
-		fetch(`/accepter-cv/` + cvId, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				"Authorization": currentToken
-			}
-		})
-			.then(response => {
-				if (response.ok) {
-					setAllCvs((prevCv) => {
-						const updatedCvs = prevCv.filter((cv) => cv.id !== cvId);
-						if (updatedCvs.length === 0) {
+		Swal.fire({
+			title: t("dashboard_home_page.cv_accept_title"),
+			text: t("dashboard_home_page.cv_accept_text"),
+			icon: "warning",
+			confirmButtonText: t("dashboard_home_page.cv_accept_confirm_button"),
+			cancelButtonText: t("dashboard_home_page.cv_accept_cancel_button")
+		}).then((result) => {
+			if (result.isConfirmed) {
+				fetch(`/accepter-cv/` + cvId, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": currentToken
+					}
+				})
+					.then(response => {
+						if (response.ok) {
+							setAllCvs((prevCv) => {
+								const updatedCvs = prevCv.filter((cv) => cv.id !== cvId);
+								if (updatedCvs.length === 0) {
+									setCurrentCV(null);
+								}
+								return updatedCvs;
+							});
 							setCurrentCV(null);
+							Swal.fire({
+								title: "Success",
+								text: t("dashboard_home_page.cv_accepted_success"),
+								icon: "success",
+								timer: 2000,
+								showConfirmButton: false
+							});
+						} else {
+							throw new Error("Erreur lors de l'acceptation du Cv");
 						}
-						return updatedCvs;
+					})
+					.catch(error => {
+						console.error("Erreur lors de l'acceptation du cv:", error);
+						Swal.fire({
+							title: "Oops...",
+							text: t("dashboard_home_page.cv_accepted_error"),
+							icon: "error",
+							timer: 2000,
+							showConfirmButton: false
+						});
 					});
-					setCurrentCV(null);
-					return response;
-				}
-				throw new Error("Erreur lors de l'acceptation du Cv");
-			})
-			.catch(error => {
-				console.error("Erreur lors de l'acceptation du cv:", error);
-			});
+			}
+		});
 	};
 	
 	const handleRejectCv = (cvId, string) => {
@@ -476,4 +498,4 @@ const DashboardHome = () => {
 	);
 };
 
-export default DashboardHome;
+export default DashboardAdmin;
