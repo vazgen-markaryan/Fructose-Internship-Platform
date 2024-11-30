@@ -1,52 +1,35 @@
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../providers/AuthProvider";
-import {Link, useNavigate} from "react-router-dom";
 import Icon from "@mdi/react";
 import {
     mdiAccountCircle,
-    mdiArrowRight, mdiBriefcaseOutline,
-    mdiBriefcasePlusOutline,
-    mdiBriefcaseRemoveOutline, mdiBriefcaseVariantOutline,
-    mdiCheck,
+    mdiBriefcaseVariantOutline,
     mdiCheckCircleOutline,
-    mdiChevronRight,
     mdiClockOutline,
     mdiClose,
     mdiCloseCircleOutline,
     mdiFileDocumentOutline,
     mdiHelpCircleOutline,
-    mdiPlus,
 } from "@mdi/js";
-import {OffreStageContext} from "../../providers/OffreStageProvider";
-import {CvContext} from "../../providers/CvProvider";
 import {useTranslation} from "react-i18next";
 import DashboardHomeAdmin from "../admin/DashboardAdmin";
-import OfferPreview from "../offre-stage/OfferPreview";
 import {CandidatureContext} from "../../providers/CandidatureProvider";
 import Swal from "sweetalert2";
-import CandidatureProgress from "../candidatures/CandidatureProgress";
 import OffresStagesDashboard from "./DashboardSections/OffresStagesEtudiantDashboard";
 import OffresStagesEmpProfDashboard from "./DashboardSections/OffresStagesEmpProfDashboard";
+import CVEtudiantDashboard from "./DashboardSections/CVEtudiantDashboard";
+import UserManagementDashboard from "./DashboardSections/UserManagementDashboard";
+import CandidatureEmployeurDashboard from "./DashboardSections/CandidatureEmployeurDashboard";
+import CandidatureEtudiantDashboard from "./DashboardSections/CandidatureEtudiantDashboard";
 
 const DashboardHome = () => {
 
     const {t} = useTranslation();
     const {currentUser} = useContext(AuthContext);
-    const {GetCvs} = useContext(CvContext);
-    const [cvs, setCvs] = useState([]);
-   // const [offresStage, setOffresStage] = useState([]);
-    //const [currentOffer, setCurrentOffer] = useState(null);
 
-    //const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
     const {candidatures, fetchCandidaturesById, setCandidatures} = useContext(CandidatureContext);
     const [currentCandidature, setCurrentCandidature] = useState(null);
-    const navigate = useNavigate();
     const {currentToken} = useContext(AuthContext)
-
-    const handleCvClick = (cv) => {
-        navigate("/dashboard/manage-cvs", {state: {selectedCv: cv}});
-    };
 
     const handleAcceptInterview = async () => {
         Swal.fire({
@@ -283,28 +266,21 @@ const DashboardHome = () => {
         if (currentUser) {
             (async function () {
                 if (currentUser.role === "ETUDIANT") {
-                    try {
-                        const response = await GetCvs();
-                        const data = await response.json();
-                        setCvs(data);
-                    } catch (error) {
-                        console.log("Erreur lors de la récupération des CVs : " + error);
-                    }
                     fetchCandidaturesById(currentUser.id);
                 }
             })();
         }
         // TODO: Ici il donne WARNING: React Hook useEffect has a missing dependency: 'fetchCandidaturesById'.
         // Mais si le faire il va envoyer 9999 requêtes dans Inspect -> Network
-    }, [currentUser, GetCvs]);
+    }, [currentUser]);
 
 
     const GetOffreStageSection = () => {
         if (currentUser != null) {
             if (currentUser.role === "ETUDIANT") {
-                return <OffresStagesDashboard currentUser={currentUser}></OffresStagesDashboard>
+                return <OffresStagesDashboard></OffresStagesDashboard>
             } else if (currentUser.role === "EMPLOYEUR" || currentUser.role === "PROFESSEUR") {
-                return <OffresStagesEmpProfDashboard currentUser={currentUser}></OffresStagesEmpProfDashboard>
+                return <OffresStagesEmpProfDashboard></OffresStagesEmpProfDashboard>
             } else if (currentUser.role === "ADMIN") {
                 return (
                     <DashboardHomeAdmin/>
@@ -313,121 +289,6 @@ const DashboardHome = () => {
         }
     }
 
-    const GetUserManagementSection = () => {
-        if (currentUser != null) {
-            if (currentUser.role === "ADMIN") {
-                return (
-                    <section>
-                        <div className={"toolbar-items"}>
-                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.user_management")}</h4>
-                            <Link to="./admin/manage-users">
-                                <button>{t("dashboard_home_page.not_approved_users")}
-                                    <Icon path={mdiChevronRight} size={1}/>
-                                </button>
-                            </Link>
-                        </div>
-                    </section>
-                )
-            }
-        }
-    }
-
-    const GetCandidatureManagementSection = () => {
-        if (currentUser != null) {
-            if (currentUser.role === "EMPLOYEUR") {
-                return (
-                    <section>
-                        <div className={"toolbar-items"}>
-                            <h4 className={"m-0 toolbar-spacer"}>Candidatures</h4>
-                            <Link to="/dashboard/view-candidatures">
-                                <button>Voir
-                                    <Icon path={mdiChevronRight} size={1}/>
-                                </button>
-                            </Link>
-                        </div>
-                    </section>
-                );
-            }
-        }
-    };
-
-    const GetPortfolioSection = () => {
-        if (currentUser != null) {
-            if (currentUser.role === "ETUDIANT") {
-                return (
-                    <section>
-                        <div className={"toolbar-items"}>
-                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.portfolio")}</h4>
-                            <Link to="/dashboard/manage-cvs">
-                                <button>{t("dashboard_home_page.manage")}
-                                    <Icon path={mdiChevronRight} size={1}/>
-                                </button>
-                            </Link>
-                            <Link to="/dashboard/upload-cv">
-                                <button>{t("dashboard_home_page.add_cv")}
-                                    <Icon path={mdiPlus} size={1}/>
-                                </button>
-                            </Link>
-                        </div>
-                        <div style={{"padding": "10px 0"}}>
-                            {cvs.length === 0 ? (
-                                <div style={{
-                                    "width": "400px",
-                                    "display": "flex",
-                                    "alignItems": "center",
-                                    "backgroundColor": "#eee",
-                                    "borderRadius": "5px",
-                                    "gap": "5px",
-                                    "padding": "10px"
-                                }}>
-                                    <Icon path={mdiFileDocumentOutline} size={1}/>
-                                    <p className="m-0">{t("dashboard_home_page.no_cv")}</p>
-                                </div>
-                            ) : (
-                                <div style={{
-                                    "display": "flex",
-                                    "flexDirection": "column",
-                                    "gap": "5px"
-                                }}>
-                                    {cvs.map((cv, index) => (
-                                        <div key={index} style={{
-                                            "width": "400px",
-                                            "display": "flex",
-                                            "alignItems": "center",
-                                            "backgroundColor": "#eee",
-                                            "borderRadius": "5px",
-                                            "padding": "10px",
-                                            "marginBottom": "5px",
-                                            "cursor": "pointer"
-                                        }} onClick={() => handleCvClick(cv)}>
-                                            <p style={{
-                                                "margin": "0",
-                                                "display": "flex",
-                                                "alignItems": "center",
-                                                "flexGrow": 1
-                                            }}>
-                                                <Icon path={mdiFileDocumentOutline} size={1}/>
-                                                {cv.filename}
-                                            </p>
-                                            {cv.isApproved &&
-                                                <Icon path={mdiCheck} size={1} color="green"
-                                                      style={{marginLeft: "5px"}}/>}
-                                            {cv.isRefused &&
-                                                <Icon path={mdiClose} size={1} color="red"
-                                                      style={{marginLeft: "5px"}}/>}
-                                            {!cv.isApproved && !cv.isRefused &&
-                                                <Icon path={mdiClockOutline} size={1} color="orange"
-                                                      style={{marginLeft: "5px"}}/>}
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </section>
-                )
-            }
-        }
-    }
 
     const handleCandidatureClick = (candidature) => {
         setCurrentCandidature(candidature)
@@ -818,41 +679,16 @@ const DashboardHome = () => {
                     <div className="dashboard-card">
 
                         {GetOffreStageSection()}
-                        {GetCandidaturesSection}
+                        {GetCandidaturesSection()}
                         {GetCandidaturesWindow()}
-                        {GetPortfolioSection()}
-                        {GetUserManagementSection()}
-                        {GetCandidatureManagementSection()}
 
-						<section>
-							<div className="menu-list">
-								<div className="menu-list-item">
-                                    <Icon path={mdiBriefcaseOutline} size={1} />
-                                    <div>
-                                        <h6 className="m-0">Dev Je ne sais quoi</h6>
-                                        <p className="m-0 text-dark">Ubisoft Holding LLC</p>
-                                    </div>
-                                    <div className="toolbar-spacer"></div>
-                                    <CandidatureProgress status={"EN_ATTENTE"}></CandidatureProgress>
-								</div>
-                                <div className="menu-list-item">
-                                    <Icon path={mdiBriefcaseOutline} size={1} />
-                                    <div>
-                                        <h6 className="m-0">Dev Je ne sais quoi</h6>
-                                        <p className="m-0 text-dark">Ubisoft Holding LLC</p>
-                                    </div>
-                                    <div className="toolbar-spacer"></div>
-                                    <CandidatureProgress status={"EN_ATTENTE"}></CandidatureProgress>
-                                </div>
 
-                                <div className="menu-list-item menu-list-item-placeholder">
-                                </div>
-                                <div className="menu-list-item menu-list-item-placeholder">
-                                </div>
-                                <div className="menu-list-item menu-list-item-placeholder">
-                                </div>
-							</div>
-						</section>
+                        <CandidatureEtudiantDashboard></CandidatureEtudiantDashboard>
+                        <CVEtudiantDashboard></CVEtudiantDashboard>
+                        <UserManagementDashboard></UserManagementDashboard>
+                        <CandidatureEmployeurDashboard></CandidatureEmployeurDashboard>
+
+
 
                         <div style={{"height": "520px"}}>
                         </div>

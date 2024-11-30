@@ -9,12 +9,14 @@ import {
 import React, {useContext, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {OffreStageContext} from "../../../providers/OffreStageProvider";
+import {AuthContext} from "../../../providers/AuthProvider";
 
-const OffresStagesDashboard = ({currentUser}) => {
+const OffresStagesDashboard = () => {
 
     const {t} = useTranslation()
     const {fetchOffresStage} = useContext(OffreStageContext);
     const [offresStage, setOffresStage] = useState([]);
+    const {currentUser} = useContext(AuthContext);
 
     useEffect(() => {
         if (currentUser) {
