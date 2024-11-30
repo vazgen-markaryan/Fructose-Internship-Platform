@@ -267,5 +267,37 @@ class CandidatureControllerTest {
 		assertEquals("Une erreur est survenue lors de la modification de l'état de la candidature.", exception.getMessage());
 		verify(candidatureService, times(1)).modifierEtatCandidature(candidatureId, nouvelEtat);
 	}
+	@Test
+	void testFindByStagiaireByOwner() {
+		String token = "valid-token";
 
+		// Mocking the UtilisateurDTO
+		UtilisateurDTO mockUtilisateur = new UtilisateurDTO();
+		mockUtilisateur.setId(1L);
+
+		// Mocking the candidatures list
+		List<Map<String, Object>> mockCandidatures = new ArrayList<>();
+		Map<String, Object> candidatureData = new HashMap<>();
+		candidatureData.put("id", 1L);
+		candidatureData.put("etat", "Approuvé");
+		candidatureData.put("commentaireRefus", "Pas de compétences requises");
+		mockCandidatures.add(candidatureData);
+
+		// Mocking the service methods
+		when(utilisateurService.validationToken(token)).thenReturn(true);
+		when(utilisateurService.getUtilisateurByToken(token)).thenReturn(mockUtilisateur);
+		when(candidatureService.findStagiaireByOwner(mockUtilisateur.getId())).thenReturn(mockCandidatures);
+
+		// Calling the controller method
+		ResponseEntity<?> response = candidatureController.findByStagiaireByOwner(token);
+
+		// Verifying the service calls
+		verify(utilisateurService, times(1)).validationToken(token);
+		verify(utilisateurService, times(1)).getUtilisateurByToken(token);
+		verify(candidatureService, times(1)).findStagiaireByOwner(mockUtilisateur.getId());
+
+		// Asserting the response
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(mockCandidatures, response.getBody());
+	}
 }
