@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -122,5 +123,13 @@ public class ContratService {
 				throw new IllegalArgumentException("Utilisateur n'est pas un employeur ou un étudiant");
 		}
 		contratRepository.save(contrat);
+	}
+
+	public List<ContratDTO> getContrats() {
+		List<ContratDTO> contratDTOS = contratRepository.findAll().stream().map(ContratDTO::toDTO).toList();
+		if (contratDTOS.isEmpty()) {
+			throw new IllegalArgumentException("Aucun contrat trouvé");
+		}
+		return contratDTOS;
 	}
 }

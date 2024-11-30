@@ -1,5 +1,6 @@
 package fructose.controller;
 
+import fructose.model.enumerator.Role;
 import fructose.service.CandidatureService;
 import fructose.service.ContratService;
 import fructose.service.UtilisateurService;
@@ -133,6 +134,20 @@ public class ContratController {
 			contratService.refuserContrat(id, utilisateur);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error refusing contract", e);
+		}
+	}
+
+	@GetMapping
+	public ResponseEntity<?> getContrats(@RequestHeader("Authorization") String token) {
+		validateToken(token);
+		try {
+			UtilisateurDTO utilisateur = utilisateurService.getUtilisateurByToken(token);
+			if (!utilisateur.getRole().equals(Role.ADMIN)) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not an admin");
+			}
+			return new ResponseEntity<>(contratService.getContrats(), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting contracts", e);
 		}
 	}
 

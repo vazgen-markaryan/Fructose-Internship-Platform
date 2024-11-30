@@ -115,6 +115,27 @@ const ContratProvider = ({children}) => {
 			console.error("Error refusing contract: " + error);
 		}
 	}
+
+	const fetchContrats = async () => {
+		try {
+			const response = await fetch(`/contrats`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': currentToken
+				},
+			});
+			if (response.ok) {
+				return await response.json();
+			} else {
+				console.error('Failed to fetch contrats');
+			}
+		}
+		catch (error) {
+			console.error('Error fetching contrats:', error);
+		}
+	}
+
 	
 	return (
 		<ContratContext.Provider value={{
@@ -122,7 +143,8 @@ const ContratProvider = ({children}) => {
 			fetchPdf,
 			fetchPdfByContratId,
 			handleSignerContrat,
-			handleRefuseSignerContrat
+			handleRefuseSignerContrat,
+			fetchContrats
 		}}>
 			{children}
 		</ContratContext.Provider>

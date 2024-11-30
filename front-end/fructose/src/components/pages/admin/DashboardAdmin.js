@@ -11,6 +11,7 @@ import Modal from "../../../utilities/modal/Modal";
 import {Link} from "react-router-dom";
 import ListCandidatureEnAttenteContrat from "../candidatures/ListCandidatureEnAttenteContrat";
 import Swal from "sweetalert2";
+import ViewContrats from "../contrat/ViewContrats";
 
 const DashboardHome = () => {
 	
@@ -453,6 +454,8 @@ const DashboardHome = () => {
 				<div>
 					<br></br>
 					<ListCandidatureEnAttenteContrat/>
+					<br></br>
+					<ViewContrats/>
 				</div>
 				{isRejectModalOpenCv && (
 					<Modal onClose={() => setRejectModalOpenCv(false)} onSend={() => {
