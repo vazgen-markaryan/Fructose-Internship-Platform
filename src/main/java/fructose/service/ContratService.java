@@ -43,6 +43,12 @@ public class ContratService {
 		if (contratDTO == null) {
 			throw new IllegalArgumentException("ContratDTO ne peut pas être nul");
 		}
+		if (contratDTO.getCandidatureDTO() == null) {
+			throw new IllegalArgumentException("CandidatureDTO ne peut pas être nul");
+		}
+		if (contratDTO.getGestionnaire() == null) {
+			throw new IllegalArgumentException("UtilisateurDTO ne peut pas être nul");
+		}
 		try {
 			Contrat contrat = ContratDTO.toEntity(contratDTO);
 			ContratPdf contratPdf = new ContratPdf(contrat);
@@ -54,6 +60,9 @@ public class ContratService {
 	}
 	
 	public void saveContrat(ContratDTO contratDTO) {
+		if (contratDTO == null) {
+			throw new IllegalArgumentException("ContratDTO ne peut pas être nul");
+		}
 		Contrat contrat = ContratDTO.toEntity(contratDTO);
 		contratRepository.save(contrat);
 	}

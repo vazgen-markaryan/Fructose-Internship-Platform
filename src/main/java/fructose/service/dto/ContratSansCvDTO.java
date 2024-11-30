@@ -1,13 +1,17 @@
 package fructose.service.dto;
 
 import fructose.model.Contrat;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ContratSansCvDTO {
     private Long id;
     private Long candidatureId;
@@ -18,19 +22,6 @@ public class ContratSansCvDTO {
     private LocalDate dateSignatureEmployeur;
     private String signatureEtudiant = "Non signe";
     private LocalDate dateSignatureEtudiant;
-
-    // Constructeur, getters et setters
-    public ContratSansCvDTO(Long id, Long candidatureId, Long gestionnaireId, String signatureGestionnaire, LocalDate dateSignatureGestionnaire, String signatureEmployeur, LocalDate dateSignatureEmployeur, String signatureEtudiant, LocalDate dateSignatureEtudiant) {
-        this.id = id;
-        this.candidatureId = candidatureId;
-        this.gestionnaireId = gestionnaireId;
-        this.signatureGestionnaire = signatureGestionnaire;
-        this.dateSignatureGestionnaire = dateSignatureGestionnaire;
-        this.signatureEmployeur = signatureEmployeur;
-        this.dateSignatureEmployeur = dateSignatureEmployeur;
-        this.signatureEtudiant = signatureEtudiant;
-        this.dateSignatureEtudiant = dateSignatureEtudiant;
-    }
 
     public static Contrat toEntity(ContratSansCvDTO contratDTO) {
         Contrat contrat = new Contrat();

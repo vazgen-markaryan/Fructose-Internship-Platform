@@ -164,6 +164,7 @@ class CandidatureServiceTest {
         expectedData.put("commentaireRefus", candidature.getCommentaireRefus());
         expectedData.put("nomOffre", offreStage.getNom());
         expectedData.put("compagnie", offreStage.getCompagnie());
+        expectedData.put("offreStageId", offreStage.getId());
 
         List<Map<String, Object>> expected = Collections.singletonList(expectedData);
         assertEquals(expected, result, "Le résultat devrait correspondre aux données attendues.");

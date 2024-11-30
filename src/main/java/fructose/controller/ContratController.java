@@ -119,10 +119,6 @@ public class ContratController {
 		validateToken(token);
 		try {
 			UtilisateurDTO utilisateur = utilisateurService.getUtilisateurByToken(token);
-			ContratDTO contrat = contratService.getContratById(id);
-			if (contrat == null) {
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Contract not found");
-			}
 			contratService.signContrat(id, utilisateur);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error signing contract", e);
@@ -134,10 +130,6 @@ public class ContratController {
 		validateToken(token);
 		try {
 			UtilisateurDTO utilisateur = utilisateurService.getUtilisateurByToken(token);
-			ContratDTO contrat = contratService.getContratById(id);
-			if (contrat == null) {
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Contract not found");
-			}
 			contratService.refuserContrat(id, utilisateur);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error refusing contract", e);
