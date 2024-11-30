@@ -591,7 +591,7 @@ const DashboardHome = () => {
                         {GetOffreStageSection()}
 
                         {GetCandidaturesWindow()}
-                        
+
                         <CandidatureEtudiantDashboard></CandidatureEtudiantDashboard>
                         <CVEtudiantDashboard></CVEtudiantDashboard>
                         <UserManagementDashboard></UserManagementDashboard>
