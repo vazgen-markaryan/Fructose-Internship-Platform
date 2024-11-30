@@ -41,8 +41,6 @@ public class SectionEvaluation {
     @JsonBackReference
     private EvaluationMilieuStage evaluationMilieuStage;
 
-    private String commentaireSection;
-
     public void addCritere(CritereEvaluation critere) {
         this.criteres.add(critere);
     }
