@@ -4,7 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import Icon from "@mdi/react";
 import {
     mdiAccountCircle,
-    mdiAlertCircleOutline, mdiArrowRight, mdiBriefcaseOutline,
+    mdiArrowRight, mdiBriefcaseOutline,
     mdiBriefcasePlusOutline,
     mdiBriefcaseRemoveOutline, mdiBriefcaseVariantOutline,
     mdiCheck,
@@ -13,9 +13,9 @@ import {
     mdiClockOutline,
     mdiClose,
     mdiCloseCircleOutline,
-    mdiFileDocumentOutline, mdiFileSign, mdiForumOutline,
+    mdiFileDocumentOutline,
     mdiHelpCircleOutline,
-    mdiPlus, mdiSendOutline
+    mdiPlus,
 } from "@mdi/js";
 import {OffreStageContext} from "../../providers/OffreStageProvider";
 import {CvContext} from "../../providers/CvProvider";
@@ -25,6 +25,8 @@ import OfferPreview from "../offre-stage/OfferPreview";
 import {CandidatureContext} from "../../providers/CandidatureProvider";
 import Swal from "sweetalert2";
 import CandidatureProgress from "../candidatures/CandidatureProgress";
+import OffresStagesDashboard from "./DashboardSections/OffresStagesEtudiantDashboard";
+import OffresStagesEmpProfDashboard from "./DashboardSections/OffresStagesEmpProfDashboard";
 
 const DashboardHome = () => {
 
@@ -32,11 +34,10 @@ const DashboardHome = () => {
     const {currentUser} = useContext(AuthContext);
     const {GetCvs} = useContext(CvContext);
     const [cvs, setCvs] = useState([]);
-    const [offresStage, setOffresStage] = useState([]);
-    const [currentOffer, setCurrentOffer] = useState(null);
-    const {fetchOffresStage} = useContext(OffreStageContext);
-    const {deleteOffreStage} = useContext(OffreStageContext);
-    const [currentPage, setCurrentPage] = useState(1);
+   // const [offresStage, setOffresStage] = useState([]);
+    //const [currentOffer, setCurrentOffer] = useState(null);
+
+    //const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
     const {candidatures, fetchCandidaturesById, setCandidatures} = useContext(CandidatureContext);
     const [currentCandidature, setCurrentCandidature] = useState(null);
@@ -291,258 +292,19 @@ const DashboardHome = () => {
                     }
                     fetchCandidaturesById(currentUser.id);
                 }
-
-                if (currentUser.role === "EMPLOYEUR" || currentUser.role === "ETUDIANT" || currentUser.role === "PROFESSEUR") {
-                    try {
-                        const response = await fetchOffresStage();
-                        setOffresStage(response);
-                    } catch (error) {
-                        console.log("error" + error);
-                    }
-                }
             })();
         }
         // TODO: Ici il donne WARNING: React Hook useEffect has a missing dependency: 'fetchCandidaturesById'.
         // Mais si le faire il va envoyer 9999 requêtes dans Inspect -> Network
-    }, [currentUser, GetCvs, fetchOffresStage]);
+    }, [currentUser, GetCvs]);
 
-    const handleDeleteOffreStage = async (offreStageId) => {
-        try {
-            const response = await deleteOffreStage(offreStageId);
-            if (response.ok) {
-                setOffresStage((prevOffreStages) => prevOffreStages.filter((offreStage) => offreStage.id !== offreStageId));
-                setCurrentOffer(null);
-            } else {
-                console.error("Error deleting offre stage:", response.statusText);
-            }
-        } catch (error) {
-            console.error("Error deleting offre stage:", error);
-        }
-    };
-
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
 
     const GetOffreStageSection = () => {
         if (currentUser != null) {
             if (currentUser.role === "ETUDIANT") {
-                if (offresStage.length !== 0) {
-                    return (
-                        <section>
-                            <div className={"toolbar-items"}>
-                                <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
-                                <Link to="/dashboard/discover-offers">
-                                    <button>{t("dashboard_home_page.explore")}
-                                        <Icon path={mdiChevronRight} size={1}/>
-                                    </button>
-                                </Link>
-                            </div>
-                            <br/>
-                            <div>
-                                <div style={{display: "flex", gap: "10px"}}>
-                                    {
-                                        (offresStage.length > 0)?
-                                            <Link to={`/dashboard/discover-offers?offer=${offresStage[0].id}`} style={{width: "66%"}}>
-                                                <div className="card no-border" style={{height: "300px"}}>
-                                                    <div className="card-image" style={{backgroundColor: "#21277c"}}>
-                                                        <div className="card-image-shadowed-text">
-                                                            <h4>{ t("programme." + offresStage[0].departementDTO.nom) }</h4>
-                                                        </div>
-                                                        <div className="card-image-information toolbar-items" style={{alignItems: "flex-end"}}>
-                                                            <div className="toolbar-spacer card-image-information-content">
-                                                                <h3>{ offresStage[0].poste }</h3>
-                                                                <h6>{ offresStage[0].ownerDTO.companyName }</h6>
-                                                            </div>
-                                                            <Icon path={mdiArrowRight} size={1}/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                            :null
-                                    }
-                                    {
-                                        (offresStage.length > 1)?
-                                            <Link to={`/dashboard/discover-offers?offer=${offresStage[1].id}`} style={{width: "33%"}}>
-                                                <div className="card no-border" style={{height: "300px"}}>
-                                                    <div className="card-image" style={{backgroundColor: "#dedede", color: "black"}}>
-                                                        <div className="card-image-shadowed-text">
-                                                            <h6>{ t("programme." + offresStage[1].departementDTO.nom) }</h6>
-                                                        </div>
-                                                        <div className="card-image-information toolbar-items">
-                                                            <div className="toolbar-spacer card-image-information-content">
-                                                                <h4>{ offresStage[1].poste }</h4>
-                                                                <h6>{ offresStage[1].ownerDTO.companyName }</h6>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                            :null
-                                    }
-                                </div>
-                                <div style={{height: "10px"}}></div>
-                                <div style={{display:"flex", gap:"10px"}}>
-                                    {offresStage.reverse().slice(2, 5).map((item, index) => (
-                                        <Link to={`/dashboard/discover-offers?offer=${item.id}`} key={index} style={{width: "33%"}}>
-                                            <div className="card no-border" style={{height: "170px"}}>
-                                                <div className="card-image" style={{backgroundColor: "#d1d1d1", color: "black"}}>
-                                                    <div className="card-image-shadowed-text">
-                                                        <h6>{t("programme." + item.departementDTO.nom)}</h6>
-                                                    </div>
-                                                    <div className="card-image-information toolbar-items">
-                                                        <div className="toolbar-spacer card-image-information-content">
-                                                            <h5>{item.poste}</h5>
-                                                            <h6>{item.ownerDTO.companyName}</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    ))}
-                                </div>
-                            </div>
-                        </section>
-                    );
-                } else {
-                    return (
-                        <section>
-                            <div className={"toolbar-items"}>
-                                <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
-                                <Link to="/dashboard/discover-offers">
-                                    <button>{t("dashboard_home_page.explore")}
-                                        <Icon path={mdiChevronRight} size={1}/>
-                                    </button>
-                                </Link>
-                            </div>
-                            <div style={{"padding": "10px 0"}}>
-                                <div style={{
-                                    "width": "400px",
-                                    "height": "320px",
-                                    "display": "flex",
-                                    "alignItems": "center",
-                                    "justifyContent": "center",
-                                    "backgroundColor": "#eee",
-                                    "borderRadius": "5px"
-                                }}>
-                                    <div style={{"textAlign": "center"}}>
-                                        <Icon path={mdiBriefcaseRemoveOutline} size={1}/>
-                                        <p>{t("dashboard_home_page.no_offers")}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    );
-                }
+                return <OffresStagesDashboard currentUser={currentUser}></OffresStagesDashboard>
             } else if (currentUser.role === "EMPLOYEUR" || currentUser.role === "PROFESSEUR") {
-                const startIndex = (currentPage - 1) * itemsPerPage;
-                const selectedOffresStage = offresStage.slice(startIndex, startIndex + itemsPerPage);
-
-                return (
-                    <section>
-                        <div className={"toolbar-items"}>
-                            <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.offers")}</h4>
-                            {currentUser.role === "EMPLOYEUR" && (
-                                <Link to="/dashboard/creer-offre-stage">
-                                    <button className={"btn-filled"}>
-                                        <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                        {t("dashboard_home_page.add_offer")}
-                                    </button>
-                                </Link>
-                            )}
-                        </div>
-                        <div style={{"padding": "10px 0"}}>
-                            {offresStage.length === 0 ? (
-                                <div style={{
-                                    "width": "400px",
-                                    "display": "flex",
-                                    "alignItems": "center",
-                                    "backgroundColor": "#eee",
-                                    "borderRadius": "5px",
-                                    "gap": "5px",
-                                    "padding": "10px"
-                                }}>
-                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                    <p className="m-0">{t("dashboard_home_page.no_offers")}</p>
-                                </div>
-                            ) : (
-                                <div style={{
-                                    "width": "auto",
-                                    "backgroundColor": "#eee",
-                                    "borderRadius": "5px",
-                                    "padding": "10px"
-                                }}>
-                                    <div style={{display: "flex", gap: "20px"}}>
-                                        <div className="menu-list" style={{
-                                            flex: 1,
-                                            backgroundColor: "#f9f9f9",
-                                            borderRadius: "5px",
-                                            padding: "10px"
-                                        }}>
-                                            {selectedOffresStage.map((offreStage, index) => (
-                                                <div key={index}
-                                                     style={{
-                                                         display: "flex",
-                                                         alignItems: "center",
-                                                         gap: "10px",
-                                                         padding: "5px",
-                                                         borderBottom: "1px solid #ddd",
-                                                         cursor: "pointer",
-                                                         backgroundColor: currentOffer && currentOffer.id === offreStage.id ? "#e0e0e0" : "transparent"
-                                                     }}
-                                                     onClick={() => setCurrentOffer(currentOffer && currentOffer.id === offreStage.id ? null : offreStage)}>
-                                                    <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                                                    {currentUser.role === "EMPLOYEUR" && offreStage && (
-                                                        <div>
-                                                            {offreStage.isApproved ? (
-                                                                <Icon path={mdiCheck} size={1} color="green"/>
-                                                            ) : offreStage.isRefused ? (
-                                                                <Icon path={mdiClose} size={1} color="red"/>
-                                                            ) : (
-                                                                <Icon path={mdiClockOutline} size={1} color="orange"/>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                    <p className="m-0">{offreStage.nom}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        {currentOffer &&
-                                            <OfferPreview
-                                                currentOffer={currentOffer}
-                                                handleDeleteOffreStage={handleDeleteOffreStage}
-                                                style={{
-                                                    flex: 2,
-                                                    padding: "10px",
-                                                    backgroundColor: "#fff",
-                                                    borderRadius: "5px",
-                                                    boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-                                                }}/>}
-                                    </div>
-                                </div>
-                            )}
-                            <div style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                gap: "5px",
-                                marginTop: "20px"
-                            }}>
-                                {Array.from({length: Math.ceil(offresStage.length / itemsPerPage)}, (_, index) => (
-                                    <button
-                                        key={index}
-                                        className={(currentPage === index + 1) ? "btn-filled" : ""}
-                                        onClick={() => {
-                                            handlePageChange(index + 1);
-                                            setCurrentOffer(null);
-                                        }}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </section>
-                );
+                return <OffresStagesEmpProfDashboard currentUser={currentUser}></OffresStagesEmpProfDashboard>
             } else if (currentUser.role === "ADMIN") {
                 return (
                     <DashboardHomeAdmin/>
@@ -1056,7 +818,7 @@ const DashboardHome = () => {
                     <div className="dashboard-card">
 
                         {GetOffreStageSection()}
-                        {GetCandidaturesSection()}
+                        {GetCandidaturesSection}
                         {GetCandidaturesWindow()}
                         {GetPortfolioSection()}
                         {GetUserManagementSection()}
