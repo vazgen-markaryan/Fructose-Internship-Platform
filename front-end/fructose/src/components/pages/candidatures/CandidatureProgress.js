@@ -42,7 +42,7 @@ const CandidatureProgress = ({etat}) => {
                 return "bg-green"
             } else if(indexEtat === 1 || indexEtat === 3 || indexEtat === 5){
                 return "bg-red"
-            } else if (indexEtat === "EN_ATTENTE"){
+            } else if (etat === "EN_ATTENTE"){
                 return "bg-orange"
             } else if (indexEtat >= 1){
                 return "bg-grey-3"

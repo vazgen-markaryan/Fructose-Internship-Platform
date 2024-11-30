@@ -1,5 +1,13 @@
 import Icon from "@mdi/react";
-import {mdiBriefcaseOutline, mdiCheckCircleOutline, mdiClockOutline, mdiClose, mdiCloseCircleOutline} from "@mdi/js";
+import {
+    mdiArrowLeft, mdiArrowRight,
+    mdiBriefcaseOutline,
+    mdiCheckCircleOutline,
+    mdiChevronLeft, mdiChevronRight,
+    mdiClockOutline,
+    mdiClose,
+    mdiCloseCircleOutline
+} from "@mdi/js";
 import CandidatureProgress from "../../candidatures/CandidatureProgress";
 import React, {useContext, useEffect, useState} from "react";
 import {CandidatureContext} from "../../../providers/CandidatureProvider";
@@ -12,6 +20,13 @@ const CandidatureEtudiantDashboard = () => {
     const {currentUser} = useContext(AuthContext);
     const {candidatures, fetchCandidaturesById, setCandidatures} = useContext(CandidatureContext);
     const [currentCandidature, setCurrentCandidature] = useState(null);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const candidaturesInPage = candidatures.slice(startIndex, startIndex + itemsPerPage);
+    const maxPages = Math.ceil(candidatures.length / itemsPerPage)
 
     useEffect(() => {
         if (currentUser) {
@@ -30,78 +45,61 @@ const CandidatureEtudiantDashboard = () => {
         setCurrentCandidature(candidature)
     };
 
+    const handlePageChange = (isNext) => {
+        if(isNext){
+            if(currentPage + 1 <= maxPages){
+                setCurrentPage(currentPage + 1)
+            }
+        } else {
+            if(currentPage - 1 >= 1){
+                setCurrentPage(currentPage - 1)
+            }
+        }
+    };
+
+    const actionIsRequired = (etat) => {
+        return etat === "ENTREVUE_PROPOSE"
+    }
+
     return(
         <section>
             <h4>{t("dashboard_home_page.my_applications")}</h4>
 
 
             <div className="menu-list">
-                {candidatures.map((candidature, index) => (
-                    <div className="menu-list-item" key={index} onClick={() => handleCandidatureClick(candidature)}>
+                {candidaturesInPage.map((candidature, index) => (
+                    <div className="menu-list-item menu-list-item-64" key={index} onClick={() => handleCandidatureClick(candidature)}>
                         <Icon path={mdiBriefcaseOutline} size={1} />
                         <div>
-                            <h6 className="m-0">{candidature.nomOffre}</h6>
+                            <h6 className="m-0">{candidature.nomOffre} {(actionIsRequired(candidature.etat))?<span className="badge bg-orange">Action requise</span>:null}</h6>
                             <p className="m-0 text-dark">{candidature.compagnie}</p>
                         </div>
                         <div className="toolbar-spacer"></div>
-                        <CandidatureProgress etat={candidature.etat}></CandidatureProgress>
+                        {
+                            (index == 0)?
+                                <CandidatureProgress etat={"POSTE_OBTENU"}></CandidatureProgress>
+                                :
+                                <CandidatureProgress etat={candidature.etat}></CandidatureProgress>
+                        }
                     </div>
                 ))}
-                <div className="menu-list-item">
-                    <Icon path={mdiBriefcaseOutline} size={1} />
-                    <div>
-                        <h6 className="m-0">Dev Je ne sais quoi</h6>
-                        <p className="m-0 text-dark">Ubisoft Holding LLC</p>
-                    </div>
-                    <div className="toolbar-spacer"></div>
-                    <CandidatureProgress etat={"EN_ATTENTE"}></CandidatureProgress>
-                </div>
-                <div className="menu-list-item">
-                    <Icon path={mdiBriefcaseOutline} size={1} />
-                    <div>
-                        <h6 className="m-0">Dev Je ne sais quoi</h6>
-                        <p className="m-0 text-dark">Ubisoft Holding LLC</p>
-                    </div>
-                    <div className="toolbar-spacer"></div>
-                    <CandidatureProgress etat={"REFUSEE"}></CandidatureProgress>
-                </div>
-                <div className="menu-list-item">
-                    <Icon path={mdiBriefcaseOutline} size={1} />
-                    <div>
-                        <h6 className="m-0">Dev Je ne sais quoi</h6>
-                        <p className="m-0 text-dark">Ubisoft Holding LLC</p>
-                    </div>
-                    <div className="toolbar-spacer"></div>
-                    <CandidatureProgress etat={"ENTREVUE_PROPOSE"}></CandidatureProgress>
-                </div>
 
-                <div className="menu-list-item">
-                    <Icon path={mdiBriefcaseOutline} size={1} />
-                    <div>
-                        <h6 className="m-0">Dev Je ne sais quoi</h6>
-                        <p className="m-0 text-dark">Ubisoft Holding LLC</p>
-                    </div>
+                {
+                    (candidaturesInPage.length < itemsPerPage)
+                        ?
+                        Array.from({ length: itemsPerPage - candidaturesInPage.length }, (_, i) => (
+                            <div key={i} className="menu-list-item menu-list-item-64 menu-list-item-placeholder">
+                            </div>
+                        ))
+                        :
+                        null
+                }
+                <div className="menu-list-item menu-list-footer">
+                    <p className="m-0 text-dark">{candidatures.length} Resultats</p>
                     <div className="toolbar-spacer"></div>
-                    <CandidatureProgress etat={"POSTE_OBTENU"}></CandidatureProgress>
-                </div>
-
-                <div className="menu-list-item">
-                    <Icon path={mdiBriefcaseOutline} size={1} />
-                    <div>
-                        <h6 className="m-0">Dev Je ne sais quoi</h6>
-                        <p className="m-0 text-dark">Ubisoft Holding LLC</p>
-                    </div>
-                    <div className="toolbar-spacer"></div>
-                    <CandidatureProgress etat={"CONTRAT_CREE_PAR_GESTIONNAIRE"}></CandidatureProgress>
-                </div>
-
-                <div className="menu-list-item menu-list-item-placeholder">
-                </div>
-                <div className="menu-list-item menu-list-item-placeholder">
-                </div>
-                <div className="menu-list-item menu-list-item-placeholder">
-                </div>
-                <div className="menu-list-item menu-list-item-placeholder">
+                    <button className="btn-icon" disabled={currentPage === 1} onClick={() => {handlePageChange(false)}}><Icon path={mdiArrowLeft} size={1} /></button>
+                    <p className="m-0">{currentPage} de {maxPages}</p>
+                    <button className="btn-icon" disabled={!(currentPage < maxPages)} onClick={() => {handlePageChange(true)}}><Icon path={mdiArrowRight} size={1} /></button>
                 </div>
             </div>
         </section>

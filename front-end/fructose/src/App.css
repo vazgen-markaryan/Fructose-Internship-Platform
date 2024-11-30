@@ -774,6 +774,20 @@ section.nospace {
 	min-height: 58px;
 	gap: 8px;
 	user-select: none;
+	transition: 0.3s;
+}
+
+.menu-list-footer {
+	height: 48px;
+	min-height: 48px;
+}
+
+.menu-list-item-64{
+	min-height: 64px
+}
+
+.menu-list-item:hover:not(.menu-list-footer, .menu-list-item-placeholder) {
+	background-color: rgba(128, 128, 128, 0.1);
 }
 
 .menu-list-item:first-of-type {
@@ -789,7 +803,11 @@ section.nospace {
 	border-radius: var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius);
 }
 
-.menu-list-item.menu-list-item-placeholder :first-of-type{
+.menu-list > .menu-list-item:not(.menu-list-item-placeholder) + .menu-list-item-placeholder{
+	border-top: 1px solid #8080805c;
+}
+
+.menu-list > .menu-list-item.menu-list-item-placeholder{
 	border-top: none;
 }
 
