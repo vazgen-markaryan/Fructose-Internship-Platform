@@ -15,16 +15,66 @@ const CandidatureProgress = ({etat}) => {
         "REFUSEE",
         "ENTREVUE_PROPOSE",
 
-        "ENTREVUE_ACCEPTE_ETUDIANT",
         "ENTREVUE_REFUSE_ETUDIANT",
+        "ENTREVUE_ACCEPTE_ETUDIANT",
 
         "REFUSEE_APRES_ENTREVUE",
         "ACCEPTE_APRES_ENTREVUE",
 
         "CONTRAT_CREE_PAR_GESTIONNAIRE",
+
+        "POSTE_OBTENU",
     ]
 
     let indexEtat = etats.indexOf(etat)
+
+    const getEtatColor = (step) => {
+        if (step === 1){
+            if (etat === "POSTE_OBTENU"){
+                return "bg-green"
+            } else if(indexEtat === 1 || indexEtat === 3 || indexEtat === 5){
+                return "bg-red"
+            } else if (indexEtat >= 0){
+                return "bg-grey-3"
+            }
+        } else if (step === 2){
+            if (etat === "POSTE_OBTENU"){
+                return "bg-green"
+            } else if(indexEtat === 1 || indexEtat === 3 || indexEtat === 5){
+                return "bg-red"
+            } else if (indexEtat === "EN_ATTENTE"){
+                return "bg-orange"
+            } else if (indexEtat >= 1){
+                return "bg-grey-3"
+            }
+        } else if (step === 3){
+            if (etat === "POSTE_OBTENU"){
+                return "bg-green"
+            } else if(indexEtat === 3 || indexEtat === 5){
+                return "bg-red"
+            } else if (etat === "ENTREVUE_PROPOSE"){
+                return "bg-orange-breathing"
+            } else if (etat === "ENTREVUE_ACCEPTE_ETUDIANT" ){
+                return "bg-orange"
+            } else if (indexEtat > 5){
+                return "bg-grey-3"
+            }
+        } else if (step === 4){
+            // TODO: IMPLEMENTER LA VERIFICATION DE SIGNATURE
+            if (etat === "POSTE_OBTENU"){
+                return "bg-green"
+            } else if (etat === "CONTRAT_CREE_PAR_GESTIONNAIRE"){
+                return "bg-orange"
+            } else if (indexEtat > 7){
+                return "bg-grey-3"
+            }
+        } else if (step === 5){
+            if (etat === "POSTE_OBTENU"){
+                return "bg-green"
+            }
+        }
+    }
+
     return (
         <>
             <div className="candidature-progressbar-frame">
@@ -33,7 +83,7 @@ const CandidatureProgress = ({etat}) => {
                         <Icon path={mdiSendOutline} size={0.6} />
                         <p>Envoi</p>
                     </div>
-                    <div className={"candidature-progressbar-segment-bar " + ((indexEtat >= 0)?"bg-green":"")}>
+                    <div className={"candidature-progressbar-segment-bar " + (getEtatColor(1))}>
 
                     </div>
                 </div>
@@ -42,7 +92,7 @@ const CandidatureProgress = ({etat}) => {
                         <Icon path={mdiCheckCircleOutline} size={0.6} />
                         <p>Selection</p>
                     </div>
-                    <div className={"candidature-progressbar-segment-bar " + ((indexEtat > 1)?"bg-green":"") + " " + ((etat === "REFUSEE")?"bg-red":"")}>
+                    <div className={"candidature-progressbar-segment-bar " + (getEtatColor(2))}>
 
                     </div>
                 </div>
@@ -51,7 +101,7 @@ const CandidatureProgress = ({etat}) => {
                         <Icon path={mdiForumOutline} size={0.6} />
                         <p>Entrevue</p>
                     </div>
-                    <div className={"candidature-progressbar-segment-bar" }>
+                    <div className={"candidature-progressbar-segment-bar " + (getEtatColor(3))}>
 
                     </div>
                 </div>
@@ -60,7 +110,7 @@ const CandidatureProgress = ({etat}) => {
                         <Icon path={mdiFileSign} size={0.6} />
                         <p>Contrat</p>
                     </div>
-                    <div className="candidature-progressbar-segment-bar">
+                    <div className={"candidature-progressbar-segment-bar " + (getEtatColor(4))}>
 
                     </div>
                 </div>
@@ -69,7 +119,7 @@ const CandidatureProgress = ({etat}) => {
                         <Icon path={mdiBriefcaseVariantOutline} size={0.6} />
                         <p>Poste</p>
                     </div>
-                    <div className="candidature-progressbar-segment-bar">
+                    <div className={"candidature-progressbar-segment-bar " + (getEtatColor(5))}>
 
                     </div>
                 </div>

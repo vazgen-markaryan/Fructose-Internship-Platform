@@ -688,10 +688,6 @@ const DashboardHome = () => {
                         <UserManagementDashboard></UserManagementDashboard>
                         <CandidatureEmployeurDashboard></CandidatureEmployeurDashboard>
 
-
-
-                        <div style={{"height": "520px"}}>
-                        </div>
                     </div>
                 </div>
                 <div style={{"width": "30%"}}>

@@ -140,6 +140,27 @@ label {
 	color: white;
 }
 
+.bg-orange-breathing {
+	animation-name: breathing-orange;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+	background-color: #ff9800 !important;
+	color: white;
+}
+
+@keyframes breathing-orange {
+	0%{
+		box-shadow: 0 0 10px 2px #ff9800;
+	}
+	50%{
+		box-shadow: 0 0 0 0 #ff9800;
+	}
+	100%{
+		box-shadow: 0 0 10px 2px #ff9800;
+	}
+}
+
+
 .bg-yellow {
 	background-color: #ffeb3b !important;
 	color: white;
@@ -157,6 +178,11 @@ label {
 
 .bg-grey-2 {
 	background-color: grey !important;
+	color: white;
+}
+
+.bg-grey-3 {
+	background-color: #c5c5c5 !important;
 	color: white;
 }
 
