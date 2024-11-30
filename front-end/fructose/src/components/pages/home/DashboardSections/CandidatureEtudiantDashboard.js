@@ -1,12 +1,7 @@
 import Icon from "@mdi/react";
 import {
     mdiArrowLeft, mdiArrowRight,
-    mdiBriefcaseOutline,
-    mdiCheckCircleOutline,
-    mdiChevronLeft, mdiChevronRight,
-    mdiClockOutline,
-    mdiClose,
-    mdiCloseCircleOutline
+    mdiBriefcaseOutline
 } from "@mdi/js";
 import CandidatureProgress from "../../candidatures/CandidatureProgress";
 import React, {useContext, useEffect, useState} from "react";
@@ -21,11 +16,28 @@ const CandidatureEtudiantDashboard = () => {
     const {candidatures, fetchCandidaturesById, setCandidatures} = useContext(CandidatureContext);
     const [currentCandidature, setCurrentCandidature] = useState(null);
 
+    const sortedCandidatures = [...candidatures].sort((a, b) => {
+        const statusOrder = {
+            "CONTRAT_SIGNE_TOUS": 1,
+            "CONTRAT_SIGNE_ETUDIANT": 2,
+            "CONTRAT_SIGNE_EMPLOYEUR": 3,
+            "ACCEPTE_APRES_ENTREVUE": 4,
+            "ENTREVUE_ACCEPTE_ETUDIANT": 5,
+            "ENTREVUE_PROPOSE": 6,
+            "EN_ATTENTE": 7,
+            "ENTREVUE_REFUSE_ETUDIANT": 8,
+            "REFUSEE_APRES_ENTREVUE": 9,
+            "CONTRAT_REFUSE_ETUDIANT": 10,
+            "REFUSEE": 11
+        };
+        return statusOrder[a.etat] - statusOrder[b.etat];
+    });
+
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
 
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const candidaturesInPage = candidatures.slice(startIndex, startIndex + itemsPerPage);
+    const candidaturesInPage = sortedCandidatures.slice(startIndex, startIndex + itemsPerPage);
     const maxPages = Math.ceil(candidatures.length / itemsPerPage)
 
     useEffect(() => {
@@ -75,12 +87,7 @@ const CandidatureEtudiantDashboard = () => {
                             <p className="m-0 text-dark">{candidature.compagnie}</p>
                         </div>
                         <div className="toolbar-spacer"></div>
-                        {
-                            (index == 0)?
-                                <CandidatureProgress etat={"POSTE_OBTENU"}></CandidatureProgress>
-                                :
-                                <CandidatureProgress etat={candidature.etat}></CandidatureProgress>
-                        }
+                        <CandidatureProgress etat={candidature.etat}></CandidatureProgress>
                     </div>
                 ))}
 

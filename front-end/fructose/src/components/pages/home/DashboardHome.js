@@ -575,96 +575,6 @@ const DashboardHome = () => {
         }
     }
 
-    const GetCandidaturesSection = () => {
-        if (currentUser && currentUser.role === "ETUDIANT") {
-            const sortedCandidatures = [...candidatures].sort((a, b) => {
-                const statusOrder = {
-                    "CONTRAT_SIGNE_TOUS": 1,
-                    "CONTRAT_SIGNE_ETUDIANT": 2,
-                    "CONTRAT_SIGNE_EMPLOYEUR": 3,
-                    "ACCEPTE_APRES_ENTREVUE": 4,
-                    "ENTREVUE_ACCEPTE_ETUDIANT": 5,
-                    "ENTREVUE_PROPOSE": 6,
-                    "EN_ATTENTE": 7,
-                    "ENTREVUE_REFUSE_ETUDIANT": 8,
-                    "REFUSEE_APRES_ENTREVUE": 9,
-                    "CONTRAT_REFUSE_ETUDIANT": 10,
-                    "REFUSEE": 11
-                };
-                return statusOrder[a.etat] - statusOrder[b.etat];
-            });
-
-            return (
-                <section>
-                    <h4>{t("dashboard_home_page.my_applications")}</h4>
-                    <div>
-                        {sortedCandidatures.length !== 0 ? (
-                            <div style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "5px"
-                            }}>
-                                {sortedCandidatures.map((candidature, index) => (
-                                    <div key={index} style={{
-                                        width: "400px",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        backgroundColor: "#eee",
-                                        borderRadius: "5px",
-                                        padding: "10px",
-                                        marginBottom: "5px",
-                                        cursor: "pointer"
-                                    }} onClick={() => handleCandidatureClick(candidature)}>
-                                        <p style={{
-                                            margin: "0",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            flexGrow: 1
-                                        }}>
-                                            <b><em>{candidature.nomOffre}</em></b>&nbsp;{t("dashboard_home_page.at")}&nbsp;{candidature.compagnie}
-                                        </p>
-                                        {candidature.etat === "CONTRAT_SIGNE_TOUS" &&
-                                            <Icon path={mdiCheckCircleOutline} size={1} color="green"/>}
-                                        {(candidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" || candidature.etat === "CONTRAT_SIGNE_ETUDIANT") &&
-                                            <Icon path={mdiClockOutline} size={1} color="orange"
-                                                  style={{marginLeft: "5px"}}/>}
-                                        {(candidature.etat === "ENTREVUE_PROPOSE" || candidature.etat === "CONTRAT_SIGNE_EMPLOYEUR") &&
-                                            <Icon path={mdiClockOutline} size={1} color="blue"
-                                                  style={{marginLeft: "5px"}}/>}
-                                        {(candidature.etat === "EN_ATTENTE") &&
-                                            <Icon path={mdiClockOutline} size={1} color="orange"
-                                                  style={{marginLeft: "5px"}}/>}
-                                        {(candidature.etat === "ENTREVUE_REFUSE_ETUDIANT" || candidature.etat === "CONTRAT_REFUSE_ETUDIANT") &&
-                                            <Icon path={mdiClose} size={1} color="red" style={{marginLeft: "5px"}}/>}
-                                        {(candidature.etat === "REFUSEE" || candidature.etat === "REFUSEE_APRES_ENTREVUE") &&
-                                            <Icon path={mdiCloseCircleOutline} size={1} color="red"
-                                                  style={{marginLeft: "5px"}}/>}
-                                        {(candidature.etat === "ACCEPTE_APRES_ENTREVUE") &&
-                                            <Icon path={mdiClockOutline} size={1} color="orange"
-                                                  style={{marginLeft: "5px"}}/>}
-
-                                    </div>
-                                ))}
-                            </div>
-                        ) : <div style={{
-                            width: "400px",
-                            display: "flex",
-                            alignItems: "center",
-                            backgroundColor: "#eee",
-                            borderRadius: "5px",
-                            gap: "5px",
-                            padding: "10px"
-                        }}>
-                            <Icon path={mdiFileDocumentOutline} size={1}/>
-                            <p className="m-0">{t("dashboard_home_page.no_applications")}</p>
-                        </div>}
-                    </div>
-                </section>
-            );
-        }
-        return null;
-    };
-
     return (
         <>
             <div className="dashboard-card-titlebar">
@@ -679,10 +589,9 @@ const DashboardHome = () => {
                     <div className="dashboard-card">
 
                         {GetOffreStageSection()}
-                        {GetCandidaturesSection()}
+
                         {GetCandidaturesWindow()}
-
-
+                        
                         <CandidatureEtudiantDashboard></CandidatureEtudiantDashboard>
                         <CVEtudiantDashboard></CVEtudiantDashboard>
                         <UserManagementDashboard></UserManagementDashboard>
