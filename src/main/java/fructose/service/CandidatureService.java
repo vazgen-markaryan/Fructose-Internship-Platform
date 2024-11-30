@@ -97,6 +97,7 @@ public class CandidatureService {
 			candidatureData.put("etat", candidature.getEtat());
 			candidatureData.put("commentaireRefus", candidature.getCommentaireRefus());
 			candidatureData.put("dateEntrevue", candidature.getDateEntrevue());
+			candidatureData.put("offreStageId", candidature.getOffreStage().getId());
 			
 			// Ajouter les informations de l'offre de stage
 			OffreStage offreStage = offreStageRepository.findById(candidature.getOffreStage().getId()).orElse(null);
@@ -141,6 +142,33 @@ public class CandidatureService {
 		} catch (Exception e) {
 			logger.error("Erreur lors de la modification de l'état de la candidature avec ID: {}", candidatureId, e);
 			throw new RuntimeException("Une erreur est survenue lors de la modification de l'état de la candidature.", e);
+		}
+	}
+	
+	public List<CandidatureDTO> getCandidaturesByEtatAccepteApresEntrevue() {
+		try {
+			List<Candidature> candidatures = candidatureRepository.findByEtatWithoutCv(EtatCandidature.ACCEPTE_APRES_ENTREVUE);
+			
+			List<CandidatureDTO> result = new ArrayList<>();
+			
+			for (Candidature candidature : candidatures) {
+				result.add(CandidatureDTO.toDTO(candidature));
+			}
+			return result;
+		} catch (Exception e) {
+			logger.error("Erreur lors de la récupération des candidatures par état accepté après entrevue", e);
+			throw new RuntimeException("Une erreur est survenue lors de la récupération des candidatures par état accepté après entrevue.", e);
+		}
+	}
+	
+	public CandidatureDTO getCandidatureById(Long candidatureId) {
+		try {
+			Candidature candidature = candidatureRepository.findById(candidatureId)
+				.orElseThrow(() -> new IllegalArgumentException("Candidature avec ID: " + candidatureId + " n'existe pas"));
+			return CandidatureDTO.toDTO(candidature);
+		} catch (Exception e) {
+			logger.error("Erreur lors de la récupération de la candidature avec ID: {}", candidatureId, e);
+			throw new RuntimeException("Une erreur est survenue lors de la récupération de la candidature.", e);
 		}
 	}
 }

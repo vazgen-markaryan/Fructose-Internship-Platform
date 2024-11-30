@@ -1,6 +1,7 @@
 package fructose.repository;
 
 import fructose.model.Candidature;
+import fructose.model.enumerator.EtatCandidature;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,4 +27,8 @@ public interface CandidatureRepository extends JpaRepository<Candidature, Long> 
 	
 	@Query ("SELECT c.cv.id FROM Candidature c WHERE c.id = :candidatureId")
 	Long getCvId(Long candidatureId);
+	
+	@Query("SELECT new fructose.model.Candidature(c.id, c.etudiant, c.offreStage, c.etat, c.commentaireRefus, c.dateEntrevue) " +
+		"FROM Candidature c WHERE c.etat = :etat")
+	List<Candidature> findByEtatWithoutCv(@Param("etat") EtatCandidature etat);
 }

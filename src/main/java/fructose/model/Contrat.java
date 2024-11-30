@@ -1,4 +1,5 @@
 package fructose.model;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -12,49 +13,38 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Table(name = "contrat")
+@Table (name = "contrat")
 public class Contrat {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "gestionnaire_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Admin gestionnaire;
-
-    @ManyToOne
-    @JoinColumn(name = "employeur_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Employeur employeur;
-
-    @ManyToOne
-    @JoinColumn(name = "etudiant_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Etudiant etudiant;
-
-    @ManyToOne
-    @JoinColumn(name = "offre_stage_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private OffreStage offreStage;
-
-    @Column(name = "signature_gestionnaire", nullable = false)
-    private String signatureGestionnaire;
-
-    @Column(name = "date_signature_gestionnaire")
-    private LocalDate dateSignatureGestionnaire;
-
-    @Column(name = "signature_employeur", nullable = false)
-    private String signatureEmployeur;
-
-    @Column(name = "date_signature_employeur")
-    private LocalDate dateSignatureEmployeur;
-
-    @Column(name = "signature_etudiant", nullable = false)
-    private String signatureEtudiant;
-
-    @Column(name = "date_signature_etudiant")
-    private LocalDate dateSignatureEtudiant;
+	
+	@Id
+	@GeneratedValue (strategy = GenerationType.IDENTITY)
+	@Column (name = "id", nullable = false)
+	private Long id;
+	
+	@ManyToOne
+	@JoinColumn (name = "candidature_id", nullable = false)
+	@OnDelete (action = OnDeleteAction.CASCADE)
+	private Candidature candidature;
+	
+	@ManyToOne
+	@JoinColumn (name = "gestionnaire_id", nullable = false)
+	private Utilisateur gestionnaire;
+	
+	@Column (name = "signature_gestionnaire", nullable = false)
+	private String signatureGestionnaire;
+	
+	@Column (name = "date_signature_gestionnaire", nullable = false)
+	private LocalDate dateSignatureGestionnaire;
+	
+	@Column (name = "signature_employeur")
+	private String signatureEmployeur = "Non signe";
+	
+	@Column (name = "date_signature_employeur")
+	private LocalDate dateSignatureEmployeur;
+	
+	@Column (name = "signature_etudiant")
+	private String signatureEtudiant = "Non signe";
+	
+	@Column (name = "date_signature_etudiant")
+	private LocalDate dateSignatureEtudiant;
 }

@@ -4,6 +4,7 @@ import fructose.model.enumerator.EtatCandidature;
 import fructose.service.CandidatureService;
 import fructose.service.UtilisateurService;
 import fructose.service.dto.ApplicationStageDTO;
+import fructose.service.dto.CandidatureDTO;
 import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -92,6 +93,20 @@ public class CandidatureController {
 		} catch (RuntimeException e) {
 			logger.error("Erreur lors de la modification de l'état de la candidature avec ID: {}", candidatureId, e);
 			throw new RuntimeException("Une erreur est survenue lors de la modification de l'état de la candidature.");
+		}
+	}
+	
+	@GetMapping("/accepteApresEntrevue")
+	public ResponseEntity<?> getCandidaturesAccepteApresEntrevue(@RequestHeader("Authorization") String token) {
+		if (!utilisateurService.validationToken(token)) {
+			return new ResponseEntity<>("Invalid token", HttpStatus.FORBIDDEN);
+		}
+		try {
+			List<CandidatureDTO>  candidatures = candidatureService.getCandidaturesByEtatAccepteApresEntrevue();
+			return new ResponseEntity<>(candidatures, HttpStatus.OK);
+		} catch (RuntimeException e) {
+			logger.error("Erreur lors de la récupération des candidatures acceptées après l'entrevue", e);
+			return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

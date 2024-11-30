@@ -10,7 +10,7 @@ import lombok.ToString;
 @Entity
 @Setter
 @Getter
-@ToString
+@ToString(callSuper = true)
 @DiscriminatorValue("RECORD_ADMIN")
 public class Admin extends Utilisateur {
 	public Admin() {

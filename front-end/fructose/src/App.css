@@ -390,7 +390,7 @@ header {
 
 .header-user-menu {
 	position: absolute;
-	width: 260px;
+	width: auto;
 	height: auto;
 	background-color: white;
 	top: 70px;
@@ -1145,4 +1145,9 @@ tr {
 
 .candidature-progressbar-segment:last-of-type > .candidature-progressbar-segment-bar{
 	border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.btn-candidature {
+	background-color: #4CAF50;
+	color: white;
 }

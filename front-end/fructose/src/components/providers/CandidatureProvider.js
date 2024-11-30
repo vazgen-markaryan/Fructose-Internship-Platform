@@ -28,26 +28,48 @@ const CandidatureProvider = ({children}) => {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
-					'Authorization': currentToken
+					'Authorization': `Bearer ${currentToken}`,
 				},
 			});
 			if (response.ok) {
 				const data = await response.json();
 				setCandidatures(data);
 			} else {
+				console.error('Échec de la récupération des candidatures');
+			}
+		} catch (error) {
+			console.error('Erreur lors de la récupération des candidatures :', error);
+		}
+	};
+	
+	const fetchCandidatureByEtatAccepteApresEntrevue = async () => {
+		try {
+			const response = await fetch(`/candidatures/accepteApresEntrevue`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					"Authorization": currentToken
+				},
+			});
+			if (response.ok) {
+				const data = await response.json();
+				setCandidatures(data);
+				return data;
+			} else {
 				throw new Error('Failed to fetch candidatures');
 			}
 		} catch (error) {
 			console.error("Erreur " + error);
 		}
-	};
+	}
 	
 	return (
 		<CandidatureContext.Provider value={{
 			candidatures,
 			fetchCandidaturesById,
 			ApplyOffreStage,
-			setCandidatures
+			setCandidatures,
+			fetchCandidatureByEtatAccepteApresEntrevue
 		}}>
 			{children}
 		</CandidatureContext.Provider>

@@ -306,7 +306,7 @@ json_output() {
         # echo $json_output
 
         # Écrire la sortie JSON dans un fichier, formaté avec jq
-        echo "$json_output" | jq --indent 7 . >GitScripts/project_impact.json
+        echo "$json_output" | jq --indent 7 . >front-end/fructose/src/components/project_impact.json
         echo "JSON output generated successfully. Check 'GitScripts/project_impact.json'."
 }
 

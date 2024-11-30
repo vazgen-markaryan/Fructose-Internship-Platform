@@ -2,103 +2,125 @@ package fructose.service;
 
 import fructose.model.Contrat;
 import fructose.model.ContratPdf;
-import fructose.model.Utilisateur;
 import fructose.model.enumerator.Role;
 import fructose.repository.ContratRepository;
-import fructose.repository.UtilisateurRepository;
+import fructose.service.dto.CandidatureDTO;
 import fructose.service.dto.ContratDTO;
+import fructose.service.dto.ContratSansCvDTO;
+import fructose.service.dto.UtilisateurDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import com.itextpdf.layout.Document;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
 public class ContratService {
+	
+	private final ContratRepository contratRepository;
+	private final CandidatureService candidatureService;
+	private final UtilisateurService utilisateurService;
 
-    private final ContratRepository contratRepository;
-    private final UtilisateurRepository utilisateurRepository;
+	public String generateContrat(CandidatureDTO candidatureDTO, UtilisateurDTO admin) {
+		if (candidatureDTO == null || admin == null) {
+			throw new IllegalArgumentException("CandidatureDTO et UtilisateurDTO ne peuvent pas être nuls");
+		}
+		try {
+			ContratDTO contratDTO = new ContratDTO();
+			contratDTO.setCandidatureDTO(candidatureDTO);
+			contratDTO.setGestionnaire(admin);
+			Contrat contrat = ContratDTO.toEntity(contratDTO);
+			ContratPdf contratPdf = new ContratPdf(contrat);
+			return contratPdf.returnPdf();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error generating contract PDF", e);
+		}
+	}
 
-    public Utilisateur getUtilisateurEnCours() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            return utilisateurRepository.findByEmail(authentication.getName());
-        }
-        throw new IllegalArgumentException("Aucun utilisateur n'est connecté");
-    }
+	public String generateContrat(ContratDTO contratDTO) {
+		if (contratDTO == null) {
+			throw new IllegalArgumentException("ContratDTO ne peut pas être nul");
+		}
+		if (contratDTO.getCandidatureDTO() == null) {
+			throw new IllegalArgumentException("CandidatureDTO ne peut pas être nul");
+		}
+		if (contratDTO.getGestionnaire() == null) {
+			throw new IllegalArgumentException("UtilisateurDTO ne peut pas être nul");
+		}
+		try {
+			Contrat contrat = ContratDTO.toEntity(contratDTO);
+			ContratPdf contratPdf = new ContratPdf(contrat);
+			return contratPdf.returnPdf();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error generating contract PDF", e);
+		}
+	}
+	
+	public void saveContrat(ContratDTO contratDTO) {
+		if (contratDTO == null) {
+			throw new IllegalArgumentException("ContratDTO ne peut pas être nul");
+		}
+		Contrat contrat = ContratDTO.toEntity(contratDTO);
+		contratRepository.save(contrat);
+	}
 
+	public ContratSansCvDTO getContratByCandidatureId(Long id) {
+		if (id == null) {
+			throw new IllegalArgumentException("ID de candidature ne peut pas être nul");
+		}
+		System.out.println("ID de candidature: " + id);
+		ContratSansCvDTO contrat = contratRepository.findByCandidatureIdWithoutCv(id);
+		if (contrat == null) {
+			throw new IllegalArgumentException("Contrat avec ID de candidature: " + id + " n'existe pas");
+		}
+		return contrat;
+	}
 
-    public ContratDTO createContrat(ContratDTO contratDTO) {
-        Contrat contrat = ContratDTO.toEntity(contratDTO);
-        contrat = contratRepository.save(contrat);
-        return ContratDTO.toDTO(contrat);
-    }
+	public ContratDTO getContratById(Long contratId) {
+		if (contratId == null) {
+			throw new IllegalArgumentException("ID de contrat ne peut pas être nul");
+		}
+		return ContratDTO.toDTO(contratRepository.findById(contratId).orElseThrow(() -> new IllegalArgumentException("Contrat avec ID: " + contratId + " n'existe pas")));
+	}
 
-    public void deleteContrat(Long id) {
-        if (!contratRepository.existsById(id)) {
-            throw new IllegalArgumentException("Contrat with ID: " + id + " does not exist");
-        }
-        contratRepository.deleteById(id);
-    }
+	public void signContrat(Long contratId, UtilisateurDTO utilisateurDTO) {
+		if (contratId == null || utilisateurDTO == null) {
+			throw new IllegalArgumentException("ID de contrat et UtilisateurDTO ne peuvent pas être nuls");
+		}
+		Contrat contrat = contratRepository.findById(contratId).orElseThrow(() -> new IllegalArgumentException("Contrat avec ID: " + contratId + " n'existe pas"));
+		switch (utilisateurDTO.getRole()) {
+			case EMPLOYEUR:
+				contrat.setSignatureEmployeur(utilisateurDTO.getFullName());
+				contrat.setDateSignatureEmployeur(LocalDate.now());
+				break;
+			case ETUDIANT:
+				contrat.setSignatureEtudiant(utilisateurDTO.getFullName());
+				contrat.setDateSignatureEtudiant(LocalDate.now());
+				break;
+			default:
+				throw new IllegalArgumentException("Utilisateur n'est pas un employeur ou un étudiant");
+		}
+		contratRepository.save(contrat);
+	}
 
-    public ContratDTO getContratById(Long id) {
-        Contrat contrat = contratRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Contrat with ID: " + id + " does not exist"));
-        return ContratDTO.toDTO(contrat);
-    }
-
-    public List<ContratDTO> getContrats() {
-        Utilisateur utilisateur = getUtilisateurEnCours();
-        Role role = utilisateur.getRole();
-
-        return switch (role) {
-            case EMPLOYEUR -> contratRepository.findAllByEmployeur(utilisateur)
-                    .stream()
-                    .map(ContratDTO::toDTO)
-                    .collect(Collectors.toList());
-            case ETUDIANT -> contratRepository.findAllByEtudiant(utilisateur)
-                    .stream()
-                    .map(ContratDTO::toDTO)
-                    .collect(Collectors.toList());
-            case ADMIN -> contratRepository.findAll()
-                    .stream()
-                    .map(ContratDTO::toDTO)
-                    .collect(Collectors.toList());
-            default -> throw new IllegalArgumentException("Role not supported");
-        };
-    }
-
-    public ContratDTO signContrat(Long id, String signature) {
-        Contrat contrat = contratRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Contrat with ID: " + id + " does not exist"));
-
-        Utilisateur utilisateur = getUtilisateurEnCours();
-        Role role = utilisateur.getRole();
-        switch (role) {
-            case EMPLOYEUR:
-                contrat.setSignatureEmployeur(signature);
-                break;
-            case ETUDIANT:
-                contrat.setSignatureEtudiant(signature);
-                break;
-            case ADMIN:
-                contrat.setSignatureGestionnaire(signature);
-                break;
-            default:
-                throw new IllegalArgumentException("Role not supported");
-        }
-        contrat = contratRepository.save(contrat);
-        return ContratDTO.toDTO(contrat);
-    }
-
-    public Document getContratPDFById(Long id) {
-        Contrat contrat = contratRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Contrat with ID: " + id + " does not exist"));
-        ContratPdf contratPdf = new ContratPdf(contrat);
-        return contratPdf.returnPdf();
-    }
+	public void refuserContrat(Long id, UtilisateurDTO utilisateur) {
+		if (id == null || utilisateur == null) {
+			throw new IllegalArgumentException("ID de contrat et UtilisateurDTO ne peuvent pas être nuls");
+		}
+		Contrat contrat = contratRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Contrat avec ID: " + id + " n'existe pas"));
+		switch (utilisateur.getRole()) {
+			case EMPLOYEUR:
+				contrat.setSignatureEmployeur("Refuse");
+				break;
+			case ETUDIANT:
+				contrat.setSignatureEtudiant("Refuse");
+				break;
+			default:
+				throw new IllegalArgumentException("Utilisateur n'est pas un employeur ou un étudiant");
+		}
+		contratRepository.save(contrat);
+	}
 }
