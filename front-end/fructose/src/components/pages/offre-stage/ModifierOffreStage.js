@@ -12,9 +12,10 @@ const ModifierOffreStage = () => {
 	const {t} = useTranslation();
 	const navigate = useNavigate();
 	const {currentUser} = useContext(AuthContext);
-	const [offreStage, setOffreStage] = useState({});
+	const [offreStage, setOffreStage] = useState(undefined);
 	const [errors, setErrors] = useState({});
 	const {fetchOffreStage, updateOffreStage} = useContext(OffreStageContext);
+	const [loading, setLoading] = useState(true)
 	
 	useEffect(() => {
 		if (currentUser) {
@@ -23,7 +24,9 @@ const ModifierOffreStage = () => {
 					try {
 						const response = await fetchOffreStage(id);
 						await setOffreStage(response);
+						setLoading(false)
 					} catch (error) {
+						setLoading(false)
 						console.log("error" + error);
 					}
 				}
@@ -119,9 +122,15 @@ const ModifierOffreStage = () => {
 			}
 		}
 	};
-	
-	if (!offreStage) {
-		return <div>Loading...</div>;
+
+	if (loading) {
+		return (
+			<div className="loader-container">
+				<div className="loader"></div>
+			</div>
+		)
+	} else if (offreStage == null){
+		return <h1>Erreur 404</h1>;
 	}
 	
 	return (
@@ -139,42 +148,42 @@ const ModifierOffreStage = () => {
 						<input value={offreStage.nom || ''} type="text" name="nom" onChange={handleInputChange}
 						       required/>
 						<p className="field-invalid-text">{errors.nom}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.poste")}</label>
 						<input value={offreStage.poste || ''} type="text" name="poste" onChange={handleInputChange}
 						       required/>
 						<p className="field-invalid-text">{errors.poste}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.description")}</label>
 						<input value={offreStage.description || ''} type="text" name="description"
 						       onChange={handleInputChange} required/>
 						<p className="field-invalid-text">{errors.description}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.compagnie")}</label>
 						<input value={offreStage.compagnie || ''} type="text" name="compagnie"
 						       onChange={handleInputChange} required/>
 						<p className="field-invalid-text">{errors.compagnie}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.adresse")}</label>
 						<input value={offreStage.adresse || ''} type="text" name="adresse" onChange={handleInputChange}
 						       required/>
 						<p className="field-invalid-text">{errors.adresse}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.taux_horaire")}</label>
 						<input value={offreStage.tauxHoraire || ''} type="number" name="tauxHoraire"
 						       onChange={handleInputChange} required min="0"/>
 						<p className="field-invalid-text">{errors.tauxHoraire}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.nombre_heures_semaine")}</label>
 						<input value={offreStage.nombreHeuresSemaine || ''} type="number" name="nombreHeuresSemaine"
 						       onChange={handleInputChange} required min="1"/>
 						<p className="field-invalid-text">{errors.nombreHeuresSemaine}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.nombre_postes")}</label>
 						<input value={offreStage.nombrePostes || ''} type="number" name="nombrePostes"
 						       onChange={handleInputChange} required min="1"/>
 						<p className="field-invalid-text">{errors.nombrePostes}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.type_emploi")}</label>
 						<select name="typeEmploi" onChange={handleInputChange} value={offreStage.typeEmploi || 'select'} required>
 							<option value="select">{t("modifier_offre_stage_page.modalites_travail.select")}</option>
@@ -183,7 +192,7 @@ const ModifierOffreStage = () => {
 							<option value="hybride">{t("modifier_offre_stage_page.modalites_travail.hybride")}</option>
 						</select>
 						<p className="field-invalid-text">{errors.typeEmploi}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.departement")}</label>
 						<select name="departementDTO" onChange={handleInputChange} value={(offreStage.departementDTO) ? offreStage.departementDTO.nom : ''} required>
 							<option value="">{t("programme.select")}</option>
@@ -222,7 +231,7 @@ const ModifierOffreStage = () => {
 							<option value="tremplin_dec">{t("programme.tremplin_dec")}</option>
 						</select>
 						<p className="field-invalid-text">{errors.departementDTO}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.modalite_travail")}</label>
 						<select name="modaliteTravail" onChange={handleInputChange}
 						        value={offreStage.modaliteTravail || 'select'} required>
@@ -233,7 +242,7 @@ const ModifierOffreStage = () => {
 								value="temps_plein">{t("modifier_offre_stage_page.types_emploi.temps_plein")}</option>
 						</select>
 						<p className="field-invalid-text">{errors.modaliteTravail}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.date_limite_candidate")}</label>
 						<input
 							className={`${errors.dateLimiteCandidature ? "field-invalid" : ""}`}
@@ -246,14 +255,14 @@ const ModifierOffreStage = () => {
 							onKeyDown={(e) => {
 								const currentDate = new Date(e.target.value);
 								const minDate = new Date(new Date().setDate(new Date().getDate() + 7));
-								
+
 								if (e.key === 'ArrowDown' && currentDate <= minDate) {
 									e.preventDefault();
 								}
 							}}
 						/>
 						<p className={"field-invalid-text"}>{errors.dateLimiteCandidature}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.date_debut")}</label>
 						<input
 							className={`${errors.dateDebut ? "field-invalid" : ""}`}
@@ -265,14 +274,14 @@ const ModifierOffreStage = () => {
 							min={offreStage.dateLimiteCandidature ? new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1)).toISOString().split('T')[0] : ""}
 							onKeyDown={(e) => {
 								const minDate = new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1));
-								
+
 								if (e.key === 'ArrowDown' && offreStage.dateDebut.getTime() <= minDate.getTime()) {
 									e.preventDefault(); // Prevent going below dateLimiteCandidature + 1 day
 								}
 							}}
 						/>
 						<p className={"field-invalid-text"}>{errors.dateDebut}</p>
-						
+
 						<label>{t("modifier_offre_stage_page.date_fin")}</label>
 						<input
 							className={`${errors.dateFin ? "field-invalid" : ""}`}
@@ -285,14 +294,14 @@ const ModifierOffreStage = () => {
 							onKeyDown={(e) => {
 								const currentDate = new Date(e.target.value);
 								const minDate = new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1));
-								
+
 								if (e.key === 'ArrowDown' && currentDate <= minDate) {
 									e.preventDefault();
 								}
 							}}
 						/>
 						<p className={"field-invalid-text"}>{errors.dateFin}</p>
-						
+
 						<br/>
 						<br/>
 						<button type="submit">{t("modifier_offre_stage_page.modify_offre_stage")}</button>

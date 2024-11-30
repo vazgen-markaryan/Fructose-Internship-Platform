@@ -146,14 +146,14 @@
 	},
 	"creer_offre_stage_page": {
 		"title": "Create an internship offer",
-		"nom": "Name",
+		"nom": "Job Title",
 		"poste": "Position",
 		"description": "Description",
-		"compagnie": "Company",
+		"compagnie": "Company Name",
 		"address": "Address",
 		"taux_horaire": "Hourly rate",
 		"nombre_heures_semaine": "Number of hours per week",
-		"nombre_postes": "Number of positions",
+		"nombre_postes": "Number of positions to fill",
 		"type_emploi": "Type of employment",
 		"programme_etudes": "Study program",
 		"modalite_travail": "Work modality",
@@ -204,8 +204,8 @@
 		"home": "Home",
 		"offer": "Internship Offers",
 		"explore": "Explore",
-		"manage_offers": "Manage Internship Offers in waiting for approval",
-		"manage_cv": "Manage Curiculums Vitae in waiting for approval",
+		"manage_offers": "Manage Internship Offers waiting for approval",
+		"manage_cv": "Manage Curiculums Vitae waiting for approval",
 		"no_offers": "No offers to display at the moment",
 		"my_offers": "My Internship Offers",
 		"add_offer": "New offer",
@@ -290,6 +290,12 @@
 		"delete_stage_cancel_button_text": "No, it was a mistake",
 		"no_comment_reject_cv_text": "Please enter a reason for rejection",
 		"cv_rejected_success": "The CV has been rejected",
+		"cv_accept_title": "You are about to accept the CV",
+		"cv_accept_text": "Have you reviewed the CV and are you sure you want to accept it?",
+		"cv_accept_confirm_button": "Yes, accept",
+		"cv_accept_cancel_button": "No, cancel",
+		"cv_accepted_success": "CV has been successfully accepted",
+		"cv_accepted_error": "Error while accepting the CV",
 		"offer_rejected_success": "The internship offer has been rejected",
 		"no_comment_reject_offer_text": "Please enter a reason for rejection"
 	},
@@ -346,7 +352,7 @@
 			"reject_reason": "Reason: "
 		},
 		"titles": {
-			"cvs": "My CVs",
+			"cvs": "My Curiculums Vitae",
 			"preview": "Preview"
 		}
 	},
@@ -560,6 +566,7 @@
 		"contract_refused_by_employer": "Contract signing was refused by employer",
 		"contract_signed_by_all": "Everyone signed the contract. The application was accepted",
 		"contract_not_signed_after_interview_refusal_by_student": "Contract cannot be signed. Interview was refused by student",
+		"contract_refused_by_all": "Not Employer nor Student signed the contract. The application was refused",
 		"contract_cannot_be_signed_entrevue_rejected_by_student": "Contract cannot be signed. You refused the interview",
 		"waiting_for_interview_results": "Waiting for interview results",
 		"confirm_accept_title": "Are you sure?",

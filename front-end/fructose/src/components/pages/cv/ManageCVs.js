@@ -38,8 +38,7 @@ const ManageCVs = () => {
 			})();
 		}
 	}, [isUserInit, GetCvs, t]);
-	
-	// TODO ici il dit aussi Warning Missing dependency. Ignore car ça crée plus de Warnings
+
 	useEffect(() => {
 		if (location.state && location.state.selectedCv) {
 			handleCvSelection(location.state.selectedCv);

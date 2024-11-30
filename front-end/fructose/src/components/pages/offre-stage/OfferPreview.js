@@ -61,7 +61,7 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 							<div className="toolbar-spacer"></div>
 							<div style={{display: (currentUser.role === "ETUDIANT") ? "block" : "none"}}>
 								{
-									isApplied
+									isApplied  || currentOffer.hasCandidature
 										?
 										<button className="btn-candidature" disabled>
 											<Icon path={mdiCheckCircleOutline} size={1} className="text-white"/>

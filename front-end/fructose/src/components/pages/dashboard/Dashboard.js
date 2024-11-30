@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import HeaderMain from "../../fragments/header/HeaderMain";
 import {Route, Routes} from "react-router-dom";
 import ManageCVs from "../cv/ManageCVs";
@@ -20,10 +20,21 @@ import {ContratProvider} from "../../providers/ContratProvider";
 import {ViewCandidatures} from "../candidatures/ViewCandidatures";
 
 const Dashboard = () => {
+
+	const [headerStatus, setHeaderStatus] = useState("light")
+
+	const handleScroll = (event) => {
+		if(event.target.scrollTop > 100){
+			setHeaderStatus("dark")
+		} else {
+			setHeaderStatus("light")
+		}
+	}
+
 	return (
 		<>
-			<HeaderMain theme={"light"}></HeaderMain>
-			<div className={"dashboard-layout"}>
+			<HeaderMain theme={headerStatus} background={((headerStatus === "dark")?"white":null)}></HeaderMain>
+			<div className={"dashboard-layout"} onScroll={(event)=>{handleScroll(event)}}>
 				<div className="dashboard-head">
 				</div>
 				<div className="dashboard-content">

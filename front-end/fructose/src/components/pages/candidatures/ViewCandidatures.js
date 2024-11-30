@@ -311,7 +311,7 @@ const ViewCandidatures = () => {
 						icon: 'success',
 						title: t("view_candidatures_page.sweetalert.approved"),
 						showConfirmButton: false,
-						timer: 1500
+						timer: 2000
 					});
 					
 					const updatedItems = candidatures.map(item => item.candidature.id === currentCandidature.id ? {
@@ -363,7 +363,7 @@ const ViewCandidatures = () => {
 						icon: 'success',
 						title: t("view_candidatures_page.sweetalert.refused"),
 						showConfirmButton: false,
-						timer: 1500
+						timer: 2000
 					});
 					
 					const updatedItems = candidatures.map(item => item.candidature.id === currentCandidature.id ? {
