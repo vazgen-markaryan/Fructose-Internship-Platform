@@ -26,8 +26,7 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 	if (currentOffer) {
 		const dateDebut = new Date(currentOffer.dateDebut);
 		const dateFin = new Date(currentOffer.dateFin);
-		
-		// Ajoute 1 jour à la date de début pour l'afficher correctement
+
 		dateDebut.setDate(dateDebut.getDate() + 1);
 		dateFin.setDate(dateFin.getDate() + 1);
 		

@@ -188,6 +188,28 @@
 			"programme_etudes_select": "Le programme d'études doit être sélectionné",
 			"modalite_travail_select": "La modalité de travail doit être sélectionnée",
 			"type_emploi_select": "Le type d'emploi doit être sélectionné"
+		},
+		"steps":{
+			"1": {
+				"title": "Informations de base",
+				"description": "Veuillez remplir les champs ci-dessous en fournissant le nom officiel de votre compagnie ainsi que son adresse complète, incluant le numéro de rue, le nom de la rue, la ville, le code postal et le pays."
+			},
+			"2": {
+				"title": "Informations sur l'emploi",
+				"description": "Entrer les informations requises pour permettre aux étudiants de mieux vous trouver."
+			},
+			"3": {
+				"title": "Description",
+				"description": "Entrer une description détailée de l'emploi, incluant une description du rôle de l'employé, des qualités recherchées, ainsi que l'expéreience requise."
+			},
+			"4": {
+				"title": "Particularités",
+				"description": "En choisissant parmi les choix si-dessous, décrivez les différents modes de votre emploi."
+			},
+			"5": {
+				"title": "Dates",
+				"description": "Entrer la date du début et la fin du stage, ainsi que la date limite de candidature."
+			}
 		}
 	},
 	"modal": {
@@ -443,7 +465,8 @@
 			"programme_etudes_select": "Le programme d'études doit être sélectionné",
 			"modalite_travail_select": "La modalité de travail doit être sélectionnée",
 			"type_emploi_select": "Le type d'emploi doit être sélectionné"
-		}
+		},
+		"disclaimer": "Toute modification des informations de l'offre de stage est sujet d'une re-examination par le gestionnaire"
 	},
 	"offer_status": {
 		"approved": "Approuvé",

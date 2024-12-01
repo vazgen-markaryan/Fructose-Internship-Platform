@@ -188,6 +188,28 @@
 			"programme_etudes_select": "The study program must be selected",
 			"modalite_travail_select": "The work modality must be selected",
 			"type_emploi_select": "The type of employment must be selected"
+		},
+		"steps":{
+			"1": {
+				"title": "Basic Information",
+				"description": "Please fill in the fields below by providing the official name of your company as well as its complete address, including street number, street name, city, postal code, and country."
+			},
+			"2": {
+				"title": "Job Information",
+				"description": "Enter the required information to help students find you more easily."
+			},
+			"3": {
+				"title": "Description",
+				"description": "Enter a detailed job description, including a description of the employee's role, desired qualities, and required experience."
+			},
+			"4": {
+				"title": "Particularities",
+				"description": "By choosing from the options below, describe the different modes of your job."
+			},
+			"5": {
+				"title": "Dates",
+				"description": "Enter the start and end dates of the internship, as well as the application deadline."
+			}
 		}
 	},
 	"modal": {
@@ -443,7 +465,8 @@
 			"programme_etudes_select": "The study program must be selected",
 			"modalite_travail_select": "The work modality must be selected",
 			"type_emploi_select": "The type of employment must be selected"
-		}
+		},
+		"disclaimer": "Any modification of the information in the internship offer is subject to re-examination by the manager"
 	},
 	"offer_status": {
 		"approved": "Approved",
