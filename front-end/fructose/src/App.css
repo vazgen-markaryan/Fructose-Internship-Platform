@@ -339,6 +339,10 @@ p.field-invalid-text {
 	margin: 0;
 }
 
+.p-0 {
+	padding: 0 !important;
+}
+
 .toolbar-items {
 	display: flex;
 	align-items: center;
@@ -635,7 +639,7 @@ header {
 
 section {
 	width: 100%;
-	padding: 20px 16px;
+	padding: 22px 20px;
 	box-sizing: border-box;
 }
 
@@ -790,6 +794,11 @@ section.nospace {
 	min-height: 48px;
 }
 
+.menu-list-view-more {
+	height: 48px;
+	min-height: 48px;
+}
+
 .menu-list-item-64{
 	min-height: 64px
 }
@@ -845,6 +854,23 @@ section.nospace {
 
 .menu-list-item.menu-list-item-selected + .menu-list-item {
 	border-top-color: var(--color-primary);
+}
+
+.menu-list > .menu-list-item > .menu-list-item-image{
+	background-color: rgb(206,206,206);
+	padding: 10px 30px;
+	height: 100%;
+	box-sizing: border-box;
+	border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.menu-list-item.menu-list-item-pending > *{
+	opacity: 0.3;
+}
+
+.menu-list-item.menu-list-item-striked > *{
+	text-decoration: line-through;
+	text-decoration-color: #f44336;
 }
 
 .no-items-display{
@@ -945,6 +971,8 @@ tr {
 	border-radius: var(--border-radius);
 	border: 1px solid #d1d1d1;
 	min-width: 200px;
+	box-sizing: border-box;
+	position: relative;
 }
 
 .card.no-border {

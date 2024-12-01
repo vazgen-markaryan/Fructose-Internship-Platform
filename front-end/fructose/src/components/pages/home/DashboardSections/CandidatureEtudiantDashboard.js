@@ -284,7 +284,7 @@ const CandidatureEtudiantDashboard = () => {
 								(candidatures.length === 0)?
 									<div className="menu-list-item menu-list-empty-list-placeholder">
 										<div className="no-items-display">
-											<Icon path={mdiBriefcaseRemoveOutline} size={1.4} />
+											<Icon path={mdiBriefcaseRemoveOutline} size={1.5} />
 											<h6>Aucune candidature</h6>
 											<p className="text-dark text-mini">Commencez par trouver et postuler à des offres de stage</p>
 										</div>

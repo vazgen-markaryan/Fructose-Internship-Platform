@@ -15,7 +15,7 @@ const OffresStagesDashboard = () => {
 
     const {t} = useTranslation()
     const {fetchOffresStage} = useContext(OffreStageContext);
-    const [offresStage, setOffresStage] = useState([]);
+    const [offresStage, setOffresStage] = useState(null);
     const {currentUser} = useContext(AuthContext);
 
     useEffect(() => {
@@ -35,9 +35,17 @@ const OffresStagesDashboard = () => {
 
     if (offresStage === null) {
         return (
-            <div className="loader-container" style={{maxHeight: "300px"}}>
-                <div className="loader"></div>
-            </div>
+            <section>
+                <div className={"toolbar-items"}>
+                    <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
+                </div>
+                <br/>
+                <div className="card" style={{height: "420px"}}>
+                    <div className="loader-container">
+                        <div className="loader"></div>
+                    </div>
+                </div>
+            </section>
         )
     }
     if (offresStage.length !== 0) {
@@ -127,19 +135,19 @@ const OffresStagesDashboard = () => {
                 <div className={"toolbar-items"}>
                     <h4 className={"m-0 toolbar-spacer"}>{t("dashboard_home_page.my_offers")}</h4>
                 </div>
-                <div style={{"padding": "10px 0"}}>
+                <br/>
+                <div className="card">
                     <div style={{
-                        "width": "400px",
-                        "height": "320px",
+                        "height": "420px",
                         "display": "flex",
                         "alignItems": "center",
                         "justifyContent": "center",
                         "backgroundColor": "#eee",
                         "borderRadius": "5px"
                     }}>
-                        <div style={{"textAlign": "center"}}>
-                            <Icon path={mdiBriefcaseRemoveOutline} size={1}/>
-                            <p>{t("dashboard_home_page.no_offers")}</p>
+                        <div className="no-items-display">
+                            <Icon path={mdiBriefcaseRemoveOutline} size={1.5}/>
+                            <h6>{t("dashboard_home_page.no_offers")}</h6>
                         </div>
                     </div>
                 </div>
