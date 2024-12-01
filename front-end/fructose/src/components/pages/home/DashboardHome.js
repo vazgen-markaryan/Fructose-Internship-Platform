@@ -10,6 +10,7 @@ import CVEtudiantDashboard from "./DashboardSections/CVEtudiantDashboard";
 import UserManagementDashboard from "./DashboardSections/UserManagementDashboard";
 import CandidatureEmployeurDashboard from "./DashboardSections/CandidatureEmployeurDashboard";
 import CandidatureEtudiantDashboard from "./DashboardSections/CandidatureEtudiantDashboard";
+import {AdminProvider} from "../../providers/AdminProvider";
 
 const DashboardHome = () => {
 	
@@ -24,7 +25,9 @@ const DashboardHome = () => {
 				return <OffresStagesEmpProfDashboard></OffresStagesEmpProfDashboard>
 			} else if (currentUser.role === "ADMIN") {
 				return (
-					<DashboardHomeAdmin/>
+					<AdminProvider>
+						<DashboardHomeAdmin/>
+					</AdminProvider>
 				);
 			}
 		}
@@ -47,7 +50,6 @@ const DashboardHome = () => {
 						<CVEtudiantDashboard></CVEtudiantDashboard>
 						<CandidatureEmployeurDashboard></CandidatureEmployeurDashboard>
 
-						<UserManagementDashboard></UserManagementDashboard>
 					</div>
 				</div>
 				<div style={{"width": "30%"}}>

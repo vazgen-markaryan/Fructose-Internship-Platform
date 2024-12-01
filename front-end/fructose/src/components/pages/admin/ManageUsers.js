@@ -23,6 +23,8 @@ const ManageUsers = () => {
 	const [users, setUsers] = useState(null);
 	const [currentUserIndex, setCurrentUserIndex] = useState(null);
 	const [isSwitching, setIsSwitching] = useState(false);
+
+	const userId = new URLSearchParams(window.location.search).get("user");
 	
 	useEffect(() => {
 		if (isUserInit) {
@@ -37,6 +39,20 @@ const ManageUsers = () => {
 			})();
 		}
 	}, [isUserInit, GetUnapprovedUsers]);
+
+	useEffect(() => {
+		if (users && users.length > 0) {
+			if (userId) {
+				const selectedUser = users.find((user) => user.id === parseInt(userId));
+				let index = users.indexOf(selectedUser)
+				if(index !== -1){
+					setCurrentUserIndex(index);
+				}
+			} else {
+				setCurrentUserIndex(0)
+			}
+		}
+	}, [window.location.search, userId, users]);
 	
 	const ApproveUserById = async (id) => {
 		await ApproveUser(id).then(response => {
