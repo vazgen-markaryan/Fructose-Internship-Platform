@@ -36,14 +36,8 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 		
 		return (
 			<>
-				<div className="dashboard-card" style={{
-					width: "55%",
-					position: "sticky",
-					top: "70px",
-					height: "90vh",
-					display: "flex",
-					flexDirection: "column"
-				}}>
+				<div style={{display: "flex",
+					flexDirection: "column", height: "100%"}}>
 					<div className="user-profile-section">
 						<div className="company-profile-section-banner" style={{borderRadius: "5px 5px 0 0"}}></div>
 						<div className="user-profile-section-profile-picture radius-normal"

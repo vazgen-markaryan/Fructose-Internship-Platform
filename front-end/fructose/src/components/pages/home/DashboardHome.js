@@ -45,8 +45,9 @@ const DashboardHome = () => {
 						{GetOffreStageSection()}
 						<CandidatureEtudiantDashboard></CandidatureEtudiantDashboard>
 						<CVEtudiantDashboard></CVEtudiantDashboard>
-						<UserManagementDashboard></UserManagementDashboard>
 						<CandidatureEmployeurDashboard></CandidatureEmployeurDashboard>
+
+						<UserManagementDashboard></UserManagementDashboard>
 					</div>
 				</div>
 				<div style={{"width": "30%"}}>

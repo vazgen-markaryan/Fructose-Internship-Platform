@@ -222,7 +222,7 @@ const CreerOffreStage = () => {
 						<h4>{t("creer_offre_stage_page.steps.1.title")}</h4>
 						<p>{t("creer_offre_stage_page.steps.1.description")}</p>
 						<br/>
-						
+
 						<div className={"input-container"}>
 							<p>{t("creer_offre_stage_page.compagnie")}</p>
 							<input className={`${errors.compagnie ? "field-invalid" : ""}`}
