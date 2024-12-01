@@ -26,14 +26,14 @@ public class EvaluationMilieuStage {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Candidature candidature;
 
-    @OneToMany(mappedBy = "evaluation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "evaluationMilieuStage", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SectionEvaluation> sections;
 
     // Stage type (e.g., PREMIER_STAGE, DEUXIEME_STAGE)
     @Enumerated(EnumType.STRING)
     private StageType stageType;
 
-    // Trainee capacity (e.g., UN_STAGIAIRE, DEUX_STAGIAIRES, etc.)
+    // Capacite etudiant (e.g., UN_STAGIAIRE, DEUX_STAGIAIRES, etc.)
     @Enumerated(EnumType.STRING)
     private capaciteEtudiant capaciteEtudiant;
 
@@ -43,6 +43,7 @@ public class EvaluationMilieuStage {
 
     private int tauxHoraire;
 
+    // Stage type (e.g., PREMIER_STAGE, DEUXIEME_STAGE)
     private StageType milieuStageAPrivilegierPour;
 
     private boolean memeStagiaireProchainStage;
@@ -53,13 +54,20 @@ public class EvaluationMilieuStage {
 
     private LocalTime dateSignatureSuperviseur;
 
+    private String quartTravail1Debut;
+    private String quartTravail1Fin;
+    private String quartTravail2Debut;
+    private String quartTravail2Fin;
+    private String quartTravail3Debut;
+    private String quartTravail3Fin;
+
     // Enum for stage type
     public enum StageType {
         PREMIER_STAGE,
         DEUXIEME_STAGE
     }
 
-    // Enum for trainee capacity
+    // Enum for capacite etudiant
     public enum capaciteEtudiant {
         UN_STAGIAIRE,
         DEUX_STAGIAIRES,

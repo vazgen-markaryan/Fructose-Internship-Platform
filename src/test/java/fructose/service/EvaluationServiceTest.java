@@ -6,7 +6,7 @@ import fructose.model.evaluation.CritereEvaluation;
 import fructose.model.evaluation.EvaluationEmployeur;
 import fructose.model.evaluation.PDF.EvaluationEmployeurPdf;
 import fructose.model.evaluation.SectionEvaluation;
-import fructose.repository.EvaluationRepository;
+import fructose.repository.EvaluationEmployeurRepository;
 import fructose.service.dto.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EvaluationServiceTest {
 
     @Mock
-    private EvaluationRepository evaluationRepository;
+    private EvaluationEmployeurRepository evaluationEmployeurRepository;
 
 
     @Mock
@@ -35,15 +35,12 @@ public class EvaluationServiceTest {
     @InjectMocks
     private EvaluationService evaluationService;
 
-    private CandidatureDTO candidatureDTO;
-    private UtilisateurDTO etudiant;
-    private OffreStageDTO offreStageDTO;
     private EvaluationEmployeurDTO evaluationDTO;
     private EvaluationEmployeur evaluation;
 
     @BeforeEach
     void setUp() {
-        etudiant = new UtilisateurDTO();
+        UtilisateurDTO etudiant = new UtilisateurDTO();
         etudiant.setId(1L);
         etudiant.setFullName("Test User");
         etudiant.setEmail("test@example.com");
@@ -56,7 +53,7 @@ public class EvaluationServiceTest {
         DepartementDTO departementDTO = new DepartementDTO(1L, "Test Department");
         etudiant.setDepartementDTO(departementDTO);
 
-        offreStageDTO = new OffreStageDTO();
+        OffreStageDTO offreStageDTO = new OffreStageDTO();
         offreStageDTO.setId(1L);
         offreStageDTO.setNom("Test Offer");
         offreStageDTO.setDescription("Test Offer Description");
@@ -69,7 +66,7 @@ public class EvaluationServiceTest {
         offreStageDTO.setModaliteTravail("temps_plein");
         offreStageDTO.setDepartementDTO(departementDTO);
 
-        candidatureDTO = new CandidatureDTO();
+        CandidatureDTO candidatureDTO = new CandidatureDTO();
         candidatureDTO.setId(1L);
         candidatureDTO.setEtudiantDTO(etudiant);
         candidatureDTO.setOffreStageDTO(offreStageDTO);
@@ -105,46 +102,28 @@ public class EvaluationServiceTest {
     }
 
     @Test
-    void testCreerEvaluation_Success() {
-        String result = evaluationService.creerEvaluation(EvaluationEmployeurDTO.toDTO(evaluation));
+    void testCreerEvaluation_Employeur_Success() {
+        String result = evaluationService.creerEvaluationEmployeur(EvaluationEmployeurDTO.toDTO(evaluation));
         assertEquals("evaluation_stagiaire_.pdf", result);
-        verify(evaluationRepository, times(1)).save(any(EvaluationEmployeur.class));
-    }
-
-
-    @Test
-    void testCreerEvaluation_NullEvaluation() {
-        assertThrows(IllegalArgumentException.class, () -> evaluationService.generateEvaluationPdf(null));
+        verify(evaluationEmployeurRepository, times(1)).save(any(EvaluationEmployeur.class));
     }
 
     @Test
-    void testFindAllEvaluation() {
-        when(evaluationRepository.findAll()).thenReturn(List.of(evaluation));
+    void testFindAllEvaluationEmployeur() {
+        when(evaluationEmployeurRepository.findAll()).thenReturn(List.of(evaluation));
 
-        List<EvaluationEmployeurDTO> evaluations = evaluationService.findAllEvaluation();
+        List<EvaluationEmployeurDTO> evaluations = evaluationService.findAllEvaluationEmployeur();
 
         assertNotNull(evaluations);
         assertEquals(1, evaluations.size());
     }
 
     @Test
-    void testGenerateEvaluationPdf_NullEvaluation() {
-        assertThrows(IllegalArgumentException.class, () -> evaluationService.generateEvaluationPdf(null));
-    }
+    void testRecupererEvaluationEmployeurParId() {
+        lenient().when(evaluationEmployeurRepository.findById(evaluationDTO.getId())).thenReturn(Optional.ofNullable(evaluation));
 
-    @Test
-    void testRecupererEvaluationParId() {
-        lenient().when(evaluationRepository.findById(evaluationDTO.getId())).thenReturn(Optional.ofNullable(evaluation));
-
-        String result = evaluationService.recupererEvaluationParId(evaluationDTO);
+        String result = evaluationService.recupererEvaluationEmployeurParId(evaluationDTO.getId());
 
         assertEquals("evaluation_stagiaire_.pdf", result);
-    }
-
-    @Test
-    void testInitializeData() {
-        EvaluationEmployeur evaluation = evaluationService.InitializeData(EvaluationEmployeurDTO.toDTO(this.evaluation));
-        assertNotNull(evaluation);
-        assertEquals(evaluationDTO.getSections().size(), evaluation.getSections().size());
     }
 }

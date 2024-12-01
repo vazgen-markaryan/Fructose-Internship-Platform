@@ -2,67 +2,116 @@ package fructose.service;
 
 import fructose.model.evaluation.CritereEvaluation;
 import fructose.model.evaluation.EvaluationEmployeur;
+import fructose.model.evaluation.EvaluationMilieuStage;
 import fructose.model.evaluation.PDF.EvaluationEmployeurPdf;
+import fructose.model.evaluation.PDF.EvaluationMilieuStagePdf;
 import fructose.model.evaluation.SectionEvaluation;
-import fructose.repository.CandidatureRepository;
-import fructose.repository.EvaluationRepository;
+import fructose.repository.EvaluationEmployeurRepository;
+import fructose.repository.EvaluationMilieuStageRepository;
 import fructose.service.dto.EvaluationEmployeurDTO;
+import fructose.service.dto.EvaluationMilieuStageDTO;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EvaluationService {
 
-    @Autowired
-    private EvaluationRepository evaluationRepository;
+    private final EvaluationEmployeurRepository evaluationEmployeurRepository;
+    private final EvaluationMilieuStageRepository evaluationMilieuStageRepository;
+
+    public EvaluationService(EvaluationEmployeurRepository evaluationEmployeurRepository,
+                             EvaluationMilieuStageRepository evaluationMilieuStageRepository) {
+        this.evaluationEmployeurRepository = evaluationEmployeurRepository;
+        this.evaluationMilieuStageRepository = evaluationMilieuStageRepository;
+    }
 
     @Transactional
-    public String creerEvaluation(EvaluationEmployeurDTO evaluationDTO) {
-        EvaluationEmployeur evaluation = InitializeData(evaluationDTO);
-        evaluationRepository.save(evaluation);
-        return generateEvaluationPdf(evaluation);
+    public String creerEvaluationEmployeur(EvaluationEmployeurDTO evaluationDTO) {
+        EvaluationEmployeur evaluation = initializeEvaluationData(evaluationDTO);
+        evaluationEmployeurRepository.save(evaluation);
+        return generatePdf(new EvaluationEmployeurPdf(evaluation));
     }
 
-    public String generateEvaluationPdf(EvaluationEmployeur evaluation) {
-        if (evaluation == null) {
-            throw new IllegalArgumentException("L'évaluation ne peut pas être nulle");
+    @Transactional
+    public String creerEvaluationMilieuStage(EvaluationMilieuStageDTO evaluationDTO) {
+        EvaluationMilieuStage evaluation = initializeEvaluationData(evaluationDTO);
+        evaluationMilieuStageRepository.save(evaluation);
+        return generatePdf(new EvaluationMilieuStagePdf(evaluation));
+    }
+
+    private <T> String generatePdf(T pdfGenerator) {
+        if (pdfGenerator == null) {
+            throw new IllegalArgumentException("PDF generator cannot be null");
         }
         try {
-            System.out.println(evaluation.getCandidature());
-            EvaluationEmployeurPdf evaluationPdf = new EvaluationEmployeurPdf(evaluation);
-            return evaluationPdf.createPdf();
+            if (pdfGenerator instanceof EvaluationEmployeurPdf) {
+                return ((EvaluationEmployeurPdf) pdfGenerator).createPdf();
+            } else if (pdfGenerator instanceof EvaluationMilieuStagePdf) {
+                return ((EvaluationMilieuStagePdf) pdfGenerator).createPdf();
+            } else {
+                throw new IllegalArgumentException("Unsupported PDF generator type: " + pdfGenerator.getClass().getName());
+            }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erreur lors de la génération du PDF de l'évaluation", e);
+            throw new RuntimeException("Error generating the evaluation PDF", e);
         }
     }
 
-    public String recupererEvaluationParId(EvaluationEmployeurDTO evaluationDTO) {
-        EvaluationEmployeur evaluation = InitializeData(evaluationDTO);
-        return generateEvaluationPdf(evaluation);
+    private EvaluationEmployeur initializeEvaluationData(EvaluationEmployeurDTO evaluationDTO) {
+        EvaluationEmployeur evaluation = EvaluationEmployeurDTO.toEntity(evaluationDTO);
+        linkSectionsAndCriteria(evaluation);
+        return evaluation;
     }
 
-    public static EvaluationEmployeur InitializeData(EvaluationEmployeurDTO evaluationDTO) {
-        EvaluationEmployeur evaluation = EvaluationEmployeurDTO.toEntity(evaluationDTO);
+    private EvaluationMilieuStage initializeEvaluationData(EvaluationMilieuStageDTO evaluationDTO) {
+        EvaluationMilieuStage evaluation = EvaluationMilieuStageDTO.toEntity(evaluationDTO);
+        linkSectionsAndCriteria(evaluation);
+        return evaluation;
+    }
+
+    private void linkSectionsAndCriteria(EvaluationEmployeur evaluation) {
         for (SectionEvaluation section : evaluation.getSections()) {
-            section.setEvaluation(evaluation);
+            section.setEvaluationEmployeur(evaluation);
             for (CritereEvaluation critere : section.getCriteres()) {
                 critere.setSection(section);
             }
         }
-        return evaluation;
     }
 
-    public List<EvaluationEmployeurDTO> findAllEvaluation() {
-        List<EvaluationEmployeurDTO> evaluationEmployeurDTOS = new ArrayList<>();
-        List<EvaluationEmployeur> evaluationEmployeurList = evaluationRepository.findAll();
-        for(EvaluationEmployeur evaluationEmployeur : evaluationEmployeurList){
-            evaluationEmployeurDTOS.add(EvaluationEmployeurDTO.toDTO(evaluationEmployeur));
+    private void linkSectionsAndCriteria(EvaluationMilieuStage evaluation) {
+        for (SectionEvaluation section : evaluation.getSections()) {
+            section.setEvaluationMilieuStage(evaluation);
+            for (CritereEvaluation critere : section.getCriteres()) {
+                critere.setSection(section);
+            }
         }
-        return evaluationEmployeurDTOS;
+    }
+
+    public String recupererEvaluationEmployeurParId(Long id) {
+        EvaluationEmployeur evaluation = evaluationEmployeurRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Evaluation not found"));
+        return generatePdf(new EvaluationEmployeurPdf(evaluation));
+    }
+
+    public String recupererEvaluationMilieuStageParId(Long id) {
+        EvaluationMilieuStage evaluation = evaluationMilieuStageRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Evaluation not found"));
+        return generatePdf(new EvaluationMilieuStagePdf(evaluation));
+    }
+
+    public List<EvaluationEmployeurDTO> findAllEvaluationEmployeur() {
+        return evaluationEmployeurRepository.findAll()
+                .stream()
+                .map(EvaluationEmployeurDTO::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<EvaluationMilieuStageDTO> findAllEvaluationMilieuStage() {
+        return evaluationMilieuStageRepository.findAll()
+                .stream()
+                .map(EvaluationMilieuStageDTO::toDTO)
+                .collect(Collectors.toList());
     }
 }

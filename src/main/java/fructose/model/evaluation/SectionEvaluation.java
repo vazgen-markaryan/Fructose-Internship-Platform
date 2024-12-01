@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "evaluation")
+@ToString(exclude = "evaluationEmployeur" + "evaluationMilieuStage")
 public class SectionEvaluation {
 
     @Id
@@ -30,13 +30,13 @@ public class SectionEvaluation {
     private List<CritereEvaluation> criteres;
 
     @ManyToOne
-    @JoinColumn(name = "evaluation_id", nullable = false)
+    @JoinColumn(name = "evaluation_employeur_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
-    private EvaluationEmployeur evaluation;
+    private EvaluationEmployeur evaluationEmployeur;
 
     @ManyToOne
-    @JoinColumn(name = "evaluation_milieu_stage_id", nullable = false)
+    @JoinColumn(name = "evaluation_milieu_stage_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     private EvaluationMilieuStage evaluationMilieuStage;

@@ -36,14 +36,14 @@ class EvaluationControllerTest {
         File tempFile = File.createTempFile("evaluation_stagiaire", ".pdf");
         tempFile.deleteOnExit();
 
-        when(evaluationService.creerEvaluation(evaluationDTO)).thenReturn(tempFile.getAbsolutePath());
+        when(evaluationService.creerEvaluationEmployeur(evaluationDTO)).thenReturn(tempFile.getAbsolutePath());
 
         ResponseEntity<byte[]> response = evaluationController.creerEvaluation(evaluationDTO);
 
         assertEquals(200, response.getStatusCodeValue());
         assertNotNull(response.getBody());
         assertEquals("application/pdf", response.getHeaders().getContentType().toString());
-        verify(evaluationService, times(1)).creerEvaluation(evaluationDTO);
+        verify(evaluationService, times(1)).creerEvaluationEmployeur(evaluationDTO);
     }
 
 
@@ -51,12 +51,12 @@ class EvaluationControllerTest {
     void creerEvaluation_fileNotFound() {
         EvaluationEmployeurDTO evaluationDTO = new EvaluationEmployeurDTO();
         String invalidPath = "invalid/path/evaluation_stagiaire.pdf";
-        when(evaluationService.creerEvaluation(evaluationDTO)).thenReturn(invalidPath);
+        when(evaluationService.creerEvaluationEmployeur(evaluationDTO)).thenReturn(invalidPath);
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class,
                 () -> evaluationController.creerEvaluation(evaluationDTO));
         assertEquals(500, exception.getStatusCode().value());
-        verify(evaluationService, times(1)).creerEvaluation(evaluationDTO);
+        verify(evaluationService, times(1)).creerEvaluationEmployeur(evaluationDTO);
     }
 
     @Test
@@ -66,14 +66,14 @@ class EvaluationControllerTest {
         File tempFile = File.createTempFile("evaluation_stagiaire", ".pdf");
         tempFile.deleteOnExit();
 
-        when(evaluationService.recupererEvaluationParId(evaluationDTO)).thenReturn(tempFile.getAbsolutePath());
+        when(evaluationService.recupererEvaluationEmployeurParId(evaluationDTO.getId())).thenReturn(tempFile.getAbsolutePath());
 
-        ResponseEntity<byte[]> response = evaluationController.recupererEvaluationEleve(evaluationDTO);
+        ResponseEntity<byte[]> response = evaluationController.recupererEvaluationEleve(evaluationDTO.getId());
 
         assertEquals(200, response.getStatusCodeValue());
         assertNotNull(response.getBody());
         assertEquals("application/pdf", response.getHeaders().getContentType().toString());
-        verify(evaluationService, times(1)).recupererEvaluationParId(evaluationDTO);
+        verify(evaluationService, times(1)).recupererEvaluationEmployeurParId(evaluationDTO.getId());
     }
 
 
@@ -83,24 +83,24 @@ class EvaluationControllerTest {
                 new EvaluationEmployeurDTO(),
                 new EvaluationEmployeurDTO()
         );
-        when(evaluationService.findAllEvaluation()).thenReturn(mockEvaluations);
+        when(evaluationService.findAllEvaluationEmployeur()).thenReturn(mockEvaluations);
 
         ResponseEntity<?> response = evaluationController.findAllEvaluation();
 
         assertEquals(200, response.getStatusCodeValue());
         assertNotNull(response.getBody());
         assertTrue(response.getBody() instanceof List);
-        verify(evaluationService, times(1)).findAllEvaluation();
+        verify(evaluationService, times(1)).findAllEvaluationEmployeur();
     }
 
     @Test
     void findAllEvaluation_failure() {
-        when(evaluationService.findAllEvaluation()).thenThrow(new RuntimeException("Database error"));
+        when(evaluationService.findAllEvaluationEmployeur()).thenThrow(new RuntimeException("Database error"));
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class,
                 () -> evaluationController.findAllEvaluation());
         assertEquals(500, exception.getStatusCode().value());
-        verify(evaluationService, times(1)).findAllEvaluation();
+        verify(evaluationService, times(1)).findAllEvaluationEmployeur();
     }
 
     @Test
@@ -110,16 +110,16 @@ class EvaluationControllerTest {
         String nonExistentPdfPath = "mock/path/nonexistent.pdf";
 
         // Simuler que le service retourne un chemin vers un fichier inexistant
-        when(evaluationService.recupererEvaluationParId(evaluationDTO)).thenReturn(nonExistentPdfPath);
+        when(evaluationService.recupererEvaluationEmployeurParId(evaluationDTO.getId())).thenReturn(nonExistentPdfPath);
 
         // Act & Assert
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            evaluationController.recupererEvaluationEleve(evaluationDTO);
+            evaluationController.recupererEvaluationEleve(evaluationDTO.getId());
         });
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
         assertEquals("Error generating evaluation PDF", exception.getReason());
-        verify(evaluationService, times(1)).recupererEvaluationParId(evaluationDTO);
+        verify(evaluationService, times(1)).recupererEvaluationEmployeurParId(evaluationDTO.getId());
     }
 
 }

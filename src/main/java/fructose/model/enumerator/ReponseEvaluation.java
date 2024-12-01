@@ -1,5 +1,8 @@
 package fructose.model.enumerator;
 
+import lombok.Getter;
+
+@Getter
 public enum ReponseEvaluation {
     TOTAL_AGREE("Totalement en accord"),
     MOSTLY_AGREE("Plutôt en accord"),
@@ -10,9 +13,5 @@ public enum ReponseEvaluation {
 
     ReponseEvaluation(String label) {
         this.label = label;
-    }
-
-    public String getLabel() {
-        return label;
     }
 }

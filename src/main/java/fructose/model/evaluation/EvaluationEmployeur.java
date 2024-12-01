@@ -22,7 +22,7 @@ public class EvaluationEmployeur {
     @JoinColumn(name = "candidature_id", nullable = false)
     private Candidature candidature;
 
-    @OneToMany(mappedBy = "evaluation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "evaluationEmployeur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SectionEvaluation> sections;
 
     @Column(name = "appreciation_globale", nullable = false)
