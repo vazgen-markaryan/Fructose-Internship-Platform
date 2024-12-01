@@ -1,6 +1,7 @@
 import {Link, useNavigate} from "react-router-dom";
 import Icon from "@mdi/react";
 import {
+    mdiAccountMultipleRemoveOutline,
     mdiAccountOutline,
     mdiAccountSchoolOutline, mdiAccountTieOutline,
     mdiBriefcaseRemoveOutline,
@@ -51,7 +52,7 @@ const UserManagementDashboard = () => {
                     <section>
                         <div className="toolbar-items">
                             <div className={"toolbar-items"}>
-                                <h4 className="m-0">{t("dashboard_home_page.user_management")}</h4>
+                                <h4 className="m-0">{t("manage_users_page.not_approved_users")}</h4>
                             </div>
                         </div>
                         <br/>
@@ -63,9 +64,9 @@ const UserManagementDashboard = () => {
                                                 <div className="loader"></div>
                                                 :
                                                 <div className="no-items-display">
-                                                    <Icon path={mdiBriefcaseRemoveOutline} size={1.5} />
-                                                    <h6>Aucune candidature</h6>
-                                                    <p className="text-dark text-mini">Commencez par trouver et postuler à des offres de stage</p>
+                                                    <Icon path={mdiAccountMultipleRemoveOutline} size={1.5} />
+                                                    <h6>{t("manage_users_page.no_users_to_approve")}</h6>
+                                                    <p className="text-dark text-mini">{t("manage_users_page.when_created")}</p>
                                                 </div>}
                                         </div>
                                     :

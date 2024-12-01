@@ -16,7 +16,7 @@ const OffresStagesAdminDashboard = () => {
 
     const {t} = useTranslation()
     const {fetchOffresStage} = useContext(OffreStageContext);
-    const [offresStage, setOffresStage] = useState([]);
+    const [offresStage, setOffresStage] = useState(null);
     const {currentUser, currentToken} = useContext(AuthContext);
 
     const [currentOffer, setCurrentOffer] = useState(null);
@@ -26,8 +26,8 @@ const OffresStagesAdminDashboard = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
-    const offresStageInPage = offresStage.slice(startIndex, endIndex);
-    const maxPages = Math.ceil(offresStage.filter(offre => !offre.isApproved && !offre.isRefused).length / itemsPerPage);
+    const offresStageInPage = (offresStage)?offresStage.slice(startIndex, endIndex):null;
+    const maxPages = (offresStage)?Math.ceil(offresStage.filter(offre => !offre.isApproved && !offre.isRefused).length / itemsPerPage):1;
 
 
     useEffect(() => {
@@ -158,21 +158,23 @@ const OffresStagesAdminDashboard = () => {
                     <h4 className="m-0 toolbar-spacer">{t("dashboard_home_page.manage_offers")}</h4>
                     <Link to="/dashboard/creer-offre-stage">
                         <button className={"btn-filled"}>
-                            <Icon path={mdiBriefcasePlusOutline} size={1}/>
-                            {t("dashboard_home_page.add_offer")}
+                            <Icon path={mdiBriefcasePlusOutline} size={1}/> {t("dashboard_home_page.add_offer")}
                         </button>
                     </Link>
                 </div>
                 <br/>
                 <div className="menu-list">
                     {
-                        (offresStage.length === 0)?
+                        (!offresStage || offresStage.length === 0)?
                             <div className="menu-list-item menu-list-empty-list-placeholder">
+                                {(!offresStage)?
+                                <div className="loader"></div>
+                                :
                                 <div className="no-items-display">
                                     <Icon path={mdiBriefcaseRemoveOutline} size={1.5} />
-                                    <h6>Aucune candidature</h6>
-                                    <p className="text-dark text-mini">Commencez par trouver et postuler à des offres de stage</p>
-                                </div>
+                                    <h6>{t("discover_offers_page.no_offers")}</h6>
+                                    <p className="text-dark text-mini">{t("discover_offers_page.future_offers")}</p>
+                                </div>}
                             </div>
                             :
                             <>
@@ -201,7 +203,7 @@ const OffresStagesAdminDashboard = () => {
                     }
 
                     <div className="menu-list-item menu-list-footer">
-                        <p className="m-0">{offresStage.length} {t("discover_offers_page.results")}</p>
+                        <p className="m-0">{(offresStage)?offresStage.length:1} {t("discover_offers_page.results")}</p>
                         <div className="toolbar-spacer"></div>
                         <p className="m-0">{currentPage} {t("dashboard_home_page.of")} {maxPages}</p>
                         <button className="btn-icon" disabled={currentPage === 1} onClick={() => {

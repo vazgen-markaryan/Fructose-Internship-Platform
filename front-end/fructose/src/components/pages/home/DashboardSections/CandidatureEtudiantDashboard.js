@@ -43,6 +43,7 @@ const CandidatureEtudiantDashboard = () => {
 	const startIndex = (currentPage - 1) * itemsPerPage;
 	const candidaturesInPage = sortedCandidatures.slice(startIndex, startIndex + itemsPerPage);
 	const maxPages = Math.max(1, Math.ceil(candidatures.length / itemsPerPage))
+
 	const {
 		fetchContratByCandidatureId,
 		handleSignerContrat,

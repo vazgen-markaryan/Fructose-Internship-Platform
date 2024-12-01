@@ -54,11 +54,11 @@ const PdfPreview = ({file, height = 500, filename = 'file.pdf'}) => {
 		}}>
 			<button onClick={toggleFullScreen} className="btn-icon"
 			        style={{position: 'absolute', top: '10px', right: '10px', zIndex: 10}}>
-				<Icon path={isFullScreen ? mdiFullscreenExit : mdiFullscreen} size={1.2}/>
+				<Icon path={isFullScreen ? mdiFullscreenExit : mdiFullscreen} size={1}/>
 			</button>
 			<a href={file} download={filename} className="button btn-icon"
 			   style={{position: 'absolute', top: '50px', right: '10px', zIndex: 10}}>
-				<Icon path={mdiDownloadOutline} size={1.2}/>
+				<Icon path={mdiDownloadOutline} size={1}/>
 			</a>
 			
 			<div style={{
