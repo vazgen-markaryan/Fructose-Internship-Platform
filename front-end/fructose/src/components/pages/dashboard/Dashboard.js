@@ -21,15 +21,14 @@ import {ViewCandidatures} from "../candidatures/ViewCandidatures";
 
 const Dashboard = () => {
 
-	const [headerStatus, setHeaderStatus] = useState("light")
+	let headerStatus = "light";
 
 	const handleScroll = (event) => {
-		if(event.target.scrollTop > 100){
-			setHeaderStatus("dark")
-		} else {
-			setHeaderStatus("light")
+		const newStatus = event.target.scrollTop > 100 ? "dark" : "light";
+		if (newStatus !== headerStatus) {
+			headerStatus = newStatus;
 		}
-	}
+	};
 
 	return (
 		<>

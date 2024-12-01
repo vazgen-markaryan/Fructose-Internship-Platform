@@ -1,5 +1,12 @@
 import Icon from "@mdi/react";
-import {mdiArrowLeft, mdiArrowRight, mdiBriefcaseOutline, mdiClose} from "@mdi/js";
+import {
+	mdiArrowLeft,
+	mdiArrowRight,
+	mdiBriefcaseOutline,
+	mdiBriefcaseRemoveOutline,
+	mdiChevronLeft, mdiChevronRight,
+	mdiClose
+} from "@mdi/js";
 import CandidatureProgress from "../../candidatures/CandidatureProgress";
 import React, {useContext, useEffect, useState} from "react";
 import {CandidatureContext} from "../../../providers/CandidatureProvider";
@@ -35,7 +42,7 @@ const CandidatureEtudiantDashboard = () => {
 	const itemsPerPage = 5;
 	const startIndex = (currentPage - 1) * itemsPerPage;
 	const candidaturesInPage = sortedCandidatures.slice(startIndex, startIndex + itemsPerPage);
-	const maxPages = Math.ceil(candidatures.length / itemsPerPage)
+	const maxPages = Math.max(1, Math.ceil(candidatures.length / itemsPerPage))
 	const {
 		fetchContratByCandidatureId,
 		handleSignerContrat,
@@ -157,8 +164,8 @@ const CandidatureEtudiantDashboard = () => {
 			})}<br></strong> ${t('dashboard_home_page.acceptance_irreversible')}`,
 			icon: 'warning',
 			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
+			confirmButtonColor: '#ff006c',
+			cancelButtonColor: '#fff',
 			confirmButtonText: t('dashboard_home_page.yes_accept'),
 			cancelButtonText: t('dashboard_home_page.cancel')
 		}).then(async (result) => {
@@ -213,8 +220,8 @@ const CandidatureEtudiantDashboard = () => {
 			text: t('dashboard_home_page.refuse_interview_warning'),
 			icon: 'warning',
 			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
+			confirmButtonColor: '#ff006c',
+			cancelButtonColor: '#fff',
 			confirmButtonText: t('dashboard_home_page.yes_refuse'),
 			cancelButtonText: t('dashboard_home_page.cancel')
 		}).then(async (result) => {
@@ -273,39 +280,53 @@ const CandidatureEtudiantDashboard = () => {
 						<h4>{t("dashboard_home_page.my_applications")}</h4>
 						
 						<div className="menu-list">
-							{candidaturesInPage.map((candidature, index) => (
-								<div className="menu-list-item menu-list-item-64" key={index} onClick={() => handleCandidatureClick(candidature)}>
-									<Icon path={mdiBriefcaseOutline} size={1}/>
-									<div>
-										<h6 className="m-0">{candidature.nomOffre} {(actionIsRequired(candidature.etat)) ?
-											<span className="badge bg-orange">Action requise</span> : null}</h6>
-										<p className="m-0 text-dark">{candidature.compagnie}</p>
-									</div>
-									<div className="toolbar-spacer"></div>
-									<CandidatureProgress etat={candidature.etat}></CandidatureProgress>
-								</div>
-							))}
-							
 							{
-								(candidaturesInPage.length < itemsPerPage)
-									?
-									Array.from({length: itemsPerPage - candidaturesInPage.length}, (_, i) => (
-										<div key={i} className="menu-list-item menu-list-item-64 menu-list-item-placeholder">
+								(candidatures.length === 0)?
+									<div className="menu-list-item menu-list-empty-list-placeholder">
+										<div className="no-items-display">
+											<Icon path={mdiBriefcaseRemoveOutline} size={1.4} />
+											<h6>Aucune candidature</h6>
+											<p className="text-dark text-mini">Commencez par trouver et postuler à des offres de stage</p>
 										</div>
-									))
+									</div>
 									:
-									null
+									<>
+										{candidaturesInPage.map((candidature, index) => (
+											<div className="menu-list-item menu-list-item-64" key={index} onClick={() => handleCandidatureClick(candidature)}>
+												<Icon path={mdiBriefcaseOutline} size={1}/>
+												<div>
+													<h6 className="m-0">{candidature.nomOffre} {(actionIsRequired(candidature.etat)) ?
+														<span className="badge bg-orange">Action requise</span> : null}</h6>
+													<p className="m-0 text-dark">{candidature.compagnie}</p>
+												</div>
+												<div className="toolbar-spacer"></div>
+												<CandidatureProgress etat={candidature.etat}></CandidatureProgress>
+											</div>
+										))}
+
+										{
+											(candidaturesInPage.length < itemsPerPage)
+												?
+												Array.from({length: itemsPerPage - candidaturesInPage.length}, (_, i) => (
+													<div key={i} className="menu-list-item menu-list-item-64 menu-list-item-placeholder">
+													</div>
+												))
+												:
+												null
+										}
+									</>
 							}
+
 							<div className="menu-list-item menu-list-footer">
-								<p className="m-0 text-dark">{candidatures.length} Resultats</p>
+								<p className="m-0">{candidatures.length} {t("discover_offers_page.results")}</p>
 								<div className="toolbar-spacer"></div>
+								<p className="m-0">{currentPage} {t("dashboard_home_page.of")} {maxPages}</p>
 								<button className="btn-icon" disabled={currentPage === 1} onClick={() => {
 									handlePageChange(false)
-								}}><Icon path={mdiArrowLeft} size={1}/></button>
-								<p className="m-0">{currentPage} de {maxPages}</p>
+								}}><Icon path={mdiChevronLeft} size={1}/></button>
 								<button className="btn-icon" disabled={!(currentPage < maxPages)} onClick={() => {
 									handlePageChange(true)
-								}}><Icon path={mdiArrowRight} size={1}/></button>
+								}}><Icon path={mdiChevronRight} size={1}/></button>
 							</div>
 						</div>
 					</section>
