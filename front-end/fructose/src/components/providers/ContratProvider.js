@@ -1,10 +1,13 @@
 import {AuthContext} from "./AuthProvider";
 import React, {useContext} from "react";
+import Swal from "sweetalert2";
+import {useTranslation} from "react-i18next";
 
 const ContratContext = React.createContext(undefined);
 
 const ContratProvider = ({children}) => {
 	const {currentToken} = useContext(AuthContext);
+	const {t} = useTranslation();
 	
 	const fetchContratByCandidatureId = async (id) => {
 		try {
@@ -73,10 +76,28 @@ const ContratProvider = ({children}) => {
 	const handleSignerContrat = (contrat, setCurrentCandidature) => {
 		console.log("Sign contrat: " + contrat.id);
 		try {
-			signContract(contrat.id).then(r =>
-				console.log("Contrat signé avec succès"),
-				setCurrentCandidature(null)
-			);
+			Swal.fire({
+				title: t("sign_contract_swal.confirm_sign_title"),
+				text: t("sign_contract_swal.confirm_sign_text"),
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: t("sign_contract_swal.confirm_sign_confirm_button"),
+				cancelButtonText: t("sign_contract_swal.confirm_sign_cancel_button")
+			}).then((result) => {
+				if (result.isConfirmed) {
+					signContract(contrat.id).then(r => {
+						Swal.fire({
+							title: t("sign_contract_swal.success_title"),
+							icon: 'success',
+							showConfirmButton: false,
+							timer: 2000
+						});
+						setCurrentCandidature(null);
+					});
+				}
+			});
 		} catch (error) {
 			console.error("Error signing contract: " + error);
 		}
@@ -101,10 +122,28 @@ const ContratProvider = ({children}) => {
 	const handleRefuseSignerContrat = (contrat, setCurrentCandidature) => {
 		console.log("Refuse signer contrat: " + contrat.id);
 		try {
-			refuseSignContract(contrat.id).then(r =>
-				console.log("Contrat refusé avec succès"),
-				setCurrentCandidature(null)
-			);
+			Swal.fire({
+				title: t("sign_contract_swal.confirm_refuse_title"),
+				text: t("sign_contract_swal.confirm_refuse_text"),
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#d33',
+				cancelButtonColor: '#3085d6',
+				confirmButtonText: t("sign_contract_swal.confirm_refuse_confirm_button"),
+				cancelButtonText: t("sign_contract_swal.confirm_refuse_cancel_button")
+			}).then((result) => {
+				if (result.isConfirmed) {
+					refuseSignContract(contrat.id).then(r => {
+						Swal.fire({
+							title: t("sign_contract_swal.success_refused_title"),
+							icon: 'error',
+							showConfirmButton: false,
+							timer: 2000
+						});
+						setCurrentCandidature(null);
+					});
+				}
+			});
 		} catch (error) {
 			console.error("Error refusing contract: " + error);
 		}

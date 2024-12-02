@@ -605,5 +605,17 @@
 		"one_refused_contract_text": "Une des parties a refusé le contrat",
 		"waiting_sign_from_parties": "Le contrat est en attente de signatures",
 		"contract_signed": "Toutes les signatures ont été recueillies"
+	},
+	"sign_contract_swal": {
+		"confirm_sign_title": "Êtes-vous sûr?",
+		"confirm_sign_text": "Vous êtes sur le point de signer le contrat. Voulez-vous continuer?",
+		"confirm_sign_confirm_button": "Oui, signer le contrat!",
+		"confirm_sign_cancel_button": "Non, annuler",
+		"success_title": "Vous avez accepté les termes du contrat!",
+		"confirm_refuse_title": "Êtes-vous sûr?",
+		"confirm_refuse_text": "Vous êtes sur le point de refuser de signer le contrat. Voulez-vous continuer?",
+		"confirm_refuse_confirm_button": "Oui, refuser le contrat!",
+		"confirm_refuse_cancel_button": "Non, annuler",
+		"success_refused_title": "Vous avez refusé de signer le contrat!"
 	}
 }
