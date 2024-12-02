@@ -61,17 +61,17 @@ public class EvaluationService {
 
     private EvaluationEmployeur initializeEvaluationData(EvaluationEmployeurDTO evaluationDTO) {
         EvaluationEmployeur evaluation = EvaluationEmployeurDTO.toEntity(evaluationDTO);
-        linkSectionsAndCriteria(evaluation);
+        ajoutSectionCritere(evaluation);
         return evaluation;
     }
 
     private EvaluationMilieuStage initializeEvaluationData(EvaluationMilieuStageDTO evaluationDTO) {
         EvaluationMilieuStage evaluation = EvaluationMilieuStageDTO.toEntity(evaluationDTO);
-        linkSectionsAndCriteria(evaluation);
+        ajoutSectionCritere(evaluation);
         return evaluation;
     }
 
-    private void linkSectionsAndCriteria(EvaluationEmployeur evaluation) {
+    private void ajoutSectionCritere(EvaluationEmployeur evaluation) {
         for (SectionEvaluation section : evaluation.getSections()) {
             section.setEvaluationEmployeur(evaluation);
             for (CritereEvaluation critere : section.getCriteres()) {
@@ -80,7 +80,7 @@ public class EvaluationService {
         }
     }
 
-    private void linkSectionsAndCriteria(EvaluationMilieuStage evaluation) {
+    private void ajoutSectionCritere(EvaluationMilieuStage evaluation) {
         for (SectionEvaluation section : evaluation.getSections()) {
             section.setEvaluationMilieuStage(evaluation);
             for (CritereEvaluation critere : section.getCriteres()) {

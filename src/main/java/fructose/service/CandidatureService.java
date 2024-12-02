@@ -115,21 +115,8 @@ public class CandidatureService {
 		List<Map<String, Object>> result = new ArrayList<>();
 		
 		List<Candidature> candidatures = candidatureRepository.findByCandidatureByOwnerWithoutCv(employeurId);
-		
-		for (Candidature candidature : candidatures) {
-			Map<String, Object> candidatureData = new HashMap<>();
-			
-			candidatureData.put("candidature", CandidatureDTO.toDTO(candidature));
-			Utilisateur etudiant = candidature.getEtudiant();
-			candidatureData.put("etudiant", EtudiantDTO.toDTO(etudiant));
-			OffreStage offreStage = candidature.getOffreStage();
-			candidatureData.put("idOffreStage", offreStage.getId());
-			Cv cv = cvRepository.getAllById(candidatureRepository.getCvId(candidature.getId()));
-			candidatureData.put("cvId", cv.getId());
-			result.add(candidatureData);
-		}
-		
-		return result;
+
+		return getMapsFromCandidature(result, candidatures);
 	}
 	
 	public void modifierEtatCandidature(Long candidatureId, EtatCandidature nouvelEtat) {
@@ -176,6 +163,10 @@ public class CandidatureService {
 
 		List<Candidature> candidatures = candidatureRepository.findStagiaireByOwner(id, EtatCandidature.CONTRAT_SIGNE_TOUS);
 
+		return getMapsFromCandidature(result, candidatures);
+	}
+
+	private List<Map<String, Object>> getMapsFromCandidature(List<Map<String, Object>> result, List<Candidature> candidatures) {
 		for (Candidature candidature : candidatures) {
 			Map<String, Object> candidatureData = new HashMap<>();
 			candidatureData.put("candidature", CandidatureDTO.toDTO(candidature));
@@ -188,5 +179,13 @@ public class CandidatureService {
 			result.add(candidatureData);
 		}
 		return result;
+	}
+
+	public List<Map<String, Object>> findByContratSigneTous() {
+		List<Map<String, Object>> result = new ArrayList<>();
+
+		List<Candidature> candidatures = candidatureRepository.findByEtat(EtatCandidature.CONTRAT_SIGNE_TOUS);
+
+		return getMapsFromCandidature(result, candidatures);
 	}
 }

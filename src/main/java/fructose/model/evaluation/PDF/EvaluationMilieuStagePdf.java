@@ -11,7 +11,6 @@ import fructose.model.Utilisateur;
 import fructose.model.evaluation.CritereEvaluation;
 import fructose.model.evaluation.EvaluationMilieuStage;
 import fructose.model.evaluation.SectionEvaluation;
-import java.util.Date;
 
 
 public class EvaluationMilieuStagePdf {
