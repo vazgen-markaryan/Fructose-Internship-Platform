@@ -155,7 +155,7 @@ const DiscoverOffers = () => {
 			fetchCandidaturesById(currentUser.id);
 		}
 		// Il dit d'inclure fetchCandidaturesById dans le tableau de dépendances, et il commence à spam des requetes dans Reseau
-	}, [currentUser]);
+	}, [currentUser, currentOffer]);
 	
 	const isOfferApplied = (offerId) => {
 		return candidatures.some((candidature) => candidature.offreStageId === offerId);
@@ -173,7 +173,7 @@ const DiscoverOffers = () => {
 				}
 			})();
 		}
-	}, [isUserInit, fetchOffresStage, filters]);
+	}, [isUserInit, filters]);
 	
 	useEffect(() => {
 		if (offers.length > 0){
