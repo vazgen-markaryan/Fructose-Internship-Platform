@@ -16,12 +16,6 @@ const ContratProvider = ({children}) => {
 				}
 			});
 			
-			if (!response.ok) {
-				const errorText = await response.text();
-				console.error('Error response:', errorText);
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			
 			return await response.json();
 		} catch (error) {
 			console.error('Error fetching contrat:', error);

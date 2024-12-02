@@ -29,6 +29,7 @@ const DashboardAdmin = () => {
 	const textareaRef = useRef(null);
 	const {currentToken} = useContext(AuthContext)
 	const [isRejectModalOpenCv, setRejectModalOpenCv] = useState(false);
+	const [needFetchingContracts, setNeedFetchingContracts] = useState(false);
 	
 	useEffect(() => {
 		if (currentUser && isUserInit) {
@@ -477,9 +478,9 @@ const DashboardAdmin = () => {
 				)}
 				<div>
 					<br></br>
-					<ListCandidatureEnAttenteContrat/>
+					<ListCandidatureEnAttenteContrat needFetchingContracts={setNeedFetchingContracts}/>
 					<br></br>
-					<ViewContrats/>
+					<ViewContrats needFetchingContracts={needFetchingContracts} setNeedFetchingContracts={setNeedFetchingContracts}/>
 				</div>
 				{isRejectModalOpenCv && (
 					<Modal onClose={() => setRejectModalOpenCv(false)} onSend={() => {

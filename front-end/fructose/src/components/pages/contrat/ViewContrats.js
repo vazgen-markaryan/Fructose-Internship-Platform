@@ -5,7 +5,7 @@ import {mdiBriefcasePlusOutline} from "@mdi/js";
 import {t} from "i18next";
 import PdfFromContratModal from "../../../utilities/modal/PdfFromContratModal";
 
-const ViewContrats = () => {
+const ViewContrats = ({needFetchingContracts, setNeedFetchingContracts}) => {
     const [contrats, setContrats] = useState([]);
     const { fetchContrats } = useContext(ContratContext);
     const [currentPage, setCurrentPage] = useState(1);
@@ -14,8 +14,12 @@ const ViewContrats = () => {
     const itemsPerPage = 10;
 
     useEffect(() => {
+        console.log('Fetching contrats');
         fetchData();
-    }, []);
+        if (needFetchingContracts) {
+            setNeedFetchingContracts(false);
+        }
+    }, [needFetchingContracts]);
 
     const fetchData = async () => {
         const response = await fetchContrats();

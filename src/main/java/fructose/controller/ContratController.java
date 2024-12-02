@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.util.Collections;
 
 @RestController
 @RequestMapping ("/contrats")
@@ -146,6 +147,8 @@ public class ContratController {
 				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not an admin");
 			}
 			return new ResponseEntity<>(contratService.getContrats(), HttpStatus.OK);
+		}catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting contracts", e);
 		}

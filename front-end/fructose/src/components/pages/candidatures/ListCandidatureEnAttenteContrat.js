@@ -6,7 +6,7 @@ import {mdiBriefcasePlusOutline} from "@mdi/js";
 import Icon from "@mdi/react";
 import {t} from "i18next";
 
-const ListCandidatureEnAttenteContrat = () => {
+const ListCandidatureEnAttenteContrat = ({needFetchingContracts}) => {
 		const {fetchCandidatureByEtatAccepteApresEntrevue} = useContext(CandidatureContext);
 		const {currentToken} = useContext(AuthContext);
 		const [filteredCandidatures, setFilteredCandidatures] = useState([]);
@@ -50,6 +50,7 @@ const ListCandidatureEnAttenteContrat = () => {
 						'Authorization': currentToken
 					}
 				});
+				needFetchingContracts(true);
 				setFilteredCandidatures(filteredCandidatures.filter(c => c.id !== selectedCandidature.id));
 			} else {
 				console.error('Error creating contrat');
