@@ -81,8 +81,8 @@ const ContratProvider = ({children}) => {
 				text: t("sign_contract_swal.confirm_sign_text"),
 				icon: 'question',
 				showCancelButton: true,
-				confirmButtonColor: '#3085d6',
-				cancelButtonColor: '#d33',
+				confirmButtonColor: '#ff006c',
+				cancelButtonColor: '#fff',
 				confirmButtonText: t("sign_contract_swal.confirm_sign_confirm_button"),
 				cancelButtonText: t("sign_contract_swal.confirm_sign_cancel_button")
 			}).then((result) => {
@@ -127,8 +127,8 @@ const ContratProvider = ({children}) => {
 				text: t("sign_contract_swal.confirm_refuse_text"),
 				icon: 'question',
 				showCancelButton: true,
-				confirmButtonColor: '#d33',
-				cancelButtonColor: '#3085d6',
+				confirmButtonColor: '#ff006c',
+				cancelButtonColor: '#fff',
 				confirmButtonText: t("sign_contract_swal.confirm_refuse_confirm_button"),
 				cancelButtonText: t("sign_contract_swal.confirm_refuse_cancel_button")
 			}).then((result) => {
