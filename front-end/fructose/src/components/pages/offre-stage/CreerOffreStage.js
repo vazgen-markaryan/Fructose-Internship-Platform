@@ -22,7 +22,7 @@ const CreerOffreStage = () => {
 		nombreHeuresSemaine: 1,
 		nombrePostes: 1,
 		dateLimiteCandidature: new Date(),
-		ownerDTO: {id: '', fullName: ''}
+		ownerDTO: null
 	});
 	
 	const {currentToken} = useContext(AuthContext);
@@ -170,7 +170,6 @@ const CreerOffreStage = () => {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const errorMessage = validateFields();
-		console.log(errorMessage)
 		if (Object.keys(errorMessage).length > 0) {
 			setErrors(errorMessage);
 		} else {
@@ -182,11 +181,14 @@ const CreerOffreStage = () => {
 				if (departement) {
 					offreStage.departementDTO = departement;
 				}
-				
-				const employeur = await getEmployeur(offreStage.ownerDTO.id, currentToken);
-				if (employeur) {
-					offreStage.ownerDTO = employeur;
+
+				if(offreStage.ownerDTO){
+					const employeur = await getEmployeur(offreStage.ownerDTO.id, currentToken);
+					if (employeur) {
+						offreStage.ownerDTO = employeur;
+					}
 				}
+
 				fetch('/creer-offre-stage', {
 					method: 'POST',
 					headers: {
@@ -281,7 +283,7 @@ const CreerOffreStage = () => {
 										<option value="">{t("creer_offre_stage_page.employeur_select")}</option>
 										{employeurs.map((employeur) => (
 											<option key={employeur.id}
-											        value={employeur.id}>{employeur.fullName} - {employeur.compagnie}</option>
+											        value={employeur.id}>{employeur.fullName} - {employeur.companyName}</option>
 										))}
 									</select>
 								</>
@@ -332,7 +334,7 @@ const CreerOffreStage = () => {
 							<select name="typeEmploi" onChange={handleInputChange} value={offreStage.typeEmploi}
 							        required>
 								<option
-									value="select">{t("creer_offre_stage_page.modalites_travail.select")}</option>
+									value="">{t("creer_offre_stage_page.modalites_travail.select")}</option>
 								<option
 									value="virtuel">{t("creer_offre_stage_page.modalites_travail.virtuel")}</option>
 								<option
@@ -496,12 +498,14 @@ const CreerOffreStage = () => {
 						backgroundColor: "transparent",
 						height: "100%"
 					}}>
-						<div>
-							<Icon path={mdiCheckCircleOutline} size={2.5}/>
-							<h3>Succes</h3>
-							<p>Votre offre de stage a été soumise. Veuillez allouer un délai afin que l'administrateur approuve votre offre.</p>
-							<br/>
-							<button className="btn-filled">Revenir à l'accueil</button>
+						<div className="loader-container">
+							<div>
+								<Icon path={mdiCheckCircleOutline} size={2.5}/>
+								<h3>Succes</h3>
+								<p>Votre offre de stage a été soumise. Veuillez allouer un délai afin que l'administrateur approuve votre offre.</p>
+								<br/>
+								<button type="button" className="btn-filled">Revenir à l'accueil</button>
+							</div>
 						</div>
 					</div>
 				)

@@ -45,11 +45,12 @@ public class Cv {
 	private String commentaireRefus = "Refusé par Defaut";
 	
 	
-	public Cv(Long id, @Nullable String filename, Boolean isApproved, Boolean isRefused, Utilisateur utilisateur) {
+	public Cv(Long id, @Nullable String filename, Boolean isApproved, Boolean isRefused, Utilisateur utilisateur, String commentaireRefus) {
 		this.id = id;
 		this.filename = filename;
 		this.isApproved = isApproved;
 		this.isRefused = isRefused;
 		this.utilisateur = utilisateur;
+		this.commentaireRefus = commentaireRefus;
 	}
 }
