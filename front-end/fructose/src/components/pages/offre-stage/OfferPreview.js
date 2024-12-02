@@ -8,7 +8,7 @@ import {
 	mdiCheckCircleOutline,
 	mdiDeleteOutline,
 	mdiDomain,
-	mdiMapMarkerOutline
+	mdiMapMarkerOutline, mdiPencilOutline
 } from "@mdi/js";
 import {differenceInMonths, endOfMonth, format} from "date-fns";
 import {useNavigate} from "react-router-dom";
@@ -172,7 +172,7 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 								<h5>Actions</h5>
 								<div style={{display: "flex", gap: "10px", marginBottom: "20px"}}>
 									<button className="btn-option" onClick={() => navigate(`/dashboard/modifier-offre-stage/${currentOffer.id}`)}>
-										<Icon path={mdiCheck} size={1}/>{t('manage_offre_stage.buttons.modify')}
+										<Icon path={mdiPencilOutline} size={1} />{t('manage_offre_stage.buttons.modify')}
 									</button>
 									<button className="btn-option" onClick={() => handleDeleteOffreStage(currentOffer.id)}>
 										<Icon path={mdiDeleteOutline} size={1}/>{t('manage_offre_stage.buttons.delete')}
