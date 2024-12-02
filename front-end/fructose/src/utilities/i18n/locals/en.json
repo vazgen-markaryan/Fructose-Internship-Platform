@@ -256,7 +256,7 @@
 		"initial_application": "Initial Application",
 		"waiting_employer_response": "Waiting for Employer's Response",
 		"approve": "Approved",
-		"rejected_with_comment": "Rejected with Comment",
+		"rejected_with_comment": "Rejected",
 		"interview": "Interview",
 		"waiting_interview_acceptance": "Waiting for Interview Acceptance",
 		"interview_date": "Interview Date",
@@ -554,7 +554,16 @@
 			"error_commentaire_refus": "Please enter a reason for refusal",
 			"error_date_entrevue": "Please select an interview date"
 		},
+		"categories": {
+			"nouvelles_candidatures": "New Applications",
+			"en_entrevue": "Applications in interview",
+			"en_signature": "Applications in Contract Signature",
+			"accepte_total": "Accepted Position",
+			"rejete_total": "Rejected Applications"
+		},
 		"title": "Application Management",
+		"no_comment": "No Comment",
+		"employeur_comment": "Comment from the employer",
 		"new_applications": "New Applications",
 		"in_interview": "In Interview",
 		"in_contract_signature": "In Contract Signature",
@@ -613,7 +622,10 @@
 		"accept": "Accept",
 		"you_passed_entrevue": "You passed the interview. Congratulations!",
 		"student_passed_entrevue": "Student passed the interview",
-		"waiting_for_your_signature" : "Waiting for your signature"
+		"waiting_for_your_signature" : "Waiting for your signature",
+		"employeur_candidature_initiale_info": "The student has submitted an application for your position. Examine their file, and click on Accept to continue the process, or Reject if you think they are not eligible for this position.",
+		"titre_poste_obtenu" : "Position obtained",
+		"poste_obtenu": "Congratulations! You got this position and are now part of the team."
 	},
 	"manage_contract_en_attente": {
 		"title": "Internship Contracts waiting for generation"

@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import Icon from "@mdi/react";
 import {mdiBriefcaseVariantOutline, mdiCheckCircleOutline, mdiFileSign, mdiForumOutline, mdiSendOutline} from "@mdi/js";
 
-const CandidatureProgress = ({etat}) => {
+const CandidatureProgress = ({candidature}) => {
 	
 	const {t} = useTranslation();
 	const {currentUser} = useContext(AuthContext);
@@ -21,9 +21,10 @@ const CandidatureProgress = ({etat}) => {
 		"POSTE_OBTENU",
 	]
 	
-	let indexEtat = etats.indexOf(etat)
+	let indexEtat = etats.indexOf(candidature.etat)
 	
 	const getEtatColor = (step) => {
+		let etat = candidature.etat
 		if (step === 1) {
 			if (etat === "POSTE_OBTENU") {
 				return "bg-green"
@@ -58,12 +59,12 @@ const CandidatureProgress = ({etat}) => {
 			// TODO: IMPLEMENTER LA VERIFICATION DE SIGNATURE
 			if (etat === "POSTE_OBTENU") {
 				return "bg-green"
-			} else if (etat === "ACCEPTE_APRES_ENTREVUE") {
-				return "bg-orange"
+			} else if (etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" && (candidature.needsAttention && candidature.needsAttention === true)) {
+				return "bg-orange-breathing"
 			} else if (indexEtat > 7) {
 				return "bg-green"
-			} else if (etat === "CONTRAT_CREE_PAR_GESTIONNAIRE") {
-				return "bg-orange-breathing"
+			} else if (etat === "ACCEPTE_APRES_ENTREVUE" || etat === "CONTRAT_CREE_PAR_GESTIONNAIRE") {
+				return "bg-orange"
 			}
 		} else if (step === 5) {
 			if (etat === "POSTE_OBTENU") {

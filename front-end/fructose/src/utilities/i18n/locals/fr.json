@@ -554,7 +554,16 @@
 			"error_commentaire_refus": "Veuillez entrer un commentaire pour le refus",
 			"error_date_entrevue": "Veuillez entrer une date pour l'entrevue"
 		},
+		"categories": {
+			"nouvelles_candidatures": "Nouvelles candidatures",
+			"en_entrevue": "Candatures en entrevue",
+			"en_signature": "Candatures en signature de contrat",
+			"accepte_total": "Candatures acceptées",
+			"rejete_total": "Candatures rejetées"
+		},
 		"title": "Gestion des Candidatures",
+		"no_comment": "Aucun Commentaire",
+		"employeur_comment": "Commentaire de l'employeur",
 		"new_applications": "Nouvelles candidatures",
 		"in_interview": "En Entrevue",
 		"in_contract_signature": "En signature Contrat",
@@ -572,7 +581,7 @@
 		"approve": "Approuver",
 		"refuse": "Refuser",
 		"approved": "Approuvé",
-		"refused_with_comment": "Refusé avec le commentaire : {{comment}}",
+		"refused_with_comment": "Refusé",
 		"interview": "Entrevue",
 		"waiting_for_student_confirmation": "En attente de la confirmation d'étudiant",
 		"proposed_interview_date": "Date de l'entrevue proposé: {{date}}",
@@ -613,7 +622,10 @@
 		"accept": "Accepter",
 		"you_passed_entrevue": "Vous avez passé l'entrevue avec succès.",
 		"student_passed_entrevue": "Étudiant a passé l'entrevue avec succès.",
-		"waiting_for_your_signature" : "En attente de votre signature"
+		"waiting_for_your_signature" : "En attente de votre signature",
+		"employeur_candidature_initiale_info": "L'étudiant a soumis une candidature pour votre poste. Examinez son dossier, et cliquer sur Accepter pour continuer la démarche, ou Rejeter si vous pensez qu'il n'est pas éligible pour ce poste.",
+		"titre_poste_obtenu" : "Poste obtenu",
+		"poste_obtenu": "Félicitations! Vous avez obtenu ce poste et faites maintenant partie de l'équipe."
 	},
 	"manage_contract_en_attente": {
 		"title": "Contrats de stage en attente de génération"

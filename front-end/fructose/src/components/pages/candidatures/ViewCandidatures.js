@@ -251,22 +251,19 @@ const ViewCandidatures = () => {
 					}
 					break
 				case "en_signature":
-					if (candidature.candidature.etat === "CONTRAT_SIGNE_EMPLOYEUR" ||
-						candidature.candidature.etat === "CONTRAT_SIGNE_ETUDIANT" ||
-						candidature.candidature.etat === "ACCEPTE_APRES_ENTREVUE" ||
+					if (candidature.candidature.etat === "ACCEPTE_APRES_ENTREVUE" ||
 						candidature.candidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE") {
 						newFilteredCandidatures.push(i)
 					}
 					break
 				case "accepte_total":
-					if (candidature.candidature.etat === "CONTRAT_SIGNE_TOUS") {
+					if (candidature.candidature.etat === "POSTE_OBTENU") {
 						newFilteredCandidatures.push(i)
 					}
 					break
 				case "rejete_total":
 					if (candidature.candidature.etat === "REFUSEE" ||
 						candidature.candidature.etat === "REFUSEE_APRES_ENTREVUE" ||
-						candidature.candidature.etat === "CONTRAT_REFUSE_ETUDIANT" ||
 						candidature.candidature.etat === "ENTREVUE_REFUSE_ETUDIANT") {
 						newFilteredCandidatures.push(i)
 					}
@@ -435,7 +432,7 @@ const ViewCandidatures = () => {
 				
 				<div className="dashboard-card" style={{width: "70%", maxHeight: "550px", overflowY: "auto", height: "80vh"}}>
 					<section>
-						<h5>{t("view_candidatures_page.your_applications")}</h5>
+						<h5>{t("view_candidatures_page.categories." + candidatureCategory)}</h5>
 						<div className="menu-list">
 							{
 								(filteredCandidaturesIndexes.length > 0) ?

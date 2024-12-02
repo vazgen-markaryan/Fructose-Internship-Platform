@@ -2,7 +2,7 @@ package fructose.service;
 
 import fructose.model.Contrat;
 import fructose.model.ContratPdf;
-import fructose.model.enumerator.Role;
+import fructose.model.enumerator.EtatCandidature;
 import fructose.repository.ContratRepository;
 import fructose.service.dto.CandidatureDTO;
 import fructose.service.dto.ContratDTO;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
@@ -102,6 +101,9 @@ public class ContratService {
 				break;
 			default:
 				throw new IllegalArgumentException("Utilisateur n'est pas un employeur ou un étudiant");
+		}
+		if(!contrat.getSignatureEtudiant().equals("Non signe") && !contrat.getSignatureEmployeur().equals("Non signe") && !contrat.getSignatureGestionnaire().equals("Non signe")){
+			candidatureService.modifierEtatCandidature(contrat.getCandidature().getId(), EtatCandidature.POSTE_OBTENU);
 		}
 		contratRepository.save(contrat);
 	}

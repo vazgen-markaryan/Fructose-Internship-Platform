@@ -54,6 +54,10 @@ const CandidatureEtudiantDashboard = () => {
 	const [contrat, setContrat] = useState(null);
 	
 	const handleSignerContratClick = () => {
+		const updatedCandidatures = candidatures.map(item =>
+			item.id === currentCandidature.id ? { ...item, needsAttention: false } : item
+		);
+		setCandidatures(updatedCandidatures)
 		handleSignerContrat(contrat, setCurrentCandidature);
 	};
 	
@@ -61,10 +65,9 @@ const CandidatureEtudiantDashboard = () => {
 		handleRefuseSignerContrat(contrat, setCurrentCandidature);
 	}
 
-	const fetchContrat = async () => {
+	const fetchContrat = async (id) => {
 		try {
-			const data = await fetchContratByCandidatureId(currentCandidature.id);
-			setContrat(data);
+			return await fetchContratByCandidatureId(id);
 		} catch (error) {
 			console.error("Erreur " + error);
 		}
@@ -72,7 +75,9 @@ const CandidatureEtudiantDashboard = () => {
 
 	useEffect(() => {
 		if (currentCandidature && currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE") {
-			fetchContrat();
+			(async function () {
+				setContrat(await fetchContrat(currentCandidature.id))
+			})();
 		}
 	}, [currentCandidature]);
 
@@ -89,7 +94,30 @@ const CandidatureEtudiantDashboard = () => {
 		// Mais si le faire il va envoyer 9999 requêtes dans Inspect -> Network
 		// It's ok, i'm just a chill guy 👈🐻👉
 	}, [currentUser]);
-	
+
+	const isContratsVerifInitialized = useRef(false);
+
+	useEffect(() => {
+		if(currentUser && !isContratsVerifInitialized.current){
+			(async function () {
+
+				for (let i = 0; i < candidatures.length; i++){
+					let can = candidatures[i];
+					if(can.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE"){
+						let contrat = await fetchContrat(can.id);
+						if(contrat && contrat.signatureEtudiant && contrat.signatureEtudiant === "Non signe"){
+							const updatedCandidatures = candidatures.map(item =>
+								item.id === can.id ? { ...item, needsAttention: true } : item
+							);
+							setCandidatures(updatedCandidatures)
+						}
+					}
+				}
+			})();
+			isContratsVerifInitialized.current = true;
+		}
+	}, [candidatures]);
+
 	const handleCandidatureClick = (candidature) => {
 		setCurrentCandidature(candidature)
 	};
@@ -106,8 +134,8 @@ const CandidatureEtudiantDashboard = () => {
 		}
 	};
 	
-	const actionIsRequired = (etat) => {
-		return etat === "ENTREVUE_PROPOSE" || etat === "CONTRAT_CREE_PAR_GESTIONNAIRE";
+	const actionIsRequired = (candidature) => {
+		return candidature.etat === "ENTREVUE_PROPOSE" || (candidature.needsAttention && candidature.needsAttention === true);
 	}
 	
 	const GetCandidaturesWindow = () => {
@@ -300,12 +328,12 @@ const CandidatureEtudiantDashboard = () => {
 											<div className="menu-list-item menu-list-item-64" key={index} onClick={() => handleCandidatureClick(candidature)}>
 												<Icon path={mdiBriefcaseOutline} size={1}/>
 												<div>
-													<h6 className="m-0">{candidature.nomOffre} {(actionIsRequired(candidature.etat)) ?
+													<h6 className="m-0">{candidature.nomOffre} {(actionIsRequired(candidature)) ?
 														<span className="badge bg-orange">Action requise</span> : null}</h6>
 													<p className="m-0 text-dark">{candidature.compagnie}</p>
 												</div>
 												<div className="toolbar-spacer"></div>
-												<CandidatureProgress etat={candidature.etat}></CandidatureProgress>
+												<CandidatureProgress candidature={candidature}></CandidatureProgress>
 											</div>
 										))}
 
