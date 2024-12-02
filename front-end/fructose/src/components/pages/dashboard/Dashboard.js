@@ -39,6 +39,7 @@ const Dashboard = () => {
 				<div className="dashboard-content">
 
 					<CvProvider>
+						<CandidatureProvider>
 						<OffreStageProvider>
 							<ContratProvider>
 							    <Routes>
@@ -52,6 +53,7 @@ const Dashboard = () => {
 							    </Routes>
 							</ContratProvider>
 						</OffreStageProvider>
+						</CandidatureProvider>
 						<CandidatureProvider>
 							<ContratProvider>
 								<Routes>

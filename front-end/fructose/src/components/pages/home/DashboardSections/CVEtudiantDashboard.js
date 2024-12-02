@@ -22,7 +22,7 @@ const CVEtudiantDashboard = () => {
     const navigate = useNavigate();
 
     const handleCvClick = (cv) => {
-        navigate("/dashboard/manage-cvs", {state: {selectedCv: cv}});
+        navigate(`/dashboard/manage-cvs?cv=${cv.id}`);
     };
 
     const goToCvPage = () => {
