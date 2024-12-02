@@ -1,12 +1,14 @@
 package fructose.model.evaluation;
 
 import fructose.model.Candidature;
+import fructose.model.enumerator.CapaciteEtudiant;
+import fructose.model.enumerator.StageType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -35,7 +37,7 @@ public class EvaluationMilieuStage {
 
     // Capacite etudiant (e.g., UN_STAGIAIRE, DEUX_STAGIAIRES, etc.)
     @Enumerated(EnumType.STRING)
-    private capaciteEtudiant capaciteEtudiant;
+    private CapaciteEtudiant capaciteEtudiant;
 
     private int nbHeuresParSemPremierMois;
     private int nbHeuresParSemDeuxiemeMois;
@@ -52,7 +54,7 @@ public class EvaluationMilieuStage {
 
     private String signatureSuperviseur;
 
-    private LocalTime dateSignatureSuperviseur;
+    private LocalDate dateSignatureSuperviseur;
 
     private String quartTravail1Debut;
     private String quartTravail1Fin;
@@ -60,18 +62,4 @@ public class EvaluationMilieuStage {
     private String quartTravail2Fin;
     private String quartTravail3Debut;
     private String quartTravail3Fin;
-
-    // Enum for stage type
-    public enum StageType {
-        PREMIER_STAGE,
-        DEUXIEME_STAGE
-    }
-
-    // Enum for capacite etudiant
-    public enum capaciteEtudiant {
-        UN_STAGIAIRE,
-        DEUX_STAGIAIRES,
-        TROIS_STAGIAIRES,
-        PLUS_DE_TROIS
-    }
 }

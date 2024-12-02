@@ -1,9 +1,9 @@
 package fructose.controller;
 
 import fructose.service.EvaluationService;
+import fructose.service.UtilisateurService;
 import fructose.service.dto.EvaluationEmployeurDTO;
 import fructose.service.dto.EvaluationMilieuStageDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,8 +17,19 @@ import java.util.List;
 @RequestMapping("/evaluations")
 public class EvaluationController {
 
-    @Autowired
-    private EvaluationService evaluationService;
+    private final EvaluationService evaluationService;
+    private final UtilisateurService utilisateurService;
+
+    private void validateToken(String token) {
+        if (!utilisateurService.validationToken(token)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    public EvaluationController(EvaluationService evaluationService, UtilisateurService utilisateurService) {
+        this.evaluationService = evaluationService;
+        this.utilisateurService = utilisateurService;
+    }
 
     @PostMapping("/employeur/creer")
     public ResponseEntity<byte[]> creerEvaluation(@RequestBody EvaluationEmployeurDTO evaluationDTO){
@@ -53,7 +64,9 @@ public class EvaluationController {
     }
 
     @PostMapping("/milieu-stage/creer")
-    public ResponseEntity<byte[]> creerEvaluationMilieuStage(@RequestBody EvaluationMilieuStageDTO evaluationDTO){
+    public ResponseEntity<byte[]> creerEvaluationMilieuStage(@RequestHeader("Authorization") String token, @RequestBody EvaluationMilieuStageDTO evaluationDTO){
+        validateToken(token);
+        System.out.println(evaluationDTO);
         try {
             String pdfPath = evaluationService.creerEvaluationMilieuStage(evaluationDTO);
             return getResponseEntity(pdfPath);

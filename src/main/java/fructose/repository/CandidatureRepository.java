@@ -34,6 +34,6 @@ public interface CandidatureRepository extends JpaRepository<Candidature, Long> 
 	List<Candidature> findStagiaireByOwner(@Param("ownerId") Long id, @Param("etat") EtatCandidature etat);
 
 	@Query("SELECT new fructose.model.Candidature(c.id, c.etudiant, c.offreStage, c.etat, c.commentaireRefus, c.dateEntrevue) " +
-	"FROM Candidature c WHERE c.etat = :etat")
-	List<Candidature> findByEtat(@Param("etat") EtatCandidature etat);
+			"FROM Candidature c LEFT JOIN EvaluationMilieuStage e ON c.id = e.candidature.id WHERE c.etat = :etat AND e.id IS NULL")
+	List<Candidature> findByEtatAndEvaluationMilieuStageNotExist(@Param("etat") EtatCandidature etat);
 }

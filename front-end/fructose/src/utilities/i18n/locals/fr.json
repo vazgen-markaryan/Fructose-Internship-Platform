@@ -689,7 +689,9 @@
 		}
 	},
 	"evaluation_milieu_stage": {
+		"evaluation_milieu_stage": "Évaluation(s) de milieu de stage",
 		"milieu_stage_a_evaluer": "Milieu de stage à évaluer",
+		"no_evaluation": "Aucune évaluation de milieu de stage à afficher pour le moment",
 		"no_milieu_stage_a_evaluer": "Aucun milieu de stage à évaluer",
 		"evaluation_non_disponible": "Évaluation non disponible avant :",
 		"evaluation_disponible": "Évaluation disponible",

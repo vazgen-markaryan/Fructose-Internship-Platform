@@ -21,7 +21,7 @@ public class EvaluationMilieuStagePdf {
     }
 
     public String createPdf() {
-        String dest = "evaluation_stagiaire_" + ".pdf";
+        String dest = "evaluation_milieu_stage_" + ".pdf";
         Candidature candidature = evaluation.getCandidature();
         Utilisateur etudiant = candidature.getEtudiant();
         OffreStage offreStage = candidature.getOffreStage();
@@ -39,7 +39,7 @@ public class EvaluationMilieuStagePdf {
             document.add(new Paragraph("Nom du superviseur : " + offreStage.getOwner().getFullName()));
             document.add(new Paragraph("Fonction : " + offreStage.getNom()));
             document.add(new Paragraph("Date du stage : " + offreStage.getDateDebut() + " - " + offreStage.getDateFin()));
-            document.add(new Paragraph("Stage (encercler) : " + evaluation.getStageType().name()));
+            document.add(new Paragraph("Stage : " + evaluation.getStageType().name()));
 
 
             document.add(new Paragraph("\nÉVALUATION").setBold().setFontSize(12));
@@ -65,7 +65,7 @@ public class EvaluationMilieuStagePdf {
             document.add(new Paragraph("Mêmes stagiaires pour prochain stage : " + (evaluation.isMemeStagiaireProchainStage() ? "OUI" : "NON")));
 
             document.add(new Paragraph("\nSIGNATURE").setBold().setFontSize(12));
-            document.add(new Paragraph("Signature de l’enseignant : " + evaluation.getSignatureSuperviseur()));
+            document.add(new Paragraph("Signature du Gestionnaire : " + evaluation.getSignatureSuperviseur()));
             document.add(new Paragraph("Date de signature : " + evaluation.getDateSignatureSuperviseur()));
 
             document.close();

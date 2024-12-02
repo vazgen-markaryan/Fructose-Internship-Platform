@@ -55,7 +55,10 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.GET, "/candidatures/**").authenticated()
 				.requestMatchers(HttpMethod.GET, "/candidatures/stagiaireByOwner").authenticated()
 				.requestMatchers(HttpMethod.GET, "/api/contrats/generate").authenticated()
-				.requestMatchers(HttpMethod.POST, "/evaluations/creer").authenticated()
+				.requestMatchers(HttpMethod.GET, "/evaluations/employeur/all-evaluation").authenticated()
+				.requestMatchers(HttpMethod.GET, "/evaluations/milieu-stage/all-evaluation").authenticated()
+				.requestMatchers(HttpMethod.POST, "/evaluations/employeur/creer").authenticated()
+				.requestMatchers(HttpMethod.POST, "/evaluations/milieu-stage/creer").authenticated()
 				.anyRequest().authenticated()
 			).addFilterBefore(new JwtAuthentificationFilter(tokenProvider, userRepository), UsernamePasswordAuthenticationFilter.class);
 		return http.build();

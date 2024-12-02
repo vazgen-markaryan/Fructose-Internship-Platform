@@ -50,6 +50,7 @@ public class EvaluationService {
             if (pdfGenerator instanceof EvaluationEmployeurPdf) {
                 return ((EvaluationEmployeurPdf) pdfGenerator).createPdf();
             } else if (pdfGenerator instanceof EvaluationMilieuStagePdf) {
+                System.out.println(pdfGenerator);
                 return ((EvaluationMilieuStagePdf) pdfGenerator).createPdf();
             } else {
                 throw new IllegalArgumentException("Unsupported PDF generator type: " + pdfGenerator.getClass().getName());

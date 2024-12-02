@@ -7,6 +7,7 @@ import fructose.model.Utilisateur;
 import fructose.model.enumerator.EtatCandidature;
 import fructose.repository.CandidatureRepository;
 import fructose.repository.CvRepository;
+import fructose.repository.EvaluationMilieuStageRepository;
 import fructose.repository.OffreStageRepository;
 import fructose.service.dto.CandidatureDTO;
 import fructose.service.dto.EtudiantDTO;
@@ -30,6 +31,7 @@ public class CandidatureService {
 	private final CandidatureRepository candidatureRepository;
 	private final OffreStageRepository offreStageRepository;
 	private final CvRepository cvRepository;
+	private final EvaluationMilieuStageRepository ev;
 	
 	public void postuler(UtilisateurDTO etudiantDTO, Long offreStageId, Long cvDTOId) {
 		OffreStage offreStage = offreStageRepository.getReferenceById(offreStageId);
@@ -184,8 +186,8 @@ public class CandidatureService {
 	public List<Map<String, Object>> findByContratSigneTous() {
 		List<Map<String, Object>> result = new ArrayList<>();
 
-		List<Candidature> candidatures = candidatureRepository.findByEtat(EtatCandidature.CONTRAT_SIGNE_TOUS);
 
+		List<Candidature> candidatures = candidatureRepository.findByEtatAndEvaluationMilieuStageNotExist(EtatCandidature.CONTRAT_SIGNE_TOUS);
 		return getMapsFromCandidature(result, candidatures);
 	}
 }

@@ -151,18 +151,16 @@ const EvaluationMilieuStageEtapes = () => {
             setErrors(newErrors);
             return;
         }
-        console.log("Form data", formData);
         const preparedData = {
             candidatureDTO: {
                 ...formData.candidature,
             },
-            sections: Object.keys(formData)
-                .filter((key) => ["section2", "section3"].includes(key))
+            sections: Object.keys(formData.sections)
                 .map((sectionKey) => ({
                     name: sectionKey,
-                    commentaire: formData[sectionKey].commentaire,
-                    criteres: Object.keys(formData[sectionKey].champs).map((question) => ({
-                        question: question, reponse: formData[sectionKey].champs[question],
+                    commentaire: formData.sections[sectionKey].commentaire,
+                    criteres: Object.keys(formData.sections[sectionKey].champs).map((question) => ({
+                        question: question, reponse: formData.sections[sectionKey].champs[question],
                     })),
                 })),
             stageType: formData.stageType,
@@ -175,7 +173,7 @@ const EvaluationMilieuStageEtapes = () => {
             memeStagiaireProchainStage: formData.memeStagiaireProchainStage,
             quartTravailVariable: formData.quartTravailVariable,
             signatureSuperviseur: formData.signatureSuperviseur,
-            dateSignatureSuperviseur: formData.dateSignatureSuperviseur,
+            dateSignatureSuperviseur: new Date().toISOString().split("T")[0],
             quartTravail1Debut: formData.quartTravail1Debut,
             quartTravail1Fin: formData.quartTravail1Fin,
             quartTravail2Debut: formData.quartTravail2Debut,
@@ -185,9 +183,12 @@ const EvaluationMilieuStageEtapes = () => {
         };
         try {
             const response = await fetch("/evaluations/milieu-stage/creer", {
-                method: "POST", headers: {
-                    "Content-Type": "application/json", "Authorization": currentToken,
-                }, body: JSON.stringify(preparedData),
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": currentToken,
+                },
+                body: JSON.stringify(preparedData),
             });
 
             if (response.ok) {
@@ -212,8 +213,8 @@ const EvaluationMilieuStageEtapes = () => {
                 type: "select",
                 name: "stageType",
                 options: [{value: "", label: t("evaluation_milieu_stage.step.select")}, {
-                    value: "stage1", label: t("evaluation_milieu_stage.step.general.stage1")
-                }, {value: "stage2", label: t("evaluation_milieu_stage.step.general.stage2")}]
+                    value: "PREMIER_STAGE", label: t("evaluation_milieu_stage.step.general.stage1")
+                }, {value: "DEUXIEME_STAGE", label: t("evaluation_milieu_stage.step.general.stage2")}]
             }, {
                 label: t("evaluation_milieu_stage.step.general.hours_per_week_first_month"),
                 type: "number",
@@ -334,8 +335,8 @@ const EvaluationMilieuStageEtapes = () => {
                         }}
                     >
                         <option value="">{t("evaluation_milieu_stage.step.select")}</option>
-                        <option value="stage1">{t("evaluation_milieu_stage.step.general.stage1")}</option>
-                        <option value="stage2">{t("evaluation_milieu_stage.step.general.stage2")}</option>
+                        <option value="PREMIER_STAGE">{t("evaluation_milieu_stage.step.general.stage1")}</option>
+                        <option value="DEUXIEME_STAGE">{t("evaluation_milieu_stage.step.general.stage2")}</option>
                     </select>
                     {errors.milieuStageAPrivilegierPour && (
                         <span style={{color: "red", fontSize: "12px", marginLeft: "10px"}}>
