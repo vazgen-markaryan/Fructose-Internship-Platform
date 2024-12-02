@@ -313,7 +313,7 @@ const CandidatureEtudiantDashboard = () => {
 				<div>
 					{GetCandidaturesWindow()}
 					<section>
-						<h4>{t("dashboard_home_page.my_applications")}</h4>
+						<h4 id="candidatures">{t("dashboard_home_page.my_applications")}</h4>
 						
 						<div className="menu-list">
 							{

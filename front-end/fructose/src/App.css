@@ -349,6 +349,10 @@ p.field-invalid-text {
 	padding: 0 !important;
 }
 
+.text-decoration-none{
+	text-decoration: none;
+}
+
 .toolbar-items {
 	display: flex;
 	align-items: center;
