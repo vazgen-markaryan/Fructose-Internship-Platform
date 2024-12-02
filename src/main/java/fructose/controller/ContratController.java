@@ -51,12 +51,9 @@ public class ContratController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<byte[]> generateContratAlreadyExists(@RequestHeader ("Authorization") String token, @PathVariable Long id) {
-		System.out.println("Token: " + token);
 		validateToken(token);
-		System.out.println("Contrat ID: " + id);
 		try {
 			ContratDTO contrat = contratService.getContratById(id);
-			System.out.println("Contrat: " + contrat);
 			if (contrat == null) {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Contract not found");
 			}

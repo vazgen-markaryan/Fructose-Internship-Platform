@@ -178,7 +178,6 @@ public class UtilisateurController {
 	@GetMapping("/employeur/{id}")
 	public ResponseEntity<?> getEmployeur(@RequestHeader("Authorization") String token, @PathVariable Long id) {
 		if (!utilisateurService.verifyRoleEligibilityByToken(token, Role.ADMIN)) {
-			System.out.println("403 Unauthorized");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("403 Unauthorized");
 		}
 		try {

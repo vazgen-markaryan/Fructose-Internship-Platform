@@ -79,7 +79,7 @@ const ContratProvider = ({children}) => {
 			Swal.fire({
 				title: t("sign_contract_swal.confirm_sign_title"),
 				text: t("sign_contract_swal.confirm_sign_text"),
-				icon: 'warning',
+				icon: 'question',
 				showCancelButton: true,
 				confirmButtonColor: '#3085d6',
 				cancelButtonColor: '#d33',
@@ -125,7 +125,7 @@ const ContratProvider = ({children}) => {
 			Swal.fire({
 				title: t("sign_contract_swal.confirm_refuse_title"),
 				text: t("sign_contract_swal.confirm_refuse_text"),
-				icon: 'warning',
+				icon: 'question',
 				showCancelButton: true,
 				confirmButtonColor: '#d33',
 				cancelButtonColor: '#3085d6',

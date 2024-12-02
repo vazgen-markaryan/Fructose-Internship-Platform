@@ -57,7 +57,6 @@ public class CvController {
 	@GetMapping("/cvs")
 	public ResponseEntity<?> getCVs(@RequestHeader("Authorization") String token) {
 		if (!utilisateurService.validationToken(token)) {
-			System.out.println("Token reçu : " + token);
 			return new ResponseEntity<>("Le Token est invalid", HttpStatus.BAD_REQUEST);
 		}
 		
@@ -67,7 +66,6 @@ public class CvController {
 			List<CvDTO> cvList = cvService.getCvsByUser(utilisateurDTO);
 			return new ResponseEntity<>(cvList, HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			return new ResponseEntity<>("Une erreur inattendue s'est produite.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

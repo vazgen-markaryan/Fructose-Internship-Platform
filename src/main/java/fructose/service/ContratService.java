@@ -72,7 +72,6 @@ public class ContratService {
 		if (id == null) {
 			throw new IllegalArgumentException("ID de candidature ne peut pas être nul");
 		}
-		System.out.println("ID de candidature: " + id);
 		ContratSansCvDTO contrat = contratRepository.findByCandidatureIdWithoutCv(id);
 		if (contrat == null) {
 			throw new IllegalArgumentException("Contrat avec ID de candidature: " + id + " n'existe pas");

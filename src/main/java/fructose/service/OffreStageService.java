@@ -55,8 +55,6 @@ public class OffreStageService {
 	}
 	
 	private void validateAddOffreStage(OffreStageDTO offreStageDTO, UtilisateurDTO utilisateurDTO) {
-		System.out.println(utilisateurDTO);
-		System.out.println("Avant set : " + offreStageDTO);
 		if (offreStageDTO == null) {
 			throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
 		}
@@ -68,7 +66,6 @@ public class OffreStageService {
 			}
 		}
 		validateOffreStage(offreStageDTO);
-		System.out.println("Après set : " + offreStageDTO);
 		OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
 		offreStageRepository.save(offreStage);
 	}
