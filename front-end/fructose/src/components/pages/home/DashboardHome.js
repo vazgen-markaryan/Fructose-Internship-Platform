@@ -18,13 +18,29 @@ const DashboardHome = () => {
 	
 	const {t} = useTranslation();
 	const {currentUser} = useContext(AuthContext);
-	
-	const GetOffreStageSection = () => {
+
+	const GetDashboardSections = () => {
 		if (currentUser != null) {
 			if (currentUser.role === "ETUDIANT") {
-				return <OffresStagesDashboard></OffresStagesDashboard>
-			} else if (currentUser.role === "EMPLOYEUR" || currentUser.role === "PROFESSEUR") {
-				return <OffresStagesEmpProfDashboard></OffresStagesEmpProfDashboard>
+				return (
+					<>
+						<OffresStagesDashboard></OffresStagesDashboard>
+						<CandidatureEtudiantDashboard></CandidatureEtudiantDashboard>
+						<CVEtudiantDashboard></CVEtudiantDashboard>
+					</>
+					)
+			} else if (currentUser.role === "EMPLOYEUR") {
+				return (
+					<>
+						<OffresStagesEmpProfDashboard></OffresStagesEmpProfDashboard>
+						<CandidatureEmployeurDashboard></CandidatureEmployeurDashboard>
+					</>
+				)
+			} else if (currentUser.role === "PROFESSEUR") {
+				return (
+						<OffresStagesEmpProfDashboard></OffresStagesEmpProfDashboard>
+					)
+
 			} else if (currentUser.role === "ADMIN") {
 				return (
 					<AdminProvider>
@@ -47,11 +63,7 @@ const DashboardHome = () => {
 			<div style={{"display": "flex", "gap": "20px"}}>
 				<div style={{"width": "70%"}}>
 					<div className="dashboard-card">
-						{GetOffreStageSection()}
-						<CandidatureEtudiantDashboard></CandidatureEtudiantDashboard>
-						<CVEtudiantDashboard></CVEtudiantDashboard>
-						<CandidatureEmployeurDashboard></CandidatureEmployeurDashboard>
-
+						{GetDashboardSections()}
 					</div>
 				</div>
 				<div style={{"width": "30%"}}>
@@ -74,11 +86,7 @@ const DashboardHome = () => {
 						</section>
 						<hr/>
 
-						<section className="nospace">
-							<h5>Suggestions</h5>
 							<SuggestionsDashboard role={(currentUser)?currentUser.role:null}></SuggestionsDashboard>
-						</section>
-						<hr/>
 						<section className="nospace">
 							<p className="text-dark">&copy; 2024 - Fructose</p>
 							<p className="text-dark">
