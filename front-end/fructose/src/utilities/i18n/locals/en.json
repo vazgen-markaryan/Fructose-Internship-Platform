@@ -205,7 +205,9 @@
 		"send": "Send",
 		"close": "Close",
 		"generate": "Generate",
-		"generate_pdf": "Generation of the internship Contract"
+		"generate_pdf": "Generation of the internship Contract",
+		"view_contrat": "The contract",
+		"loading_pdf" : "Loading the contract"
 	},
 	"dashboard_home_page": {
 		"home": "Home",
@@ -597,7 +599,12 @@
 		"student_passed_entrevue": "Student passed the interview",
 		"waiting_for_your_signature" : "Waiting for your signature"
 	},
-	"manage_contract_en_attente": {
-		"title": "Internship Contracts waiting for generation"
+	"manage_contract_page": {
+		"title_generate_contract": "Contracts to be generated",
+		"title_see_contract": "List of Contracts",
+		"list_contrats": "Liste des contrats",
+		"one_refused_contract_text": "One of the participants refused to sign the contract",
+		"waiting_sign_from_parties": "Waiting for the signature of all parties",
+		"contract_signed": "All signs have been received"
 	}
 }

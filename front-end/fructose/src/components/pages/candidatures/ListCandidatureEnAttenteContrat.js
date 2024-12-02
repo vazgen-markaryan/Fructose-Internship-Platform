@@ -69,7 +69,7 @@ const ListCandidatureEnAttenteContrat = () => {
 		return (
 			<section style={{padding: 0}}>
 				<div className="toolbar-items">
-					<h4 className={"m-0 toolbar-spacer"}>{t("manage_contract_en_attente.title")}</h4>
+					<h4 className={"m-0 toolbar-spacer"}>{t("manage_contract_page.title_generate_contract")}</h4>
 				</div>
 				<div style={{padding: "10px 0"}}>
 					{filteredCandidatures.length === 0 ? (
@@ -102,7 +102,7 @@ const ListCandidatureEnAttenteContrat = () => {
 									borderRadius: "5px",
 									padding: "10px"
 								}}>
-									{filteredCandidatures.map((candidature, index) => (
+									{selectedCandidatures.map((candidature, index) => (
 										<div key={index} onClick={() => handleClick(candidature)}
 										     style={{
 											     display: "flex",

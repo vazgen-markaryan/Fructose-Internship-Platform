@@ -205,7 +205,8 @@
 		"send": "Envoyer",
 		"close": "Fermer",
 		"generate": "Générer",
-		"generate_pdf": "Génération du Contrat de stage"
+		"generate_pdf": "Génération du Contrat de stage",
+		"view_contrat": "Le contrat"
 	},
 	"dashboard_home_page": {
 		"home": "Accueil",
@@ -597,7 +598,12 @@
 		"student_passed_entrevue": "Étudiant a passé l'entrevue avec succès.",
 		"waiting_for_your_signature" : "En attente de votre signature"
 	},
-	"manage_contract_en_attente": {
-		"title": "Contrats de stage en attente de génération"
+	"manage_contract_page": {
+		"title_generate_contract": "Contrats de stage à générer",
+		"title_see_contract": "Liste des contrats",
+		"list_contrats": "Liste des contrats",
+		"one_refused_contract_text": "Une des parties a refusé le contrat",
+		"waiting_sign_from_parties": "Le contrat est en attente de signatures",
+		"contract_signed": "Toutes les signatures ont été recueillies"
 	}
 }

@@ -3,37 +3,53 @@ import {ContratContext} from "../../providers/ContratProvider";
 import Icon from "@mdi/react";
 import {mdiBriefcasePlusOutline} from "@mdi/js";
 import {t} from "i18next";
+import PdfFromContratModal from "../../../utilities/modal/PdfFromContratModal";
 
 const ViewContrats = () => {
     const [contrats, setContrats] = useState([]);
     const { fetchContrats } = useContext(ContratContext);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedContrat, setSelectedContrat] = useState(null);
     const itemsPerPage = 10;
 
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetchContrats();
-            if (response) {
-                setContrats(response);
-            }
-        };
         fetchData();
     }, []);
+
+    const fetchData = async () => {
+        const response = await fetchContrats();
+        if (response) {
+            setContrats(response);
+        }
+    };
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
 
     const getSignatureStatus = (contrat) => {
-        const { etudiantSignature, gestionnaireSignature, compagnieSignature } = contrat;
+        const etudiantSignature = contrat.signatureEtudiant;
+        const gestionnaireSignature = contrat.signatureGestionnaire;
+        const compagnieSignature = contrat.signatureEmployeur;
 
         if (etudiantSignature === "Refuse" || gestionnaireSignature === "Refuse" || compagnieSignature === "Refuse") {
-            return { text: "Refusé", color: "text-red" };
-        } else if (!etudiantSignature || !gestionnaireSignature || !compagnieSignature) {
-            return { text: "En attentes des autres signatures", color: "text-orange" };
+            return { text: t("manage_contract_page.one_refused_contract_text"), color: "text-red" };
+        } else if (etudiantSignature === "Non signe" || gestionnaireSignature === "Non signe"  || compagnieSignature === "Non signe") {
+            return { text: t("manage_contract_page.waiting_sign_from_parties"), color: "text-orange" };
         } else {
-            return { text: "Tous ont signés !", color: "text-green" };
+            return { text: t("manage_contract_page.contract_signed"), color: "text-green" };
         }
+    };
+
+    const openModal = (contrat) => {
+        setSelectedContrat(contrat);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setSelectedContrat(null);
     };
 
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -42,7 +58,7 @@ const ViewContrats = () => {
 
     return (
         <div>
-            <h4>Contrats en cours</h4>
+            <h4>{t("manage_contract_page.title_see_contract")}</h4>
             {contrats.length > 0 ? (
                 <div style={{
                     width: "auto",
@@ -71,7 +87,9 @@ const ViewContrats = () => {
                                         borderBottom: "1px solid #ddd",
                                         cursor: "pointer",
                                         position: "relative"
-                                    }}>
+                                    }}
+                                         onClick={() => openModal(contrat)}
+                                    >
                                         <Icon path={mdiBriefcasePlusOutline} size={1}/>
                                         <p className="m-0"
                                            style={{flexGrow: 1}}>{contrat.candidatureDTO.etudiantDTO.fullName} - {contrat.candidatureDTO.offreStageDTO.compagnie} - {contrat.candidatureDTO.offreStageDTO.nom}</p>
@@ -115,6 +133,13 @@ const ViewContrats = () => {
                         </button>
                     ))}
                 </div>
+            )}
+            {selectedContrat && (
+                <PdfFromContratModal
+                    show={showModal}
+                    handleClose={closeModal}
+                    contrat={selectedContrat}
+                />
             )}
         </div>
     );
