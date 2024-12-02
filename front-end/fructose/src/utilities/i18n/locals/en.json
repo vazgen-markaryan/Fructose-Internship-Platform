@@ -188,6 +188,13 @@
 			"programme_etudes_select": "The study program must be selected",
 			"modalite_travail_select": "The work modality must be selected",
 			"type_emploi_select": "The type of employment must be selected"
+		},
+		"steps": {
+			"6" : {
+				"success" : "Success",
+				"success_text" : "Your internship offer has been submitted. Please allow some time for the administrator to approve your offer.",
+				"go_to_dashboard" : "Return to the main page"
+			}
 		}
 	},
 	"modal": {

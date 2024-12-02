@@ -418,6 +418,30 @@ const CreerOffreStage = () => {
 						<p>Entrer la date du début et la fin du stage, ainsi que la date limite de candidature.</p>
 						<br/>
 						<div className={"input-container"}>
+							<div className={"input-container"}>
+								<p>{t("creer_offre_stage_page.date_limite_candidate")}</p>
+								<input
+									className={`${errors.dateLimiteCandidature ? "field-invalid" : ""}`}
+									type="date"
+									name="dateLimiteCandidature"
+									onChange={handleInputChange}
+									value={offreStage.dateLimiteCandidature instanceof Date && !isNaN(offreStage.dateLimiteCandidature.getTime())
+										? offreStage.dateLimiteCandidature.toISOString().split('T')[0]
+										: ""}
+									required
+									min={new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]}
+									onKeyDown={(e) => {
+										const currentDate = new Date(e.target.value);
+										const minDate = new Date(new Date().setDate(new Date().getDate() + 7));  // 7 days from today
+
+										if (e.key === 'ArrowDown' && currentDate <= minDate) {
+											e.preventDefault(); // Prevent going below 7 days from today
+										}
+									}}
+								/>
+								<p className={"field-invalid-text"}>{errors.dateLimiteCandidature}</p>
+							</div>
+
 							<p>{t("creer_offre_stage_page.date_debut")}</p>
 							<input
 								className={`${errors.dateDebut ? "field-invalid" : ""}`}
@@ -433,7 +457,7 @@ const CreerOffreStage = () => {
 									: ""}
 								onKeyDown={(e) => {
 									const minDate = new Date(new Date(offreStage.dateLimiteCandidature).setDate(new Date(offreStage.dateLimiteCandidature).getDate() + 1));
-									
+
 									if (e.key === 'ArrowDown' && offreStage.dateDebut.getTime() <= minDate.getTime()) {
 										e.preventDefault(); // Prevent going below dateLimiteCandidature + 1 day
 									}
@@ -441,7 +465,7 @@ const CreerOffreStage = () => {
 							/>
 							<p className={"field-invalid-text"}>{errors.dateDebut}</p>
 						</div>
-						
+
 						<div className={"input-container"}>
 							<p>{t("creer_offre_stage_page.date_fin")}</p>
 							<input
@@ -459,37 +483,13 @@ const CreerOffreStage = () => {
 								onKeyDown={(e) => {
 									const currentDate = new Date(e.target.value);
 									const minDate = new Date(new Date(offreStage.dateDebut).setDate(new Date(offreStage.dateDebut).getDate() + 1));
-									
+
 									if (e.key === 'ArrowDown' && currentDate <= minDate) {
 										e.preventDefault(); // Prevent going below dateDebut + 1 day
 									}
 								}}
 							/>
 							<p className={"field-invalid-text"}>{errors.dateFin}</p>
-						</div>
-						
-						<div className={"input-container"}>
-							<p>{t("creer_offre_stage_page.date_limite_candidate")}</p>
-							<input
-								className={`${errors.dateLimiteCandidature ? "field-invalid" : ""}`}
-								type="date"
-								name="dateLimiteCandidature"
-								onChange={handleInputChange}
-								value={offreStage.dateLimiteCandidature instanceof Date && !isNaN(offreStage.dateLimiteCandidature.getTime())
-									? offreStage.dateLimiteCandidature.toISOString().split('T')[0]
-									: ""}
-								required
-								min={new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]}
-								onKeyDown={(e) => {
-									const currentDate = new Date(e.target.value);
-									const minDate = new Date(new Date().setDate(new Date().getDate() + 7));  // 7 days from today
-									
-									if (e.key === 'ArrowDown' && currentDate <= minDate) {
-										e.preventDefault(); // Prevent going below 7 days from today
-									}
-								}}
-							/>
-							<p className={"field-invalid-text"}>{errors.dateLimiteCandidature}</p>
 						</div>
 					</div>
 				)
@@ -501,16 +501,17 @@ const CreerOffreStage = () => {
 					}}>
 						<div>
 							<Icon path={mdiCheckCircleOutline} size={2.5}/>
-							<h3>Succes</h3>
-							<p>Votre offre de stage a été soumise. Veuillez allouer un délai afin que l'administrateur approuve votre offre.</p>
+							<h3>{t("creer_offre_stage_page.steps.6.success")}</h3>
+							<p>{t("creer_offre_stage_page.steps.6.success_text")}</p>
 							<br/>
-							<button className="btn-filled">Revenir à l'accueil</button>
+							<button className="btn-filled" type="button"
+									onClick={() => navigate('/dashboard')}>{t("creer_offre_stage_page.steps.6.go_to_dashboard")}</button>
 						</div>
 					</div>
 				)
 		}
 	}
-	
+
 	const getStepClass = (step) => {
 		if (currentStep === step) {
 			return "active"
@@ -519,7 +520,7 @@ const CreerOffreStage = () => {
 		}
 		return ""
 	}
-	
+
 	const returnToStep = () => {
 		if (currentStep - 1 > 0) {
 			setCurrentStep(currentStep - 1)

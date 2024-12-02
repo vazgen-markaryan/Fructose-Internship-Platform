@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Validated
@@ -54,15 +55,20 @@ public class OffreStageService {
 	}
 	
 	private void validateAddOffreStage(OffreStageDTO offreStageDTO, UtilisateurDTO utilisateurDTO) {
+		System.out.println(utilisateurDTO);
+		System.out.println("Avant set : " + offreStageDTO);
 		if (offreStageDTO == null) {
 			throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
 		}
-		if (offreStageDTO.getOwnerDTO() == null) {
+		if (offreStageDTO.getOwnerDTO() == null || !Objects.equals(offreStageDTO.getNom(), "")) {
 			offreStageDTO.setOwnerDTO(utilisateurDTO);
-		}else if (utilisateurDTO.getRole() == Role.ADMIN){
-			offreStageDTO.setIsApproved(true);
+		}else if (utilisateurDTO != null) {
+			if (utilisateurDTO.getRole() == Role.ADMIN) {
+				offreStageDTO.setIsApproved(true);
+			}
 		}
 		validateOffreStage(offreStageDTO);
+		System.out.println("Après set : " + offreStageDTO);
 		OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);
 		offreStageRepository.save(offreStage);
 	}

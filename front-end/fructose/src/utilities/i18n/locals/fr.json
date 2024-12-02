@@ -188,6 +188,13 @@
 			"programme_etudes_select": "Le programme d'études doit être sélectionné",
 			"modalite_travail_select": "La modalité de travail doit être sélectionnée",
 			"type_emploi_select": "Le type d'emploi doit être sélectionné"
+		},
+		"steps": {
+			"6" : {
+				"success" : "Succes",
+				"success_text" : "Votre offre de stage a été soumise. Veuillez allouer un délai afin que l'administrateur approuve votre offre.",
+				"go_to_dashboard" : "Revenir à l'accueil"
+			}
 		}
 	},
 	"modal": {
