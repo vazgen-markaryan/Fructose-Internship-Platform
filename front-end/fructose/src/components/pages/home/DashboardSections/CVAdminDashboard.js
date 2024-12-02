@@ -73,6 +73,8 @@ const CVAdminDashboard = () => {
             title: t("dashboard_home_page.cv_accept_title"),
             text: t("dashboard_home_page.cv_accept_text"),
             icon: "warning",
+            confirmButtonColor: '#ff006c',
+            cancelButtonColor: '#fff',
             confirmButtonText: t("dashboard_home_page.cv_accept_confirm_button"),
             cancelButtonText: t("dashboard_home_page.cv_accept_cancel_button")
         }).then((result) => {

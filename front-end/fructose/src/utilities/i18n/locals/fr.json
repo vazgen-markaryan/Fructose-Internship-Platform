@@ -555,6 +555,7 @@
 			"error_date_entrevue": "Veuillez entrer une date pour l'entrevue"
 		},
 		"categories": {
+			"all": "Toutes les candidatures",
 			"nouvelles_candidatures": "Nouvelles candidatures",
 			"en_entrevue": "Candatures en entrevue",
 			"en_signature": "Candatures en signature de contrat",
@@ -624,8 +625,11 @@
 		"student_passed_entrevue": "Étudiant a passé l'entrevue avec succès.",
 		"waiting_for_your_signature" : "En attente de votre signature",
 		"employeur_candidature_initiale_info": "L'étudiant a soumis une candidature pour votre poste. Examinez son dossier, et cliquer sur Accepter pour continuer la démarche, ou Rejeter si vous pensez qu'il n'est pas éligible pour ce poste.",
+		"etudiant_entrevue_initiale_info": "L'employeur a fixé une entrevue à la date indiquée. Vous devez accepter ou refuser cette entrevue. Notez que vous ne pourriez plus continuer avec votre candidature si vous refusez l'entrevue.",
+		"employeur_entrevue_info": "Après avoir passé à l'entrevue, veuillez accepter ou refuser la candidature de l'applicant pour passer à la prochaine étape.",
 		"titre_poste_obtenu" : "Poste obtenu",
-		"poste_obtenu": "Félicitations! Vous avez obtenu ce poste et faites maintenant partie de l'équipe."
+		"poste_obtenu": "Félicitations! Vous avez obtenu ce poste et faites maintenant partie de l'équipe.",
+		"categorie_selection": "Cliquez ici pour accèder aux nouvelles candidatures qui ont besoin de votre action ou tout autre catégorie qui est pertinente"
 	},
 	"manage_contract_en_attente": {
 		"title": "Contrats de stage en attente de génération"

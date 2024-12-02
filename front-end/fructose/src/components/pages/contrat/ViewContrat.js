@@ -37,11 +37,11 @@ const ViewContrat = ({contrat, handleSign, handleNoSign}) => {
 				!["Refuse"].includes(contrat.signatureEmployeur) &&
 				!["Refuse"].includes(contrat.signatureEtudiant) ? (
 					<>
-						<button className="btn-filled bg-green" onClick={handleSign}>
-							{t("dashboard_home_page.sign")}
-						</button>
-						<button className="btn-filled bg-red" onClick={handleNoSign}>
+						<button className="btn-outline toolbar-spacer" onClick={handleNoSign}>
 							{t("dashboard_home_page.no_sign")}
+						</button>
+						<button className="btn-filled toolbar-spacer" onClick={handleSign}>
+							{t("dashboard_home_page.sign")}
 						</button>
 					</>
 				) : null}

@@ -15,6 +15,7 @@ import {AuthContext} from "../../../providers/AuthProvider";
 import CandidatureStatus from "../../candidatures/CandidatureStatus";
 import Swal from "sweetalert2";
 import {ContratContext} from "../../../providers/ContratProvider";
+import {Link} from "react-router-dom";
 
 const CandidatureEtudiantDashboard = () => {
 	
@@ -164,7 +165,9 @@ const CandidatureEtudiantDashboard = () => {
 										<h4 className="m-0">{currentCandidature.nomOffre ? currentCandidature.nomOffre : "N/A"}</h4>
 										<h6 className="m-0 text-dark">{currentCandidature.compagnie ? currentCandidature.compagnie : "N/A"}</h6>
 									</div>
-									<button className="btn-outline">{t("dashboard_home_page.view_offer")}</button>
+									<Link to={`/dashboard/discover-offers?offer=${currentCandidature.offreStageId}`}>
+										<button className="btn-outline">{t("dashboard_home_page.view_offer")}</button>
+									</Link>
 								</div>
 							</section>
 							

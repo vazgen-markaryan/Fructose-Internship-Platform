@@ -26,7 +26,7 @@ const CandidatureStatus = ({
 			if(isEmployeur){
 				return(
 					<>
-						<p>L'étudiant a soumis une candidature pour votre poste. Examinez son dossier, et cliquer sur Accepter pour continuer la démarche, ou Rejeter si vous pensez qu'il n'est pas éligible pour ce poste.</p>
+						<p>{t("view_candidatures_page.employeur_candidature_initiale_info")}</p>
 						<br/>
 						<div style={{gap: "10px"}} className="toolbar-items">
 							<button className="btn-outline toolbar-spacer" onClick={handleRefuse}>
@@ -106,17 +106,20 @@ const CandidatureStatus = ({
 					return (
 						<>
 							<div className="toolbar-items">
-								<Icon path={mdiClockOutline} size={1} className="text-blue"/>
-								<p className="text-blue m-0">{t("dashboard_home_page.waiting_interview_acceptance")}</p>
+								<Icon path={mdiClockOutline} size={1} className="text-orange"/>
+								<p className="text-orange m-0">{t("dashboard_home_page.waiting_interview_acceptance")}</p>
 							</div>
 							<br/>
+							<p>{t("view_candidatures_page.etudiant_entrevue_initiale_info")}</p>
+							<br/>
 							<p>{t("dashboard_home_page.interview_date")}: {currentCandidature.dateEntrevue}</p>
+							<br/>
 							<div className="toolbar-items" style={{gap: "10px"}}>
-								<button className="btn-filled bg-green" onClick={handleAcceptInterview}>
-									{t("dashboard_home_page.accept")}
-								</button>
-								<button className="btn-filled bg-red" onClick={handleRefuseInterview}>
+								<button className="btn-outline toolbar-spacer" onClick={handleRefuseInterview}>
 									{t("dashboard_home_page.refuse")}
+								</button>
+								<button className="btn-filled toolbar-spacer" onClick={handleAcceptInterview}>
+									{t("dashboard_home_page.accept")}
 								</button>
 							</div>
 						</>
@@ -185,13 +188,16 @@ const CandidatureStatus = ({
 		} else if (currentCandidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT"){
 			if (isEmployeur){
 				return (
+
 					<>
+						<p>{t("view_candidatures_page.employeur_entrevue_info")}</p>
+						<br/>
 						<div className="toolbar-items" style={{gap: "10px"}}>
-							<button className="btn-filled bg-green" onClick={handleInterviewPassed}>
-								{t("view_candidatures_page.accept")}
-							</button>
-							<button className="btn-filled bg-red" onClick={handleInterviewFail}>
+							<button className="btn-outline toolbar-spacer" onClick={handleInterviewFail}>
 								{t("view_candidatures_page.refuse")}
+							</button>
+							<button className="btn-filled toolbar-spacer" onClick={handleInterviewPassed}>
+								{t("view_candidatures_page.accept")}
 							</button>
 						</div>
 					</>
@@ -415,7 +421,7 @@ const CandidatureStatus = ({
 					<h5>{t("view_candidatures_page.interview")}</h5>
 					{getSectionEntrevue()}
 				</section>
-
+				<hr/>
 				{/* SECTION CONTRAT */}
 				<section className="nospace">
 					<h5>{t("view_candidatures_page.contract")}</h5>

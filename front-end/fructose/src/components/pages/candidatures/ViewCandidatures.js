@@ -7,7 +7,7 @@ import {
 	mdiBriefcaseCheckOutline,
 	mdiBriefcaseRemoveOutline,
 	mdiClose,
-	mdiFileSign,
+	mdiFileSign, mdiListBoxOutline,
 	mdiPresentation,
 	mdiTooltipPlusOutline
 } from "@mdi/js";
@@ -31,7 +31,7 @@ const ViewCandidatures = () => {
 	const [currentCV, setCurrentCV] = useState(null);
 	const [isApproveModalOpen, setApproveModalOpen] = useState(false);
 	const interviewDateRef = useRef(null);
-	const [candidatureCategory, setCandidatureCategory] = useState("nouvelles_candidatures")
+	const [candidatureCategory, setCandidatureCategory] = useState("all")
 	const [isRejectModalOpen, setRejectModalOpen] = useState(false);
 	const textareaRef = useRef(null);
 	const {fetchContratByCandidatureId, handleSignerContrat, handleRefuseSignerContrat} = useContext(ContratContext);
@@ -116,8 +116,8 @@ const ViewCandidatures = () => {
 			text: t('view_candidatures_page.confirm_accept_text'),
 			icon: 'warning',
 			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
+			confirmButtonColor: '#ff006c',
+			cancelButtonColor: '#fff',
 			confirmButtonText: t('view_candidatures_page.confirm_accept_confirm_button'),
 			cancelButtonText: t('view_candidatures_page.confirm_accept_cancel_button')
 		}).then(async (result) => {
@@ -178,8 +178,8 @@ const ViewCandidatures = () => {
 			text: t('view_candidatures_page.confirm_reject_text'),
 			icon: 'warning',
 			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
+			confirmButtonColor: '#ff006c',
+			cancelButtonColor: '#fff',
 			confirmButtonText: t('view_candidatures_page.confirm_reject_confirm_button'),
 			cancelButtonText: t('view_candidatures_page.confirm_reject_cancel_button')
 		}).then(async (result) => {
@@ -239,6 +239,9 @@ const ViewCandidatures = () => {
 		for (let i = 0; i < candidatures.length; i++) {
 			let candidature = candidatures[i]
 			switch (category) {
+				case "all":
+					newFilteredCandidatures.push(i)
+					break
 				case "nouvelles_candidatures":
 					if (candidature.candidature.etat === "EN_ATTENTE") {
 						newFilteredCandidatures.push(i)
@@ -396,6 +399,16 @@ const ViewCandidatures = () => {
 				<div className="dashboard-card" style={{width: "30%"}}>
 					<section>
 						<button onClick={() => {
+							handleCategoryChange("all")
+						}}
+								className={"btn-option " + ((candidatureCategory === "all") ? "btn-selected" : "")}>
+							<Icon path={mdiListBoxOutline} size={1} />
+							{t("view_candidatures_page.categories.all")}
+						</button>
+						<br/>
+						<hr className="m-0"/>
+						<br/>
+						<button onClick={() => {
 							handleCategoryChange("nouvelles_candidatures")
 						}}
 						        className={"btn-option " + ((candidatureCategory === "nouvelles_candidatures") ? "btn-selected" : "")}>
@@ -443,20 +456,25 @@ const ViewCandidatures = () => {
 											onClick={() => handleCandidatureClick(candidatures[index].candidature, candidatures[index].cvId)}
 										>
 											<Icon path={mdiAccountSchoolOutline} size={1}/>
-											<div style={{
-												display: "flex",
-												justifyContent: "space-between",
-												alignItems: "center",
-												width: "100%"
-											}}>
-												<div>
-													<p className="m-0">{candidatures[index].etudiant.fullName}</p>
-													<p className="m-0 text-dark">{candidatures[index].candidature.offreStageDTO.nom}</p>
-												</div>
-												{candidatures[index].candidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" && (
-													<span className="badge bg-dark text-blue" style={{marginLeft: "10px"}}><strong>{t("view_candidatures_page.action_needed")}</strong></span>
-												)}
+											<div>
+												<p className="m-0">{candidatures[index].etudiant.fullName}</p>
+												<p className="m-0 text-dark">{candidatures[index].candidature.offreStageDTO.nom}</p>
 											</div>
+											<div className="toolbar-spacer"></div>
+											{candidatures[index].candidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" && (
+												<span className="badge bg-orange" style={{marginLeft: "10px"}}><strong>{t("view_candidatures_page.action_needed")}</strong></span>
+											)}
+											{
+												(candidatures[index].candidature.etat === "REFUSEE" || candidatures[index].candidature.etat === "REFUSEE_APRES_ENTREVUE")?
+													<Icon path={mdiBriefcaseRemoveOutline} size={1} className="text-dark" />
+													:
+													(candidatures[index].candidature.etat === "POSTE_OBTENU")?
+														<Icon path={mdiBriefcaseCheckOutline} size={1} className="text-dark" />
+														:
+														(candidatures[index].candidature.etat === "EN_ATTENTE")?
+															<Icon path={mdiTooltipPlusOutline} size={1} className="text-dark" />
+															:null
+											}
 										</div>
 									))
 									:
@@ -501,7 +519,6 @@ const ViewCandidatures = () => {
 											<h4 className="m-0">{currentCandidature.offreStageDTO ? currentCandidature.offreStageDTO.nom : "Loading"}</h4>
 											<h6 className="m-0 text-dark">{currentCandidature.offreStageDTO ? currentCandidature.offreStageDTO.compagnie : "Loading"}</h6>
 										</div>
-										<button className="btn-outline">{t("view_candidatures_page.view_offer")}</button>
 									</div>
 								</section>
 								

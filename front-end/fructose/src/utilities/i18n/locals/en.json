@@ -555,6 +555,7 @@
 			"error_date_entrevue": "Please select an interview date"
 		},
 		"categories": {
+			"all": "All Applications",
 			"nouvelles_candidatures": "New Applications",
 			"en_entrevue": "Applications in interview",
 			"en_signature": "Applications in Contract Signature",
@@ -624,8 +625,11 @@
 		"student_passed_entrevue": "Student passed the interview",
 		"waiting_for_your_signature" : "Waiting for your signature",
 		"employeur_candidature_initiale_info": "The student has submitted an application for your position. Examine their file, and click on Accept to continue the process, or Reject if you think they are not eligible for this position.",
+		"etudiant_entrevue_initiale_info": "The employer has scheduled an interview on the date indicated. You must accept or refuse this interview. Note that you will no longer be able to continue with your application if you refuse the interview.",
+		"employeur_entrevue_info": "After proceeding to the interview, please accept or reject the applicant's application to proceed to the next step.",
 		"titre_poste_obtenu" : "Position obtained",
-		"poste_obtenu": "Congratulations! You got this position and are now part of the team."
+		"poste_obtenu": "Congratulations! You got this position and are now part of the team.",
+		"categorie_selection": "Click here to access new applications that need your action or any other category that is relevant"
 	},
 	"manage_contract_en_attente": {
 		"title": "Internship Contracts waiting for generation"

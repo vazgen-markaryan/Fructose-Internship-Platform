@@ -196,7 +196,7 @@ label {
 
 /*Boutons*/
 
-button, .button {
+button, .button, button.swal2-default-outline {
 	border: none;
 	color: inherit;
 	line-height: 36px;
@@ -205,6 +205,7 @@ button, .button {
 	border-radius: var(--border-radius);
 	font-family: "Roboto Condensed", sans-serif;
 	transition: 0.3s;
+	font-weight: 400;
 }
 
 button.btn-filled {
@@ -222,9 +223,14 @@ button.btn-filled:hover:not(.btn-filled:disabled) {
 	color: white;
 }
 
-button.btn-outline {
+button.btn-outline, button.swal2-cancel {
 	border: 1px solid black;
 	background-color: transparent;
+}
+
+button.swal2-confirm{
+	color: white;
+	padding: 1px 14px;
 }
 
 button.btn-outline:hover {
@@ -996,6 +1002,16 @@ tr {
 	position: relative;
 }
 
+.card.card-clickable{
+	user-select: none;
+	transition: 0.3s;
+}
+
+.card.card-clickable:hover{
+	background-color: #eeeeee;
+	cursor: pointer;
+}
+
 .card.no-border {
 	border: none;
 }
@@ -1206,4 +1222,9 @@ tr {
 .btn-candidature {
 	background-color: #4CAF50;
 	color: white;
+}
+
+.swal2-html-container{
+	font-family: "Roboto Condensed", sans-serif !important;
+	font-size: 16px !important;
 }
