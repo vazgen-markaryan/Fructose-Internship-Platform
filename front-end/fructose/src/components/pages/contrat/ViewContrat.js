@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {ContratContext} from "../../providers/ContratProvider";
 import PdfPreview from "../../../utilities/pdf/PdfPreview";
@@ -8,21 +8,22 @@ const ViewContrat = ({contrat, handleSign, handleNoSign}) => {
 	const {t} = useTranslation();
 	const {fetchPdfByContratId} = useContext(ContratContext);
 	const [pdfUrl, setPdfUrl] = useState('');
-	const {currentUser} = useContext(AuthContext);
+	const {currentUser, isUserInit} = useContext(AuthContext);
+	const isInitialized = useRef(false);
 	
 	useEffect(() => {
-		if (contrat) {
-			const getPdf = async () => {
+		if(isUserInit && contrat && !isInitialized.current){
+			(async function () {
 				try {
 					const pdfUrl = await fetchPdfByContratId(contrat.id);
 					setPdfUrl(pdfUrl);
 				} catch (error) {
 					console.error('Error fetching PDF:', error);
 				}
-			};
-			getPdf();
+			})();
+			isInitialized.current = true;
 		}
-	}, [contrat, fetchPdfByContratId]);
+	}, [isUserInit, contrat]);
 	
 	return (
 		<>

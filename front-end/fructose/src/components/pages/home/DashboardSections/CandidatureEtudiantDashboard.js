@@ -8,7 +8,7 @@ import {
 	mdiClose
 } from "@mdi/js";
 import CandidatureProgress from "../../candidatures/CandidatureProgress";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {CandidatureContext} from "../../../providers/CandidatureProvider";
 import {useTranslation} from "react-i18next";
 import {AuthContext} from "../../../providers/AuthProvider";
@@ -42,7 +42,9 @@ const CandidatureEtudiantDashboard = () => {
 	const itemsPerPage = 5;
 	const startIndex = (currentPage - 1) * itemsPerPage;
 	const candidaturesInPage = sortedCandidatures.slice(startIndex, startIndex + itemsPerPage);
-	const maxPages = Math.max(1, Math.ceil(candidatures.length / itemsPerPage))
+	const maxPages = Math.max(1, Math.ceil(candidatures.length / itemsPerPage));
+
+	const isInitialized = useRef(false);
 
 	const {
 		fetchContratByCandidatureId,
@@ -58,28 +60,30 @@ const CandidatureEtudiantDashboard = () => {
 	const handleRefuseSignerContratClick = () => {
 		handleRefuseSignerContrat(contrat, setCurrentCandidature);
 	}
-	
+
+	const fetchContrat = async () => {
+		try {
+			const data = await fetchContratByCandidatureId(currentCandidature.id);
+			setContrat(data);
+		} catch (error) {
+			console.error("Erreur " + error);
+		}
+	};
+
 	useEffect(() => {
 		if (currentCandidature && currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE") {
-			const fetchContrat = async () => {
-				try {
-					const data = await fetchContratByCandidatureId(currentCandidature.id);
-					setContrat(data);
-				} catch (error) {
-					console.error("Erreur " + error);
-				}
-			};
 			fetchContrat();
 		}
 	}, [currentCandidature]);
-	
+
 	useEffect(() => {
-		if (currentUser) {
+		if (currentUser && !isInitialized.current) {
 			(async function () {
 				if (currentUser.role === "ETUDIANT") {
 					fetchCandidaturesById(currentUser.id);
 				}
 			})();
+			isInitialized.current = true;
 		}
 		// TODO: Ici il donne WARNING: React Hook useEffect has a missing dependency: 'fetchCandidaturesById'.
 		// Mais si le faire il va envoyer 9999 requêtes dans Inspect -> Network
