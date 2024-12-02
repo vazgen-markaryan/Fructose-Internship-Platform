@@ -1,5 +1,6 @@
 package fructose.controller;
 
+import fructose.model.enumerator.Role;
 import fructose.service.CandidatureService;
 import fructose.service.ContratService;
 import fructose.service.UtilisateurService;
@@ -18,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -413,6 +415,68 @@ public class ContratControllerTest {
 
 		ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
 			contratController.generateContratAlreadyExists(token, id);
+		});
+
+		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
+	}
+
+	@Test
+	public void testGetContrats_Success() {
+		String token = "validToken";
+		UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+		utilisateurDTO.setRole(Role.ADMIN);
+
+		when(utilisateurService.validationToken(token)).thenReturn(true);
+		when(utilisateurService.getUtilisateurByToken(token)).thenReturn(utilisateurDTO);
+		when(contratService.getContrats()).thenReturn(Collections.emptyList());
+
+		ResponseEntity<?> response = contratController.getContrats(token);
+
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(Collections.emptyList(), response.getBody());
+	}
+
+	@Test
+	public void testGetContrats_Unauthorized() {
+		String token = "invalidToken";
+
+		when(utilisateurService.validationToken(token)).thenReturn(false);
+
+		ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+			contratController.getContrats(token);
+		});
+
+		assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatusCode());
+	}
+
+	@Test
+	public void testGetContrats_Forbidden() {
+		String token = "validToken";
+		UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+		utilisateurDTO.setRole(Role.ETUDIANT);
+
+		when(utilisateurService.validationToken(token)).thenReturn(true);
+		when(utilisateurService.getUtilisateurByToken(token)).thenReturn(utilisateurDTO);
+
+		ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+			contratController.getContrats(token);
+		});
+
+		assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+	}
+
+	@Test
+	public void testGetContrats_InternalServerError() {
+		String token = "validToken";
+		UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+		utilisateurDTO.setRole(Role.ADMIN);
+
+		when(utilisateurService.validationToken(token)).thenReturn(true);
+		when(utilisateurService.getUtilisateurByToken(token)).thenReturn(utilisateurDTO);
+		when(contratService.getContrats()).thenThrow(RuntimeException.class);
+
+		ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+			contratController.getContrats(token);
 		});
 
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());

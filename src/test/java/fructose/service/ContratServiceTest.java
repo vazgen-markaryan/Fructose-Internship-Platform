@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -416,6 +417,32 @@ public class ContratServiceTest {
 
 		assertThrows(IllegalArgumentException.class, () -> {
 			contratService.generateContrat(contratDTO);
+		});
+	}
+
+	@Test
+	public void testGetContratsSuccess() {
+		Contrat contrat1 = new Contrat();
+		Contrat contrat2 = new Contrat();
+		contrat1.setCandidature(CandidatureDTO.toEntity(candidatureDTO));
+		contrat1.setGestionnaire(UtilisateurDTO.toEntity(admin));
+		contrat2.setCandidature(CandidatureDTO.toEntity(candidatureDTO));
+		contrat2.setGestionnaire(UtilisateurDTO.toEntity(admin));
+		List<Contrat> contrats = List.of(contrat1, contrat2);
+
+		when(contratRepository.findAll()).thenReturn(contrats);
+
+		List<ContratDTO> result = contratService.getContrats();
+
+		assertEquals(2, result.size());
+	}
+
+	@Test
+	public void testGetContrats_ExceptionNoContratsFound() {
+		when(contratRepository.findAll()).thenReturn(List.of());
+
+		assertThrows(IllegalArgumentException.class, () -> {
+			contratService.getContrats();
 		});
 	}
 }

@@ -39,7 +39,6 @@ class CandidatureServiceTest {
     @Mock
     private CvRepository cvRepository;
 
-    private Etudiant etudiant;
     private OffreStage offreStage;
     private Candidature candidature;
 
@@ -47,18 +46,35 @@ class CandidatureServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
+        Departement departement = new Departement();
+        departement.setId(1L);
+        departement.setNom("Informatique");
+
         Credentials credentials = Credentials.builder()
                 .email("etudiant@example.com")
+                .role(Role.ETUDIANT)
                 .build();
-        etudiant = new Etudiant();
+        Etudiant etudiant = new Etudiant();
         etudiant.setCredentials(credentials);
+        etudiant.setDepartement(departement);
+
+        Credentials credentials1 = Credentials.builder()
+                .email("employeur@example.com")
+                .role(Role.EMPLOYEUR)
+                .build();
+        Employeur employeur = new Employeur();
+        employeur.setCredentials(credentials1);
+        employeur.setDepartement(departement);
 
         offreStage = new OffreStage();
         offreStage.setNom("Stage en Développement");
         offreStage.setCompagnie("TechCorp");
+        offreStage.setDepartement(departement);
+        offreStage.setOwner(employeur);
 
         candidature = new Candidature();
         candidature.setId(1L);
+
         candidature.setEtudiant(etudiant);
         candidature.setOffreStage(offreStage);
         candidature.setEtat(EtatCandidature.EN_ATTENTE);
@@ -411,4 +427,47 @@ class CandidatureServiceTest {
         verify(candidatureRepository, never()).save(any(Candidature.class));
     }
 
+    @Test
+    void testGetCandidaturesByEtatAccepteApresEntrevue() {
+
+        List<Candidature> candidatures = List.of(candidature);
+        when(candidatureRepository.findByEtatWithoutCv(EtatCandidature.ACCEPTE_APRES_ENTREVUE)).thenReturn(candidatures);
+
+        List<CandidatureDTO> result = candidatureService.getCandidaturesByEtatAccepteApresEntrevue();
+
+        assertEquals(1, result.size());
+        assertEquals(candidature.getId(), result.getFirst().getId());
+    }
+
+    @Test
+    void testGetCandidaturesByEtatAccepteApresEntrevueException() {
+        when(candidatureRepository.findByEtatWithoutCv(EtatCandidature.ACCEPTE_APRES_ENTREVUE)).thenThrow(new RuntimeException("Database error"));
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                candidatureService.getCandidaturesByEtatAccepteApresEntrevue()
+        );
+
+        assertEquals("Une erreur est survenue lors de la récupération des candidatures par état accepté après entrevue.", exception.getMessage());
+    }
+
+    @Test
+    void testGetCandidatureByIdSuccess() {
+        System.out.println(candidature);
+        when(candidatureRepository.findById(1L)).thenReturn(Optional.of(candidature));
+
+        CandidatureDTO result = candidatureService.getCandidatureById(1L);
+
+        assertEquals(candidature.getId(), result.getId());
+    }
+
+    @Test
+    void testGetCandidatureByIdNotFound() {
+        when(candidatureRepository.findById(1L)).thenReturn(Optional.empty());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                candidatureService.getCandidatureById(1L)
+        );
+
+        assertEquals("Candidature avec ID: 1 n'existe pas", exception.getMessage());
+    }
 }

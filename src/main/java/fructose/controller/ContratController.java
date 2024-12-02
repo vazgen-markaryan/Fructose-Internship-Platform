@@ -141,11 +141,11 @@ public class ContratController {
 	@GetMapping
 	public ResponseEntity<?> getContrats(@RequestHeader("Authorization") String token) {
 		validateToken(token);
+		UtilisateurDTO utilisateur = utilisateurService.getUtilisateurByToken(token);
+		if (!utilisateur.getRole().equals(Role.ADMIN)) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not an admin");
+		}
 		try {
-			UtilisateurDTO utilisateur = utilisateurService.getUtilisateurByToken(token);
-			if (!utilisateur.getRole().equals(Role.ADMIN)) {
-				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not an admin");
-			}
 			return new ResponseEntity<>(contratService.getContrats(), HttpStatus.OK);
 		}catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);

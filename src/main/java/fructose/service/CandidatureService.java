@@ -162,9 +162,9 @@ public class CandidatureService {
 	}
 	
 	public CandidatureDTO getCandidatureById(Long candidatureId) {
-		try {
-			Candidature candidature = candidatureRepository.findById(candidatureId)
+		Candidature candidature = candidatureRepository.findById(candidatureId)
 				.orElseThrow(() -> new IllegalArgumentException("Candidature avec ID: " + candidatureId + " n'existe pas"));
+		try {
 			return CandidatureDTO.toDTO(candidature);
 		} catch (Exception e) {
 			logger.error("Erreur lors de la récupération de la candidature avec ID: {}", candidatureId, e);
