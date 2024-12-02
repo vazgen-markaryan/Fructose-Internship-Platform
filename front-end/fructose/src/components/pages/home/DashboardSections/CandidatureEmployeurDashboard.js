@@ -43,8 +43,8 @@ const UserManagementDashboard = () => {
         }
     }, [currentUser]);
 
-    const goToCandidaturesPage = () => {
-        navigate("/dashboard/view-candidatures")
+    const goToCandidaturesPage = (section) => {
+        navigate("/dashboard/view-candidatures?section=" + section)
     }
 
     if (currentUser != null) {
@@ -55,7 +55,7 @@ const UserManagementDashboard = () => {
                     <br/>
                     <div className="toolbar-items" style={{gap: "10px", alignItems: "flex-start"}}>
                         <div style={{width: "45%"}}>
-                            <div className="card card-clickable" style={{padding: "0 10px"}}>
+                            <div className="card card-clickable" style={{padding: "0 10px"}} onClick={()=>{goToCandidaturesPage("nouvelles_candidatures")}}>
                                <div className="list-bullet">
                                    <Icon path={mdiTooltipPlusOutline} size={1} />
                                    <div>
@@ -65,7 +65,7 @@ const UserManagementDashboard = () => {
                                </div>
                             </div>
                             <br/>
-                            <div className="card card-clickable" style={{padding: "0 10px"}}>
+                            <div className="card card-clickable" style={{padding: "0 10px"}} onClick={()=>{goToCandidaturesPage("en_entrevue")}}>
                                 <div className="list-bullet">
                                     <Icon path={mdiPresentation} size={1} />
                                     <div>
@@ -74,7 +74,7 @@ const UserManagementDashboard = () => {
                                 </div>
                             </div>
                             <br/>
-                            <div className="card card-clickable" style={{padding: "0 10px"}}>
+                            <div className="card card-clickable" style={{padding: "0 10px"}}  onClick={()=>{goToCandidaturesPage("en_signature")}}>
                                 <div className="list-bullet">
                                     <Icon path={mdiFileSign} size={1} />
                                     <div>
@@ -83,7 +83,7 @@ const UserManagementDashboard = () => {
                                 </div>
                             </div>
                             <br/>
-                            <div className="card card-clickable" style={{padding: "0 10px"}}>
+                            <div className="card card-clickable" style={{padding: "0 10px"}}  onClick={()=>{goToCandidaturesPage("accepte_total")}}>
                                 <div className="list-bullet">
                                     <Icon path={mdiBriefcaseCheckOutline} size={1} />
                                     <div>
@@ -92,7 +92,7 @@ const UserManagementDashboard = () => {
                                 </div>
                             </div>
                             <br/>
-                            <div className="card card-clickable" style={{padding: "0 10px"}}>
+                            <div className="card card-clickable" style={{padding: "0 10px"}}  onClick={()=>{goToCandidaturesPage("rejete_total")}}>
                                 <div className="list-bullet">
                                     <Icon path={mdiBriefcaseRemoveOutline} size={1} />
                                     <div>
@@ -119,7 +119,7 @@ const UserManagementDashboard = () => {
                                         :
                                         <>
                                             {candidatures.map((candidature, index) => (
-                                                <div className={"menu-list-item"} key={index} onClick={() => goToCandidaturesPage()}>
+                                                <div className={"menu-list-item"} key={index} onClick={() => goToCandidaturesPage("all")}>
                                                     <Icon path={mdiAccountSchoolOutline} size={1} />
                                                     <div>
                                                         <div className="toolbar-items">
@@ -128,6 +128,9 @@ const UserManagementDashboard = () => {
                                                         <p className="m-0 text-dark">{candidature.candidature.offreStageDTO.nom}</p>
                                                     </div>
                                                     <div className="toolbar-spacer"></div>
+                                                    {candidatures[index].candidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" && (
+                                                        <span className="badge bg-orange" style={{marginLeft: "10px"}}>{t("view_candidatures_page.action_needed")}</span>
+                                                    )}
                                                     {
                                                         (candidature.candidature.etat === "REFUSEE" || candidature.candidature.etat === "REFUSEE_APRES_ENTREVUE")?
                                                             <Icon path={mdiBriefcaseRemoveOutline} size={1} className="text-dark" />
@@ -155,7 +158,7 @@ const UserManagementDashboard = () => {
                                         </>
                                 }
 
-                                <div className="menu-list-item menu-list-view-more " onClick={()=>{goToCandidaturesPage()}}>
+                                <div className="menu-list-item menu-list-view-more " onClick={()=>{goToCandidaturesPage("all")}}>
                                     <div className="toolbar-spacer"></div>
                                     <p className="m-0">{t("dashboard_home_page.see_all")}</p>
                                     <Icon path={mdiChevronRight} size={1}/>

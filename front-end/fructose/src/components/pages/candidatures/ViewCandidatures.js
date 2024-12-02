@@ -19,9 +19,11 @@ import {CvContext} from "../../providers/CvProvider";
 import Swal from "sweetalert2";
 import {ContratContext, handleSignerContrat} from "../../providers/ContratProvider";
 import CandidatureStatus from "./CandidatureStatus";
+const sectionId = new URLSearchParams(window.location.search).get("section");
 
 const ViewCandidatures = () => {
-	
+	const sectionId = new URLSearchParams(window.location.search).get("section");
+
 	const {t} = useTranslation();
 	const [currentCandidature, setCurrentCandidature] = useState(null);
 	const [candidatures, setCandidatures] = useState([]);
@@ -31,7 +33,7 @@ const ViewCandidatures = () => {
 	const [currentCV, setCurrentCV] = useState(null);
 	const [isApproveModalOpen, setApproveModalOpen] = useState(false);
 	const interviewDateRef = useRef(null);
-	const [candidatureCategory, setCandidatureCategory] = useState("all")
+	const [candidatureCategory, setCandidatureCategory] = useState(sectionId)
 	const [isRejectModalOpen, setRejectModalOpen] = useState(false);
 	const textareaRef = useRef(null);
 	const {fetchContratByCandidatureId, handleSignerContrat, handleRefuseSignerContrat} = useContext(ContratContext);
@@ -462,7 +464,7 @@ const ViewCandidatures = () => {
 											</div>
 											<div className="toolbar-spacer"></div>
 											{candidatures[index].candidature.etat === "ENTREVUE_ACCEPTE_ETUDIANT" && (
-												<span className="badge bg-orange" style={{marginLeft: "10px"}}><strong>{t("view_candidatures_page.action_needed")}</strong></span>
+												<span className="badge bg-orange" style={{marginLeft: "10px"}}>{t("view_candidatures_page.action_needed")}</span>
 											)}
 											{
 												(candidatures[index].candidature.etat === "REFUSEE" || candidatures[index].candidature.etat === "REFUSEE_APRES_ENTREVUE")?
