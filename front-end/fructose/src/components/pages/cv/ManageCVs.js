@@ -1,9 +1,9 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {
-	mdiArrowLeft,
+	mdiArrowLeft, mdiCheckCircleOutline, mdiClockOutline,
 	mdiClose,
 	mdiDeleteOutline,
-	mdiDownloadOutline,
+	mdiDownloadOutline, mdiFileDocumentOutline,
 	mdiFileOutline,
 	mdiFileQuestionOutline,
 	mdiFileUploadOutline
@@ -33,7 +33,7 @@ const ManageCVs = () => {
 			(async function () {
 				try {
 					const response = await GetCvs();
-					const data = JSON.parse(await response.text());
+					const data = JSON.parse(await response.text()).reverse();
 					setCvs(data);
 				} catch (error) {
 					console.log(t('manage_cv.upload_error'));
@@ -86,15 +86,15 @@ const ManageCVs = () => {
 			console.error("Erreur lors de la suppression du CV:", error);
 		}
 	};
-	
+
 	const getStatutElement = (cv) => {
 		if (cv) {
 			if (!cv.isApproved && !cv.isRefused) {
-				return <StatusElement status="pending" text={t("manage_cv.status.pending")}/>;
+				return <Icon path={mdiClockOutline} size={0.7} />;
 			} else if (cv.isApproved) {
-				return <StatusElement status="approved" text={t("manage_cv.status.approved")}/>;
+				return <Icon path={mdiCheckCircleOutline} size={0.7} />;
 			} else if (cv.isRefused) {
-				return <StatusElement status="rejected" text={t("manage_cv.status.rejected")}/>;
+				return <Icon path={mdiClose} size={0.7} className="text-red" />;
 			}
 		}
 		return null;
@@ -102,7 +102,7 @@ const ManageCVs = () => {
 	
 	const getCvList = () => {
 			if (cvs.length > 0) {
-				const lastCv = cvs[cvs.length - 1];
+				const lastCv = cvs[0];
 				return (
 					<>
 						<div className="toolbar-items">
@@ -116,7 +116,7 @@ const ManageCVs = () => {
 						<div className="menu-list">
 							<div onClick={() => handleCvSelection(lastCv)}>
 								<div
-									className={`menu-list-item ${currentCv && lastCv.id === currentCv.id ? "menu-list-item-selected" : ""}`}
+									className={`menu-list-item ${currentCv && lastCv.id === currentCv.id ? "menu-list-item-selected" : ""}  ${((!lastCv.isApproved && !lastCv.isRefused)?"menu-list-item-pending":((lastCv.isRefused)?"menu-list-item-striked":""))}`}
 									style={{
 										width: "100%",
 										display: "flex",
@@ -133,10 +133,10 @@ const ManageCVs = () => {
 									}}>
 										<img src="/assets/dashboard/preview.png" alt="" style={{height: "100%"}}/>
 									</div>
-									<div style={{padding: "16px"}}>
+									<div style={{paddingLeft: "16px"}}>
 										<h4 className="m-0">{lastCv.filename}</h4>
-										{getStatutElement(lastCv)}
 									</div>
+									{getStatutElement(lastCv)}
 								</div>
 							</div>
 						</div>
@@ -144,14 +144,12 @@ const ManageCVs = () => {
 						{cvs.length > 1 && (
 							<>
 								<div className="menu-list">
-									{cvs.slice(0, -1).reverse().map((item, index) => (
+									{cvs.slice(1).map((item, index) => (
 										<div key={index} onClick={() => handleCvSelection(item)}
-											 className={`menu-list-item ${currentCv && item.id === currentCv.id ? "menu-list-item-selected" : ""}`}>
+											 className={`menu-list-item ${currentCv && item.id === currentCv.id ? "menu-list-item-selected" : ""} ${((!item.isApproved && !item.isRefused)?"menu-list-item-pending":((item.isRefused)?"menu-list-item-striked":""))}`}>
 											<Icon path={mdiFileOutline} size={1}/>
-											<div>
 												<p className="m-0">{item.filename}</p>
 												{getStatutElement(item)}
-											</div>
 										</div>
 									))}
 								</div>

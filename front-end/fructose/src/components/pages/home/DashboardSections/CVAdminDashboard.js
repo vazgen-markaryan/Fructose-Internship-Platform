@@ -252,7 +252,7 @@ const CVAdminDashboard = () => {
                                             :
                                             <div className="no-items-display">
                                                 <Icon path={mdiFileQuestionOutline} size={1.4}/>
-                                                <h6>{t("discover_offers_page.no_offers")}</h6>
+                                                <h6>{t("dashboard_home_page.no_cv")}</h6>
                                                 <p className="text-dark text-mini">{t("discover_offers_page.future_offers")}</p>
                                             </div>}
                                     </div>

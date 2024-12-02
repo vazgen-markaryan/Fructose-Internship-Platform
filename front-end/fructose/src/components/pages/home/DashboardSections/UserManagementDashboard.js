@@ -108,7 +108,7 @@ const UserManagementDashboard = () => {
 
                             <div className="menu-list-item menu-list-view-more " onClick={()=>{goToUserManagementPage()}}>
                                 <div className="toolbar-spacer"></div>
-                                <p className="m-0">Voir tout</p>
+                                <p className="m-0">{t("dashboard_home_page.see_all")}</p>
                                 <Icon path={mdiChevronRight} size={1}/>
                             </div>
                         </div>

@@ -38,6 +38,14 @@ const DiscoverOffers = () => {
     const handleApplyStage = async () => {
         const isConfirmed = await openCandidatureWindow(currentOffer);
         if (isConfirmed) {
+            const updatedOffers = offers.map(item =>
+                item.id === currentOffer.id ? { ...item, hasCandidature: true } : item
+            );
+            const updatedFilteredOffers = filteredOffers.map(item =>
+                item.id === currentOffer.id ? { ...item, hasCandidature: true } : item
+            );
+            setOffers(updatedOffers);
+            setFilteredOffers(updatedFilteredOffers)
             setCurrentOffer({...currentOffer, hasCandidature: true})
         }
     };
@@ -157,8 +165,9 @@ const DiscoverOffers = () => {
         // Il dit d'inclure fetchCandidaturesById dans le tableau de dépendances, et il commence à spam des requetes dans Reseau
     }, [currentUser]);
 
-    const isOfferApplied = (offerId) => {
-        return candidatures.some((candidature) => candidature.offreStageId === offerId);
+    const isOfferApplied = (offer) => {
+        console.log(offer)
+        return offer.hasCandidature || candidatures.some((candidature) => candidature.offreStageId === offer.id);
     };
 
     useEffect(() => {
@@ -176,12 +185,14 @@ const DiscoverOffers = () => {
     }, [isUserInit, fetchOffresStage, filters]);
 
     useEffect(() => {
-        if (offers.length > 0) {
-            if (offerId) {
-                const selectedOffer = offers.find((offer) => offer.id === parseInt(offerId));
-                setCurrentOffer(selectedOffer);
-            } else {
-                setCurrentOffer(offers[0])
+        if(!currentOffer) {
+            if (offers.length > 0) {
+                if (offerId) {
+                    const selectedOffer = offers.find((offer) => offer.id === parseInt(offerId));
+                    setCurrentOffer(selectedOffer);
+                } else {
+                    setCurrentOffer(offers[0])
+                }
             }
         }
     }, [location.search, offerId, offers]);
@@ -480,7 +491,7 @@ const DiscoverOffers = () => {
                         <OfferPreview
                             currentOffer={currentOffer}
                             handleApply={handleApplyStage}
-                            isApplied={isOfferApplied(currentOffer.id)}
+                            isApplied={isOfferApplied(currentOffer)}
                         />
                     </div>
                 }
