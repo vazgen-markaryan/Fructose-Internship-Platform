@@ -24,6 +24,7 @@ import OfferPreview from "../offre-stage/OfferPreview";
 import {CandidatureContext} from "../../providers/CandidatureProvider";
 import Swal from "sweetalert2";
 import EvaluationEmployeur from "../evaluation/EvaluationEmployeur";
+import EvaluationMilieuStage from "../evaluation/EvaluationMilieuStage";
 
 const DashboardHome = () => {
 	
@@ -978,6 +979,7 @@ const DashboardHome = () => {
 						{GetPortfolioSection()}
 						{GetCandidatureManagementSection()}
 						<EvaluationEmployeur />
+						<EvaluationMilieuStage />
 						<div style={{"height": "520px"}}>
 						</div>
 					</div>

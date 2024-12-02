@@ -39,7 +39,7 @@ const EvaluationEmployeur = () => {
 
     const fetchAllEvaluations = async () => {
         try {
-            const response = await fetch(`/evaluations/all-evaluation`, {
+            const response = await fetch(`/evaluations/employeur/all-evaluation`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -60,13 +60,12 @@ const EvaluationEmployeur = () => {
 
     const fetchEvaluationByCandidatureId = async (evaluation) => {
         try {
-            const response = await fetch(`/evaluations/evaluation-eleve`, {
-                method: "POST",
+            const response = await fetch(`/evaluations/employeur/${evaluation.id}`, {
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": currentToken,
                 },
-                body: JSON.stringify(evaluation),
             });
             if (!response.ok) {
                 throw new Error("Erreur lors de la récupération de l'évaluation.");

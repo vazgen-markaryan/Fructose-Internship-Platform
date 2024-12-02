@@ -84,6 +84,27 @@ const CandidatureProvider = ({children}) => {
 			console.error('Erreur lors de la récupération des candidatures:', error);
 		}
 	};
+	const fetchCandidatureByEtatContratSigneTous = async () => {
+		try {
+			const response = await fetch(`/candidatures/contratSigneTous`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					"Authorization": currentToken
+				},
+			});
+			if (response.ok) {
+				const data = await response.json();
+				console.log('Candidatures:', data);
+				return data;
+			} else {
+				throw new Error('Failed to fetch candidatures');
+			}
+		}
+		catch (error) {
+			console.error("Erreur " + error);
+		}
+	}
 	return (
 		<CandidatureContext.Provider value={{
 			candidatures,
@@ -91,7 +112,8 @@ const CandidatureProvider = ({children}) => {
 			ApplyOffreStage,
 			setCandidatures,
 			fetchCandidatureByEtatAccepteApresEntrevue,
-			fetchStagiaireByOwner
+			fetchStagiaireByOwner,
+			fetchCandidatureByEtatContratSigneTous
 		}}>
 			{children}
 		</CandidatureContext.Provider>

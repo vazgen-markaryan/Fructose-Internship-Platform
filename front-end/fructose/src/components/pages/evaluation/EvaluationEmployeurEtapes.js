@@ -4,7 +4,7 @@ import {Link, useLocation} from "react-router-dom";
 import {AuthContext} from "../../providers/AuthProvider";
 import PdfPreview from "../../../utilities/pdf/PdfPreview";
 
-const EvaluationEtapes = () => {
+const EvaluationEmployeurEtapes = () => {
     const {t} = useTranslation();
     const [currentStep, setCurrentStep] = useState(1); // Étape actuelle
     const {currentToken} = useContext(AuthContext);
@@ -55,7 +55,7 @@ const EvaluationEtapes = () => {
             } else {
                 updatedFormData[name] = value;
             }
-
+            console.log(updatedFormData);
             return updatedFormData;
         });
     };
@@ -653,4 +653,4 @@ const EvaluationEtapes = () => {
     );
 };
 
-export default EvaluationEtapes;
+export default EvaluationEmployeurEtapes;

@@ -687,5 +687,89 @@
 			},
 			"no_step": "Aucune étape sélectionnée"
 		}
+	},
+	"evaluation_milieu_stage": {
+		"milieu_stage_a_evaluer": "Milieu de stage à évaluer",
+		"no_milieu_stage_a_evaluer": "Aucun milieu de stage à évaluer",
+		"evaluation_non_disponible": "Évaluation non disponible avant :",
+		"evaluation_disponible": "Évaluation disponible",
+		"evaluer": "Évaluer",
+		"required": "Champ obligatoire",
+		"step": {
+			"general": {
+				"title": "Informations Générales",
+				"stage_type": "Premier ou deuxième stage",
+				"hours_per_week_first_month": "Heures par semaine (Premier Mois)",
+				"hours_per_week_second_month": "Heures par semaine (Deuxième Mois)",
+				"hours_per_week_third_month": "Heures par semaine (Troisième Mois)",
+				"hourly_rate": "Taux horaire",
+				"stage1": "Stage 1",
+				"stage2": "Stage 2"
+			},
+			"section2": {
+				"title": "Section 2 : Critères d'Évaluation",
+				"description": "Évaluez les critères suivants :",
+				"fields": {
+					"field1": "Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans l’entente de stage",
+					"field2": "Des mesures d’accueil facilitent l’intégration du nouveau stagiaire",
+					"field3": "Le temps réel consacré à l’encadrement du stagiaire est suffisant",
+					"field4": "L’environnement de travail respecte les normes d’hygiène et de sécurité au travail",
+					"field5": "Le climat de travail est agréable"
+				}
+			},
+			"section3": {
+				"title": "Section 3 : Critères d'Évaluation",
+				"description": "Évaluez les critères suivants :",
+				"fields": {
+					"field1": "Le milieu de stage est accessible par transport en commun",
+					"field2": "Le salaire offert est intéressant pour le stagiaire",
+					"field3": "La communication avec le superviseur de stage facilite le déroulement du stage",
+					"field4": "L’équipement fourni est adéquat pour réaliser les tâches confiées",
+					"field5": "Le volume de travail est acceptable"
+				}
+			},
+			"section4": {
+				"title": "Section 4 : Observations Générales",
+				"field1": "Milieu de stage à prioriser pour :",
+				"field2": "Signature du superviseur",
+				"field3": "Nombre d'étudiants pouvant être accueillis",
+				"field4": "Même stagiaire pour le prochain stage",
+				"field5": "Horaire de travail variable",
+				"field6": "Début du quart de travail 1",
+				"field7": "Début du quart de travail 2",
+				"field8": "Début du quart de travail 3"
+			},
+			"total_agree": "Totalement d'accord",
+			"mostly_agree": "Plutôt d'accord",
+			"mostly_disagree": "Plutôt en désaccord",
+			"total_disagree": "Totalement en désaccord",
+			"select": "Sélectionner",
+			"comment": "Commentaire",
+			"previous": "Précédent",
+			"next": "Suivant",
+			"submit": "Soumettre",
+			"back_to_dashboard": "Retour au tableau de bord",
+			"capaciteEtudiant": {
+				"UN_STAGIAIRE": "Un stagiaire",
+				"DEUX_STAGIAIRES": "Deux stagiaires",
+				"TROIS_STAGIAIRES": "Trois stagiaires",
+				"PLUS_DE_TROIS": "Plus de trois stagiaires"
+			}
+		},
+		"evaluation_steps": {
+			"title": "Évaluation de milieu de stage",
+			"step1": {
+				"title": "Étape 1 : Informations Générales"
+			},
+			"step2": {
+				"title": "Étape 2 : Critères d'Évaluation"
+			},
+			"step3": {
+				"title": "Étape 3 : Critères d'Évaluation"
+			},
+			"step4": {
+				"title": "Étape 4 : Observations Générales"
+			}
+		}
 	}
 }
