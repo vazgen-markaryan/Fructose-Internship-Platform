@@ -135,7 +135,7 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 						<hr/>
 						<section className="nospace">
 							<h5>{t("discover_offers_page.description")}</h5>
-							<p>{currentOffer.description}</p>
+							<p style={{wordWrap: "break-word"}}>{currentOffer.description}</p>
 						</section>
 						<hr/>
 						<section className="nospace">

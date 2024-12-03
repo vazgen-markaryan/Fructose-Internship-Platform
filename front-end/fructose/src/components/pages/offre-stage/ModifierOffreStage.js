@@ -203,9 +203,9 @@ const ModifierOffreStage = () => {
 						<br/>
 
 						<div className={"input-container"}>
-                            <textarea className={`${errors.description ? "field-invalid" : ""}`}
-									  value={offreStage.description} name="description" style={{height: "100px"}}
-									  onChange={handleInputChange} required ></textarea>
+							<textarea className={`${errors.description ? "field-invalid" : ""}`}
+		  						value={offreStage.description} name="description" style={{height: "400px"}}
+		  						onChange={handleInputChange} required></textarea>
 							<p className={"field-invalid-text"}>{errors.description}</p>
 						</div>
 
@@ -216,8 +216,8 @@ const ModifierOffreStage = () => {
 						<br/>
 
 						<div className={"input-container"}>
-							<p>{t("modifier_offre_stage_page.taux_horaire")}</p>
-							<input value={offreStage.tauxHoraire || ''} type="number" name="tauxHoraire"
+						<p>{t("modifier_offre_stage_page.taux_horaire")}</p>
+							<input value={offreStage.tauxHoraire !== undefined ? offreStage.tauxHoraire : ''} type="number" name="tauxHoraire"
 								   onChange={handleInputChange} required min="0" className={`${errors.tauxHoraire ? "field-invalid" : ""}`}/>
 							<p className="field-invalid-text">{errors.tauxHoraire}</p>
 						</div>

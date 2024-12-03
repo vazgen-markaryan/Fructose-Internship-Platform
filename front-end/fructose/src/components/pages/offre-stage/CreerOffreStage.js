@@ -17,11 +17,11 @@ const CreerOffreStage = () => {
 		typeEmploi: '',
 		adresse: '',
 		modaliteTravail: '',
-		dateDebut: new Date(),
-		dateFin: new Date(),
+		dateDebut: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000),
+		dateFin: new Date(Date.now() + 9 * 24 * 60 * 60 * 1000),
 		nombreHeuresSemaine: 1,
 		nombrePostes: 1,
-		dateLimiteCandidature: new Date(),
+		dateLimiteCandidature: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 		ownerDTO: null
 	});
 	
