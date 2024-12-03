@@ -21,8 +21,16 @@ h1, h2, h3 {
 	margin: 0 0 18px 0;
 }
 
-h4, h5, h6 {
+h4{
 	margin: 0 0 14px 0;
+}
+
+h5 {
+	margin: 0 0 10px 0;
+}
+
+h6 {
+	margin: 0 0 6px 0;
 }
 
 h4, h5, h6, p, a {
@@ -188,7 +196,7 @@ label {
 
 /*Boutons*/
 
-button, .button {
+button, .button, button.swal2-default-outline {
 	border: none;
 	color: inherit;
 	line-height: 36px;
@@ -197,6 +205,7 @@ button, .button {
 	border-radius: var(--border-radius);
 	font-family: "Roboto Condensed", sans-serif;
 	transition: 0.3s;
+	font-weight: 400;
 }
 
 button.btn-filled {
@@ -214,9 +223,14 @@ button.btn-filled:hover:not(.btn-filled:disabled) {
 	color: white;
 }
 
-button.btn-outline {
+button.btn-outline, button.swal2-cancel {
 	border: 1px solid black;
 	background-color: transparent;
+}
+
+button.swal2-confirm{
+	color: white;
+	padding: 1px 14px;
 }
 
 button.btn-outline:hover {
@@ -329,6 +343,14 @@ p.field-invalid-text {
 
 .m-0 {
 	margin: 0;
+}
+
+.p-0 {
+	padding: 0 !important;
+}
+
+.text-decoration-none{
+	text-decoration: none;
 }
 
 .toolbar-items {
@@ -627,7 +649,7 @@ header {
 
 section {
 	width: 100%;
-	padding: 20px 16px;
+	padding: 22px 20px;
 	box-sizing: border-box;
 }
 
@@ -705,6 +727,28 @@ section.nospace {
 	border-radius: var(--border-radius);
 }
 
+/*PDF PREVIEW, FULLSCREEN*/
+
+.pdf-file-preview-zone {
+	margin: 0 auto;
+	background-color: white;
+	border-radius: 8px;
+	border: 1px solid #d1d1d1;
+	padding: 10px;
+	position: relative;
+}
+
+.pdf-file-preview-zone.fullscreen {
+	position: fixed;
+	top: 70px;
+	left: 10px;
+	right: 10px;
+	bottom: 30px;
+	z-index: 1000;
+	background-color: white;
+	border-radius: 8px;
+}
+
 .pdf-file-preview-navigation {
 	position: absolute;
 	bottom: 30px;
@@ -733,7 +777,6 @@ section.nospace {
 	align-items: center;
 	justify-content: center;
 	text-align: center;
-	color: gray;
 }
 
 .loader {
@@ -782,6 +825,11 @@ section.nospace {
 	min-height: 48px;
 }
 
+.menu-list-view-more {
+	height: 48px;
+	min-height: 48px;
+}
+
 .menu-list-item-64{
 	min-height: 64px
 }
@@ -803,8 +851,21 @@ section.nospace {
 	border-radius: var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius);
 }
 
-.menu-list:first-child{
-	border-top: 1px solid #8080805c !important;
+.menu-list > .menu-list-item.menu-list-item-placeholder:nth-child(1){
+	border-top: 1px solid #8080805c;
+}
+
+.menu-list > .menu-list-item.menu-list-empty-list-placeholder{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 320px;
+	text-align: center;
+}
+
+.menu-list > .menu-list-item.menu-list-empty-list-placeholder:hover{
+	background-color: inherit;
 }
 
 .menu-list > .menu-list-item:not(.menu-list-item-placeholder) + .menu-list-item-placeholder{
@@ -824,6 +885,31 @@ section.nospace {
 
 .menu-list-item.menu-list-item-selected + .menu-list-item {
 	border-top-color: var(--color-primary);
+}
+
+.menu-list > .menu-list-item > .menu-list-item-image{
+	background-color: rgb(206,206,206);
+	padding: 10px 30px;
+	height: 100%;
+	box-sizing: border-box;
+	border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.menu-list-item.menu-list-item-pending > *{
+	opacity: 0.3;
+}
+
+.menu-list-item.menu-list-item-striked > *{
+	text-decoration: line-through;
+	text-decoration-color: #f44336;
+}
+
+.no-items-display{
+	text-align: center;
+}
+
+.no-items-display > h5, .no-items-display > h6{
+	margin: 5px 0 5px 0;
 }
 
 .user-profile-section {
@@ -916,6 +1002,18 @@ tr {
 	border-radius: var(--border-radius);
 	border: 1px solid #d1d1d1;
 	min-width: 200px;
+	box-sizing: border-box;
+	position: relative;
+}
+
+.card.card-clickable{
+	user-select: none;
+	transition: 0.3s;
+}
+
+.card.card-clickable:hover{
+	background-color: #eeeeee;
+	cursor: pointer;
 }
 
 .card.no-border {
@@ -1060,28 +1158,6 @@ tr {
 	margin: 0;
 }
 
-/*PDF PREVIEW, FULLSCREEN*/
-
-.pdf-file-preview-zone {
-	margin: 0 auto;
-	background-color: white;
-	border-radius: 8px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	padding: 10px;
-	position: relative;
-}
-
-.pdf-file-preview-zone.fullscreen {
-	position: fixed;
-	top: 70px;
-	left: 10px;
-	right: 10px;
-	bottom: 30px;
-	z-index: 1000;
-	background-color: white;
-	border-radius: 8px;
-}
-
 /*Modal*/
 .modal-overlay {
 	position: fixed;
@@ -1093,7 +1169,7 @@ tr {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: 50;
+	z-index: 120;
 }
 
 .modal-content {
@@ -1150,4 +1226,9 @@ tr {
 .btn-candidature {
 	background-color: #4CAF50;
 	color: white;
+}
+
+.swal2-html-container{
+	font-family: "Roboto Condensed", sans-serif !important;
+	font-size: 16px !important;
 }

@@ -189,7 +189,27 @@
 			"modalite_travail_select": "La modalité de travail doit être sélectionnée",
 			"type_emploi_select": "Le type d'emploi doit être sélectionné"
 		},
-		"steps": {
+		"steps":{
+			"1": {
+				"title": "Informations de base",
+				"description": "Veuillez remplir les champs ci-dessous en fournissant le nom officiel de votre compagnie ainsi que son adresse complète, incluant le numéro de rue, le nom de la rue, la ville, le code postal et le pays."
+			},
+			"2": {
+				"title": "Informations sur l'emploi",
+				"description": "Entrer les informations requises pour permettre aux étudiants de mieux vous trouver."
+			},
+			"3": {
+				"title": "Description",
+				"description": "Entrer une description détailée de l'emploi, incluant une description du rôle de l'employé, des qualités recherchées, ainsi que l'expéreience requise."
+			},
+			"4": {
+				"title": "Particularités",
+				"description": "En choisissant parmi les choix si-dessous, décrivez les différents modes de votre emploi."
+			},
+			"5": {
+				"title": "Dates",
+				"description": "Entrer la date du début et la fin du stage, ainsi que la date limite de candidature."
+			},
 			"6" : {
 				"success" : "Succes",
 				"success_text" : "Votre offre de stage a été soumise. Veuillez allouer un délai afin que l'administrateur approuve votre offre.",
@@ -210,7 +230,7 @@
 	},
 	"dashboard_home_page": {
 		"home": "Accueil",
-		"offer": "Offres de stage",
+		"offer": "Offre de stage",
 		"explore": "Explorer",
 		"no_offers": "Aucune offre à afficher pour le moment",
 		"my_offers": "Offres de stage",
@@ -219,6 +239,7 @@
 		"add_offer": "Nouvelle offre",
 		"offers": "Offres de stage",
 		"hello": "Bonjour",
+		"of": "de",
 		"portfolio": "Mon Portfolio",
 		"add_cv": "Ajouter un CV",
 		"manage": "Gérer",
@@ -233,7 +254,7 @@
 		"not_approved_users": "Utilisateurs non approuvés",
 		"limited_places": "Places limitées",
 		"modalFermer": "Fermer",
-		"my_applications": "Liste de vos applications aux Offres de Stage",
+		"my_applications": "Mes Candidatures",
 		"no_applications": "Vous n'avez pas encore postulé à une Offre de Stage",
 		"at": "chez",
 		"application": "Candidature",
@@ -264,6 +285,7 @@
 		"application_rejected_after_interview": "Candidature refusée après l'entrevue",
 		"waiting_interview_results": "En attente des résultats de l'entrevue",
 		"see": "Voir",
+		"see_all": "Voir tout",
 		"are_you_sure": "Êtes-vous sûr?",
 		"proposed_interview_date_employeur": "La date de votre entrevue proposée par Employeur est le",
 		"acceptance_irreversible": "L'acceptation est irréversible et vous engage à participer à l'entrevue à cette date.",
@@ -450,7 +472,8 @@
 			"programme_etudes_select": "Le programme d'études doit être sélectionné",
 			"modalite_travail_select": "La modalité de travail doit être sélectionnée",
 			"type_emploi_select": "Le type d'emploi doit être sélectionné"
-		}
+		},
+		"disclaimer": "Toute modification des informations de l'offre de stage est sujet d'une re-examination par le gestionnaire"
 	},
 	"offer_status": {
 		"approved": "Approuvé",
@@ -537,7 +560,17 @@
 			"error_commentaire_refus": "Veuillez entrer un commentaire pour le refus",
 			"error_date_entrevue": "Veuillez entrer une date pour l'entrevue"
 		},
+		"categories": {
+			"all": "Toutes les candidatures",
+			"nouvelles_candidatures": "Nouvelles candidatures",
+			"en_entrevue": "Candatures en entrevue",
+			"en_signature": "Candatures en signature de contrat",
+			"accepte_total": "Candatures acceptées",
+			"rejete_total": "Candatures rejetées"
+		},
 		"title": "Gestion des Candidatures",
+		"no_comment": "Aucun Commentaire",
+		"employeur_comment": "Commentaire de l'employeur",
 		"new_applications": "Nouvelles candidatures",
 		"in_interview": "En Entrevue",
 		"in_contract_signature": "En signature Contrat",
@@ -555,7 +588,7 @@
 		"approve": "Approuver",
 		"refuse": "Refuser",
 		"approved": "Approuvé",
-		"refused_with_comment": "Refusé avec le commentaire : {{comment}}",
+		"refused_with_comment": "Refusé",
 		"interview": "Entrevue",
 		"waiting_for_student_confirmation": "En attente de la confirmation d'étudiant",
 		"proposed_interview_date": "Date de l'entrevue proposé: {{date}}",
@@ -596,7 +629,13 @@
 		"accept": "Accepter",
 		"you_passed_entrevue": "Vous avez passé l'entrevue avec succès.",
 		"student_passed_entrevue": "Étudiant a passé l'entrevue avec succès.",
-		"waiting_for_your_signature" : "En attente de votre signature"
+		"waiting_for_your_signature" : "En attente de votre signature",
+		"employeur_candidature_initiale_info": "L'étudiant a soumis une candidature pour votre poste. Examinez son dossier, et cliquer sur Accepter pour continuer la démarche, ou Rejeter si vous pensez qu'il n'est pas éligible pour ce poste.",
+		"etudiant_entrevue_initiale_info": "L'employeur a fixé une entrevue à la date indiquée. Vous devez accepter ou refuser cette entrevue. Notez que vous ne pourriez plus continuer avec votre candidature si vous refusez l'entrevue.",
+		"employeur_entrevue_info": "Après avoir passé à l'entrevue, veuillez accepter ou refuser la candidature de l'applicant pour passer à la prochaine étape.",
+		"titre_poste_obtenu" : "Poste obtenu",
+		"poste_obtenu": "Félicitations! Vous avez obtenu ce poste et faites maintenant partie de l'équipe.",
+		"categorie_selection": "Cliquez ici pour accèder aux nouvelles candidatures qui ont besoin de votre action ou tout autre catégorie qui est pertinente"
 	},
 	"manage_contract_page": {
 		"title_generate_contract": "Contrats de stage à générer",

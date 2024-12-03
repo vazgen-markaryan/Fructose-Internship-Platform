@@ -10,21 +10,42 @@ import CVEtudiantDashboard from "./DashboardSections/CVEtudiantDashboard";
 import UserManagementDashboard from "./DashboardSections/UserManagementDashboard";
 import CandidatureEmployeurDashboard from "./DashboardSections/CandidatureEmployeurDashboard";
 import CandidatureEtudiantDashboard from "./DashboardSections/CandidatureEtudiantDashboard";
+import {AdminProvider} from "../../providers/AdminProvider";
+import Suggestions from "./Suggestions";
+import SuggestionsDashboard from "./Suggestions";
 
 const DashboardHome = () => {
 	
 	const {t} = useTranslation();
 	const {currentUser} = useContext(AuthContext);
-	
-	const GetOffreStageSection = () => {
+
+	const GetDashboardSections = () => {
 		if (currentUser != null) {
 			if (currentUser.role === "ETUDIANT") {
-				return <OffresStagesDashboard></OffresStagesDashboard>
-			} else if (currentUser.role === "EMPLOYEUR" || currentUser.role === "PROFESSEUR") {
-				return <OffresStagesEmpProfDashboard></OffresStagesEmpProfDashboard>
+				return (
+					<>
+						<OffresStagesDashboard></OffresStagesDashboard>
+						<CandidatureEtudiantDashboard></CandidatureEtudiantDashboard>
+						<CVEtudiantDashboard></CVEtudiantDashboard>
+					</>
+					)
+			} else if (currentUser.role === "EMPLOYEUR") {
+				return (
+					<>
+						<OffresStagesEmpProfDashboard></OffresStagesEmpProfDashboard>
+						<CandidatureEmployeurDashboard></CandidatureEmployeurDashboard>
+					</>
+				)
+			} else if (currentUser.role === "PROFESSEUR") {
+				return (
+						<OffresStagesEmpProfDashboard></OffresStagesEmpProfDashboard>
+					)
+
 			} else if (currentUser.role === "ADMIN") {
 				return (
-					<DashboardHomeAdmin/>
+					<AdminProvider>
+						<DashboardHomeAdmin/>
+					</AdminProvider>
 				);
 			}
 		}
@@ -42,11 +63,7 @@ const DashboardHome = () => {
 			<div style={{"display": "flex", "gap": "20px"}}>
 				<div style={{"width": "70%"}}>
 					<div className="dashboard-card">
-						{GetOffreStageSection()}
-						<CandidatureEtudiantDashboard></CandidatureEtudiantDashboard>
-						<CVEtudiantDashboard></CVEtudiantDashboard>
-						<UserManagementDashboard></UserManagementDashboard>
-						<CandidatureEmployeurDashboard></CandidatureEmployeurDashboard>
+						{GetDashboardSections()}
 					</div>
 				</div>
 				<div style={{"width": "30%"}}>
@@ -68,31 +85,8 @@ const DashboardHome = () => {
 							</p>
 						</section>
 						<hr/>
-						<section className="nospace">
-							<h5>Suggestions</h5>
-							<div className="banner bg-primary">
-								<Icon path={mdiAccountCircle} size={1.2}/>
-								<div>
-									<h5 className="m-0">Complétez votre profil</h5>
-									<p className="m-0">Ajoutez un CV et commencez à postuler dès maintenant</p>
-								</div>
-							</div>
-							<div className="banner bg-grey">
-								<Icon path={mdiBriefcaseVariantOutline} size={1.2}/>
-								<div className="toolbar-spacer">
-									<h5 className="m-0">Commencez à postuler</h5>
-									<p className="m-0">Plusieures offres de stage disponibles</p>
-								</div>
-							</div>
-							<div className="banner bg-grey">
-								<Icon path={mdiBriefcaseVariantOutline} size={1.2}/>
-								<div className="toolbar-spacer">
-									<h5 className="m-0">Commencez à postuler</h5>
-									<p className="m-0">Plusieures offres de stage disponibles</p>
-								</div>
-							</div>
-						</section>
-						<hr/>
+
+							<SuggestionsDashboard role={(currentUser)?currentUser.role:null}></SuggestionsDashboard>
 						<section className="nospace">
 							<p className="text-dark">&copy; 2024 - Fructose</p>
 							<p className="text-dark">

@@ -189,7 +189,27 @@
 			"modalite_travail_select": "The work modality must be selected",
 			"type_emploi_select": "The type of employment must be selected"
 		},
-		"steps": {
+		"steps":{
+			"1": {
+				"title": "Basic Information",
+				"description": "Please fill in the fields below by providing the official name of your company as well as its complete address, including street number, street name, city, postal code, and country."
+			},
+			"2": {
+				"title": "Job Information",
+				"description": "Enter the required information to help students find you more easily."
+			},
+			"3": {
+				"title": "Description",
+				"description": "Enter a detailed job description, including a description of the employee's role, desired qualities, and required experience."
+			},
+			"4": {
+				"title": "Particularities",
+				"description": "By choosing from the options below, describe the different modes of your job."
+			},
+			"5": {
+				"title": "Dates",
+				"description": "Enter the start and end dates of the internship, as well as the application deadline."
+			},
 			"6" : {
 				"success" : "Success",
 				"success_text" : "Your internship offer has been submitted. Please allow some time for the administrator to approve your offer.",
@@ -220,6 +240,7 @@
 		"add_offer": "New offer",
 		"offers": "Internship Offers",
 		"hello": "Hello",
+		"of": "of",
 		"portfolio": "My Portfolio",
 		"add_cv": "Add a CV",
 		"manage": "Manage",
@@ -242,7 +263,7 @@
 		"initial_application": "Initial Application",
 		"waiting_employer_response": "Waiting for Employer's Response",
 		"approve": "Approved",
-		"rejected_with_comment": "Rejected with Comment",
+		"rejected_with_comment": "Rejected",
 		"interview": "Interview",
 		"waiting_interview_acceptance": "Waiting for Interview Acceptance",
 		"interview_date": "Interview Date",
@@ -265,6 +286,7 @@
 		"application_rejected_after_interview": "Application Rejected After Interview",
 		"waiting_interview_results": "Waiting for Interview Results",
 		"see": "Look Up",
+		"see_all": "View all",
 		"are_you_sure": "Are you sure?",
 		"proposed_interview_date_employeur": "The date of your interview proposed by the Employer is",
 		"acceptance_irreversible": "Acceptance is irreversible and commits you to participate in the interview on this date.",
@@ -451,7 +473,8 @@
 			"programme_etudes_select": "The study program must be selected",
 			"modalite_travail_select": "The work modality must be selected",
 			"type_emploi_select": "The type of employment must be selected"
-		}
+		},
+		"disclaimer": "Any modification of the information in the internship offer is subject to re-examination by the manager"
 	},
 	"offer_status": {
 		"approved": "Approved",
@@ -538,7 +561,17 @@
 			"error_commentaire_refus": "Please enter a reason for refusal",
 			"error_date_entrevue": "Please select an interview date"
 		},
+		"categories": {
+			"all": "All Applications",
+			"nouvelles_candidatures": "New Applications",
+			"en_entrevue": "Applications in interview",
+			"en_signature": "Applications in Contract Signature",
+			"accepte_total": "Accepted Position",
+			"rejete_total": "Rejected Applications"
+		},
 		"title": "Application Management",
+		"no_comment": "No Comment",
+		"employeur_comment": "Comment from the employer",
 		"new_applications": "New Applications",
 		"in_interview": "In Interview",
 		"in_contract_signature": "In Contract Signature",
@@ -597,7 +630,13 @@
 		"accept": "Accept",
 		"you_passed_entrevue": "You passed the interview. Congratulations!",
 		"student_passed_entrevue": "Student passed the interview",
-		"waiting_for_your_signature" : "Waiting for your signature"
+		"waiting_for_your_signature" : "Waiting for your signature",
+		"employeur_candidature_initiale_info": "The student has submitted an application for your position. Examine their file, and click on Accept to continue the process, or Reject if you think they are not eligible for this position.",
+		"etudiant_entrevue_initiale_info": "The employer has scheduled an interview on the date indicated. You must accept or refuse this interview. Note that you will no longer be able to continue with your application if you refuse the interview.",
+		"employeur_entrevue_info": "After proceeding to the interview, please accept or reject the applicant's application to proceed to the next step.",
+		"titre_poste_obtenu" : "Position obtained",
+		"poste_obtenu": "Congratulations! You got this position and are now part of the team.",
+		"categorie_selection": "Click here to access new applications that need your action or any other category that is relevant"
 	},
 	"manage_contract_page": {
 		"title_generate_contract": "Contracts to be generated",

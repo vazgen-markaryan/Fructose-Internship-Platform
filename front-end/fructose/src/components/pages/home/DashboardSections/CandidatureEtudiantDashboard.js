@@ -1,13 +1,21 @@
 import Icon from "@mdi/react";
-import {mdiArrowLeft, mdiArrowRight, mdiBriefcaseOutline, mdiClose} from "@mdi/js";
+import {
+	mdiArrowLeft,
+	mdiArrowRight,
+	mdiBriefcaseOutline,
+	mdiBriefcaseRemoveOutline,
+	mdiChevronLeft, mdiChevronRight,
+	mdiClose
+} from "@mdi/js";
 import CandidatureProgress from "../../candidatures/CandidatureProgress";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {CandidatureContext} from "../../../providers/CandidatureProvider";
 import {useTranslation} from "react-i18next";
 import {AuthContext} from "../../../providers/AuthProvider";
 import CandidatureStatus from "../../candidatures/CandidatureStatus";
 import Swal from "sweetalert2";
 import {ContratContext} from "../../../providers/ContratProvider";
+import {Link} from "react-router-dom";
 
 const CandidatureEtudiantDashboard = () => {
 	
@@ -20,10 +28,10 @@ const CandidatureEtudiantDashboard = () => {
 		const statusOrder = {
 			"POSTE_OBTENU": 1,
 			"CONTRAT_CREE_PAR_GESTIONNAIRE": 2,
-			"EN_ATTENTE": 3,
+			"ACCEPTE_APRES_ENTREVUE": 3,
 			"ENTREVUE_PROPOSE": 4,
-			"ENTREVUE_ACCEPTE_ETUDIANT": 5,
-			"ACCEPTE_APRES_ENTREVUE": 6,
+			"EN_ATTENTE": 5,
+			"ENTREVUE_ACCEPTE_ETUDIANT": 6,
 			"ENTREVUE_REFUSE_ETUDIANT": 7,
 			"REFUSEE_APRES_ENTREVUE": 8,
 			"REFUSEE": 9
@@ -35,7 +43,10 @@ const CandidatureEtudiantDashboard = () => {
 	const itemsPerPage = 5;
 	const startIndex = (currentPage - 1) * itemsPerPage;
 	const candidaturesInPage = sortedCandidatures.slice(startIndex, startIndex + itemsPerPage);
-	const maxPages = Math.ceil(candidatures.length / itemsPerPage)
+	const maxPages = Math.max(1, Math.ceil(candidatures.length / itemsPerPage));
+
+	const isInitialized = useRef(false);
+
 	const {
 		fetchContratByCandidatureId,
 		handleSignerContrat,
@@ -44,40 +55,70 @@ const CandidatureEtudiantDashboard = () => {
 	const [contrat, setContrat] = useState(null);
 	
 	const handleSignerContratClick = () => {
+		const updatedCandidatures = candidatures.map(item =>
+			item.id === currentCandidature.id ? { ...item, needsAttention: false } : item
+		);
+		setCandidatures(updatedCandidatures)
 		handleSignerContrat(contrat, setCurrentCandidature);
 	};
 	
 	const handleRefuseSignerContratClick = () => {
 		handleRefuseSignerContrat(contrat, setCurrentCandidature);
 	}
-	
+
+	const fetchContrat = async (id) => {
+		try {
+			return await fetchContratByCandidatureId(id);
+		} catch (error) {
+			console.error("Erreur " + error);
+		}
+	};
+
 	useEffect(() => {
 		if (currentCandidature && currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE") {
-			const fetchContrat = async () => {
-				try {
-					const data = await fetchContratByCandidatureId(currentCandidature.id);
-					setContrat(data);
-				} catch (error) {
-					console.error("Erreur " + error);
-				}
-			};
-			fetchContrat();
+			(async function () {
+				setContrat(await fetchContrat(currentCandidature.id))
+			})();
 		}
 	}, [currentCandidature]);
-	
+
 	useEffect(() => {
-		if (currentUser) {
+		if (currentUser && !isInitialized.current) {
 			(async function () {
 				if (currentUser.role === "ETUDIANT") {
 					fetchCandidaturesById(currentUser.id);
 				}
 			})();
+			isInitialized.current = true;
 		}
 		// TODO: Ici il donne WARNING: React Hook useEffect has a missing dependency: 'fetchCandidaturesById'.
 		// Mais si le faire il va envoyer 9999 requêtes dans Inspect -> Network
 		// It's ok, i'm just a chill guy 👈🐻👉
 	}, [currentUser]);
-	
+
+	const isContratsVerifInitialized = useRef(false);
+
+	useEffect(() => {
+		if(currentUser && !isContratsVerifInitialized.current){
+			(async function () {
+
+				for (let i = 0; i < candidatures.length; i++){
+					let can = candidatures[i];
+					if(can.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE"){
+						let contrat = await fetchContrat(can.id);
+						if(contrat && contrat.signatureEtudiant && contrat.signatureEtudiant === "Non signe"){
+							const updatedCandidatures = candidatures.map(item =>
+								item.id === can.id ? { ...item, needsAttention: true } : item
+							);
+							setCandidatures(updatedCandidatures)
+						}
+					}
+				}
+			})();
+			isContratsVerifInitialized.current = true;
+		}
+	}, [candidatures]);
+
 	const handleCandidatureClick = (candidature) => {
 		setCurrentCandidature(candidature)
 	};
@@ -94,8 +135,8 @@ const CandidatureEtudiantDashboard = () => {
 		}
 	};
 	
-	const actionIsRequired = (etat) => {
-		return etat === "ENTREVUE_PROPOSE" || etat === "CONTRAT_CREE_PAR_GESTIONNAIRE";
+	const actionIsRequired = (candidature) => {
+		return candidature.etat === "ENTREVUE_PROPOSE" || (candidature.needsAttention && candidature.needsAttention === true);
 	}
 	
 	const GetCandidaturesWindow = () => {
@@ -124,7 +165,9 @@ const CandidatureEtudiantDashboard = () => {
 										<h4 className="m-0">{currentCandidature.nomOffre ? currentCandidature.nomOffre : "N/A"}</h4>
 										<h6 className="m-0 text-dark">{currentCandidature.compagnie ? currentCandidature.compagnie : "N/A"}</h6>
 									</div>
-									<button className="btn-outline">{t("dashboard_home_page.view_offer")}</button>
+									<Link to={`/dashboard/discover-offers?offer=${currentCandidature.offreStageId}`}>
+										<button className="btn-outline">{t("dashboard_home_page.view_offer")}</button>
+									</Link>
 								</div>
 							</section>
 							
@@ -157,8 +200,8 @@ const CandidatureEtudiantDashboard = () => {
 			})}<br></strong> ${t('dashboard_home_page.acceptance_irreversible')}`,
 			icon: 'warning',
 			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
+			confirmButtonColor: '#ff006c',
+			cancelButtonColor: '#fff',
 			confirmButtonText: t('dashboard_home_page.yes_accept'),
 			cancelButtonText: t('dashboard_home_page.cancel')
 		}).then(async (result) => {
@@ -213,8 +256,8 @@ const CandidatureEtudiantDashboard = () => {
 			text: t('dashboard_home_page.refuse_interview_warning'),
 			icon: 'warning',
 			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
+			confirmButtonColor: '#ff006c',
+			cancelButtonColor: '#fff',
 			confirmButtonText: t('dashboard_home_page.yes_refuse'),
 			cancelButtonText: t('dashboard_home_page.cancel')
 		}).then(async (result) => {
@@ -270,42 +313,56 @@ const CandidatureEtudiantDashboard = () => {
 				<div>
 					{GetCandidaturesWindow()}
 					<section>
-						<h4>{t("dashboard_home_page.my_applications")}</h4>
+						<h4 id="candidatures">{t("dashboard_home_page.my_applications")}</h4>
 						
 						<div className="menu-list">
-							{candidaturesInPage.map((candidature, index) => (
-								<div className="menu-list-item menu-list-item-64" key={index} onClick={() => handleCandidatureClick(candidature)}>
-									<Icon path={mdiBriefcaseOutline} size={1}/>
-									<div>
-										<h6 className="m-0">{candidature.nomOffre} {(actionIsRequired(candidature.etat)) ?
-											<span className="badge bg-orange">Action requise</span> : null}</h6>
-										<p className="m-0 text-dark">{candidature.compagnie}</p>
-									</div>
-									<div className="toolbar-spacer"></div>
-									<CandidatureProgress etat={candidature.etat}></CandidatureProgress>
-								</div>
-							))}
-							
 							{
-								(candidaturesInPage.length < itemsPerPage)
-									?
-									Array.from({length: itemsPerPage - candidaturesInPage.length}, (_, i) => (
-										<div key={i} className="menu-list-item menu-list-item-64 menu-list-item-placeholder">
+								(candidatures.length === 0)?
+									<div className="menu-list-item menu-list-empty-list-placeholder">
+										<div className="no-items-display">
+											<Icon path={mdiBriefcaseRemoveOutline} size={1.5} />
+											<h6>Aucune candidature</h6>
+											<p className="text-dark text-mini">Commencez par trouver et postuler à des offres de stage</p>
 										</div>
-									))
+									</div>
 									:
-									null
+									<>
+										{candidaturesInPage.map((candidature, index) => (
+											<div className="menu-list-item menu-list-item-64" key={index} onClick={() => handleCandidatureClick(candidature)}>
+												<Icon path={mdiBriefcaseOutline} size={1}/>
+												<div>
+													<h6 className="m-0">{candidature.nomOffre} {(actionIsRequired(candidature)) ?
+														<span className="badge bg-orange">Action requise</span> : null}</h6>
+													<p className="m-0 text-dark">{candidature.compagnie}</p>
+												</div>
+												<div className="toolbar-spacer"></div>
+												<CandidatureProgress candidature={candidature}></CandidatureProgress>
+											</div>
+										))}
+
+										{
+											(candidaturesInPage.length < itemsPerPage)
+												?
+												Array.from({length: itemsPerPage - candidaturesInPage.length}, (_, i) => (
+													<div key={i} className="menu-list-item menu-list-item-64 menu-list-item-placeholder">
+													</div>
+												))
+												:
+												null
+										}
+									</>
 							}
+
 							<div className="menu-list-item menu-list-footer">
-								<p className="m-0 text-dark">{candidatures.length} Resultats</p>
+								<p className="m-0">{candidatures.length} {t("discover_offers_page.results")}</p>
 								<div className="toolbar-spacer"></div>
+								<p className="m-0">{currentPage} {t("dashboard_home_page.of")} {maxPages}</p>
 								<button className="btn-icon" disabled={currentPage === 1} onClick={() => {
 									handlePageChange(false)
-								}}><Icon path={mdiArrowLeft} size={1}/></button>
-								<p className="m-0">{currentPage} de {maxPages}</p>
+								}}><Icon path={mdiChevronLeft} size={1}/></button>
 								<button className="btn-icon" disabled={!(currentPage < maxPages)} onClick={() => {
 									handlePageChange(true)
-								}}><Icon path={mdiArrowRight} size={1}/></button>
+								}}><Icon path={mdiChevronRight} size={1}/></button>
 							</div>
 						</div>
 					</section>

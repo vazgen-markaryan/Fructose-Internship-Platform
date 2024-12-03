@@ -22,7 +22,7 @@ const CreerOffreStage = () => {
 		nombreHeuresSemaine: 1,
 		nombrePostes: 1,
 		dateLimiteCandidature: new Date(),
-		ownerDTO: {id: '', fullName: ''}
+		ownerDTO: null
 	});
 	
 	const {currentToken} = useContext(AuthContext);
@@ -170,7 +170,6 @@ const CreerOffreStage = () => {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const errorMessage = validateFields();
-		console.log(errorMessage)
 		if (Object.keys(errorMessage).length > 0) {
 			setErrors(errorMessage);
 		} else {
@@ -182,11 +181,14 @@ const CreerOffreStage = () => {
 				if (departement) {
 					offreStage.departementDTO = departement;
 				}
-				
-				const employeur = await getEmployeur(offreStage.ownerDTO.id, currentToken);
-				if (employeur) {
-					offreStage.ownerDTO = employeur;
+
+				if(offreStage.ownerDTO){
+					const employeur = await getEmployeur(offreStage.ownerDTO.id, currentToken);
+					if (employeur) {
+						offreStage.ownerDTO = employeur;
+					}
 				}
+
 				fetch('/creer-offre-stage', {
 					method: 'POST',
 					headers: {
@@ -219,12 +221,10 @@ const CreerOffreStage = () => {
 			case 1:
 				return (
 					<div className="stepper-form-step">
-						<h4>Informations de base</h4>
-						<p>Veuillez remplir les champs ci-dessous en fournissant le nom officiel de votre compagnie
-						   ainsi que son adresse complète, incluant le numéro de rue, le nom de la rue, la ville,
-						   le code postal et le pays.</p>
+						<h4>{t("creer_offre_stage_page.steps.1.title")}</h4>
+						<p>{t("creer_offre_stage_page.steps.1.description")}</p>
 						<br/>
-						
+
 						<div className={"input-container"}>
 							<p>{t("creer_offre_stage_page.compagnie")}</p>
 							<input className={`${errors.compagnie ? "field-invalid" : ""}`}
@@ -244,8 +244,9 @@ const CreerOffreStage = () => {
 			case 2:
 				return (
 					<div className="stepper-form-step">
-						<h4>Informations sur l'emploi</h4>
-						<p>Entrer les informations requises pour permettre aux étudiants de mieux vous trouver.</p>
+						<h4>{t("creer_offre_stage_page.steps.2.title")}</h4>
+						<p>{t("creer_offre_stage_page.steps.2.description")}</p>
+
 						<br/>
 						
 						<div className={"input-container"}>
@@ -282,7 +283,7 @@ const CreerOffreStage = () => {
 										<option value="">{t("creer_offre_stage_page.employeur_select")}</option>
 										{employeurs.map((employeur) => (
 											<option key={employeur.id}
-											        value={employeur.id}>{employeur.fullName}</option>
+											        value={employeur.id}>{employeur.fullName} - {employeur.companyName}</option>
 										))}
 									</select>
 								</>
@@ -293,11 +294,10 @@ const CreerOffreStage = () => {
 			case 3:
 				return (
 					<div className="stepper-form-step">
-						
-						<h4>Description</h4>
-						<p>Entrer une description détailée de l'emploi, incluant une description du rôle de
-						   l'employé, des qualités recherchées, ainsi que l'expéreience requise.</p>
-						<br/>
+
+						<h4>{t("creer_offre_stage_page.steps.3.title")}</h4>
+						<p>{t("creer_offre_stage_page.steps.3.description")}</p>
+
 						<div className={"input-container"}>
                             <textarea className={`${errors.description ? "field-invalid" : ""}`}
                                       value={offreStage.description} name="description" style={{height: "200px"}}
@@ -309,9 +309,8 @@ const CreerOffreStage = () => {
 			case 4:
 				return (
 					<div className="stepper-form-step">
-						<h4>Particularités</h4>
-						<p>En choisissant parmi les choix si-dessous, décrivez les différents modes de votre
-						   emploi.</p>
+						<h4>{t("creer_offre_stage_page.steps.4.title")}</h4>
+						<p>{t("creer_offre_stage_page.steps.4.description")}</p>
 						<br/>
 						
 						<div className={"input-container"}>
@@ -335,7 +334,7 @@ const CreerOffreStage = () => {
 							<select name="typeEmploi" onChange={handleInputChange} value={offreStage.typeEmploi}
 							        required>
 								<option
-									value="select">{t("creer_offre_stage_page.modalites_travail.select")}</option>
+									value="">{t("creer_offre_stage_page.modalites_travail.select")}</option>
 								<option
 									value="virtuel">{t("creer_offre_stage_page.modalites_travail.virtuel")}</option>
 								<option
@@ -414,8 +413,8 @@ const CreerOffreStage = () => {
 			case 5:
 				return (
 					<div className="stepper-form-step">
-						<h4>Dates</h4>
-						<p>Entrer la date du début et la fin du stage, ainsi que la date limite de candidature.</p>
+						<h4>{t("creer_offre_stage_page.steps.5.title")}</h4>
+						<p>{t("creer_offre_stage_page.steps.5.description")}</p>
 						<br/>
 						<div className={"input-container"}>
 							<div className={"input-container"}>
@@ -499,13 +498,15 @@ const CreerOffreStage = () => {
 						backgroundColor: "transparent",
 						height: "100%"
 					}}>
-						<div>
-							<Icon path={mdiCheckCircleOutline} size={2.5}/>
-							<h3>{t("creer_offre_stage_page.steps.6.success")}</h3>
-							<p>{t("creer_offre_stage_page.steps.6.success_text")}</p>
-							<br/>
-							<button className="btn-filled" type="button"
-									onClick={() => navigate('/dashboard')}>{t("creer_offre_stage_page.steps.6.go_to_dashboard")}</button>
+						<div className="loader-container">
+							<div>
+								<Icon path={mdiCheckCircleOutline} size={2.5}/>
+								<h3>{t("creer_offre_stage_page.steps.6.success")}</h3>
+								<p>{t("creer_offre_stage_page.steps.6.success_text")}</p>
+								<br/>
+								<button className="btn-filled" type="button"
+										onClick={() => navigate('/dashboard')}>{t("creer_offre_stage_page.steps.6.go_to_dashboard")}</button>
+							</div>
 						</div>
 					</div>
 				)
@@ -545,7 +546,7 @@ const CreerOffreStage = () => {
 				<div style={{
 					width: "100%",
 					maxWidth: "300px",
-					backgroundColor: "#0e2c3c",
+					backgroundColor: "#21277c",
 					borderRadius: "5px 0 0 5px",
 					padding: "20px",
 					color: "white"
