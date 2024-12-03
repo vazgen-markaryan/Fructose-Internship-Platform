@@ -1,12 +1,16 @@
 package fructose.service;
 
+import fructose.model.enumerator.CapaciteEtudiant;
 import fructose.model.enumerator.ReponseEvaluation;
 import fructose.model.enumerator.Role;
+import fructose.model.enumerator.StageType;
 import fructose.model.evaluation.CritereEvaluation;
 import fructose.model.evaluation.EvaluationEmployeur;
+import fructose.model.evaluation.EvaluationMilieuStage;
 import fructose.model.evaluation.PDF.EvaluationEmployeurPdf;
 import fructose.model.evaluation.SectionEvaluation;
 import fructose.repository.EvaluationEmployeurRepository;
+import fructose.repository.EvaluationMilieuStageRepository;
 import fructose.service.dto.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +32,8 @@ public class EvaluationServiceTest {
     @Mock
     private EvaluationEmployeurRepository evaluationEmployeurRepository;
 
+    @Mock
+    private EvaluationMilieuStageRepository evaluationMilieuStageRepository;
 
     @Mock
     private EvaluationEmployeurPdf evaluationEmployeurPdf;
@@ -37,6 +43,7 @@ public class EvaluationServiceTest {
 
     private EvaluationEmployeurDTO evaluationDTO;
     private EvaluationEmployeur evaluation;
+    private EvaluationMilieuStage evaluationMilieuStage;
 
     @BeforeEach
     void setUp() {
@@ -99,6 +106,25 @@ public class EvaluationServiceTest {
         critere.setSection(section);
         section.setCriteres(List.of(critere));
         evaluation.setSections(List.of(section));
+
+        EvaluationMilieuStageDTO evaluationMilieuStageDTO = new EvaluationMilieuStageDTO();
+        evaluationMilieuStageDTO.setCandidatureDTO(candidatureDTO);
+
+        evaluationMilieuStage = new EvaluationMilieuStage();
+        evaluationMilieuStage.setCandidature(CandidatureDTO.toEntity(candidatureDTO));
+        evaluationMilieuStage.getCandidature().setEtudiant(UtilisateurDTO.toEntity(etudiant));
+        evaluationMilieuStage.setStageType(StageType.PREMIER_STAGE);
+        evaluationMilieuStage.setCapaciteEtudiant(CapaciteEtudiant.UN_STAGIAIRE);
+        evaluationMilieuStage.setMilieuStageAPrivilegierPour(StageType.PREMIER_STAGE);
+        SectionEvaluation sectionMilieuStage = new SectionEvaluation();
+        sectionMilieuStage.setName("Test Section");
+        sectionMilieuStage.setCommentaire("Test Commentaire");
+        CritereEvaluation critereMilieuStage = new CritereEvaluation();
+        critereMilieuStage.setQuestion("Test Question");
+        critereMilieuStage.setReponse(ReponseEvaluation.MOSTLY_AGREE);
+        critereMilieuStage.setSection(sectionMilieuStage);
+        sectionMilieuStage.setCriteres(List.of(critereMilieuStage));
+        evaluationMilieuStage.setSections(List.of(sectionMilieuStage));
     }
 
     @Test
@@ -125,5 +151,46 @@ public class EvaluationServiceTest {
         String result = evaluationService.recupererEvaluationEmployeurParId(evaluationDTO.getId());
 
         assertEquals("evaluation_stagiaire_.pdf", result);
+    }
+
+    @Test
+    void testRecupererEvaluationEmployeurParId_NotFound() {
+        when(evaluationEmployeurRepository.findById(evaluationDTO.getId())).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> evaluationService.recupererEvaluationEmployeurParId(evaluationDTO.getId()));
+    }
+
+    @Test
+    void testCreerEvaluationMilieuStage_Success() {
+        String result = evaluationService.creerEvaluationMilieuStage(EvaluationMilieuStageDTO.toDTO(evaluationMilieuStage));
+        assertEquals("evaluation_milieu_stage_.pdf", result);
+        verify(evaluationMilieuStageRepository, times(1)).save(any(EvaluationMilieuStage.class));
+    }
+
+    @Test
+    void testRecupererEvaluationMilieuStageParId() {
+        when(evaluationMilieuStageRepository.findById(evaluationMilieuStage.getId())).thenReturn(Optional.of(evaluationMilieuStage));
+
+        String result = evaluationService.recupererEvaluationMilieuStageParId(evaluationMilieuStage.getId());
+
+        assertEquals("evaluation_milieu_stage_.pdf", result);
+        verify(evaluationMilieuStageRepository, times(1)).findById(evaluationMilieuStage.getId());
+    }
+
+    @Test
+    void testRecupererEvaluationMilieuStageParId_NotFound() {
+        when(evaluationMilieuStageRepository.findById(evaluationMilieuStage.getId())).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> evaluationService.recupererEvaluationMilieuStageParId(evaluationMilieuStage.getId()));
+    }
+
+    @Test
+    void testFindAllEvaluationMilieuStage() {
+        when(evaluationMilieuStageRepository.findAll()).thenReturn(List.of(evaluationMilieuStage));
+
+        List<EvaluationMilieuStageDTO> evaluations = evaluationService.findAllEvaluationMilieuStage();
+
+        assertNotNull(evaluations);
+        assertEquals(1, evaluations.size());
     }
 }

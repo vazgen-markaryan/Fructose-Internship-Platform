@@ -66,7 +66,6 @@ public class EvaluationController {
     @PostMapping("/milieu-stage/creer")
     public ResponseEntity<byte[]> creerEvaluationMilieuStage(@RequestHeader("Authorization") String token, @RequestBody EvaluationMilieuStageDTO evaluationDTO){
         validateToken(token);
-        System.out.println(evaluationDTO);
         try {
             String pdfPath = evaluationService.creerEvaluationMilieuStage(evaluationDTO);
             return getResponseEntity(pdfPath);
