@@ -33,7 +33,7 @@ const ViewCandidatures = () => {
 	const [currentCV, setCurrentCV] = useState(null);
 	const [isApproveModalOpen, setApproveModalOpen] = useState(false);
 	const interviewDateRef = useRef(null);
-	const [candidatureCategory, setCandidatureCategory] = useState(sectionId)
+	const [candidatureCategory, setCandidatureCategory] = useState((sectionId)?sectionId:"all")
 	const [isRejectModalOpen, setRejectModalOpen] = useState(false);
 	const textareaRef = useRef(null);
 	const {fetchContratByCandidatureId, handleSignerContrat, handleRefuseSignerContrat} = useContext(ContratContext);
