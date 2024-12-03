@@ -1,21 +1,19 @@
 import React, {useContext} from "react";
 import {AuthContext} from "../../providers/AuthProvider";
-import Icon from "@mdi/react";
-import {mdiAccountCircle, mdiBriefcaseVariantOutline,} from "@mdi/js";
 import {useTranslation} from "react-i18next";
 import DashboardHomeAdmin from "../admin/DashboardAdmin";
 import OffresStagesDashboard from "./DashboardSections/OffresStagesEtudiantDashboard";
 import OffresStagesEmpProfDashboard from "./DashboardSections/OffresStagesEmpProfDashboard";
 import CVEtudiantDashboard from "./DashboardSections/CVEtudiantDashboard";
-import UserManagementDashboard from "./DashboardSections/UserManagementDashboard";
 import CandidatureEmployeurDashboard from "./DashboardSections/CandidatureEmployeurDashboard";
 import CandidatureEtudiantDashboard from "./DashboardSections/CandidatureEtudiantDashboard";
 import {AdminProvider} from "../../providers/AdminProvider";
-import Suggestions from "./Suggestions";
 import SuggestionsDashboard from "./Suggestions";
+import EvaluationEmployeur from "../evaluation/EvaluationEmployeur";
+import EvaluationMilieuStage from "../evaluation/EvaluationMilieuStage";
 
 const DashboardHome = () => {
-	
+
 	const {t} = useTranslation();
 	const {currentUser} = useContext(AuthContext);
 
@@ -34,7 +32,8 @@ const DashboardHome = () => {
 					<>
 						<OffresStagesEmpProfDashboard></OffresStagesEmpProfDashboard>
 						<CandidatureEmployeurDashboard></CandidatureEmployeurDashboard>
-					</>
+                        <EvaluationEmployeur />
+                    </>
 				)
 			} else if (currentUser.role === "PROFESSEUR") {
 				return (
@@ -45,12 +44,14 @@ const DashboardHome = () => {
 				return (
 					<AdminProvider>
 						<DashboardHomeAdmin/>
+                        <EvaluationEmployeur />
+                        <EvaluationMilieuStage />
 					</AdminProvider>
 				);
 			}
 		}
 	}
-	
+
 	return (
 		<>
 			<div className="dashboard-card-titlebar">
@@ -59,7 +60,7 @@ const DashboardHome = () => {
 					<div className={"loading-placeholder"}></div>}
 				</h5>
 			</div>
-			
+
 			<div style={{"display": "flex", "gap": "20px"}}>
 				<div style={{"width": "70%"}}>
 					<div className="dashboard-card">
