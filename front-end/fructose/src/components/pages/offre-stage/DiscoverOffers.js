@@ -166,7 +166,6 @@ const DiscoverOffers = () => {
     }, [currentUser, currentOffer]);
 
     const isOfferApplied = (offer) => {
-        console.log(offer)
         return offer.hasCandidature || candidatures.some((candidature) => candidature.offreStageId === offer.id);
     };
 
