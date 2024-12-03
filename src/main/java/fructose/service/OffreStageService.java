@@ -17,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Validated
@@ -46,8 +45,8 @@ public class OffreStageService {
 	}
 	
 	public void addOffreStage(OffreStageDTO offreStageDTO) {
-		UtilisateurDTO utilisateurDTO = UtilisateurDTO.toDTO(getUtilisateurEnCours());
-		validateAddOffreStage(offreStageDTO, utilisateurDTO);
+		//UtilisateurDTO utilisateurDTO = UtilisateurDTO.toDTO(getUtilisateurEnCours());
+		validateAddOffreStage(offreStageDTO, offreStageDTO.getOwnerDTO());
 	}
 	
 	public void addOffreStage(OffreStageDTO offreStageDTO, UtilisateurDTO utilisateurDTO) {
