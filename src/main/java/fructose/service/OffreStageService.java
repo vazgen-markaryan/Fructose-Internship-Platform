@@ -58,7 +58,7 @@ public class OffreStageService {
 		if (offreStageDTO == null) {
 			throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
 		}
-		if (offreStageDTO.getOwnerDTO() == null || !Objects.equals(offreStageDTO.getNom(), "")) {
+		if (offreStageDTO.getOwnerDTO() == null) {
 			offreStageDTO.setOwnerDTO(utilisateurDTO);
 		}else if (utilisateurDTO != null) {
 			if (utilisateurDTO.getRole() == Role.ADMIN) {

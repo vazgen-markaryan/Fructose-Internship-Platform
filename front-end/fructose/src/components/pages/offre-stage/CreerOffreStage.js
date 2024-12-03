@@ -189,6 +189,9 @@ const CreerOffreStage = () => {
 					}
 				}
 
+				// Dans le backend le problème
+				console.log(offreStage);
+
 				fetch('/creer-offre-stage', {
 					method: 'POST',
 					headers: {

@@ -108,10 +108,14 @@ const ModifierOffreStage = () => {
                 offreStage.dateFin = new Date(offreStage.dateFin).toISOString().split('T')[0];
                 offreStage.dateLimiteCandidature = new Date(offreStage.dateLimiteCandidature).toISOString().split('T')[0];
 
-                const departement = await getDepartement(offreStage.departementDTO);
-                if (departement) {
+				console.log(offreStage.departementDTO);
+
+                if (offreStage.departementDTO !== null && typeof offreStage.departementDTO === 'string') {
+					const departement = await getDepartement(offreStage.departementDTO);
                     offreStage.departementDTO = departement;
                 }
+
+
 
                 await updateOffreStage(offreStage);
 
