@@ -4,27 +4,33 @@ import {ContratContext} from "../../providers/ContratProvider";
 import PdfPreview from "../../../utilities/pdf/PdfPreview";
 import {AuthContext} from "../../providers/AuthProvider";
 
-const ViewContrat = ({contrat, handleSign, handleNoSign}) => {
+const ViewContrat = ({contrat, handleSign, currentCandidature, handleNoSign}) => {
 	const {t} = useTranslation();
 	const {fetchPdfByContratId} = useContext(ContratContext);
 	const [pdfUrl, setPdfUrl] = useState('');
 	const {currentUser} = useContext(AuthContext);
-	const isInitialized = useRef(false);
 
 	useEffect(() => {
-		if (contrat) {
+		let isActive = true;
+		if (contrat && currentCandidature && contrat.candidatureId === currentCandidature.id) {
 			(async function () {
 				try {
 					const pdfUrl = await fetchPdfByContratId(contrat.id);
-					setPdfUrl(pdfUrl);
+					if (isActive) setPdfUrl(pdfUrl);
 				} catch (error) {
 					console.error('Error fetching PDF:', error);
+					if (isActive) setPdfUrl(null);
 				}
 			})();
 		} else {
-			setPdfUrl(null); // Reset if no contract is present
+			setPdfUrl(null); // Réinitialise si les IDs ne correspondent pas
 		}
-	}, [contrat, fetchPdfByContratId]);
+
+		return () => {
+			isActive = false; // Stoppe les mises à jour après démontage
+		};
+	}, [contrat, currentCandidature, fetchPdfByContratId]);
+
 
 	
 	return (
