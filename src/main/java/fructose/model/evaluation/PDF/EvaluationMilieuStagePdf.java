@@ -40,11 +40,14 @@ public class EvaluationMilieuStagePdf {
             document.add(new Paragraph("Fonction : " + offreStage.getNom()));
             document.add(new Paragraph("Date du stage : " + offreStage.getDateDebut() + " - " + offreStage.getDateFin()));
             document.add(new Paragraph("Stage : " + evaluation.getStageType().name()));
-
+            document.add(new Paragraph("Nombre d'heures par semaine premier mois : " + evaluation.getNbHeuresParSemPremierMois()));
+            document.add(new Paragraph("Nombre d'heures par semaine deuxième mois : " + evaluation.getNbHeuresParSemDeuxiemeMois()));
+            document.add(new Paragraph("Nombre d'heures par semaine troisième mois : " + evaluation.getNbHeuresParSemTroisiemeMois()));
+            document.add(new Paragraph("Salaire : " + evaluation.getTauxHoraire()));
 
             document.add(new Paragraph("\nÉVALUATION").setBold().setFontSize(12));
             for (SectionEvaluation section : evaluation.getSections()) {
-                document.add(new Paragraph("\n" + section.getName().toUpperCase()).setBold());
+                document.add(new Paragraph("Évaluation").setBold().setFontSize(12));
 
                 Table table = new Table(2);
                 table.addCell("Critère");
@@ -63,6 +66,10 @@ public class EvaluationMilieuStagePdf {
             document.add(new Paragraph("Milieu de stage à privilégier pour : " + evaluation.getMilieuStageAPrivilegierPour().name()));
             document.add(new Paragraph("Capacité de stagiaires : " + evaluation.getCapaciteEtudiant().name()));
             document.add(new Paragraph("Mêmes stagiaires pour prochain stage : " + (evaluation.isMemeStagiaireProchainStage() ? "OUI" : "NON")));
+            document.add(new Paragraph("Quart de travail variable : " + (evaluation.isQuartTravailVariable() ? "OUI" : "NON")));
+            document.add(new Paragraph("Quart de travail variable : " + evaluation.getQuartTravail1Debut() + " - " + evaluation.getQuartTravail1Fin()));
+            document.add(new Paragraph("Quart de travail variable : " + evaluation.getQuartTravail2Debut() + " - " + evaluation.getQuartTravail2Fin()));
+            document.add(new Paragraph("Quart de travail variable : " + evaluation.getQuartTravail3Debut() + " - " + evaluation.getQuartTravail3Fin()));
 
             document.add(new Paragraph("\nSIGNATURE").setBold().setFontSize(12));
             document.add(new Paragraph("Signature du Gestionnaire : " + evaluation.getSignatureSuperviseur()));

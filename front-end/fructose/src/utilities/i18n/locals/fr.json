@@ -660,206 +660,206 @@
         "success_refused_title": "Vous avez refusé de signer le contrat!",
         "manage_contract_en_attente": {
             "title": "Contrats de stage en attente de génération"
-        },
-        "evaluation_employeur": {
-            "stagiaire_a_evaluer": "Stagiaire à évaluer",
-            "no_stagiaire_a_evaluer": "Aucun stagiaire à évaluer",
-            "evaluation_non_disponible": "évaluation non disponible avant le :",
-            "evaluer": "Évaluer",
-            "evaluation_disponible": "évaluation disponible",
-            "step": {
-                "productivite": {
-                    "title": "Étape 1: Productivité",
-                    "description": "Capacité d’optimiser son rendement au travail",
-                    "fields": {
-                        "field1": "Planifier et organiser son travail de façon efficace",
-                        "field2": "Comprendre rapidement les directives relatives à son travail",
-                        "field3": "Maintenir un rythme de travail soutenu",
-                        "field4": "Établir ses priorités",
-                        "field5": "Respecter ses échéanciers"
-                    }
-                },
-                "qualiteTravail": {
-                    "title": "Étape 2: QUALITÉ DU TRAVAIL",
-                    "description": "Capacité de s’acquitter des tâches sous sa responsabilité en s’imposant personnellement des normes de qualité",
-                    "fields": {
-                        "field1": "Respecter les mandats qui lui ont été confiés",
-                        "field2": "Porter attention aux détails dans la réalisation de ses tâches",
-                        "field3": "Vérifier son travail, s’assurer que rien n’a été oublié",
-                        "field4": "Rechercher des occasions de se perfectionner",
-                        "field5": "Faire une bonne analyse des problèmes rencontrés"
-                    }
-                },
-                "relationsInterpersonnelles": {
-                    "title": "Étape 3: QUALITÉS DES RELATIONS",
-                    "description": "Capacité d’établir des interrelations harmonieuses dans son milieu de travail",
-                    "fields": {
-                        "field1": "Établir facilement des contacts avec les gens",
-                        "field2": "Contribuer activement au travail d’équipe",
-                        "field3": "S’adapter facilement à la culture de l’entreprise",
-                        "field4": "Accepter les critiques constructives",
-                        "field5": "Être respectueux envers les gens",
-                        "field6": "Faire preuve d’écoute active en essayant de comprendre le point de vue de l’autre"
-                    }
-                },
-                "habiletesPersonnelles": {
-                    "title": "Étape 4: HABILETÉS PERSONNELLES",
-                    "description": "Capacité de faire preuve d’attitudes ou de comportements matures et responsables",
-                    "fields": {
-                        "field1": "Démontrer de l’intérêt et de la motivation au travail",
-                        "field2": "Exprimer clairement ses idées",
-                        "field3": "Faire preuve d’initiative",
-                        "field4": "Travailler de façon sécuritaire",
-                        "field5": "Démontrer un bon sens des responsabilités ne requérant qu’un minimum de supervision",
-                        "field6": "Être ponctuel et assidu à son travail"
-                    }
-                },
-                "total_agree": "Tout à fait d'accord",
-                "mostly_agree": "Plutôt d'accord",
-                "mostly_disagree": "Plutôt pas d'accord",
-                "total_disagree": "Pas du tout d'accord",
-                "select": "Sélectionner",
-                "comment": "Commentaire",
-                "appreciationGlobale": {
-                    "title": "Étape 5: Appréciation globale",
-                    "description": "Les habiletés démontrées :",
-                    "options": {
-                        "option1": "Dépassent de beaucoup les attentes",
-                        "option2": "Dépassent les attentes",
-                        "option3": "Répondent pleinement aux attentes",
-                        "option4": "Répondent partiellement aux attentes",
-                        "option5": "Ne répondent pas aux attentes"
-                    },
-                    "comment_label": "Précisez votre appréciation :"
-                },
-                "evaluationFinale": {
-                    "title": "Étape 6: Évaluation finale",
-                    "discussion_label": "Cette évaluation a été discutée avec le stagiaire :",
-                    "hours_label": "Nombre d’heures réel d’encadrement :",
-                    "stage_label": "L’entreprise aimerait accueillir l’élève :",
-                    "stage_options": {
-                        "yes": "Oui",
-                        "no": "Non",
-                        "maybe": "Peut-être"
-                    },
-                    "signature_label": "Signature :"
-                },
-                "submit": "Soumettre",
-                "next": "Suivant",
-                "previous": "Précédent",
-                "back_to_dashboard": "Retour au tableau de bord"
+        }
+    },
+    "evaluation_employeur": {
+        "stagiaire_a_evaluer": "Stagiaire à évaluer",
+        "no_stagiaire_a_evaluer": "Aucun stagiaire à évaluer",
+        "evaluation_non_disponible": "évaluation non disponible avant le :",
+        "evaluer": "Évaluer",
+        "evaluation_disponible": "évaluation disponible",
+        "step": {
+            "productivite": {
+                "title": "Étape 1: Productivité",
+                "description": "Capacité d’optimiser son rendement au travail",
+                "fields": {
+                    "field1": "Planifier et organiser son travail de façon efficace",
+                    "field2": "Comprendre rapidement les directives relatives à son travail",
+                    "field3": "Maintenir un rythme de travail soutenu",
+                    "field4": "Établir ses priorités",
+                    "field5": "Respecter ses échéanciers"
+                }
             },
-            "evaluation_steps": {
-                "title": "Évaluation",
-                "step1": {
-                    "title": "Étape 1: Productivité",
-                    "description": "Capacité d’optimiser son rendement au travail"
+            "qualiteTravail": {
+                "title": "Étape 2: QUALITÉ DU TRAVAIL",
+                "description": "Capacité de s’acquitter des tâches sous sa responsabilité en s’imposant personnellement des normes de qualité",
+                "fields": {
+                    "field1": "Respecter les mandats qui lui ont été confiés",
+                    "field2": "Porter attention aux détails dans la réalisation de ses tâches",
+                    "field3": "Vérifier son travail, s’assurer que rien n’a été oublié",
+                    "field4": "Rechercher des occasions de se perfectionner",
+                    "field5": "Faire une bonne analyse des problèmes rencontrés"
+                }
+            },
+            "relationsInterpersonnelles": {
+                "title": "Étape 3: QUALITÉS DES RELATIONS",
+                "description": "Capacité d’établir des interrelations harmonieuses dans son milieu de travail",
+                "fields": {
+                    "field1": "Établir facilement des contacts avec les gens",
+                    "field2": "Contribuer activement au travail d’équipe",
+                    "field3": "S’adapter facilement à la culture de l’entreprise",
+                    "field4": "Accepter les critiques constructives",
+                    "field5": "Être respectueux envers les gens",
+                    "field6": "Faire preuve d’écoute active en essayant de comprendre le point de vue de l’autre"
+                }
+            },
+            "habiletesPersonnelles": {
+                "title": "Étape 4: HABILETÉS PERSONNELLES",
+                "description": "Capacité de faire preuve d’attitudes ou de comportements matures et responsables",
+                "fields": {
+                    "field1": "Démontrer de l’intérêt et de la motivation au travail",
+                    "field2": "Exprimer clairement ses idées",
+                    "field3": "Faire preuve d’initiative",
+                    "field4": "Travailler de façon sécuritaire",
+                    "field5": "Démontrer un bon sens des responsabilités ne requérant qu’un minimum de supervision",
+                    "field6": "Être ponctuel et assidu à son travail"
+                }
+            },
+            "total_agree": "Tout à fait d'accord",
+            "mostly_agree": "Plutôt d'accord",
+            "mostly_disagree": "Plutôt pas d'accord",
+            "total_disagree": "Pas du tout d'accord",
+            "select": "Sélectionner",
+            "comment": "Commentaire",
+            "appreciationGlobale": {
+                "title": "Étape 5: Appréciation globale",
+                "description": "Les habiletés démontrées :",
+                "options": {
+                    "option1": "Dépassent de beaucoup les attentes",
+                    "option2": "Dépassent les attentes",
+                    "option3": "Répondent pleinement aux attentes",
+                    "option4": "Répondent partiellement aux attentes",
+                    "option5": "Ne répondent pas aux attentes"
                 },
-                "step2": {
-                    "title": "Étape 2: Qualité du travail",
-                    "description": "Capacité de s’acquitter des tâches sous sa responsabilité en s’imposant personnellement des normes de qualité"
+                "comment_label": "Précisez votre appréciation :"
+            },
+            "evaluationFinale": {
+                "title": "Étape 6: Évaluation finale",
+                "discussion_label": "Cette évaluation a été discutée avec le stagiaire :",
+                "hours_label": "Nombre d’heures réel d’encadrement :",
+                "stage_label": "L’entreprise aimerait accueillir l’élève :",
+                "stage_options": {
+                    "yes": "Oui",
+                    "no": "Non",
+                    "maybe": "Peut-être"
                 },
-                "step3": {
-                    "title": "Étape 3: Qualités des relations",
-                    "description": "Capacité d’établir des interrelations harmonieuses dans son milieu de travail"
-                },
-                "step4": {
-                    "title": "Étape 4: Habiletés personnelles",
-                    "description": "Capacité de faire preuve d’attitudes ou de comportements matures et responsables"
-                },
-                "step5": {
-                    "title": "Étape 5: Appréciation globale"
-                },
-                "step6": {
-                    "title": "Étape 6: Évaluation finale"
-                },
-                "no_step": "Aucune étape sélectionnée"
+                "signature_label": "Signature :"
+            },
+            "submit": "Soumettre",
+            "next": "Suivant",
+            "previous": "Précédent",
+            "back_to_dashboard": "Retour au tableau de bord"
+        },
+        "evaluation_steps": {
+            "title": "Évaluation",
+            "step1": {
+                "title": "Étape 1: Productivité",
+                "description": "Capacité d’optimiser son rendement au travail"
+            },
+            "step2": {
+                "title": "Étape 2: Qualité du travail",
+                "description": "Capacité de s’acquitter des tâches sous sa responsabilité en s’imposant personnellement des normes de qualité"
+            },
+            "step3": {
+                "title": "Étape 3: Qualités des relations",
+                "description": "Capacité d’établir des interrelations harmonieuses dans son milieu de travail"
+            },
+            "step4": {
+                "title": "Étape 4: Habiletés personnelles",
+                "description": "Capacité de faire preuve d’attitudes ou de comportements matures et responsables"
+            },
+            "step5": {
+                "title": "Étape 5: Appréciation globale"
+            },
+            "step6": {
+                "title": "Étape 6: Évaluation finale"
+            },
+            "no_step": "Aucune étape sélectionnée"
+        }
+    },
+    "evaluation_milieu_stage": {
+        "evaluation_milieu_stage": "Évaluation(s) de milieu de stage",
+        "milieu_stage_a_evaluer": "Milieu de stage à évaluer",
+        "no_evaluation": "Aucune évaluation de milieu de stage à afficher pour le moment",
+        "no_milieu_stage_a_evaluer": "Aucun milieu de stage à évaluer",
+        "evaluation_non_disponible": "Évaluation non disponible avant :",
+        "evaluation_disponible": "Évaluation disponible",
+        "evaluer": "Évaluer",
+        "required": "Champ obligatoire",
+        "step": {
+            "general": {
+                "title": "Informations Générales",
+                "stage_type": "Premier ou deuxième stage",
+                "hours_per_week_first_month": "Heures par semaine (Premier Mois)",
+                "hours_per_week_second_month": "Heures par semaine (Deuxième Mois)",
+                "hours_per_week_third_month": "Heures par semaine (Troisième Mois)",
+                "hourly_rate": "Taux horaire",
+                "stage1": "Stage 1",
+                "stage2": "Stage 2"
+            },
+            "section2": {
+                "title": "Section 2 : Critères d'Évaluation",
+                "description": "Évaluez les critères suivants :",
+                "fields": {
+                    "field1": "Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans l’entente de stage",
+                    "field2": "Des mesures d’accueil facilitent l’intégration du nouveau stagiaire",
+                    "field3": "Le temps réel consacré à l’encadrement du stagiaire est suffisant",
+                    "field4": "L’environnement de travail respecte les normes d’hygiène et de sécurité au travail",
+                    "field5": "Le climat de travail est agréable"
+                }
+            },
+            "section3": {
+                "title": "Section 3 : Critères d'Évaluation",
+                "description": "Évaluez les critères suivants :",
+                "fields": {
+                    "field1": "Le milieu de stage est accessible par transport en commun",
+                    "field2": "Le salaire offert est intéressant pour le stagiaire",
+                    "field3": "La communication avec le superviseur de stage facilite le déroulement du stage",
+                    "field4": "L’équipement fourni est adéquat pour réaliser les tâches confiées",
+                    "field5": "Le volume de travail est acceptable"
+                }
+            },
+            "section4": {
+                "title": "Section 4 : Observations Générales",
+                "field1": "Milieu de stage à prioriser pour :",
+                "field2": "Signature du superviseur",
+                "field3": "Nombre d'étudiants pouvant être accueillis",
+                "field4": "Même stagiaire pour le prochain stage",
+                "field5": "Horaire de travail variable",
+                "field6": "Début du quart de travail 1",
+                "field7": "Début du quart de travail 2",
+                "field8": "Début du quart de travail 3"
+            },
+            "total_agree": "Totalement d'accord",
+            "mostly_agree": "Plutôt d'accord",
+            "mostly_disagree": "Plutôt en désaccord",
+            "total_disagree": "Totalement en désaccord",
+            "select": "Sélectionner",
+            "comment": "Commentaire",
+            "previous": "Précédent",
+            "next": "Suivant",
+            "submit": "Soumettre",
+            "back_to_dashboard": "Retour au tableau de bord",
+            "capaciteEtudiant": {
+                "UN_STAGIAIRE": "Un stagiaire",
+                "DEUX_STAGIAIRES": "Deux stagiaires",
+                "TROIS_STAGIAIRES": "Trois stagiaires",
+                "PLUS_DE_TROIS": "Plus de trois stagiaires"
             }
         },
-        "evaluation_milieu_stage": {
-            "evaluation_milieu_stage": "Évaluation(s) de milieu de stage",
-            "milieu_stage_a_evaluer": "Milieu de stage à évaluer",
-            "no_evaluation": "Aucune évaluation de milieu de stage à afficher pour le moment",
-            "no_milieu_stage_a_evaluer": "Aucun milieu de stage à évaluer",
-            "evaluation_non_disponible": "Évaluation non disponible avant :",
-            "evaluation_disponible": "Évaluation disponible",
-            "evaluer": "Évaluer",
-            "required": "Champ obligatoire",
-            "step": {
-                "general": {
-                    "title": "Informations Générales",
-                    "stage_type": "Premier ou deuxième stage",
-                    "hours_per_week_first_month": "Heures par semaine (Premier Mois)",
-                    "hours_per_week_second_month": "Heures par semaine (Deuxième Mois)",
-                    "hours_per_week_third_month": "Heures par semaine (Troisième Mois)",
-                    "hourly_rate": "Taux horaire",
-                    "stage1": "Stage 1",
-                    "stage2": "Stage 2"
-                },
-                "section2": {
-                    "title": "Section 2 : Critères d'Évaluation",
-                    "description": "Évaluez les critères suivants :",
-                    "fields": {
-                        "field1": "Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans l’entente de stage",
-                        "field2": "Des mesures d’accueil facilitent l’intégration du nouveau stagiaire",
-                        "field3": "Le temps réel consacré à l’encadrement du stagiaire est suffisant",
-                        "field4": "L’environnement de travail respecte les normes d’hygiène et de sécurité au travail",
-                        "field5": "Le climat de travail est agréable"
-                    }
-                },
-                "section3": {
-                    "title": "Section 3 : Critères d'Évaluation",
-                    "description": "Évaluez les critères suivants :",
-                    "fields": {
-                        "field1": "Le milieu de stage est accessible par transport en commun",
-                        "field2": "Le salaire offert est intéressant pour le stagiaire",
-                        "field3": "La communication avec le superviseur de stage facilite le déroulement du stage",
-                        "field4": "L’équipement fourni est adéquat pour réaliser les tâches confiées",
-                        "field5": "Le volume de travail est acceptable"
-                    }
-                },
-                "section4": {
-                    "title": "Section 4 : Observations Générales",
-                    "field1": "Milieu de stage à prioriser pour :",
-                    "field2": "Signature du superviseur",
-                    "field3": "Nombre d'étudiants pouvant être accueillis",
-                    "field4": "Même stagiaire pour le prochain stage",
-                    "field5": "Horaire de travail variable",
-                    "field6": "Début du quart de travail 1",
-                    "field7": "Début du quart de travail 2",
-                    "field8": "Début du quart de travail 3"
-                },
-                "total_agree": "Totalement d'accord",
-                "mostly_agree": "Plutôt d'accord",
-                "mostly_disagree": "Plutôt en désaccord",
-                "total_disagree": "Totalement en désaccord",
-                "select": "Sélectionner",
-                "comment": "Commentaire",
-                "previous": "Précédent",
-                "next": "Suivant",
-                "submit": "Soumettre",
-                "back_to_dashboard": "Retour au tableau de bord",
-                "capaciteEtudiant": {
-                    "UN_STAGIAIRE": "Un stagiaire",
-                    "DEUX_STAGIAIRES": "Deux stagiaires",
-                    "TROIS_STAGIAIRES": "Trois stagiaires",
-                    "PLUS_DE_TROIS": "Plus de trois stagiaires"
-                }
+        "evaluation_steps": {
+            "title": "Évaluation de milieu de stage",
+            "step1": {
+                "title": "Étape 1 : Informations Générales"
             },
-            "evaluation_steps": {
-                "title": "Évaluation de milieu de stage",
-                "step1": {
-                    "title": "Étape 1 : Informations Générales"
-                },
-                "step2": {
-                    "title": "Étape 2 : Critères d'Évaluation"
-                },
-                "step3": {
-                    "title": "Étape 3 : Critères d'Évaluation"
-                },
-                "step4": {
-                    "title": "Étape 4 : Observations Générales"
-                }
+            "step2": {
+                "title": "Étape 2 : Critères d'Évaluation"
+            },
+            "step3": {
+                "title": "Étape 3 : Critères d'Évaluation"
+            },
+            "step4": {
+                "title": "Étape 4 : Observations Générales"
             }
         }
     }
