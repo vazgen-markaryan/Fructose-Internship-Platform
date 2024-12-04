@@ -11,9 +11,9 @@
 - Commencer le sprint rapidement (ne pas tarder)
 - Faire les taches les plus importantes en premier (ceux qui vont être des dépendances avec les autres)
 
-# Point d'action du sprint 4 :
-- Mieux répartir les tâches selon les fichiers affectés
-- Éviter la surestimation du temps des stories du sprint.
+# Point d'Action du sprint 4
+- Faire plus de composants réutilisables afin d'éviter mettre tous dans un seul composant afin d'éviter les merges hells
+- Faire des stories plus sur les fichiers à travailler plutôt que sur les rôles affecté afin d'éviter que les personnes ne soient bloqué.
 
 # Définition de DONE
 - Le code compile
