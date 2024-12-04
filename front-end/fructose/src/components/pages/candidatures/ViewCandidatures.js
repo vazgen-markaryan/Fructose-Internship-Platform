@@ -67,7 +67,7 @@ const ViewCandidatures = () => {
 	}, [candidatures, candidatureCategory]);
 
 	useEffect(() => {
-		if (currentCandidature && currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE") {
+		if (currentCandidature && (currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" || currentCandidature.etat === "POSTE_OBTENU")){
 			const fetchContrat = async () => {
 				try {
 					const data = await fetchContratByCandidatureId(currentCandidature.id);

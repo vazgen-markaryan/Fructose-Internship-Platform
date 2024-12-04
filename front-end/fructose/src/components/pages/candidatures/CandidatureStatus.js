@@ -401,6 +401,8 @@ const CandidatureStatus = ({
 								{t("view_candidatures_page.poste_obtenu")}
 							</p>
 							:null}
+						{console.log(contrat)}
+						{contrat && <ViewContrat contrat={contrat} handleSign={handleSignerContrat} handleNoSign={handleRefuserContrat}/>}
 					</div>
 				</div>
 				<br/>

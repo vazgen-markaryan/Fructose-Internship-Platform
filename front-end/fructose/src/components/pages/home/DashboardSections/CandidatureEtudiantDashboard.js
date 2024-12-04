@@ -75,7 +75,7 @@ const CandidatureEtudiantDashboard = () => {
 	};
 
 	useEffect(() => {
-		if (currentCandidature && currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE") {
+		if (currentCandidature && (currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" || currentCandidature.etat === "POSTE_OBTENU")) {
 			(async function () {
 				setContrat(await fetchContrat(currentCandidature.id))
 			})();
