@@ -331,7 +331,8 @@
         "no_comment_reject_offer_text": "Please enter a reason for rejection",
         "manage_evaluations": "Internship evaluations",
         "no_evaluation": "No evaluations to display at the moment",
-        "manage_evaluations_milieu_stage": "Manage Milieu Stage Evaluations"
+        "manage_evaluations_milieu_stage": "Manage Milieu Stage Evaluations",
+        "find_and_apply": "Find and apply"
     },
     "pdf_view_page": {
         "error": "An unknown error occurred"
@@ -553,6 +554,13 @@
         "cancel": "Cancel",
         "send": "Apply",
         "see_cv": "See my CVs"
+    },
+    "candidature_progress": {
+        "send": "Send",
+        "selection": "Selection",
+        "interview": "Interview",
+        "contract": "Contract",
+        "position": "Position"
     },
     "view_candidatures_page": {
         "interview_date": "Select desired interview date",

@@ -18,12 +18,12 @@ import {ContratContext} from "../../../providers/ContratProvider";
 import {Link} from "react-router-dom";
 
 const CandidatureEtudiantDashboard = () => {
-	
+
 	const {t} = useTranslation();
 	const {currentUser, currentToken} = useContext(AuthContext);
 	const {candidatures, fetchCandidaturesById, setCandidatures} = useContext(CandidatureContext);
 	const [currentCandidature, setCurrentCandidature] = useState(null);
-	
+
 	const sortedCandidatures = [...candidatures].sort((a, b) => {
 		const statusOrder = {
 			"POSTE_OBTENU": 1,
@@ -38,7 +38,7 @@ const CandidatureEtudiantDashboard = () => {
 		};
 		return statusOrder[a.etat] - statusOrder[b.etat];
 	});
-	
+
 	const [currentPage, setCurrentPage] = useState(1);
 	const itemsPerPage = 5;
 	const startIndex = (currentPage - 1) * itemsPerPage;
@@ -53,7 +53,7 @@ const CandidatureEtudiantDashboard = () => {
 		handleRefuseSignerContrat
 	} = useContext(ContratContext);
 	const [contrat, setContrat] = useState(null);
-	
+
 	const handleSignerContratClick = () => {
 		const updatedCandidatures = candidatures.map(item =>
 			item.id === currentCandidature.id ? { ...item, needsAttention: false } : item
@@ -61,7 +61,7 @@ const CandidatureEtudiantDashboard = () => {
 		setCandidatures(updatedCandidatures)
 		handleSignerContrat(contrat, setCurrentCandidature);
 	};
-	
+
 	const handleRefuseSignerContratClick = () => {
 		handleRefuseSignerContrat(contrat, setCurrentCandidature);
 	}
@@ -122,7 +122,7 @@ const CandidatureEtudiantDashboard = () => {
 	const handleCandidatureClick = (candidature) => {
 		setCurrentCandidature(candidature)
 	};
-	
+
 	const handlePageChange = (isNext) => {
 		if (isNext) {
 			if (currentPage + 1 <= maxPages) {
@@ -134,11 +134,11 @@ const CandidatureEtudiantDashboard = () => {
 			}
 		}
 	};
-	
+
 	const actionIsRequired = (candidature) => {
 		return candidature.etat === "ENTREVUE_PROPOSE" || (candidature.needsAttention && candidature.needsAttention === true);
 	}
-	
+
 	const GetCandidaturesWindow = () => {
 		if (currentCandidature) {
 			return (
@@ -170,9 +170,9 @@ const CandidatureEtudiantDashboard = () => {
 									</Link>
 								</div>
 							</section>
-							
+
 							<hr/>
-							
+
 							<CandidatureStatus
 								t={t}
 								contrat={contrat}
@@ -182,14 +182,14 @@ const CandidatureEtudiantDashboard = () => {
 								handleSignerContrat={handleSignerContratClick}
 								handleRefuserContrat={handleRefuseSignerContratClick}
 							/>
-						
+
 						</div>
 					</div>
 				</div>
 			)
 		}
 	}
-	
+
 	const handleAcceptInterview = async () => {
 		Swal.fire({
 			title: t('dashboard_home_page.are_you_sure'),
@@ -249,7 +249,7 @@ const CandidatureEtudiantDashboard = () => {
 			}
 		});
 	};
-	
+
 	const handleRefuseInterview = async () => {
 		Swal.fire({
 			title: t('dashboard_home_page.are_you_sure'),
@@ -306,7 +306,7 @@ const CandidatureEtudiantDashboard = () => {
 			}
 		});
 	};
-	
+
 	if (currentUser) {
 		if (currentUser.role === "ETUDIANT") {
 			return (
@@ -314,15 +314,15 @@ const CandidatureEtudiantDashboard = () => {
 					{GetCandidaturesWindow()}
 					<section>
 						<h4 id="candidatures">{t("dashboard_home_page.my_applications")}</h4>
-						
+
 						<div className="menu-list">
 							{
 								(candidatures.length === 0)?
 									<div className="menu-list-item menu-list-empty-list-placeholder">
 										<div className="no-items-display">
-											<Icon path={mdiBriefcaseRemoveOutline} size={1.5} />
-											<h6>Aucune candidature</h6>
-											<p className="text-dark text-mini">Commencez par trouver et postuler à des offres de stage</p>
+											<Icon path={mdiBriefcaseRemoveOutline} size={1.5}/>
+											<h6>{t('dashboard_home_page.no_applications')}</h6>
+											<p className="text-dark text-mini">{t('dashboard_home_page.find_and_apply')}</p>
 										</div>
 									</div>
 									:
