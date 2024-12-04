@@ -6,6 +6,8 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 
+import java.util.Objects;
+
 public class ContratPdf {
 	
 	private final Contrat contrat;
@@ -48,10 +50,10 @@ public class ContratPdf {
 			document.add(new Paragraph("L’entreprise s’engage à:\n..."));
 			document.add(new Paragraph("L’étudiant s’engage à:\n..."));
 			document.add(new Paragraph("SIGNATURES"));
-			document.add(new Paragraph("Signature de l’étudiant(e): " + (contrat.getSignatureEtudiant() != null ? contrat.getSignatureEtudiant() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEmployeur() != null ? contrat.getDateSignatureEtudiant() : "_______________________")));
-			document.add(new Paragraph("Signature de l’employeur: " + (contrat.getSignatureEmployeur() != null ? contrat.getSignatureEmployeur() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEmployeur() != null ? contrat.getDateSignatureEmployeur() : "_______________________")));
+
+			document.add(new Paragraph("Signature de l’étudiant(e): " + (!Objects.equals(contrat.getSignatureEtudiant(), "Non signe") ? contrat.getSignatureEtudiant() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEtudiant() != null ? contrat.getDateSignatureEtudiant() : "_______________________")));
+			document.add(new Paragraph("Signature de l’employeur: " + (!Objects.equals(contrat.getSignatureEmployeur(), "Non signe") ? contrat.getSignatureEmployeur() : "_______________________") + "\n " + "Date de signature : " + (contrat.getDateSignatureEmployeur() != null ? contrat.getDateSignatureEmployeur() : "_______________________")));
 			document.add(new Paragraph("Signature du gestionnaire de stage: " + (contrat.getSignatureGestionnaire() != null ? contrat.getSignatureGestionnaire() : "_______________________") + "\n " + " Date de signature : " + (contrat.getDateSignatureGestionnaire() != null ? contrat.getDateSignatureGestionnaire().toString() : "_______________________")));
-			
 			document.close();
 			return dest;
 		} catch (Exception e) {

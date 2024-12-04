@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import HeaderMain from "../../fragments/header/HeaderMain";
 import {Route, Routes} from "react-router-dom";
 import ManageCVs from "../cv/ManageCVs";
@@ -18,17 +18,21 @@ import {ApplyOffreWindow} from "../offre-stage/ApplyOffreWindow";
 import {CandidatureProvider} from "../../providers/CandidatureProvider";
 import {ContratProvider} from "../../providers/ContratProvider";
 import {ViewCandidatures} from "../candidatures/ViewCandidatures";
+import EvaluationEmployeurEtapes from "../evaluation/EvaluationEmployeurEtapes";
+import EvaluationMilieuStageEtape from "../evaluation/EvaluationMilieuStageEtape";
 
 const Dashboard = () => {
+
 	return (
 		<>
-			<HeaderMain theme={"light"}></HeaderMain>
+			<HeaderMain theme={"dark"}></HeaderMain>
 			<div className={"dashboard-layout"}>
 				<div className="dashboard-head">
 				</div>
 				<div className="dashboard-content">
 
 					<CvProvider>
+						<CandidatureProvider>
 						<OffreStageProvider>
 							<ContratProvider>
 							    <Routes>
@@ -38,14 +42,19 @@ const Dashboard = () => {
                                     <Route path="/manage-offres-stage" element={<RoleRoute element={<ManageOffresStage/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
                                     <Route path="/modifier-offre-stage/:id" element={<RoleRoute element={<ModifierOffreStage/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
                                     <Route path="/discover-offers/" element={<RoleRoute element={<CandidatureProvider><ApplyOffreWindow><DiscoverOffers/></ApplyOffreWindow></CandidatureProvider>} roles={['ETUDIANT']}/>}/>
-                                    <Route path="/" element={<DashboardHome/>}/>
+                                    <Route path="/evaluation-step/" element={<EvaluationEmployeurEtapes />} />
+									<Route path="/evaluation-milieu-stage-step/" element={<EvaluationMilieuStageEtape />} />
+									<Route path="/" element={<DashboardHome/>}/>
 							    </Routes>
 							</ContratProvider>
 						</OffreStageProvider>
+						</CandidatureProvider>
 						<CandidatureProvider>
-							<Routes>
-								<Route path="/view-candidatures" element={<RoleRoute element={<ViewCandidatures/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
-							</Routes>
+							<ContratProvider>
+								<Routes>
+									<Route path="/view-candidatures" element={<RoleRoute element={<ViewCandidatures/>} roles={['EMPLOYEUR', 'ADMIN']}/>}/>
+								</Routes>
+							</ContratProvider>
 						</CandidatureProvider>
 					</CvProvider>
 

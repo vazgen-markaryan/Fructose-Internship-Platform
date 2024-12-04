@@ -48,11 +48,6 @@ public class FructoseApplication implements CommandLineRunner {
 		LocalDate dateFinCYBERPUNK = LocalDate.of(2077, 5, 31);
 		LocalDate dateLimiteCandidatureCYBERPUNK = LocalDate.of(2077, 1, 10);
 		
-		//DATES DANS LE WARHAMMER 40K
-		LocalDate dateDebutWARHAMMER = LocalDate.of(40000, 1, 20);
-		LocalDate dateFinWARHAMMER = LocalDate.of(40000, 5, 31);
-		LocalDate dateLimiteCandidatureWARHAMMER = LocalDate.of(40000, 1, 10);
-		
 		// DEPARTEMENTS
 		checkAndAddDepartement();
 		Departement departementInformatique = getDepartement("techniques_informatique");
@@ -65,30 +60,14 @@ public class FructoseApplication implements CommandLineRunner {
 		createAndPersistUtilisateur("Etudiant", "Lou Jonathan Monty", "lou@gmail.com", "LouJM123!", "4444444", departementInformatique, null, true);
 		createAndPersistUtilisateur("Etudiant", "Joan Favrichon", "joan@gmail.com", "Joan123!", "5555555", departementInformatique, null, true);
 		
-		// ÉTUDIANTS NON APPROUVÉS
-		createAndPersistUtilisateur("Etudiant", "Roberto Berrios Larios", "roberto@gmail.com", "Roberto123!", "1234567", departementInformatique, null, false);
-		createAndPersistUtilisateur("Etudiant", "Samuel Léveillé", "samuel@gmail.com", "Samuel123!", "2345678", departementInformatique, null, false);
-		createAndPersistUtilisateur("Etudiant", "Jason Jody Aubé", "jason@gmail.com", "Jason123!", "3456789", departementInformatique, null, false);
-		System.out.println();
-		
 		// PROFESSEURS APPROUVÉS
 		createAndPersistUtilisateur("Professeur", "François Lacoursière", "francois@gmail.com", "Francois123!", "6666666", departementInformatique, null, true);
 		createAndPersistUtilisateur("Professeur", "Michel Généreux", "michel@gmail.com", "Michel123!", "7777777", departementInformatique, null, true);
-		
-		// PROFESSEURS NON APPROUVÉS
-		createAndPersistUtilisateur("Professeur", "David Giasson", "david@gmail.com", "David123!", "8888888", departementInformatique, null, false);
-		createAndPersistUtilisateur("Professeur", "Thomas Coutelen", "thomas@gmail.com", "Thomas123!", "9999999", departementInformatique, null, false);
-		System.out.println();
 		
 		// EMPLOYEURS
 		createAndPersistUtilisateur("Employeur", "Yves Guillemot", "ubisoft@gmail.com", "Ubisoft123!", null, null, "Ubisoft Incorporé", true);
 		createAndPersistUtilisateur("Employeur", "Sundar Pichai", "google@gmail.com", "Google123!", null, null, "Google LLC", true);
 		createAndPersistUtilisateur("Employeur", "Bobby Kotick", "activision@gmail.com", "Activision123!", null, null, "Activision Publishing Incorporé", true);
-		
-		// EMPLOYEUR NON APPROUVÉS
-		createAndPersistUtilisateur("Employeur", "Andrew Wilson", "electronicarts@gmail.com", "Electronicarts123!", null, null, "Electronic Arts Inc", false);
-		createAndPersistUtilisateur("Employeur", "Satya Nadella", "microsoft@gmail.com", "Microsoft123!", null, null, "Microsoft Corporation", false);
-		System.out.println();
 		
 		// ADMINS
 		createAndPersistUtilisateur("Admin", "Didier Tremblay", "didieradmin@gmail.com", "Didieradmin123!", "1212121", departementCegep, null, true);
@@ -97,7 +76,6 @@ public class FructoseApplication implements CommandLineRunner {
 		
 		// OFFRES DE STAGE
 		createAndPersistOffreStage("Développeur Java", "Développer des applications Java", "Développeur Java", "Ubisoft Incorporé", departementInformatique, 20.0, "presentiel", "Saint-Laurent, Montréal, Québec, Canada", "temps_partiel", dateDebutCYBERPUNK, dateFinCYBERPUNK, 30, 10, dateLimiteCandidatureCYBERPUNK, "ubisoft@gmail.com");
-		createAndPersistOffreStage("Développeur Web", "Développer des applications Web", "Développeur Web", "Ubisoft Incorporé", departementInformatique, 25.0, "virtuel", "Mountain View, Californie, États-Unis", "temps_partiel", dateDebutWARHAMMER, dateFinWARHAMMER, 30, 10, dateLimiteCandidatureWARHAMMER, "ubisoft@gmail.com");
 		createAndPersistOffreStage("Développeur C++", "Développer des jeux vidéo", "Développeur C++", "Ubisoft Incorporé", departementInformatique, 30.0, "hybride", "Santa Monica, Californie, États-Unis", "temps_plein", dateDebut, dateFin, 40, 15, dateLimiteCandidature, "ubisoft@gmail.com");
 		createAndPersistOffreStage("Développeur Python", "Développer des applications Python", "Développeur Python", "Ubisoft Incorporé", departementInformatique, 22.0, "presentiel", "Redmond, Washington, États-Unis", "temps_partiel", dateDebut, dateFin, 25, 8, dateLimiteCandidature, "ubisoft@gmail.com");
 		createAndPersistOffreStage("Développeur Frontend", "Créer des interfaces utilisateur", "Développeur Frontend", "Ubisoft Incorporé", departementInformatique, 28.0, "virtuel", "Menlo Park, Californie, États-Unis", "temps_plein", dateDebut, dateFin, 35, 12, dateLimiteCandidature, "ubisoft@gmail.com");
@@ -105,10 +83,9 @@ public class FructoseApplication implements CommandLineRunner {
 		createAndPersistOffreStage("Ingénieur en machine learning", "Développer des modèles ML", "Ingénieur en ML", "Ubisoft Incorporé", departementInformatique, 35.0, "hybride", "Sunnyvale, Californie, États-Unis", "temps_partiel", dateDebut, dateFin, 20, 6, dateLimiteCandidature, "ubisoft@gmail.com");
 		createAndPersistOffreStage("Développeur Go", "Développer des applications Go", "Développeur Go", "Ubisoft Incorporé", departementInformatique, 28.0, "presentiel", "Calgary, Alberta, Canada", "temps_plein", dateDebut, dateFin, 19, 8, dateLimiteCandidature, "ubisoft@gmail.com");
 		createAndPersistOffreStage("Ingénieur en cloud", "Gérer les infrastructures cloud", "Ingénieur Cloud", "Ubisoft Incorporé", departementInformatique, 34.0, "virtuel", "Seattle, Washington, États-Unis", "temps_partiel", dateDebut, dateFin, 18, 9, dateLimiteCandidature, "ubisoft@gmail.com");
-		
-		createAndPersistOffreStage("Développeur Backend", "Développer la logique serveur", "Développeur Backend", "Google LLC", departementInformatique, 24.0, "hybride", "Seattle, Washington, États-Unis", "temps_partiel", dateDebutCYBERPUNK, dateFinCYBERPUNK, 20, 6, dateLimiteCandidatureCYBERPUNK, "google@gmail.com");
-		createAndPersistOffreStage("Ingénieur DevOps", "Gérer l'infrastructure", "Ingénieur DevOps", "Google LLC", departementInformatique, 26.0, "presentiel", "Armonk, New York, États-Unis", "temps_plein", dateDebutWARHAMMER, dateFinWARHAMMER, 15, 7, dateLimiteCandidatureWARHAMMER, "google@gmail.com");
-		createAndPersistOffreStage("Analyste de données", "Analyser les données", "Analyste de données", "Google LLC", departementInformatique, 27.0, "virtuel", "Redwood City, Californie, États-Unis", "temps_partiel", dateDebut, dateFin, 18, 9, dateLimiteCandidature, "google@gmail.com");
+		createAndPersistOffreStage("Développeur Backend", "Développer la logique serveur", "Développeur Backend", "Ubisoft Incorporé", departementInformatique, 24.0, "hybride", "Seattle, Washington, États-Unis", "temps_partiel", dateDebutCYBERPUNK, dateFinCYBERPUNK, 20, 6, dateLimiteCandidatureCYBERPUNK, "ubisoft@gmail.com");
+		createAndPersistOffreStage("Analyste de données", "Analyser les données", "Analyste de données", "Ubisoft Incorporé", departementInformatique, 27.0, "virtuel", "Redwood City, Californie, États-Unis", "temps_partiel", dateDebut, dateFin, 18, 9, dateLimiteCandidature, "ubisoft@gmail.com");
+
 		createAndPersistOffreStage("Concepteur UX/UI", "Concevoir des expériences utilisateur", "Concepteur UX/UI", "Google LLC", departementInformatique, 29.0, "hybride", "San Jose, Californie, États-Unis", "temps_plein", dateDebut, dateFin, 22, 5, dateLimiteCandidature, "google@gmail.com");
 		createAndPersistOffreStage("Testeur QA", "Tester des applications", "Testeur QA", "Google LLC", departementInformatique, 21.0, "presentiel", "San Francisco, Californie, États-Unis", "temps_partiel", dateDebut, dateFin, 19, 8, dateLimiteCandidature, "google@gmail.com");
 		createAndPersistOffreStage("Développeur Kotlin", "Développer des applications Android", "Développeur Kotlin", "Google LLC", departementInformatique, 31.0, "presentiel", "Mountain View, Californie, États-Unis", "temps_partiel", dateDebut, dateFin, 20, 8, dateLimiteCandidature, "google@gmail.com");
@@ -117,7 +94,6 @@ public class FructoseApplication implements CommandLineRunner {
 		createAndPersistOffreStage("Consultant en IT", "Conseiller les entreprises sur les technologies", "Consultant IT", "Google LLC", departementInformatique, 32.0, "presentiel", "New York, New York, États-Unis", "temps_plein", dateDebut, dateFin, 22, 9, dateLimiteCandidature, "google@gmail.com");
 		
 		createAndPersistOffreStage("Développeur en réalité virtuelle", "Créer des applications VR", "Développeur VR", "Activision Publishing, Inc", departementInformatique, 29.0, "hybride", "Menlo Park, Californie, États-Unis", "temps_plein", dateDebutCYBERPUNK, dateFinCYBERPUNK, 17, 6, dateLimiteCandidatureCYBERPUNK, "activision@gmail.com");
-		createAndPersistOffreStage("Analyste en cybersécurité", "Protéger les données", "Analyste Cyber", "Activision Publishing, Inc", departementInformatique, 37.0, "presentiel", "Santa Clara, Californie, États-Unis", "temps_partiel", dateDebutWARHAMMER, dateFinWARHAMMER, 16, 8, dateLimiteCandidatureWARHAMMER, "activision@gmail.com");
 		createAndPersistOffreStage("Développeur en blockchain", "Développer des solutions blockchain", "Développeur Blockchain", "Activision Publishing, Inc", departementInformatique, 38.0, "virtuel", "San Francisco, Californie, États-Unis", "temps_plein", dateDebut, dateFin, 18, 7, dateLimiteCandidature, "activision@gmail.com");
 		createAndPersistOffreStage("Ingénieur en intelligence artificielle", "Développer des modèles IA", "Ingénieur IA", "Activision Publishing, Inc", departementInformatique, 40.0, "hybride", "Washington, D.C., États-Unis", "temps_partiel", dateDebut, dateFin, 20, 9, dateLimiteCandidature, "activision@gmail.com");
 		createAndPersistOffreStage("Développeur en systèmes embarqués", "Développer des systèmes embarqués", "Développeur Systèmes", "Activision Publishing, Inc", departementInformatique, 27.0, "presentiel", "Miami, Floride, États-Unis", "temps_plein", dateDebut, dateFin, 22, 6, dateLimiteCandidature, "activision@gmail.com");
@@ -128,11 +104,11 @@ public class FructoseApplication implements CommandLineRunner {
 		
 		// APPROUVER OFFRES DE STAGE
 		System.out.println(); // Ajouter une ligne vide pour la lisibilité
-		approuverOffresStage(1L, 2L, 3L, 10L, 11L, 12L, 19L, 20L, 21L);
+		approuverOffresStage(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L, 12L, 19L, 20L, 21L);
 		
 		// REFUSER OFFRES DE STAGE
 		System.out.println(); // Ajouter une ligne vide pour la lisibilité
-		refuserOffresStage(4L, 5L, 6L, 13L, 14L, 15L, 22L, 23L, 24L);
+		refuserOffresStage( 13L, 14L, 15L, 22L, 23L, 24L);
 	}
 	
 	//ADD METHODS

@@ -8,7 +8,7 @@ import {
 	mdiCheckCircleOutline,
 	mdiDeleteOutline,
 	mdiDomain,
-	mdiMapMarkerOutline
+	mdiMapMarkerOutline, mdiPencilOutline
 } from "@mdi/js";
 import {differenceInMonths, endOfMonth, format} from "date-fns";
 import {useNavigate} from "react-router-dom";
@@ -16,7 +16,7 @@ import {useTranslation} from "react-i18next";
 import {AuthContext} from "../../providers/AuthProvider";
 import Modal from "../../../utilities/modal/Modal"
 
-const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, handleApply, handlerefused}) => {
+const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, handleApply, handlerefused, isApplied}) => {
 	const {t} = useTranslation();
 	const {currentUser} = useContext(AuthContext);
 	const navigate = useNavigate();
@@ -26,8 +26,7 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 	if (currentOffer) {
 		const dateDebut = new Date(currentOffer.dateDebut);
 		const dateFin = new Date(currentOffer.dateFin);
-		
-		// Ajoute 1 jour à la date de début pour l'afficher correctement
+
 		dateDebut.setDate(dateDebut.getDate() + 1);
 		dateFin.setDate(dateFin.getDate() + 1);
 		
@@ -37,14 +36,8 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 		
 		return (
 			<>
-				<div className="dashboard-card" style={{
-					width: "55%",
-					position: "sticky",
-					top: "70px",
-					height: "90vh",
-					display: "flex",
-					flexDirection: "column"
-				}}>
+				<div style={{display: "flex",
+					flexDirection: "column", height: "100%"}}>
 					<div className="user-profile-section">
 						<div className="company-profile-section-banner" style={{borderRadius: "5px 5px 0 0"}}></div>
 						<div className="user-profile-section-profile-picture radius-normal"
@@ -61,23 +54,23 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 							<div className="toolbar-spacer"></div>
 							<div style={{display: (currentUser.role === "ETUDIANT") ? "block" : "none"}}>
 								{
-									(currentOffer.hasCandidature)
+									isApplied  || currentOffer.hasCandidature
 										?
-										<div className="toolbar-items">
-											<Icon path={mdiCheckCircleOutline} size={1} className="text-green"/>
-											<h6 className="m-0 text-green">{t("discover_offers_page.applied")}</h6>
-										</div>
+										<button className="btn-candidature" disabled>
+											<Icon path={mdiCheckCircleOutline} size={1} className="text-white"/>
+											<span className="text-white">{t("discover_offers_page.applied")}</span>
+										</button>
 										:
-										<button className="btn-filled" onClick={() => handleApply()}>{t("discover_offers_page.apply")}</button>
+										<button className="btn-filled" onClick={handleApply}>
+											<span className="text-white">{t("discover_offers_page.apply")}</span>
+										</button>
 								}
 							</div>
 						</div>
 						{currentOffer.isRefused && (
-							<p style={{
-								color: "red",
-								textAlign: "center",
-								marginTop: "10px"
-							}}>{t("discover_offers_page.refusal_reason")}{currentOffer.commentaireRefus}</p>
+							<p style={{color: "red", textAlign: "center", marginTop: "10px"}}>
+								{t("discover_offers_page.refusal_reason")}{currentOffer.commentaireRefus}
+							</p>
 						)}
 					</section>
 					
@@ -89,21 +82,9 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 								<section className="nospace">
 									<h5>{t("discover_offers_page.actions")}</h5>
 									
-									<div style={{
-										gap: "10px"
-									}}
-									     className="toolbar-items">
-										<button
-											className="btn-filled toolbar-spacer bg-green"
-											onClick={() => handleValidate(currentOffer.id)}
-										>
-											{t("modal.validate")}
-										</button>
-										<button
-											className="btn-filled toolbar-spacer bg-red"
-											onClick={() => setRejectModalOpen(true)}>
-											{t("modal.reject")}
-										</button>
+									<div style={{gap: "10px"}} className="toolbar-items">
+										<button className="btn-filled toolbar-spacer bg-green" onClick={() => handleValidate(currentOffer.id)}>{t("modal.validate")}</button>
+										<button className="btn-filled toolbar-spacer bg-red" onClick={() => setRejectModalOpen(true)}>{t("modal.reject")}</button>
 									</div>
 								</section>
 								<hr/>
@@ -114,38 +95,30 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 							<div className="list-bullet">
 								<Icon path={mdiCashMultiple} size={1}/>
 								<div style={{padding: "4px 0"}}>
-									<h6 className="m-0"
-									    style={{marginBottom: "5px"}}>{t("discover_offers_page.salary")}</h6>
+									<h6 className="m-0" style={{marginBottom: "5px"}}>{t("discover_offers_page.salary")}</h6>
 									<span className="badge text-mini">C$ {currentOffer.tauxHoraire}.00</span>
 								</div>
 							</div>
 							<div className="list-bullet">
 								<Icon path={mdiBriefcaseOutline} size={1}/>
 								<div style={{padding: "4px 0"}}>
-									<h6 className="m-0"
-									    style={{marginBottom: "5px"}}>{t("discover_offers_page.internship_type")}</h6>
-									<span
-										className="badge text-mini">{t("discover_offers_page.types_emploi." + currentOffer.modaliteTravail)}</span>
-									<span
-										className="badge text-mini"> {t("discover_offers_page.hours", {count: currentOffer.nombreHeuresSemaine})}</span>
+									<h6 className="m-0" style={{marginBottom: "5px"}}>{t("discover_offers_page.internship_type")}</h6>
+									<span className="badge text-mini">{t("discover_offers_page.types_emploi." + currentOffer.modaliteTravail)}</span>
+									<span className="badge text-mini"> {t("discover_offers_page.hours", {count: currentOffer.nombreHeuresSemaine})}</span>
 								</div>
 							</div>
 							<div className="list-bullet">
 								<Icon path={mdiDomain} size={1}/>
 								<div style={{padding: "4px 0"}}>
-									<h6 className="m-0"
-									    style={{marginBottom: "5px"}}>{t("discover_offers_page.work_type.title")}</h6>
-									<span
-										className="badge text-mini">{t("discover_offers_page.work_type." + currentOffer.typeEmploi)}</span>
+									<h6 className="m-0" style={{marginBottom: "5px"}}>{t("discover_offers_page.work_type.title")}</h6>
+									<span className="badge text-mini">{t("discover_offers_page.work_type." + currentOffer.typeEmploi)}</span>
 								</div>
 							</div>
 							<div className="list-bullet">
 								<Icon path={mdiCalendarOutline} size={1}/>
 								<div style={{padding: "4px 0"}}>
-									<h6 className="m-0"
-									    style={{marginBottom: "5px"}}>{t("discover_offers_page.internship_duration")}</h6>
-									<span
-										className="badge text-mini">{formattedDateDebut} - {formattedDateFin} ({t("discover_offers_page.month", {count: monthsDifference})})</span>
+									<h6 className="m-0" style={{marginBottom: "5px"}}>{t("discover_offers_page.internship_duration")}</h6>
+									<span className="badge text-mini">{formattedDateDebut} - {formattedDateFin} ({t("discover_offers_page.month", {count: monthsDifference})})</span>
 								</div>
 							</div>
 						</section>
@@ -162,11 +135,10 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 						<hr/>
 						<section className="nospace">
 							<h5>{t("discover_offers_page.description")}</h5>
-							<p>{currentOffer.description}</p>
+							<p style={{wordWrap: "break-word"}}>{currentOffer.description}</p>
 						</section>
 						<hr/>
 						<section className="nospace">
-							
 							{currentUser && currentUser.role !== "EMPLOYEUR" && (
 								<>
 									<h5>{t("discover_offers_page.employer")}</h5>
@@ -174,7 +146,6 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 							)}
 							
 							<div className="list-bullet">
-								
 								{currentUser && currentUser.role !== "EMPLOYEUR" && (
 									<>
 										<div className="user-profile-section-profile-picture" style={{
@@ -194,19 +165,14 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 										</a>
 									</>
 								)}
-							
 							</div>
 						</section>
 						{currentUser && currentUser.role === "EMPLOYEUR" && (
 							<section className="nospace">
 								<h5>Actions</h5>
-								<div style={{
-									display: "flex",
-									gap: "10px",
-									marginBottom: "20px"
-								}}>
+								<div style={{display: "flex", gap: "10px", marginBottom: "20px"}}>
 									<button className="btn-option" onClick={() => navigate(`/dashboard/modifier-offre-stage/${currentOffer.id}`)}>
-										<Icon path={mdiCheck} size={1}/>{t('manage_offre_stage.buttons.modify')}
+										<Icon path={mdiPencilOutline} size={1} />{t('manage_offre_stage.buttons.modify')}
 									</button>
 									<button className="btn-option" onClick={() => handleDeleteOffreStage(currentOffer.id)}>
 										<Icon path={mdiDeleteOutline} size={1}/>{t('manage_offre_stage.buttons.delete')}
@@ -224,17 +190,12 @@ const OfferPreview = ({currentOffer, handleDeleteOffreStage, handleValidate, han
 							setRejectModalOpen(false);
 						}}>
 							<h4>{t("modal.reject_reason")}</h4>
-							<textarea
-								ref={textareaRef}
-								placeholder={t("modal.reject_reason_placeholder")}
-								style={{width: "100%", height: "100px"}}
-							/>
+							<textarea ref={textareaRef} placeholder={t("modal.reject_reason_placeholder")} style={{width: "100%", height: "100px"}}/>
 						</Modal>
 					)
 				}
 			</>
-		)
-			;
+		);
 	}
 	return null;
 };

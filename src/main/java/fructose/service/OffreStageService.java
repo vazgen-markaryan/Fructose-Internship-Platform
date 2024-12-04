@@ -45,8 +45,10 @@ public class OffreStageService {
 	}
 	
 	public void addOffreStage(OffreStageDTO offreStageDTO) {
-		UtilisateurDTO utilisateurDTO = UtilisateurDTO.toDTO(getUtilisateurEnCours());
-		validateAddOffreStage(offreStageDTO, utilisateurDTO);
+		if (offreStageDTO == null) {
+			throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
+		}
+		validateAddOffreStage(offreStageDTO, offreStageDTO.getOwnerDTO());
 	}
 	
 	public void addOffreStage(OffreStageDTO offreStageDTO, UtilisateurDTO utilisateurDTO) {
@@ -59,8 +61,10 @@ public class OffreStageService {
 		}
 		if (offreStageDTO.getOwnerDTO() == null) {
 			offreStageDTO.setOwnerDTO(utilisateurDTO);
-		}else if (utilisateurDTO.getRole() == Role.ADMIN){
-			offreStageDTO.setIsApproved(true);
+		}else if (utilisateurDTO != null) {
+			if (utilisateurDTO.getRole() == Role.ADMIN) {
+				offreStageDTO.setIsApproved(true);
+			}
 		}
 		validateOffreStage(offreStageDTO);
 		OffreStage offreStage = OffreStageDTO.toEntity(offreStageDTO);

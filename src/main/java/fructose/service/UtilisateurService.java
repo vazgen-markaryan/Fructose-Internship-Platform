@@ -95,8 +95,6 @@ public class UtilisateurService {
 			case EMPLOYEUR -> employeurRepository.deleteById(id);
 			case ADMIN -> adminRepository.deleteById(id);
 		}
-		// TODO: Commenté juste pour avoir clean look dans MAIN
-		// System.out.println(role + " " + saveFullName.toUpperCase() + " a été supprimé avec succès.");
 	}
 	
 	public List<UtilisateurDTO> getUtilisateurs(Role role) {

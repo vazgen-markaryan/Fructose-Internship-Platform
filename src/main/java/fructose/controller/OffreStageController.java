@@ -1,5 +1,6 @@
 package fructose.controller;
 
+import fructose.model.enumerator.Role;
 import fructose.service.OffreStageService;
 import fructose.service.UtilisateurService;
 import fructose.service.dto.OffreStageDTO;
@@ -22,26 +23,44 @@ import java.util.stream.Collectors;
 
 @RestController
 public class OffreStageController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(OffreStageController.class);
 	private final OffreStageService offreStageService;
 	private final UtilisateurService utilisateurService;
-	
+
 	public OffreStageController(OffreStageService offreStageService, UtilisateurService utilisateurService) {
 		this.offreStageService = offreStageService;
 		this.utilisateurService = utilisateurService;
 	}
-	
+
 	@PostMapping ("/creer-offre-stage")
 	public ResponseEntity<?> creerOffreStage(@RequestHeader ("Authorization") String token, @RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
+		UtilisateurDTO currentUser = utilisateurService.getUtilisateurByToken(token);
+
+		if(!(currentUser.getRole() == Role.ADMIN || currentUser.getRole() == Role.EMPLOYEUR)){
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("");
+		}
+
 		if (offreStageDTO.getOwnerDTO() == null) {
 			UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurByToken(token);
 			offreStageDTO.setOwnerDTO(utilisateurDTO);
+		} else {
+			try {
+				UtilisateurDTO utilisateurDTO = utilisateurService.getUtilisateurById(offreStageDTO.getOwnerDTO().getId(), Role.EMPLOYEUR);
+				if (utilisateurDTO != null && currentUser.getRole() == Role.ADMIN){
+					offreStageDTO.setOwnerDTO(utilisateurDTO);
+					offreStageDTO.setIsApproved(true);
+				} else {
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Employeur non trouvé");
+				}
+			} catch (Exception e) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Employeur non trouvé");
+			}
 		}
 		if (result.hasErrors()) {
 			String errorMessages = result.getFieldErrors().stream()
-				.map(DefaultMessageSourceResolvable::getDefaultMessage)
-				.collect(Collectors.joining(", "));
+					.map(DefaultMessageSourceResolvable::getDefaultMessage)
+					.collect(Collectors.joining(", "));
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur de validation : " + errorMessages);
 		}
 		try {
@@ -60,15 +79,15 @@ public class OffreStageController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
 		}
 	}
-	
+
 	@PutMapping ("/modifier-offre-stage")
 	public ResponseEntity<?> modifierOffreStage(@RequestHeader ("Authorization") String token, @RequestBody @Valid OffreStageDTO offreStageDTO, BindingResult result) {
-		
+
 		if (result.hasErrors()) {
 			// Collect validation error messages into a list and return as JSON
 			List<String> errorMessages = result.getFieldErrors().stream()
-				.map(DefaultMessageSourceResolvable::getDefaultMessage)
-				.collect(Collectors.toList());
+					.map(DefaultMessageSourceResolvable::getDefaultMessage)
+					.collect(Collectors.toList());
 			Map<String, Object> errorResponse = new HashMap<>();
 			errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
 			errorResponse.put("errors", errorMessages);
@@ -80,7 +99,7 @@ public class OffreStageController {
 			Map<String, String> successResponse = new HashMap<>();
 			successResponse.put("message", "Offre de stage modifiée avec succès !");
 			return ResponseEntity.status(HttpStatus.OK).body(successResponse);
-			
+
 		} catch (DataAccessException e) {
 			// Handle unique constraint violations
 			if (e.getCause() instanceof ConstraintViolationException violation) {
@@ -103,7 +122,7 @@ public class OffreStageController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 		}
 	}
-	
+
 	@GetMapping ("/get-offre-stage")
 	public ResponseEntity<?> getOffreStage() {
 		try {
@@ -115,7 +134,7 @@ public class OffreStageController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
 		}
 	}
-	
+
 	@GetMapping ("/get-offre-stage/{id}")
 	public ResponseEntity<?> getOffreStageById(@PathVariable Long id) {
 		try {
@@ -125,7 +144,7 @@ public class OffreStageController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
 		}
 	}
-	
+
 	@DeleteMapping ("/delete-offre-stage/{id}")
 	public ResponseEntity<?> deleteOffreStage(@PathVariable Long id) {
 		try {
@@ -136,7 +155,7 @@ public class OffreStageController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur inattendue s'est produite.");
 		}
 	}
-	
+
 	@PostMapping ("/refuser-offre-stage/{id}")
 	public ResponseEntity<String> refuserOffreStage(@PathVariable Long id, @RequestBody String commentaireRefus) {
 		try {

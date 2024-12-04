@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useState} from 'react';
+import React, {createContext, useEffect, useRef, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 
 const AuthContext = createContext(undefined);
@@ -9,12 +9,16 @@ const AuthProvider = ({children}) => {
 	const navigate = useNavigate();
 	const [currentToken, setCurrentToken] = useState(null)
 	const [isUserInit, setIsUserInit] = useState(false)
-	
+
+	const isInitialized = useRef(false);
+
 	useEffect(() => {
-		const token = localStorage.getItem("FOSE_AUTH");
-		if (token) {
-			setCurrentToken(token)
-			SetUserByToken(token);
+		if (!isInitialized.current) {
+			const token = localStorage.getItem("FOSE_AUTH");
+			if (token) {
+				SetUserByToken(token);
+			}
+			isInitialized.current = true;
 		}
 	}, []);
 	

@@ -18,20 +18,18 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 function App() {
-	
+
 	return (
 		<BrowserRouter>
 			<div style={{minHeight: '100vh', position: 'relative'}}>
 				<AuthProvider>
-					<CandidatureProvider>
-						<Routes>
-							<Route path="/" element={<HomePage/>}/>
-							<Route path="/creer-utilisateur" element={<CreerUtilisateur/>}/>
-							<Route path="/connexion" element={<ConnexionUtilisateur/>}/>
-							<Route path="/dashboard/*" element={<PrivateRoute element={<Dashboard/>}/>}/>
-							<Route path="/creer-offre-stage" element={<RoleRoute element={<CreerOffreStage/>} roles={['ADMIN', 'EMPLOYEUR']}/>}/>
-						</Routes>
-					</CandidatureProvider>
+					<Routes>
+						<Route path="/" element={<HomePage/>}/>
+						<Route path="/creer-utilisateur" element={<CreerUtilisateur/>}/>
+						<Route path="/connexion" element={<ConnexionUtilisateur/>}/>
+						<Route path="/dashboard/*" element={<PrivateRoute element={<Dashboard/>}/>}/>
+						<Route path="/creer-offre-stage" element={<RoleRoute element={<CreerOffreStage/>} roles={['ADMIN', 'EMPLOYEUR']}/>}/>
+					</Routes>
 				</AuthProvider>
 			</div>
 		</BrowserRouter>

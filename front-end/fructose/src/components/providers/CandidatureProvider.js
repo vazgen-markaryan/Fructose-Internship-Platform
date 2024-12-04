@@ -28,17 +28,17 @@ const CandidatureProvider = ({children}) => {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
-					'Authorization': currentToken
+					'Authorization': `Bearer ${currentToken}`,
 				},
 			});
 			if (response.ok) {
 				const data = await response.json();
 				setCandidatures(data);
 			} else {
-				throw new Error('Failed to fetch candidatures');
+				console.error('Échec de la récupération des candidatures');
 			}
 		} catch (error) {
-			console.error("Erreur " + error);
+			console.error('Erreur lors de la récupération des candidatures :', error);
 		}
 	};
 	
@@ -58,18 +58,62 @@ const CandidatureProvider = ({children}) => {
 			} else {
 				throw new Error('Failed to fetch candidatures');
 			}
-		}catch (error) {
+		} catch (error) {
 			console.error("Erreur " + error);
 		}
 	}
-	
+	const fetchStagiaireByOwner = async () => {
+		try {
+			const response = await fetch('/candidatures/stagiaireByOwner', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': currentToken,
+				}
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				console.log('Candidatures:', data);
+				return data;
+			} else {
+				const errorText = await response.text();
+				throw new Error(errorText);
+			}
+		} catch (error) {
+			console.error('Erreur lors de la récupération des candidatures:', error);
+		}
+	};
+	const fetchCandidatureByEtatContratSigneTous = async () => {
+		try {
+			const response = await fetch(`/candidatures/contratSigneTous`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					"Authorization": currentToken
+				},
+			});
+			if (response.ok) {
+				const data = await response.json();
+				console.log('Candidatures:', data);
+				return data;
+			} else {
+				throw new Error('Failed to fetch candidatures');
+			}
+		}
+		catch (error) {
+			console.error("Erreur " + error);
+		}
+	}
 	return (
 		<CandidatureContext.Provider value={{
 			candidatures,
 			fetchCandidaturesById,
 			ApplyOffreStage,
 			setCandidatures,
-			fetchCandidatureByEtatAccepteApresEntrevue
+			fetchCandidatureByEtatAccepteApresEntrevue,
+			fetchStagiaireByOwner,
+			fetchCandidatureByEtatContratSigneTous
 		}}>
 			{children}
 		</CandidatureContext.Provider>

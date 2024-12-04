@@ -37,13 +37,13 @@ public class Contrat {
 	private LocalDate dateSignatureGestionnaire;
 	
 	@Column (name = "signature_employeur")
-	private String signatureEmployeur;
+	private String signatureEmployeur = "Non signe";
 	
 	@Column (name = "date_signature_employeur")
 	private LocalDate dateSignatureEmployeur;
 	
 	@Column (name = "signature_etudiant")
-	private String signatureEtudiant;
+	private String signatureEtudiant = "Non signe";
 	
 	@Column (name = "date_signature_etudiant")
 	private LocalDate dateSignatureEtudiant;

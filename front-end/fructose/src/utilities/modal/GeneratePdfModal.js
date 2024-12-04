@@ -1,30 +1,22 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {AuthContext} from '../../components/providers/AuthProvider';
+import {ContratContext} from "../../components/providers/ContratProvider";
 
 const GeneratePdfModal = ({onClose, onSave, candidatureId}) => {
 	const {t} = useTranslation();
 	const [pdfUrl, setPdfUrl] = useState('');
-	const {currentToken} = useContext(AuthContext);
+	const {fetchPdf} = useContext(ContratContext);
 	
 	useEffect(() => {
-		const fetchPdf = async () => {
+		const getPdf = async () => {
 			try {
-				const response = await fetch(`/contrats/generate/${candidatureId}`, {
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': currentToken
-					},
-				});
-				const pdfBlob = await response.blob();
-				const pdfUrl = URL.createObjectURL(pdfBlob);
+				const pdfUrl = await fetchPdf(candidatureId);
 				setPdfUrl(pdfUrl);
 			} catch (error) {
 				console.error('Error fetching PDF:', error);
 			}
 		};
-		fetchPdf();
+		getPdf();
 	}, [candidatureId]);
 	
 	const handleSave = () => {
@@ -38,7 +30,7 @@ const GeneratePdfModal = ({onClose, onSave, candidatureId}) => {
 				className="modal-content"
 				style={{
 					width: '80%',
-					height: '80vh',
+					height: '90vh',
 					maxWidth: '1200px',
 					maxHeight: '90vh',
 				}}
@@ -61,13 +53,11 @@ const GeneratePdfModal = ({onClose, onSave, candidatureId}) => {
 						display: 'flex',
 						justifyContent: 'flex-end',
 						gap: '10px',
-						marginTop: '10px',
+						margin: '10px 0'
 					}}
 				>
 					<button onClick={onClose}>{t('modal.close')}</button>
-					<button onClick={handleSave} className="btn-filled">
-						{t('modal.generate')}
-					</button>
+					<button onClick={handleSave} className="btn-filled">{t('modal.generate')}</button>
 				</div>
 			</div>
 		</div>

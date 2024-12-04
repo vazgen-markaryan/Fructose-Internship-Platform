@@ -1,8 +1,10 @@
 package fructose.controller;
 
+import fructose.model.enumerator.Role;
 import fructose.service.OffreStageService;
 import fructose.service.UtilisateurService;
 import fructose.service.dto.OffreStageDTO;
+import fructose.service.dto.UtilisateurDTO;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,6 +52,9 @@ public class OffreStageControllerTest {
 	void testCreerOffreStageSucces() {
 		when(bindingResult.hasErrors()).thenReturn(false);
 		doNothing().when(offreStageService).addOffreStage(any(OffreStageDTO.class));
+		UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+		utilisateurDTO.setRole(Role.ADMIN);
+		when(utilisateurService.getUtilisateurByToken("token")).thenReturn(utilisateurDTO);
 		ResponseEntity<?> response = offreStageController.creerOffreStage("token", offreStageDTO, bindingResult);
 		
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -64,6 +69,10 @@ public class OffreStageControllerTest {
 		when(bindingResult.getFieldErrors()).thenReturn(
 			List.of(new FieldError("offreStageDTO", "nom", "Le nom n'est pas valide"))
 		);
+
+		UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+		utilisateurDTO.setRole(Role.ADMIN);
+		when(utilisateurService.getUtilisateurByToken("token")).thenReturn(utilisateurDTO);
 		
 		ResponseEntity<?> response = offreStageController.creerOffreStage("token", offreStageDTO, bindingResult);
 		
@@ -80,6 +89,10 @@ public class OffreStageControllerTest {
 		when(bindingResult.hasErrors()).thenReturn(false);
 		doThrow(new DataAccessException("Database error") {
 		}).when(offreStageService).addOffreStage(any(OffreStageDTO.class));
+
+		UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+		utilisateurDTO.setRole(Role.ADMIN);
+		when(utilisateurService.getUtilisateurByToken("token")).thenReturn(utilisateurDTO);
 		
 		ResponseEntity<?> response = offreStageController.creerOffreStage("token", offreStageDTO, bindingResult);
 		
@@ -96,7 +109,11 @@ public class OffreStageControllerTest {
 		ConstraintViolationException constraintViolationException = new ConstraintViolationException("Database error", sqlException, "constraint violation");
 		doThrow(new DataAccessException("Database error", constraintViolationException) {
 		}).when(offreStageService).addOffreStage(any(OffreStageDTO.class));
-		
+
+		UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+		utilisateurDTO.setRole(Role.ADMIN);
+		when(utilisateurService.getUtilisateurByToken("token")).thenReturn(utilisateurDTO);
+
 		ResponseEntity<?> response = offreStageController.creerOffreStage("token", offreStageDTO, bindingResult);
 		
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
@@ -109,7 +126,10 @@ public class OffreStageControllerTest {
 	void testCreerOffreStageException() {
 		when(bindingResult.hasErrors()).thenReturn(false);
 		doThrow(new RuntimeException()).when(offreStageService).addOffreStage(any(OffreStageDTO.class));
-		
+
+		UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+		utilisateurDTO.setRole(Role.ADMIN);
+		when(utilisateurService.getUtilisateurByToken("token")).thenReturn(utilisateurDTO);
 		ResponseEntity<?> response = offreStageController.creerOffreStage("token", offreStageDTO, bindingResult);
 		
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());

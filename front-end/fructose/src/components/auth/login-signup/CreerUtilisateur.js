@@ -90,6 +90,15 @@ const CreerUtilisateur = () => {
 			setCurrentStep(currentStep - 1)
 		}
 	};
+
+	const getStepClass = (step) => {
+		if (currentStep === step) {
+			return "active"
+		} else if (currentStep > step) {
+			return "completed"
+		}
+		return ""
+	}
 	
 	const getPage = () => {
 		if (currentStep === 0) {
@@ -135,25 +144,25 @@ const CreerUtilisateur = () => {
 						{
 							(currentStep !== 0) ?
 								<div className="vertical-stepper">
-									<div className="vertical-stepper-item">
+									<div className={"vertical-stepper-item " + getStepClass(1)}>
 										<div className="vertical-stepper-content">
 											<h6 className="vertical-stepper-title">{t("creer_utilisateur_page.profile")}</h6>
 											<p className="vertical-stepper-desc">{t("creer_utilisateur_page.profile_2")}</p>
 										</div>
 									</div>
-									<div className="vertical-stepper-item">
+									<div className={"vertical-stepper-item " + getStepClass(2)}>
 										<div className="vertical-stepper-content">
 											<h6 className="vertical-stepper-title">{t("creer_utilisateur_page.school")}</h6>
 											<p className="vertical-stepper-desc">{t("creer_utilisateur_page.school_2")}</p>
 										</div>
 									</div>
-									<div className="vertical-stepper-item">
+									<div className={"vertical-stepper-item " + getStepClass(3)}>
 										<div className="vertical-stepper-content">
 											<h6 className="vertical-stepper-title">{t("creer_utilisateur_page.security")}</h6>
 											<p className="vertical-stepper-desc">{t("creer_utilisateur_page.pasword")}</p>
 										</div>
 									</div>
-									<div className="vertical-stepper-item">
+									<div className={"vertical-stepper-item " + getStepClass(4)}>
 										<div className="vertical-stepper-content">
 											<h6 className="vertical-stepper-title">{t("creer_utilisateur_page.finalization")}</h6>
 											<p className="vertical-stepper-desc">{t("creer_utilisateur_page.dashboard")}</p>

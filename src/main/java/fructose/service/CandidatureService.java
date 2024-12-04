@@ -7,6 +7,7 @@ import fructose.model.Utilisateur;
 import fructose.model.enumerator.EtatCandidature;
 import fructose.repository.CandidatureRepository;
 import fructose.repository.CvRepository;
+import fructose.repository.EvaluationMilieuStageRepository;
 import fructose.repository.OffreStageRepository;
 import fructose.service.dto.CandidatureDTO;
 import fructose.service.dto.EtudiantDTO;
@@ -30,6 +31,7 @@ public class CandidatureService {
 	private final CandidatureRepository candidatureRepository;
 	private final OffreStageRepository offreStageRepository;
 	private final CvRepository cvRepository;
+	private final EvaluationMilieuStageRepository ev;
 	
 	public void postuler(UtilisateurDTO etudiantDTO, Long offreStageId, Long cvDTOId) {
 		OffreStage offreStage = offreStageRepository.getReferenceById(offreStageId);
@@ -97,6 +99,7 @@ public class CandidatureService {
 			candidatureData.put("etat", candidature.getEtat());
 			candidatureData.put("commentaireRefus", candidature.getCommentaireRefus());
 			candidatureData.put("dateEntrevue", candidature.getDateEntrevue());
+			candidatureData.put("offreStageId", candidature.getOffreStage().getId());
 			
 			// Ajouter les informations de l'offre de stage
 			OffreStage offreStage = offreStageRepository.findById(candidature.getOffreStage().getId()).orElse(null);
@@ -115,21 +118,8 @@ public class CandidatureService {
 		List<Map<String, Object>> result = new ArrayList<>();
 		
 		List<Candidature> candidatures = candidatureRepository.findByCandidatureByOwnerWithoutCv(employeurId);
-		
-		for (Candidature candidature : candidatures) {
-			Map<String, Object> candidatureData = new HashMap<>();
-			
-			candidatureData.put("candidature", CandidatureDTO.toDTO(candidature));
-			Utilisateur etudiant = candidature.getEtudiant();
-			candidatureData.put("etudiant", EtudiantDTO.toDTO(etudiant));
-			OffreStage offreStage = candidature.getOffreStage();
-			candidatureData.put("idOffreStage", offreStage.getId());
-			Cv cv = cvRepository.getAllById(candidatureRepository.getCvId(candidature.getId()));
-			candidatureData.put("cvId", cv.getId());
-			result.add(candidatureData);
-		}
-		
-		return result;
+
+		return getMapsFromCandidature(result, candidatures);
 	}
 	
 	public void modifierEtatCandidature(Long candidatureId, EtatCandidature nouvelEtat) {
@@ -161,13 +151,44 @@ public class CandidatureService {
 	}
 	
 	public CandidatureDTO getCandidatureById(Long candidatureId) {
-		try {
-			Candidature candidature = candidatureRepository.findById(candidatureId)
+		Candidature candidature = candidatureRepository.findById(candidatureId)
 				.orElseThrow(() -> new IllegalArgumentException("Candidature avec ID: " + candidatureId + " n'existe pas"));
+		try {
 			return CandidatureDTO.toDTO(candidature);
 		} catch (Exception e) {
 			logger.error("Erreur lors de la récupération de la candidature avec ID: {}", candidatureId, e);
 			throw new RuntimeException("Une erreur est survenue lors de la récupération de la candidature.", e);
 		}
+	}
+
+	public List<Map<String, Object>> findStagiaireByOwner(Long id) {
+		List<Map<String, Object>> result = new ArrayList<>();
+
+		List<Candidature> candidatures = candidatureRepository.findStagiaireByOwner(id, EtatCandidature.POSTE_OBTENU);
+
+		return getMapsFromCandidature(result, candidatures);
+	}
+
+	private List<Map<String, Object>> getMapsFromCandidature(List<Map<String, Object>> result, List<Candidature> candidatures) {
+		for (Candidature candidature : candidatures) {
+			Map<String, Object> candidatureData = new HashMap<>();
+			candidatureData.put("candidature", CandidatureDTO.toDTO(candidature));
+			Utilisateur etudiant = candidature.getEtudiant();
+			candidatureData.put("etudiant", EtudiantDTO.toDTO(etudiant));
+			OffreStage offreStage = candidature.getOffreStage();
+			candidatureData.put("idOffreStage", offreStage.getId());
+			Cv cv = cvRepository.getAllById(candidatureRepository.getCvId(candidature.getId()));
+			candidatureData.put("cvId", cv.getId());
+			result.add(candidatureData);
+		}
+		return result;
+	}
+
+	public List<Map<String, Object>> findByContratSigneTous() {
+		List<Map<String, Object>> result = new ArrayList<>();
+
+
+		List<Candidature> candidatures = candidatureRepository.findByEtatAndEvaluationMilieuStageNotExist(EtatCandidature.POSTE_OBTENU);
+		return getMapsFromCandidature(result, candidatures);
 	}
 }
