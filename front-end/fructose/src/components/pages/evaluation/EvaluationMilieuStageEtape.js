@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useRef} from "react";
 import {useTranslation} from "react-i18next";
 import {Link, useLocation} from "react-router-dom";
 import {AuthContext} from "../../providers/AuthProvider";
@@ -13,6 +13,7 @@ const EvaluationMilieuStageEtapes = () => {
     const [errors, setErrors] = useState({});
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
     const [isPdfPreviewVisible, setIsPdfPreviewVisible] = useState(false);
+    const isSent = useRef(false)
 
     const [formData, setFormData] = useState({
         candidature: initialCandidature.candidature || "",
@@ -191,6 +192,12 @@ const EvaluationMilieuStageEtapes = () => {
             quartTravail3Debut: formData.quartTravail3Debut,
             quartTravail3Fin: formData.quartTravail3Fin,
         };
+
+        if(isSent.current === true){
+            return
+        }
+        isSent.current = true
+
         try {
             const response = await fetch("/evaluations/milieu-stage/creer", {
                 method: "POST",

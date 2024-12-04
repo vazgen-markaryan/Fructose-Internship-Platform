@@ -10,9 +10,11 @@ const ViewContrat = ({contrat, handleSign, currentCandidature, handleNoSign}) =>
 	const [pdfUrl, setPdfUrl] = useState('');
 	const {currentUser} = useContext(AuthContext);
 
+	const isInitialized = useRef(false)
+
 	useEffect(() => {
 		let isActive = true;
-		if (contrat && currentCandidature && contrat.candidatureId === currentCandidature.id) {
+		if (contrat && currentCandidature && contrat.candidatureId === currentCandidature.id && !isInitialized.current) {
 			(async function () {
 				try {
 					const pdfUrl = await fetchPdfByContratId(contrat.id);
@@ -22,13 +24,15 @@ const ViewContrat = ({contrat, handleSign, currentCandidature, handleNoSign}) =>
 					if (isActive) setPdfUrl(null);
 				}
 			})();
+
+			isInitialized.current = true
 		} else {
 			setPdfUrl(null);
 		}
 
-		return () => {
+		/*return () => {
 			isActive = false;
-		};
+		};*/
 	}, [contrat, currentCandidature, fetchPdfByContratId]);
 
 

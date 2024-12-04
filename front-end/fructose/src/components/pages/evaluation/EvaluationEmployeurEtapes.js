@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useRef} from "react";
 import {useTranslation} from "react-i18next";
 import {Link, useLocation} from "react-router-dom";
 import {AuthContext} from "../../providers/AuthProvider";
@@ -15,6 +15,8 @@ const EvaluationEmployeurEtapes = () => {
     const [errors, setErrors] = useState({});
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
     const [isPdfPreviewVisible, setIsPdfPreviewVisible] = useState(false);
+
+    const isSent = useRef(false)
 
     // Structure des données du formulaire
     const [formData, setFormData] = useState({
@@ -239,6 +241,11 @@ const EvaluationEmployeurEtapes = () => {
                     })),
                 })),
         };
+
+        if(isSent.current === true){
+            return
+        }
+        isSent.current = true
 
         try {
             const response = await fetch("/evaluations/employeur/creer", {

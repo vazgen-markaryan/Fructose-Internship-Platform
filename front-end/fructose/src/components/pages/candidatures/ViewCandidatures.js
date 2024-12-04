@@ -68,15 +68,14 @@ const ViewCandidatures = () => {
 
 	useEffect(() => {
 		if (currentCandidature && (currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" || currentCandidature.etat === "POSTE_OBTENU")){
-			const fetchContrat = async () => {
+			(async function () {
 				try {
 					const data = await fetchContratByCandidatureId(currentCandidature.id);
 					setContrat(data);
 				} catch (error) {
 					console.error("Erreur " + error);
 				}
-			};
-			fetchContrat();
+			})();
 		} else {
 			setContrat(null);
 		}
