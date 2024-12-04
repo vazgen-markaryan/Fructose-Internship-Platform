@@ -1,11 +1,19 @@
 import {Link} from "react-router-dom";
 import Icon from "@mdi/react";
-import {mdiAccount, mdiTranslate, mdiViewDashboardOutline, mdiWeb} from "@mdi/js";
+import {
+	mdiAccount, mdiAlphaEBoxOutline,
+	mdiAlphaFBoxOutline,
+	mdiCheck,
+	mdiLogout,
+	mdiTranslate,
+	mdiViewDashboardOutline,
+	mdiWeb
+} from "@mdi/js";
 import React, {useContext, useState} from "react";
 import {AuthContext} from "../../providers/AuthProvider";
 import {useTranslation} from "react-i18next";
 
-const HeaderMain = ({theme, background}) => {
+const HeaderMain = ({theme}) => {
 	
 	const {t, i18n} = useTranslation();
 	const [menuOpen, setMenuOpen] = useState(false)
@@ -90,26 +98,49 @@ const HeaderMain = ({theme, background}) => {
 					}}></button>
 					
 					<div className={"header-user-menu"} style={{"display": (languageMenuOpen) ? "block" : "none"}}>
-						<button onClick={() => handleChangeLanguage('fr')} style={{marginRight: "10px"}}>
-							<Icon path={mdiTranslate} size={1}/> FR
+						<button className="btn-option" onClick={()=>{handleChangeLanguage('fr')}}>
+							<Icon path={mdiAlphaFBoxOutline} size={1}/>
+							Français
+							<span className="toolbar-spacer"></span>
+							{(i18n.language === "fr")?<Icon path={mdiCheck} size={1}/>:null}
 						</button>
-						
-						<button onClick={() => handleChangeLanguage('en')}>
-							<Icon path={mdiTranslate} size={1}/> EN
+						<button className="btn-option" onClick={()=>{handleChangeLanguage('en')}}>
+							<Icon path={mdiAlphaEBoxOutline} size={1}/>
+							English
+							<span className="toolbar-spacer"></span>
+							{(i18n.language === "en")?<Icon path={mdiCheck} size={1}/>:null}
 						</button>
 					</div>
 					
-					<div className={"header-user-menu"} style={{"display": (menuOpen) ? "block" : "none"}}>
-						<div className={"header-user-menu-profile"}>
-							<h6>{currentUser.fullName}</h6>
-							<p className={"text-dark"}>{currentUser.email}</p>
+					<div className={"header-user-menu p-0"} style={{"display": (menuOpen) ? "block" : "none"}}>
+
+						<div className="user-profile-section" style={{height: "100px"}}>
+							<div className="user-profile-section-banner" style={{height: "100px"}}>
+							</div>
+							<div className="user-profile-section-profile-picture centered"
+								 style={{backgroundImage: 'url("/assets/auth/default-profile.jpg")'}}>
+							</div>
 						</div>
-						
-						<button onClick={() => {
-							SignOutUser()
-						}}>
-							{t("header_main_page.disconnect")}
-						</button>
+						<div style={{padding: "10px"}}>
+							<div className={"header-user-menu-profile text-center"} style={{padding: "8px"}}>
+								<h6>{currentUser.fullName}</h6>
+								<p className={"text-dark"}>{currentUser.email}</p>
+							</div>
+
+							<Link to="/dashboard" className="text-decoration-none">
+								<button className="btn-option" onClick={()=>{closeAllMenus()}}>
+									<Icon path={mdiViewDashboardOutline} size={1} />
+									{t("dashboard_home_page.home")}
+								</button>
+							</Link>
+
+							<button className="btn-option" onClick={() => {
+								SignOutUser()
+							}}>
+								<Icon path={mdiLogout} size={1} />
+								{t("header_main_page.disconnect")}
+							</button>
+						</div>
 					</div>
 				</>
 			)
@@ -118,11 +149,10 @@ const HeaderMain = ({theme, background}) => {
 	
 	return (
 		<header style={{
-			"color": ((theme === "dark") ? "black" : "white"),
-			background: ((background) ? "linear-gradient(" + background + ",transparent)" : "none")
+			"color": "white",
+			background: ((theme && theme === "dark") ? "linear-gradient(rgba(0,0,0,0.7),transparent)" : "none")
 		}}>
-			<Link to="/"><img src={"/assets/logo/logo" + ((theme === "dark") ? "-blk" : "") + ".png"} alt=""
-			                  className={"logo"}/></Link>
+			<Link to="/"><img src={"/assets/logo/logo.png"} alt="" className={"logo"}/></Link>
 			<div className={"toolbar-spacer"}></div>
 			{GetHeaderOptions()}
 		</header>

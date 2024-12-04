@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {CandidatureContext} from '../../providers/CandidatureProvider';
 import {AuthContext} from '../../providers/AuthProvider';
 import GeneratePdfModal from '../../../utilities/modal/GeneratePdfModal';
-import {mdiBriefcasePlusOutline} from "@mdi/js";
+import {mdiBriefcasePlusOutline, mdiFileSign} from "@mdi/js";
 import Icon from "@mdi/react";
 import {t} from "i18next";
 
@@ -87,40 +87,16 @@ const ListCandidatureEnAttenteContrat = ({needFetchingContracts}) => {
 							<p className="m-0">{t("manage_offre_stage.messages.no_offre_stages_contracts")}</p>
 						</div>
 					) : (
-						<div style={{
-							width: "auto",
-							backgroundColor: "#eee",
-							borderRadius: "10px",
-							padding: "10px"
-						}}>
-							<div style={{
-								display: "flex",
-								gap: "20px"
-							}}>
-								<div className="menu-list" style={{
-									flex: 1,
-									backgroundColor: "#f9f9f9",
-									borderRadius: "5px",
-									padding: "10px"
-								}}>
+
+								<div className="menu-list">
 									{selectedCandidatures.map((candidature, index) => (
 										<div key={index} onClick={() => handleClick(candidature)}
-										     style={{
-											     display: "flex",
-											     alignItems: "center",
-											     gap: "10px",
-											     padding: "5px",
-											     borderBottom: "1px solid #ddd",
-											     cursor: "pointer",
-											     backgroundColor: selectedCandidature && selectedCandidature.id === candidature.id ? "#e0e0e0" : "#f9f9f9"
-										     }}>
-											<Icon path={mdiBriefcasePlusOutline} size={1}/>
+										     className="menu-list-item">
+											<Icon path={mdiFileSign} size={1} />
 											<p className="m-0">{candidature.etudiantDTO.fullName} - {candidature.offreStageDTO.compagnie} - {candidature.offreStageDTO.nom}</p>
 										</div>
 									))}
 								</div>
-							</div>
-						</div>
 					)}
 					{filteredCandidatures.length > itemsPerPage && (
 						<div style={{

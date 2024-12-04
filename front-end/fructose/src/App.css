@@ -414,11 +414,11 @@ header {
 
 .header-user-menu {
 	position: absolute;
-	width: auto;
+	width: 300px;
 	height: auto;
 	background-color: white;
 	top: 70px;
-	right: 10px;
+	right: 30px;
 	padding: 10px;
 	box-sizing: border-box;
 	border: 1px solid grey;

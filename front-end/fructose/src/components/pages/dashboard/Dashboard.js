@@ -23,19 +23,10 @@ import EvaluationMilieuStageEtape from "../evaluation/EvaluationMilieuStageEtape
 
 const Dashboard = () => {
 
-	let headerStatus = "light";
-
-	const handleScroll = (event) => {
-		const newStatus = event.target.scrollTop > 100 ? "dark" : "light";
-		if (newStatus !== headerStatus) {
-			headerStatus = newStatus;
-		}
-	};
-
 	return (
 		<>
-			<HeaderMain theme={headerStatus} background={((headerStatus === "dark")?"white":null)}></HeaderMain>
-			<div className={"dashboard-layout"} onScroll={(event)=>{handleScroll(event)}}>
+			<HeaderMain theme={"dark"}></HeaderMain>
+			<div className={"dashboard-layout"}>
 				<div className="dashboard-head">
 				</div>
 				<div className="dashboard-content">

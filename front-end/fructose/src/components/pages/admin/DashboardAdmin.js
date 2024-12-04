@@ -17,6 +17,7 @@ const DashboardAdmin = () => {
             <section>
 
                 <ListCandidatureEnAttenteContrat needFetchingContracts={setNeedFetchingContracts}/>
+                <br/>
                 <ViewContrats needFetchingContracts={needFetchingContracts}
                               setNeedFetchingContracts={setNeedFetchingContracts}/>
             </section>
