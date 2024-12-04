@@ -23,11 +23,11 @@ const ViewContrat = ({contrat, handleSign, currentCandidature, handleNoSign}) =>
 				}
 			})();
 		} else {
-			setPdfUrl(null); // Réinitialise si les IDs ne correspondent pas
+			setPdfUrl(null);
 		}
 
 		return () => {
-			isActive = false; // Stoppe les mises à jour après démontage
+			isActive = false;
 		};
 	}, [contrat, currentCandidature, fetchPdfByContratId]);
 

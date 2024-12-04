@@ -226,7 +226,8 @@
         "close": "Fermer",
         "generate": "Générer",
         "generate_pdf": "Génération du Contrat de stage",
-        "view_contrat": "Le contrat"
+        "view_contrat": "Le contrat",
+        "loading_pdf": "Loading the contract"
     },
     "dashboard_home_page": {
         "home": "Accueil",
@@ -330,6 +331,7 @@
         "no_comment_reject_offer_text": "Veuillez entrer un commentaire pour le refus",
         "manage_evaluations": "Stagiaires évalués",
         "no_evaluation": "Aucune évaluation à afficher pour le moment",
+        "manage_evaluations_milieu_stage": "Manage Milieu Stage Evaluations",
         "find_and_apply": "Trouver et postuler à des offres de stage"
     },
     "pdf_view_page": {
@@ -674,8 +676,8 @@
         "stagiaire_a_evaluer": "Stagiaire à évaluer",
         "no_stagiaire_a_evaluer": "Aucun stagiaire à évaluer",
         "evaluation_non_disponible": "évaluation non disponible avant le :",
-        "evaluer": "Évaluer",
         "evaluation_disponible": "évaluation disponible",
+        "evaluer": "Évaluer",
         "step": {
             "productivite": {
                 "title": "Étape 1: Productivité",

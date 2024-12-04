@@ -187,7 +187,8 @@ const ManageCVs = () => {
 							{currentCv.isRefused && currentCv && (
 								<p style={{
 									color: "red",
-									textAlign: "center"
+									textAlign: "center",
+									wordWrap: "break-word"
 								}}>{t('manage_cv.messages.reject_reason')}"{currentCv.commentaireRefus}"</p>
 							)}
 							<a href={currentCv.fileUrl} download={currentCv.filename}

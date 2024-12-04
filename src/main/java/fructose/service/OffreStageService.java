@@ -45,7 +45,9 @@ public class OffreStageService {
 	}
 	
 	public void addOffreStage(OffreStageDTO offreStageDTO) {
-		//UtilisateurDTO utilisateurDTO = UtilisateurDTO.toDTO(getUtilisateurEnCours());
+		if (offreStageDTO == null) {
+			throw new IllegalArgumentException("OffreStageDTO ne peut pas être nul");
+		}
 		validateAddOffreStage(offreStageDTO, offreStageDTO.getOwnerDTO());
 	}
 	
