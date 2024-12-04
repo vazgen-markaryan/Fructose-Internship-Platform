@@ -215,15 +215,15 @@ const DiscoverOffers = () => {
                 }
             }
             if (filters.tauxHoraire) {
-                isEligible = (isEligible === true && currentOffer.tauxHoraire > filters.tauxHoraire.value)
+                isEligible = (isEligible === true && currentOffer.tauxHoraire >= filters.tauxHoraire.value)
                 if (filters.tauxHoraire.default !== parseInt(filters.tauxHoraire.value)) {
                     filterCount++
                 }
             }
             if (filters.sessions && isEligible === true) {
                 const dateDebut = new Date(currentOffer.dateDebut);
-                const session = (dateDebut.getMonth() >= 0 && dateDebut.getMonth() <= 4) ? "Hiver " + dateDebut.getFullYear() : (dateDebut.getMonth() >= 8 && dateDebut.getMonth() <= 11) ? "Automne " + dateDebut.getFullYear() : "";
-                isEligible = ((filters.sessions.value === "tous" && (dateDebut.getMonth() <= 4 || dateDebut.getMonth() >= 8)) || filters.sessions.value === session);
+                const session = (dateDebut.getMonth() >= 0 && dateDebut.getMonth() <= 4) ? t("discover_offers_page.filters.sessions.hiver") + " " + dateDebut.getFullYear() : (dateDebut.getMonth() >= 5 && dateDebut.getMonth() <= 7) ? t("discover_offers_page.filters.sessions.automne") + " " + dateDebut.getFullYear() : (dateDebut.getMonth() >= 8 && dateDebut.getMonth() <= 11) ? "Automne " + dateDebut.getFullYear() : "";
+                isEligible = ((filters.sessions.value === "tous" && (dateDebut.getMonth() <= 4 || (dateDebut.getMonth() >= 5 && dateDebut.getMonth() <= 7) || dateDebut.getMonth() >= 8)) || filters.sessions.value === session);
                 if (filters.sessions.default !== filters.sessions.value) {
                     filterCount++;
                 }
