@@ -329,7 +329,8 @@
         "offer_rejected_success": "L'Offre de stage a été refusée avec succès",
         "no_comment_reject_offer_text": "Veuillez entrer un commentaire pour le refus",
         "manage_evaluations": "Stagiaires évalués",
-        "no_evaluation": "Aucune évaluation à afficher pour le moment"
+        "no_evaluation": "Aucune évaluation à afficher pour le moment",
+        "find_and_apply": "Trouver et postuler à des offres de stage"
     },
     "pdf_view_page": {
         "error": "Une erreur inconnue est survenue"
@@ -551,6 +552,13 @@
         "cancel": "Annuler",
         "send": "Postuler",
         "see_cv": "Voir mes CVs"
+    },
+    "candidature_progress": {
+        "send": "Envoyer",
+        "selection": "Sélection",
+        "interview": "Entrevue",
+        "contract": "Contrat",
+        "position": "Poste"
     },
     "view_candidatures_page": {
         "interview_date": "Sélectionner une date pour l'entrevue",
@@ -828,7 +836,9 @@
                 "field5": "Horaire de travail variable",
                 "field6": "Début du quart de travail 1",
                 "field7": "Début du quart de travail 2",
-                "field8": "Début du quart de travail 3"
+                "field8": "Début du quart de travail 3",
+                "yes": "Oui",
+                "no": "Non"
             },
             "total_agree": "Totalement d'accord",
             "mostly_agree": "Plutôt d'accord",

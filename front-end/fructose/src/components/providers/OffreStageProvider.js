@@ -71,8 +71,8 @@ const OffreStageProvider = ({children}) => {
 			text: t('dashboard_home_page.delete_stage_confirmation_text'),
 			icon: 'warning',
 			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
+			confirmButtonColor: '#ff006c',
+			cancelButtonColor: '#fff',
 			confirmButtonText: t('dashboard_home_page.delete_stage_confirm_button_text'),
 			cancelButtonText: t('dashboard_home_page.delete_stage_cancel_button_text')
 		});

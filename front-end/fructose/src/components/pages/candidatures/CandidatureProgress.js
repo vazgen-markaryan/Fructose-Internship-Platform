@@ -79,7 +79,7 @@ const CandidatureProgress = ({candidature}) => {
 				<div className="candidature-progressbar-segment">
 					<div className="candidature-progressbar-segment-info">
 						<Icon path={mdiSendOutline} size={0.6}/>
-						<p>Envoi</p>
+						<p>{t('candidature_progress.send')}</p>
 					</div>
 					<div className={"candidature-progressbar-segment-bar " + (getEtatColor(1))}>
 					
@@ -88,7 +88,7 @@ const CandidatureProgress = ({candidature}) => {
 				<div className="candidature-progressbar-segment">
 					<div className="candidature-progressbar-segment-info">
 						<Icon path={mdiCheckCircleOutline} size={0.6}/>
-						<p>Selection</p>
+						<p>{t('candidature_progress.selection')}</p>
 					</div>
 					<div className={"candidature-progressbar-segment-bar " + (getEtatColor(2))}>
 					
@@ -97,7 +97,7 @@ const CandidatureProgress = ({candidature}) => {
 				<div className="candidature-progressbar-segment">
 					<div className="candidature-progressbar-segment-info">
 						<Icon path={mdiForumOutline} size={0.6}/>
-						<p>Entrevue</p>
+						<p>{t('candidature_progress.interview')}</p>
 					</div>
 					<div className={"candidature-progressbar-segment-bar " + (getEtatColor(3))}>
 					
@@ -106,7 +106,7 @@ const CandidatureProgress = ({candidature}) => {
 				<div className="candidature-progressbar-segment">
 					<div className="candidature-progressbar-segment-info">
 						<Icon path={mdiFileSign} size={0.6}/>
-						<p>Contrat</p>
+						<p>{t('candidature_progress.contract')}</p>
 					</div>
 					<div className={"candidature-progressbar-segment-bar " + (getEtatColor(4))}>
 					
@@ -115,7 +115,7 @@ const CandidatureProgress = ({candidature}) => {
 				<div className="candidature-progressbar-segment">
 					<div className="candidature-progressbar-segment-info">
 						<Icon path={mdiBriefcaseVariantOutline} size={0.6}/>
-						<p>Poste</p>
+						<p>{t('candidature_progress.position')}</p>
 					</div>
 					<div className={"candidature-progressbar-segment-bar " + (getEtatColor(5))}>
 					
