@@ -525,7 +525,7 @@ header {
 }
 
 .stepper-form{
-
+	box-sizing: border-box;
 }
 
 .stepper-form-step{
@@ -533,6 +533,21 @@ header {
 	padding: 30px 20px;
 	max-width: 450px;
 	margin: auto;
+	height: 100%;
+}
+
+.scrollable-content{
+	height: calc(100% - 56px);
+	overflow-y: auto;
+	box-sizing: border-box;
+}
+
+.form-full-body{
+	width: 100%;
+	min-height: calc(100vh - 100px);
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 /*Dahboard*/

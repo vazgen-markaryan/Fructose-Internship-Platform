@@ -3,6 +3,8 @@ import {useTranslation} from "react-i18next";
 import {Link, useLocation} from "react-router-dom";
 import {AuthContext} from "../../providers/AuthProvider";
 import PdfPreview from "../../../utilities/pdf/PdfPreview";
+import Icon from "@mdi/react";
+import {mdiChevronLeft} from "@mdi/js";
 
 const EvaluationEmployeurEtapes = () => {
     const {t} = useTranslation();
@@ -186,6 +188,15 @@ const EvaluationEmployeurEtapes = () => {
         if (currentStep > 1) setCurrentStep((prev) => prev - 1);
     };
 
+    const getStepClass = (step) => {
+        if (currentStep === step) {
+            return "active"
+        } else if (currentStep > step) {
+            return "completed"
+        }
+        return ""
+    }
+
     const handleSubmit = async () => {
         const finalFields = [
             "evaluationDiscutee",
@@ -228,7 +239,7 @@ const EvaluationEmployeurEtapes = () => {
                     })),
                 })),
         };
-        console.log("preparedData", preparedData.candidatureDTO);
+
         try {
             const response = await fetch("/evaluations/employeur/creer", {
                 method: "POST",
@@ -314,59 +325,54 @@ const EvaluationEmployeurEtapes = () => {
         if (currentStep <= stepOptions.length) {
             const {title, description, items, section} = stepOptions[currentStep - 1];
             return (
-                <section>
-                    <h3>{title}</h3>
+                <div className="stepper-form-step">
+                    <h4>{title}</h4>
                     <p>{description}</p>
+                    <br/>
                     {items.map((item, idx) => (
                         <div key={idx} style={{marginBottom: "15px"}}>
-                            <div style={{display: "flex", alignItems: "center"}}>
-                                <label htmlFor={`${section}.champs.${item}`} style={{flex: 1, marginRight: "10px"}}>
-                                    {item}
-                                </label>
-                                <select
-                                    id={`${section}.champs.${item}`}
-                                    name={`${section}.champs.${item}`}
-                                    value={formData[section]?.champs?.[item] || ""}
-                                    onChange={handleChange}
-                                    style={{
-                                        width: "50%",
-                                        textAlign: "center",
-                                        textAlignLast: "center",
-                                        border: errors[`${section}.champs.${item}`] ? "1px solid red" : "1px solid #ccc",
-                                    }}
-                                >
-                                    <option value="">{t("evaluation_employeur.step.select")}</option>
-                                    {Object.entries(ReponseEvaluation).map(([key, label]) => (
-                                        <option key={key} value={key}>
-                                            {label}
-                                        </option>
-                                    ))}
-                                </select>
+                                <div className="input-container">
+                                    <p>
+                                        {item}
+                                    </p>
+                                    <select
+                                        id={`${section}.champs.${item}`}
+                                        name={`${section}.champs.${item}`}
+                                        value={formData[section]?.champs?.[item] || ""}
+                                        onChange={handleChange}
+                                        style={{
+                                            border: errors[`${section}.champs.${item}`] ? "1px solid red" : "1px solid #ccc",
+                                        }}
+                                    >
+                                        <option value="">{t("evaluation_employeur.step.select")}</option>
+                                        {Object.entries(ReponseEvaluation).map(([key, label]) => (
+                                            <option key={key} value={key}>
+                                                {label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors[`${section}.champs.${item}`] && (
+                                        <p className="text-red m-0 text-mini">{errors[`${section}.champs.${item}`]}</p>
+                                    )}
                             </div>
-                            {errors[`${section}.champs.${item}`] && (
-                                <span style={{
-                                    color: "red",
-                                    fontSize: "12px"
-                                }}>{errors[`${section}.champs.${item}`]}</span>
-                            )}
                         </div>
                     ))}
-                    <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                        <label style={{marginBottom: "10px"}}>{t("evaluation_employeur.step.comment")}</label>
+                    <div className="input-container">
+                        <p>{t("evaluation_employeur.step.comment")}</p>
                         <textarea
                             name={`${section}.commentaire`}
                             value={formData[section].commentaire || ""}
                             onChange={handleChange}
-                            style={{width: "60%", marginLeft: "10px", fontSize: 12}}
                         ></textarea>
                     </div>
-                </section>
+                </div>
             );
         } else if (currentStep === 5) {
             return (
-                <section>
-                    <h3>{t("evaluation_employeur.step.appreciationGlobale.title")}</h3>
-                    <label>{t("evaluation_employeur.step.appreciationGlobale.description")}</label>
+                <div className="stepper-form-step">
+                    <h4>{t("evaluation_employeur.step.appreciationGlobale.title")}</h4>
+                    <br/>
+                    <h6>{t("evaluation_employeur.step.appreciationGlobale.description")}</h6>
                     {[
                         t("evaluation_employeur.step.appreciationGlobale.options.option1"),
                         t("evaluation_employeur.step.appreciationGlobale.options.option2"),
@@ -386,29 +392,29 @@ const EvaluationEmployeurEtapes = () => {
                         </div>
                     ))}
                     {errors["appreciationGlobale.valeur"] && (
-                        <span style={{color: "red", fontSize: "12px"}}>{errors["appreciationGlobale.valeur"]}</span>
+                        <p className="text-red">{errors["appreciationGlobale.valeur"]}</p>
                     )}
-                    <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                        <label>{t("evaluation_employeur.step.appreciationGlobale.comment_label")}</label>
+                    <br/>
+                    <div className="input-container">
+                        <p>{t("evaluation_employeur.step.appreciationGlobale.comment_label")}</p>
                         <textarea
                             name="appreciationGlobale.commentaire"
                             value={formData.appreciationGlobale.commentaire || ""}
                             onChange={handleChange}
-                            style={{width: "60%", marginLeft: "10px", fontSize: 12}}
                         ></textarea>
                     </div>
                     {errors["appreciationGlobale.commentaire"] && (
-                        <span
-                            style={{color: "red", fontSize: "12px"}}>{errors["appreciationGlobale.commentaire"]}</span>
+                        <p className="text-red">{errors["appreciationGlobale.commentaire"]}</p>
                     )}
-                </section>
+                </div>
             );
         } else if (currentStep === 6) {
             return (
-                <section>
-                    <h3>{t("evaluation_employeur.step.evaluationFinale.title")}</h3>
-                    <label>{t("evaluation_employeur.step.evaluationFinale.discussion_label")}</label>
-                    <div>
+                <div className="stepper-form-step">
+                    <h5>{t("evaluation_employeur.step.evaluationFinale.title")}</h5>
+                    <br/>
+                    <p className="m-0">{t("evaluation_employeur.step.evaluationFinale.discussion_label")}</p>
+                    <div className="input-container">
                         <input
                             type="radio"
                             name="evaluationDiscutee"
@@ -417,6 +423,7 @@ const EvaluationEmployeurEtapes = () => {
                             checked={formData.evaluationDiscutee === "Oui"}
                         />
                         <label>{t("evaluation_employeur.step.evaluationFinale.stage_options.yes")}</label>
+                        <br/>
                         <input
                             type="radio"
                             name="evaluationDiscutee"
@@ -427,25 +434,23 @@ const EvaluationEmployeurEtapes = () => {
                         <label>{t("evaluation_employeur.step.evaluationFinale.stage_options.no")}</label>
                     </div>
                     {errors["evaluationDiscutee"] && (
-                        <span style={{color: "red", fontSize: "12px"}}>{errors["evaluationDiscutee"]}</span>
+                        <p className="text-red">{errors["evaluationDiscutee"]}</p>
                     )}
-                    <br/>
-                    <br/>
-                    <label>{t("evaluation_employeur.step.evaluationFinale.hours_label")}</label>
-                    <input
-                        type="number"
-                        name="nombreHeures"
-                        value={formData.nombreHeures || ""}
-                        onChange={handleChange}
-                    />
-                    <br/>
+                    <div className="input-container">
+                        <p>{t("evaluation_employeur.step.evaluationFinale.hours_label")}</p>
+                        <input
+                            type="number"
+                            name="nombreHeures"
+                            value={formData.nombreHeures || ""}
+                            onChange={handleChange}
+                        />
+                    </div>
                     {errors["nombreHeures"] && (
-                        <span style={{color: "red", fontSize: "12px"}}>{errors["nombreHeures"]}</span>
+                        <p className="text-red">{errors["nombreHeures"]}</p>
                     )}
                     <br/>
-                    <br/>
-                    <label>{t("evaluation_employeur.step.evaluationFinale.stage_label")}</label>
-                    <div>
+                    <p className="m-0">{t("evaluation_employeur.step.evaluationFinale.stage_label")}</p>
+                    <div className="input-container">
                         <input
                             type="radio"
                             name="prochainStage"
@@ -454,6 +459,7 @@ const EvaluationEmployeurEtapes = () => {
                             checked={formData.prochainStage === "Oui"}
                         />
                         <label>{t("evaluation_employeur.step.evaluationFinale.stage_options.yes")}</label>
+                        <br/>
                         <input
                             type="radio"
                             name="prochainStage"
@@ -462,6 +468,7 @@ const EvaluationEmployeurEtapes = () => {
                             checked={formData.prochainStage === "Non"}
                         />
                         <label>{t("evaluation_employeur.step.evaluationFinale.stage_options.no")}</label>
+                        <br/>
                         <input
                             type="radio"
                             name="prochainStage"
@@ -472,21 +479,22 @@ const EvaluationEmployeurEtapes = () => {
                         <label>{t("evaluation_employeur.step.evaluationFinale.stage_options.maybe")}</label>
                     </div>
                     {errors["prochainStage"] && (
-                        <span style={{color: "red", fontSize: "12px"}}>{errors["prochainStage"]}</span>
+                        <p className="text-red">{errors["prochainStage"]}</p>
                     )}
                     <br/>
-                    <label>{t("evaluation_employeur.step.evaluationFinale.signature_label")}</label>
-                    <input
-                        type="text"
-                        name="signature"
-                        value={formData.signature || ""}
-                        onChange={handleChange}
-                        style={{width: "60%", marginLeft: "10px", fontSize: 12}}
-                    />
-                    {errors["signature"] && (
-                        <span style={{color: "red", fontSize: "12px"}}>{errors["signature"]}</span>
-                    )}
-                </section>
+                    <p>{t("evaluation_employeur.step.evaluationFinale.signature_label")}</p>
+                    <div className="input-container">
+                        <input
+                            type="text"
+                            name="signature"
+                            value={formData.signature || ""}
+                            onChange={handleChange}
+                        />
+                        {errors["signature"] && (
+                            <p className="text-red">{errors["signature"]}</p>
+                        )}
+                    </div>
+                </div>
             );
         } else {
             return <p>Étape invalide</p>;
@@ -496,76 +504,61 @@ const EvaluationEmployeurEtapes = () => {
     return (
 
         <div>
-            <div className="bg-auth">
-                <div className="bg-auth-point"></div>
-                <div className="bg-auth-point"></div>
-                <div className="bg-auth-point"></div>
-            </div>
-
-            <div className="auth-body">
+            <div className="form-full-body">
                 <div className={"signup-frame"}>
-                    <div className={"signup-head " + (currentStep !== 0 ? "signup-head-instep" : "")} style={{
-                        "background": "linear-gradient(rgba(0,0,0,0.4), rgb(255, 0, 108,0.8)), url('/assets/auth/signup/s1.jpg') center/cover",
-                        "backdropFilter": "blur(10px)"
-                    }}>
-                        <div className="toolbar-items">
-                            <Link to="/">
-                                <img src="/assets/logo/logo.svg" alt="" className={"logo"}/>
-                            </Link>
-                        </div>
-                        <br/>
-                        <h5>{t("evaluation_employeur.evaluation_steps.title")}</h5>
+                    <div className={"signup-head " + (currentStep !== 0 ? "signup-head-instep" : "") + " bg-secondary"}>
+                        <h4>{t("evaluation_employeur.evaluation_steps.title")}</h4>
                         <br/>
                         {currentStep !== 0 ? (
                             <div className="vertical-stepper">
-                                <div className="vertical-stepper-item">
+                                <div className={"vertical-stepper-item " + getStepClass(1)}>
                                     <div className="vertical-stepper-content">
                                         <h6 className="vertical-stepper-title">
                                             {t("evaluation_employeur.evaluation_steps.step1.title")}
                                         </h6>
-                                        <p className="text-center" style={{fontStyle: "italic", margin: 0}}>
+                                        <p style={{fontStyle: "italic", margin: 0}}>
                                             {t("evaluation_employeur.evaluation_steps.step1.description")}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="vertical-stepper-item">
+                                <div className={"vertical-stepper-item " + getStepClass(2)}>
                                     <div className="vertical-stepper-content">
                                         <h6 className="vertical-stepper-title">
                                             {t("evaluation_employeur.evaluation_steps.step2.title")}
                                         </h6>
-                                        <p className="text-center" style={{fontStyle: "italic", margin: 0}}>
+                                        <p style={{fontStyle: "italic", margin: 0}}>
                                             {t("evaluation_employeur.evaluation_steps.step2.description")}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="vertical-stepper-item">
+                                <div className={"vertical-stepper-item " + getStepClass(3)}>
                                     <div className="vertical-stepper-content">
                                         <h6 className="vertical-stepper-title">
                                             {t("evaluation_employeur.evaluation_steps.step3.title")}
                                         </h6>
-                                        <p className="text-center" style={{fontStyle: "italic", margin: 0}}>
+                                        <p style={{fontStyle: "italic", margin: 0}}>
                                             {t("evaluation_employeur.evaluation_steps.step3.description")}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="vertical-stepper-item">
+                                <div className={"vertical-stepper-item " + getStepClass(4)}>
                                     <div className="vertical-stepper-content">
                                         <h6 className="vertical-stepper-title">
                                             {t("evaluation_employeur.evaluation_steps.step4.title")}
                                         </h6>
-                                        <p className="text-center" style={{fontStyle: "italic", margin: 0}}>
+                                        <p style={{fontStyle: "italic", margin: 0}}>
                                             {t("evaluation_employeur.evaluation_steps.step4.description")}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="vertical-stepper-item">
+                                <div className={"vertical-stepper-item " + getStepClass(5)}>
                                     <div className="vertical-stepper-content">
                                         <h6 className="vertical-stepper-title">
                                             {t("evaluation_employeur.evaluation_steps.step5.title")}
                                         </h6>
                                     </div>
                                 </div>
-                                <div className="vertical-stepper-item">
+                                <div className={"vertical-stepper-item " + getStepClass(6)}>
                                     <div className="vertical-stepper-content">
                                         <h6 className="vertical-stepper-title">
                                             {t("evaluation_employeur.evaluation_steps.step6.title")}
@@ -581,33 +574,25 @@ const EvaluationEmployeurEtapes = () => {
                         <br/>
                         <br/>
                     </div>
-                    <div className="signup-content">
+                    <div className="signup-content p-0">
                         {!isPdfPreviewVisible ? (
                             <>
-                                {renderStep()}
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        marginBottom: "20px",
-                                        position: "absolute",
-                                        bottom: "0px",
-                                        width: "100%",
-                                    }}
-                                >
+                                <div className="scrollable-content">
+                                    {renderStep()}
+                                </div>
+                                <div className="form-dock">
                                     {currentStep > 1 && (
                                         <button
                                             onClick={handlePreviousStep}
-                                            style={{marginRight: "auto"}}
                                         >
-                                            {t("evaluation_employeur.step.previous")}
+                                            <Icon path={mdiChevronLeft} size={1} />
                                         </button>
                                     )}
+                                    <div className="toolbar-spacer"></div>
                                     {currentStep < 6 && (
                                         <button
                                             onClick={handleNextStep}
                                             className="btn-filled"
-                                            style={{marginLeft: "auto", marginRight: "50px"}}
                                         >
 
                                             {t("evaluation_employeur.step.next")}
@@ -620,7 +605,6 @@ const EvaluationEmployeurEtapes = () => {
                                                     handleSubmit();
                                                 }}
                                                 className="btn-filled"
-                                                style={{marginLeft: "auto", marginRight: "50px"}}
                                             >
 
                                                 {t("evaluation_employeur.step.submit")}
@@ -631,19 +615,22 @@ const EvaluationEmployeurEtapes = () => {
                             </>
                         ) : (
                             <div>
-                                <PdfPreview file={pdfPreviewUrl} height={500} filename="evaluation_stagiaire.pdf"/>
-                                <button
-                                    onClick={() => (window.location.href = "/dashboard")}
-                                    className="btn-filled"
-                                    style={{
-                                        marginTop: "20px",
-                                        display: "block",
-                                        marginLeft: "auto",
-                                        marginRight: "auto",
-                                    }}
-                                >
-                                    {t("evaluation_employeur.step.back_to_dashboard")}
-                                </button>
+                                <div style={{padding: "10px"}}>
+                                    <PdfPreview file={pdfPreviewUrl} height={500} filename="evaluation_stagiaire.pdf"/>
+                                </div>
+                                <Link to="/dashboard">
+                                    <button
+                                        className="btn-filled"
+                                        style={{
+                                            marginTop: "20px",
+                                            display: "block",
+                                            marginLeft: "auto",
+                                            marginRight: "auto",
+                                        }}
+                                    >
+                                        {t("evaluation_employeur.step.back_to_dashboard")}
+                                    </button>
+                                </Link>
                             </div>
                         )}
                     </div>
