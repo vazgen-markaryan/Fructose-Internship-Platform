@@ -231,6 +231,8 @@ button.btn-outline, button.swal2-cancel {
 button.swal2-confirm{
 	color: white;
 	padding: 1px 14px;
+	font-weight: 400;
+	background-color: var(--color-primary) !important;
 }
 
 button.btn-outline:hover {

@@ -99,10 +99,10 @@ const CandidatureEtudiantDashboard = () => {
 	const isContratsVerifInitialized = useRef(false);
 
 	useEffect(() => {
-		if(currentUser && !isContratsVerifInitialized.current){
+		if(currentUser && isContratsVerifInitialized.current === false){
 			(async function () {
-
 				for (let i = 0; i < candidatures.length; i++){
+					isContratsVerifInitialized.current = true;
 					let can = candidatures[i];
 					if(can.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE"){
 						let contrat = await fetchContrat(can.id);
@@ -115,7 +115,6 @@ const CandidatureEtudiantDashboard = () => {
 					}
 				}
 			})();
-			isContratsVerifInitialized.current = true;
 		}
 	}, [candidatures]);
 
