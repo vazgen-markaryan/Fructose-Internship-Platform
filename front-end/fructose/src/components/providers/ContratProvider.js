@@ -74,7 +74,7 @@ const ContratProvider = ({children}) => {
 	};
 
 	const handleSignerContrat = (contrat, setCurrentCandidature) => {
-		console.log("Sign contrat: " + contrat.id);
+		console.log(contrat.id);
 		try {
 			Swal.fire({
 				title: t("sign_contract_swal.confirm_sign_title"),

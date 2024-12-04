@@ -17,9 +17,8 @@ import {AuthContext} from "../../providers/AuthProvider";
 import Modal from "../../../utilities/modal/Modal";
 import {CvContext} from "../../providers/CvProvider";
 import Swal from "sweetalert2";
-import {ContratContext, handleSignerContrat} from "../../providers/ContratProvider";
+import {ContratContext} from "../../providers/ContratProvider";
 import CandidatureStatus from "./CandidatureStatus";
-const sectionId = new URLSearchParams(window.location.search).get("section");
 
 const ViewCandidatures = () => {
 	const sectionId = new URLSearchParams(window.location.search).get("section");
@@ -66,7 +65,7 @@ const ViewCandidatures = () => {
 	useEffect(() => {
 		loadFilteredCategories(candidatureCategory);
 	}, [candidatures, candidatureCategory]);
-	
+
 	useEffect(() => {
 		if (currentCandidature && currentCandidature.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE") {
 			const fetchContrat = async () => {
@@ -78,8 +77,10 @@ const ViewCandidatures = () => {
 				}
 			};
 			fetchContrat();
+		} else {
+			setContrat(null);
 		}
-	}, [currentCandidature]);
+	}, [currentCandidature, fetchContratByCandidatureId]);
 	
 	const fetchCvById = async (cvId) => {
 		try {

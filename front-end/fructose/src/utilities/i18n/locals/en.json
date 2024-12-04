@@ -649,8 +649,20 @@
         "waiting_sign_from_parties": "Waiting for the signature of all parties",
         "contract_signed": "All signs have been received"
     },
-    "manage_contract_en_attente": {
-        "title": "Internship Contracts waiting for generation"
+    "sign_contract_swal": {
+        "confirm_sign_title": "Are you sure ?",
+        "confirm_sign_text": "You're signing the contract, will you still continue ?",
+        "confirm_sign_confirm_button": "Yes, sign the contract !",
+        "confirm_sign_cancel_button": "Non, go back",
+        "success_title": "You accepted the terms of the contracts!",
+        "confirm_refuse_title": "Are you sure ?",
+        "confirm_refuse_text": "You're not signing the contract, will you still continue ?",
+        "confirm_refuse_confirm_button": "Yes, refuse the contract !",
+        "confirm_refuse_cancel_button": "No, go back",
+        "success_refused_title": "You have refused to sign the contract!",
+        "manage_contract_en_attente": {
+            "title": "Contracts in waiting for signature"
+        }
     },
     "evaluation_employeur": {
         "stagiaire_a_evaluer": "Intern to evaluate",

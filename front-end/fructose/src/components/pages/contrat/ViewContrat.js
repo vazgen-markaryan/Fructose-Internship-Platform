@@ -8,11 +8,11 @@ const ViewContrat = ({contrat, handleSign, handleNoSign}) => {
 	const {t} = useTranslation();
 	const {fetchPdfByContratId} = useContext(ContratContext);
 	const [pdfUrl, setPdfUrl] = useState('');
-	const {currentUser, isUserInit} = useContext(AuthContext);
+	const {currentUser} = useContext(AuthContext);
 	const isInitialized = useRef(false);
-	
+
 	useEffect(() => {
-		if(isUserInit && contrat && !isInitialized.current){
+		if (contrat) {
 			(async function () {
 				try {
 					const pdfUrl = await fetchPdfByContratId(contrat.id);
@@ -21,9 +21,11 @@ const ViewContrat = ({contrat, handleSign, handleNoSign}) => {
 					console.error('Error fetching PDF:', error);
 				}
 			})();
-			isInitialized.current = true;
+		} else {
+			setPdfUrl(null); // Reset if no contract is present
 		}
-	}, [isUserInit, contrat]);
+	}, [contrat, fetchPdfByContratId]);
+
 	
 	return (
 		<>
