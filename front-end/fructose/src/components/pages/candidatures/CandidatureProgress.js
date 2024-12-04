@@ -28,6 +28,8 @@ const CandidatureProgress = ({candidature}) => {
 		if (step === 1) {
 			if (etat === "POSTE_OBTENU") {
 				return "bg-green"
+			} else if (etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" && (candidature.signRefuse && candidature.signRefuse === true)){
+				return "bg-red"
 			} else if (indexEtat === 1 || indexEtat === 3 || indexEtat === 5) {
 				return "bg-red"
 			} else if (indexEtat >= 0) {
@@ -36,6 +38,8 @@ const CandidatureProgress = ({candidature}) => {
 		} else if (step === 2) {
 			if (etat === "POSTE_OBTENU") {
 				return "bg-green"
+			} else if (etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" && (candidature.signRefuse && candidature.signRefuse === true)){
+				return "bg-red"
 			} else if (indexEtat === 1 || indexEtat === 3 || indexEtat === 5) {
 				return "bg-red"
 			} else if (etat === "EN_ATTENTE") {
@@ -46,6 +50,8 @@ const CandidatureProgress = ({candidature}) => {
 		} else if (step === 3) {
 			if (etat === "POSTE_OBTENU") {
 				return "bg-green"
+			} else if (etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" && (candidature.signRefuse && candidature.signRefuse === true)){
+				return "bg-red"
 			} else if (indexEtat === 3 || indexEtat === 5) {
 				return "bg-red"
 			} else if (etat === "ENTREVUE_PROPOSE") {
@@ -59,6 +65,8 @@ const CandidatureProgress = ({candidature}) => {
 			// TODO: IMPLEMENTER LA VERIFICATION DE SIGNATURE
 			if (etat === "POSTE_OBTENU") {
 				return "bg-green"
+			} else if (etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" && (candidature.signRefuse && candidature.signRefuse === true)){
+				return "bg-red"
 			} else if (etat === "CONTRAT_CREE_PAR_GESTIONNAIRE" && (candidature.needsAttention && candidature.needsAttention === true)) {
 				return "bg-orange-breathing"
 			} else if (indexEtat > 7) {

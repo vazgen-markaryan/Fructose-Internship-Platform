@@ -145,6 +145,16 @@ const EvaluationMilieuStageEtapes = () => {
         return newErrors;
     }
 
+    const getStepClass = (step) => {
+        if (currentStep === step) {
+            return "active"
+        } else if (currentStep > step) {
+            return "completed"
+        }
+        return ""
+    }
+
+
     const handleSubmit = async () => {
         const newErrors = checkErrors();
         if (Object.keys(newErrors).length > 0) {
@@ -243,59 +253,53 @@ const EvaluationMilieuStageEtapes = () => {
         }];
         if (currentStep === 1) {
             const {title, fields} = stepOptions[0];
-            return (<section>
-                <h3>{title}</h3>
-                {fields.map((field, index) => (
-                    <div key={index} style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                        <label>{field.label}</label>
-                        {field.type === "select" ? (<select
-                            name={field.name}
-                            value={formData[field.name]}
-                            onChange={handleChange}
-                            style={{
-                                width: "50%",
-                                marginLeft: "10px",
-                                border: errors[field.name] ? "1px solid red" : "1px solid #ccc"
-                            }}
-                        >
-                            {field.options.map((option, idx) => (<option key={idx} value={option.value}>
-                                {option.label}
-                            </option>))}
-                        </select>) : (<input
-                            type={field.type}
-                            name={field.name}
-                            value={formData[field.name]}
-                            onChange={handleChange}
-                            style={{
-                                width: "50%",
-                                marginLeft: "10px",
-                                border: errors[field.name] ? "1px solid red" : "1px solid #ccc"
-                            }}
-                        />)}
-                        {errors[field.name] && (<span style={{color: "red", fontSize: "12px", marginLeft: "10px"}}>
-                        {errors[field.name]}
-                    </span>)}
-                    </div>))}
-            </section>);
+            return (
+                <div className="stepper-form-step">
+                    <h4>{title}</h4>
+                    {fields.map((field, index) => (
+                        <div key={index} className="input-container">
+                            <p>{field.label}</p>
+                            {field.type === "select" ? (<select
+                                name={field.name}
+                                value={formData[field.name]}
+                                onChange={handleChange}
+                                style={{
+                                    border: errors[field.name] ? "1px solid red" : "1px solid #ccc"
+                                }}
+                            >
+                                {field.options.map((option, idx) => (<option key={idx} value={option.value}>
+                                    {option.label}
+                                </option>))}
+                            </select>) : (<input
+                                type={field.type}
+                                name={field.name}
+                                value={formData[field.name]}
+                                onChange={handleChange}
+                                style={{
+                                    border: errors[field.name] ? "1px solid red" : "1px solid #ccc"
+                                }}
+                            />)}
+                            {errors[field.name] && (<p className="text-red text-mini">
+                                {errors[field.name]}
+                            </p>)}
+                        </div>))}
+                </div>);
         } else if (currentStep > 1 && currentStep <= stepOptions.length) {
             const {title, description, items, section} = stepOptions[currentStep - 1];
-            return (<section>
-                <h3>{title}</h3>
+            return (<div className="stepper-form-step">
+                <h4>{title}</h4>
                 <p>{description}</p>
                 {items.map((item, idx) => (<div key={idx} style={{marginBottom: "15px"}}>
-                    <div style={{display: "flex", alignItems: "center"}}>
-                        <label htmlFor={`${section}.champs.${item}`} style={{flex: 1, marginRight: "10px"}}>
+                    <div className="input-container">
+                        <p>
                             {item}
-                        </label>
+                        </p>
                         <select
                             id={`${section}.champs.${item}`}
                             name={`${section}.champs.${item}`}
                             value={formData.sections[section]?.champs?.[item] || ""}
                             onChange={handleChange}
                             style={{
-                                width: "50%",
-                                textAlign: "center",
-                                textAlignLast: "center",
                                 border: errors[`${section}.champs.${item}`] ? "1px solid red" : "1px solid #ccc",
                             }}
                         >
@@ -304,33 +308,29 @@ const EvaluationMilieuStageEtapes = () => {
                                 {label}
                             </option>))}
                         </select>
+                        {errors[`${section}.champs.${item}`] && (
+                            <p className="text-red text-mini">{errors[`${section}.champs.${item}`]}</p>)}
                     </div>
-                    {errors[`${section}.champs.${item}`] && (<span style={{
-                        color: "red", fontSize: "12px"
-                    }}>{errors[`${section}.champs.${item}`]}</span>)}
                 </div>))}
-                <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                    <label style={{marginBottom: "10px"}}>{t("evaluation_milieu_stage.step.comment")}</label>
+                <div className="input-container">
+                    <label>{t("evaluation_milieu_stage.step.comment")}</label>
                     <textarea
                         name={`${section}.commentaire`}
                         value={formData.sections[section]?.commentaire || ""}
                         onChange={handleChange}
-                        style={{width: "60%", marginLeft: "10px", fontSize: 12}}
                     ></textarea>
                 </div>
-            </section>);
+            </div>);
         } else if (currentStep === 4) {
-            return (<section>
-                <h3>{t("evaluation_milieu_stage.step.section4.title")}</h3>
-                <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                    <label>{t("evaluation_milieu_stage.step.section4.field1")}</label>
+            return (<div className="stepper-form-step">
+                <h4>{t("evaluation_milieu_stage.step.section4.title")}</h4>
+                <div className="input-container">
+                    <p>{t("evaluation_milieu_stage.step.section4.field1")}</p>
                     <select
                         name="milieuStageAPrivilegierPour"
                         value={formData.milieuStageAPrivilegierPour}
                         onChange={handleChange}
                         style={{
-                            width: "50%",
-                            marginLeft: "10px",
                             border: errors.milieuStageAPrivilegierPour ? "1px solid red" : "1px solid #ccc"
                         }}
                     >
@@ -339,36 +339,32 @@ const EvaluationMilieuStageEtapes = () => {
                         <option value="DEUXIEME_STAGE">{t("evaluation_milieu_stage.step.general.stage2")}</option>
                     </select>
                     {errors.milieuStageAPrivilegierPour && (
-                        <span style={{color: "red", fontSize: "12px", marginLeft: "10px"}}>
-        {errors.milieuStageAPrivilegierPour}
-    </span>)}
+                        <p className="text-red text-mini">
+                            {errors.milieuStageAPrivilegierPour}
+                        </p>)}
                 </div>
-                <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                    <label>{t("evaluation_milieu_stage.step.section4.field2")}</label>
+                <div className="input-container">
+                    <p>{t("evaluation_milieu_stage.step.section4.field2")}</p>
                     <input
                         type="text"
                         name="signatureSuperviseur"
                         value={formData.signatureSuperviseur}
                         onChange={handleChange}
                         style={{
-                            width: "50%",
-                            marginLeft: "10px",
                             border: errors.signatureSuperviseur ? "1px solid red" : "1px solid #ccc"
                         }}
                     />
-                    {errors.signatureSuperviseur && (<span style={{color: "red", fontSize: "12px", marginLeft: "10px"}}>
-        {errors.signatureSuperviseur}
-    </span>)}
+                    {errors.signatureSuperviseur && (<p className="text-red text-mini">
+                        {errors.signatureSuperviseur}
+                    </p>)}
                 </div>
-                <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                    <label>{t("evaluation_milieu_stage.step.section4.field3")}</label>
+                <div className="input-container">
+                    <p>{t("evaluation_milieu_stage.step.section4.field3")}</p>
                     <select
                         name="capaciteEtudiant"
                         value={formData.capaciteEtudiant}
                         onChange={handleChange}
                         style={{
-                            width: "50%",
-                            marginLeft: "10px",
                             border: errors.capaciteEtudiant ? "1px solid red" : "1px solid #ccc"
                         }}
                     >
@@ -382,188 +378,178 @@ const EvaluationMilieuStageEtapes = () => {
                         <option
                             value="PLUS_DE_TROIS">{t("evaluation_milieu_stage.step.capaciteEtudiant.PLUS_DE_TROIS")}</option>
                     </select>
-                    {errors.capaciteEtudiant && (<span style={{color: "red", fontSize: "12px", marginLeft: "10px"}}>
-        {errors.capaciteEtudiant}
-    </span>)}
+                    {errors.capaciteEtudiant && (<p className="text-red text-mini">
+                        {errors.capaciteEtudiant}
+                    </p>)}
                 </div>
-                <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                    <label>{t("evaluation_milieu_stage.step.section4.field4")}</label>
+                <div className="input-container">
+                    <p>{t("evaluation_milieu_stage.step.section4.field4")}</p>
                     <input
                         type="radio"
                         name="memeStagiaireProchainStage"
                         value="yes"
+                        id="yes-1"
                         checked={formData.memeStagiaireProchainStage === true}
                         onChange={() => setFormData((prev) => ({
                             ...prev, memeStagiaireProchainStage: true
                         }))}
-                        style={{marginLeft: "10px"}}
-                    /> {t("evaluation_milieu_stage.step.section4.yes")}
+                    /> <label htmlFor="yes-1">{t("evaluation_milieu_stage.step.section4.yes")}</label>
+                    <br/>
                     <input
                         type="radio"
                         name="memeStagiaireProchainStage"
                         value="no"
+                        id="no-1"
                         checked={formData.memeStagiaireProchainStage === false}
                         onChange={() => setFormData((prev) => ({
                             ...prev, memeStagiaireProchainStage: false
                         }))}
-                        style={{marginLeft: "10px"}}
-                    /> {t("evaluation_milieu_stage.step.section4.no")}
+                    /> <label htmlFor="no-1">{t("evaluation_milieu_stage.step.section4.no")}</label>
                 </div>
-                <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                    <label>{t("evaluation_milieu_stage.step.section4.field5")}</label>
-                    <div style={{marginLeft: "10px"}}>
+                <div className="input-container">
+                    <p>{t("evaluation_milieu_stage.step.section4.field5")}</p>
+                    <div>
                         <input
                             type="radio"
                             name="quartTravailVariable"
                             value="yes"
+                            id="yes-2"
                             checked={formData.quartTravailVariable === true}
                             onChange={() => setFormData((prev) => ({...prev, quartTravailVariable: true}))}
-                        /> {t("evaluation_milieu_stage.step.section4.yes")}
+                        /> <label htmlFor="yes-2">{t("evaluation_milieu_stage.step.section4.yes")}</label>
+                        <br/>
                         <input
                             type="radio"
                             name="quartTravailVariable"
                             value="no"
                             checked={formData.quartTravailVariable === false}
                             onChange={() => setFormData((prev) => ({...prev, quartTravailVariable: false}))}
-                            style={{marginLeft: "10px"}}
-                        /> {t("evaluation_milieu_stage.step.section4.no")}
+                        /> <label htmlFor="no-2">{t("evaluation_milieu_stage.step.section4.no")}</label>
                     </div>
                 </div>
-                <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                    <label>{t("evaluation_milieu_stage.step.section4.field6")}</label>
-                    <input
-                        type="text"
-                        name="quartTravail1Debut"
-                        value={formData.quartTravail1Debut}
-                        onChange={handleChange}
-                        style={{
-                            width: "50%",
-                            marginLeft: "10px",
-                            border: errors.quartTravail1Debut ? "1px solid red" : "1px solid #ccc"
-                        }}
-                    />
-                    <input
-                        type="text"
-                        name="quartTravail1Fin"
-                        value={formData.quartTravail1Fin}
-                        onChange={handleChange}
-                        style={{
-                            width: "50%",
-                            marginLeft: "10px",
-                            border: errors.quartTravail1Fin ? "1px solid red" : "1px solid #ccc"
-                        }}
-                    />
-                    {errors.quartTravail1Debut && (<span style={{color: "red", fontSize: "12px", marginLeft: "10px"}}>
-        {errors.quartTravail1Debut}
-    </span>)}
-                    {errors.quartTravail1Fin && (<span style={{color: "red", fontSize: "12px", marginLeft: "10px"}}>
-        {errors.quartTravail1Fin}
-    </span>)}
+                <div className="input-container">
+                    <p>{t("evaluation_milieu_stage.step.section4.field6")}</p>
+                    <div className="toolbar-items">
+                        <input
+                            type="text"
+                            name="quartTravail1Debut"
+                            value={formData.quartTravail1Debut}
+                            onChange={handleChange}
+                            style={{
+                                width: "50%",
+                                border: errors.quartTravail1Debut ? "1px solid red" : "1px solid #ccc"
+                            }}
+                        />
+                        <input
+                            type="text"
+                            name="quartTravail1Fin"
+                            value={formData.quartTravail1Fin}
+                            onChange={handleChange}
+                            style={{
+                                width: "50%",
+                                marginLeft: "10px",
+                                border: errors.quartTravail1Fin ? "1px solid red" : "1px solid #ccc"
+                            }}
+                        />
+                    </div>
+                    {errors.quartTravail1Debut && (<p className="text-red text-mini">
+                        {errors.quartTravail1Debut}
+                    </p>)}
+                    {errors.quartTravail1Fin && (<p className="text-red text-mini">
+                        {errors.quartTravail1Fin}
+                    </p>)}
                 </div>
-                <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                    <label style={{width: "50%"}}>
+                <div className="input-container">
+                    <p>
                         {t("evaluation_milieu_stage.step.section4.field7")}
-                    </label>
-                    <input
-                        type="text"
-                        name="quartTravail2Debut"
-                        value={formData.quartTravail2Debut}
-                        onChange={handleChange}
-                        style={{
-                            width: "50%",
-                            marginLeft: "10px",
-                            border: errors.quartTravail2Debut ? "1px solid red" : "1px solid #ccc"
-                        }}
-                    />
-                    <input
-                        type="text"
-                        name="quartTravail2Fin"
-                        value={formData.quartTravail2Fin}
-                        onChange={handleChange}
-                        style={{
-                            width: "50%",
-                            marginLeft: "10px",
-                            border: errors.quartTravail2Fin ? "1px solid red" : "1px solid #ccc"
-                        }}
-                    />
+                    </p>
+                    <div className="toolbar-items">
+                        <input
+                            type="text"
+                            name="quartTravail2Debut"
+                            value={formData.quartTravail2Debut}
+                            onChange={handleChange}
+                            style={{
+                                width: "50%",
+                                border: errors.quartTravail2Debut ? "1px solid red" : "1px solid #ccc"
+                            }}
+                        />
+                        <input
+                            type="text"
+                            name="quartTravail2Fin"
+                            value={formData.quartTravail2Fin}
+                            onChange={handleChange}
+                            style={{
+                                width: "50%",
+                                marginLeft: "10px",
+                                border: errors.quartTravail2Fin ? "1px solid red" : "1px solid #ccc"
+                            }}
+                        />
+                    </div>
                 </div>
-                <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                    <label style={{width: "50%"}}>
+                <div className="input-container">
+                    <p>
                         {t("evaluation_milieu_stage.step.section4.field8")}
-                    </label>
-                    <input
-                        type="text"
-                        name="quartTravail3Debut"
-                        value={formData.quartTravail3Debut}
-                        onChange={handleChange}
-                        style={{
-                            width: "50%",
-                            marginLeft: "10px",
-                            border: errors.quartTravail3Debut ? "1px solid red" : "1px solid #ccc"
-                        }}
-                    />
-                    <input
-                        type="text"
-                        name="quartTravail3Fin"
-                        value={formData.quartTravail3Fin}
-                        onChange={handleChange}
-                        style={{
-                            width: "50%",
-                            marginLeft: "10px",
-                            border: errors.quartTravail3Fin ? "1px solid red" : "1px solid #ccc"
-                        }}
-                    />
+                    </p>
+                    <div className="toolbar-items">
+                        <input
+                            type="text"
+                            name="quartTravail3Debut"
+                            value={formData.quartTravail3Debut}
+                            onChange={handleChange}
+                            style={{
+                                width: "50%",
+                                border: errors.quartTravail3Debut ? "1px solid red" : "1px solid #ccc"
+                            }}
+                        />
+                        <input
+                            type="text"
+                            name="quartTravail3Fin"
+                            value={formData.quartTravail3Fin}
+                            onChange={handleChange}
+                            style={{
+                                width: "50%",
+                                marginLeft: "10px",
+                                border: errors.quartTravail3Fin ? "1px solid red" : "1px solid #ccc"
+                            }}
+                        />
+                    </div>
                 </div>
-            </section>);
+            </div>);
         } else {
             return <p>Étape invalide</p>;
         }
     };
 
     return (<div>
-        <div className="bg-auth">
-            <div className="bg-auth-point"></div>
-            <div className="bg-auth-point"></div>
-            <div className="bg-auth-point"></div>
-        </div>
-
-        <div className="auth-body">
+        <div className="form-full-body">
             <div className={"signup-frame"}>
-                <div className={"signup-head " + (currentStep !== 0 ? "signup-head-instep" : "")} style={{
-                    "background": "linear-gradient(rgba(0,0,0,0.4), rgb(255, 0, 108,0.8)), url('/assets/auth/signup/s1.jpg') center/cover",
-                    "backdropFilter": "blur(10px)"
-                }}>
-                    <div className="toolbar-items">
-                        <Link to="/">
-                            <img src="/assets/logo/logo.svg" alt="" className={"logo"}/>
-                        </Link>
-                    </div>
-                    <br/>
-                    <h5>{t("evaluation_milieu_stage.evaluation_steps.title")}</h5>
+                <div className={"signup-head " + (currentStep !== 0 ? "signup-head-instep" : "") + " bg-secondary"}>
+                    <h4>{t("evaluation_milieu_stage.evaluation_steps.title")}</h4>
                     <br/>
                     {currentStep !== 0 ? (<div className="vertical-stepper">
-                        <div className="vertical-stepper-item">
+                        <div className={"vertical-stepper-item " + getStepClass(1)}>
                             <div className="vertical-stepper-content">
                                 <h6 className="vertical-stepper-title">
                                     {t("evaluation_milieu_stage.evaluation_steps.step1.title")}
                                 </h6>
                             </div>
                         </div>
-                        <div className="vertical-stepper-item">
+                        <div className={"vertical-stepper-item " + getStepClass(2)}>
                             <div className="vertical-stepper-content">
                                 <h6 className="vertical-stepper-title">
                                     {t("evaluation_milieu_stage.evaluation_steps.step2.title")}
                                 </h6>
                             </div>
                         </div>
-                        <div className="vertical-stepper-item">
+                        <div className={"vertical-stepper-item " + getStepClass(3)}>
                             <div className="vertical-stepper-content">
                                 <h6 className="vertical-stepper-title">
                                     {t("evaluation_milieu_stage.evaluation_steps.step3.title")}
                                 </h6>
                             </div>
                         </div>
-                        <div className="vertical-stepper-item">
+                        <div className={"vertical-stepper-item " + getStepClass(4)}>
                             <div className="vertical-stepper-content">
                                 <h6 className="vertical-stepper-title">
                                     {t("evaluation_milieu_stage.evaluation_steps.step4.title")}
@@ -576,29 +562,22 @@ const EvaluationMilieuStageEtapes = () => {
                     <br/>
                     <br/>
                 </div>
-                <div className="signup-content">
+                <div className="signup-content p-0">
                     {!isPdfPreviewVisible ? (<>
-                        {renderStep()}
+                        <div className="scrollable-content">
+                            {renderStep()}
+                        </div>
                         <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                marginBottom: "20px",
-                                position: "absolute",
-                                bottom: "0px",
-                                width: "100%",
-                            }}
+                            className="form-dock"
                         >
                             {currentStep > 1 && (<button
-                                onClick={handlePreviousStep}
-                                style={{marginRight: "auto"}}
-                            >
+                                onClick={handlePreviousStep}>
                                 {t("evaluation_milieu_stage.step.previous")}
                             </button>)}
+                            <div className="toolbar-spacer"></div>
                             {currentStep < 4 && (<button
                                 onClick={handleNextStep}
                                 className="btn-filled"
-                                style={{marginLeft: "auto", marginRight: "50px"}}
                             >
                                 {t("evaluation_milieu_stage.step.next")}
                             </button>)}
@@ -606,23 +585,25 @@ const EvaluationMilieuStageEtapes = () => {
                                 <button
                                     onClick={handleSubmit}
                                     className="btn-filled"
-                                    style={{marginLeft: "auto", marginRight: "50px"}}
                                 >
                                     {t("evaluation_milieu_stage.step.submit")}
                                 </button>
                             </div>)}
                         </div>
                     </>) : (<div>
-                        <PdfPreview file={pdfPreviewUrl} height={500} filename="evaluation_stagiaire.pdf"/>
-                        <button
-                            onClick={() => (window.location.href = "/dashboard")}
-                            className="btn-filled"
-                            style={{
-                                marginTop: "20px", display: "block", marginLeft: "auto", marginRight: "auto",
-                            }}
-                        >
-                            {t("evaluation_milieu_stage.step.back_to_dashboard")}
-                        </button>
+                        <div style={{padding: "10px"}}>
+                            <PdfPreview file={pdfPreviewUrl} height={500} filename="evaluation_stagiaire.pdf"/>
+                        </div>
+                        <Link to="/dashboard">
+                            <button
+                                className="btn-filled"
+                                style={{
+                                    display: "block", marginLeft: "auto", marginRight: "auto",
+                                }}
+                            >
+                                {t("evaluation_milieu_stage.step.back_to_dashboard")}
+                            </button>
+                        </Link>
                     </div>)}
                 </div>
             </div>

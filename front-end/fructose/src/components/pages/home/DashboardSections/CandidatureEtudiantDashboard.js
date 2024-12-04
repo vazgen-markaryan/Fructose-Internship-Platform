@@ -52,6 +52,7 @@ const CandidatureEtudiantDashboard = () => {
 		handleSignerContrat,
 		handleRefuseSignerContrat
 	} = useContext(ContratContext);
+
 	const [contrat, setContrat] = useState(null);
 
 	const handleSignerContratClick = () => {
@@ -99,23 +100,27 @@ const CandidatureEtudiantDashboard = () => {
 	const isContratsVerifInitialized = useRef(false);
 
 	useEffect(() => {
-		if(currentUser && !isContratsVerifInitialized.current){
+		if(currentUser && isContratsVerifInitialized.current === false){
 			(async function () {
-
-				for (let i = 0; i < candidatures.length; i++){
-					let can = candidatures[i];
+				let tempCandidatures = candidatures
+				for (let i = 0; i < tempCandidatures.length; i++){
+					isContratsVerifInitialized.current = true;
+					let can = tempCandidatures[i];
 					if(can.etat === "CONTRAT_CREE_PAR_GESTIONNAIRE"){
 						let contrat = await fetchContrat(can.id);
 						if(contrat && contrat.signatureEtudiant && contrat.signatureEtudiant === "Non signe"){
-							const updatedCandidatures = candidatures.map(item =>
+							tempCandidatures = tempCandidatures.map(item =>
 								item.id === can.id ? { ...item, needsAttention: true } : item
 							);
-							setCandidatures(updatedCandidatures)
+						} else if(contrat && contrat.signatureEmployeur === "Refuse" || contrat.signatureEtudiant === "Refuse"){
+							tempCandidatures = tempCandidatures.map(item =>
+								item.id === can.id ? { ...item, signRefuse: true } : item
+							);
 						}
 					}
 				}
+				setCandidatures(tempCandidatures)
 			})();
-			isContratsVerifInitialized.current = true;
 		}
 	}, [candidatures]);
 
