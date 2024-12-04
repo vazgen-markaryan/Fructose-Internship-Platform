@@ -55,7 +55,7 @@ public class FructoseApplication implements CommandLineRunner {
 		
 		// ÉTUDIANTS APPROUVÉS
 		createAndPersistUtilisateur("Etudiant", "Vazgen Markaryan", "vazgen@gmail.com", "Vazgen123!", "1111111", departementInformatique, null, true);
-		createAndPersistUtilisateur("Etudiant", "Alexondeur Tudose", "alex@gmail.com", "Alex123!", "2222222", departementInformatique, null, true);
+		createAndPersistUtilisateur("Etudiant", "Alexander Tudose", "alex@gmail.com", "Alex123!", "2222222", departementInformatique, null, true);
 		createAndPersistUtilisateur("Etudiant", "Bernard Thomas Laforest", "bernard@gmail.com", "Bernard123!", "3333333", departementInformatique, null, true);
 		createAndPersistUtilisateur("Etudiant", "Lou Jonathan Monty", "lou@gmail.com", "LouJM123!", "4444444", departementInformatique, null, true);
 		createAndPersistUtilisateur("Etudiant", "Joan Favrichon", "joan@gmail.com", "Joan123!", "5555555", departementInformatique, null, true);
