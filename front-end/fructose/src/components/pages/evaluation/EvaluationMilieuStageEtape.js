@@ -397,7 +397,7 @@ const EvaluationMilieuStageEtapes = () => {
                             ...prev, memeStagiaireProchainStage: true
                         }))}
                         style={{marginLeft: "10px"}}
-                    /> Yes
+                    /> {t("evaluation_milieu_stage.step.section4.yes")}
                     <input
                         type="radio"
                         name="memeStagiaireProchainStage"
@@ -407,7 +407,7 @@ const EvaluationMilieuStageEtapes = () => {
                             ...prev, memeStagiaireProchainStage: false
                         }))}
                         style={{marginLeft: "10px"}}
-                    /> No
+                    /> {t("evaluation_milieu_stage.step.section4.no")}
                 </div>
                 <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
                     <label>{t("evaluation_milieu_stage.step.section4.field5")}</label>
@@ -418,7 +418,7 @@ const EvaluationMilieuStageEtapes = () => {
                             value="yes"
                             checked={formData.quartTravailVariable === true}
                             onChange={() => setFormData((prev) => ({...prev, quartTravailVariable: true}))}
-                        /> Yes
+                        /> {t("evaluation_milieu_stage.step.section4.yes")}
                         <input
                             type="radio"
                             name="quartTravailVariable"
@@ -426,7 +426,7 @@ const EvaluationMilieuStageEtapes = () => {
                             checked={formData.quartTravailVariable === false}
                             onChange={() => setFormData((prev) => ({...prev, quartTravailVariable: false}))}
                             style={{marginLeft: "10px"}}
-                        /> No
+                        /> {t("evaluation_milieu_stage.step.section4.no")}
                     </div>
                 </div>
                 <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
