@@ -818,7 +818,9 @@
                 "field5": "Variable work schedule",
                 "field6": "Start of shift 1",
                 "field7": "Start of shift 2",
-                "field8": "Start of shift 3"
+                "field8": "Start of shift 3",
+                "yes": "Yes",
+                "no": "No"
             },
             "total_agree": "Totally agree",
             "mostly_agree": "Mostly agree",
