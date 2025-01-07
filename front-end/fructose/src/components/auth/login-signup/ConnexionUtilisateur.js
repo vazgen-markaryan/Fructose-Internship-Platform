@@ -146,7 +146,7 @@ const ConnexionUtilisateur = () => {
 								flexWrap: 'wrap',
 								justifyContent: 'center'
 							}}>
-								<button style={{margin: '5px'}} onClick={() => handleTestLogin('alex@gmail.com', 'Alex123!')}>Etudiant</button>
+								<button style={{margin: '5px'}} onClick={() => handleTestLogin('vazgen@gmail.com', 'Vazgen123!')}>Etudiant</button>
 								<button style={{margin: '5px'}} onClick={() => handleTestLogin('francois@gmail.com', 'Francois123!')}>Professeur</button>
 								<button style={{margin: '5px'}} onClick={() => handleTestLogin('ubisoft@gmail.com', 'Ubisoft123!')}>Employeur</button>
 								<button style={{margin: '5px'}} onClick={() => handleTestLogin('didieradmin@gmail.com', 'Didieradmin123!')}>Admin</button>

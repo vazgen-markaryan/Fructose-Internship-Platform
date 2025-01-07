@@ -39,9 +39,9 @@ public class FructoseApplication implements CommandLineRunner {
 	public void run(String... args) {
 		
 		//DATES
-		LocalDate dateDebut = LocalDate.of(2025, 1, 20);
-		LocalDate dateFin = LocalDate.of(2025, 5, 31);
-		LocalDate dateLimiteCandidature = LocalDate.of(2025, 1, 10);
+		LocalDate dateDebut = LocalDate.of(2026, 1, 20);
+		LocalDate dateFin = LocalDate.of(2026, 5, 31);
+		LocalDate dateLimiteCandidature = LocalDate.of(2026, 1, 10);
 		
 		//DATES DANS LE CYBERPUNK 2077
 		LocalDate dateDebutCYBERPUNK = LocalDate.of(2077, 1, 20);

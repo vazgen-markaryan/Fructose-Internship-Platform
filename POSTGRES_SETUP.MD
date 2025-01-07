@@ -37,4 +37,3 @@ psql -U team24 -d fructose
 ### Verifier la connexion
 ### Executer Spring
 ### Verifier que le table Users a bien été crée
-### Ouvrir une boutelle de champagne et féliciter l'installation de PostgreSQL
